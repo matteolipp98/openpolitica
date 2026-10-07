@@ -24,7 +24,15 @@ describe("controlli incrociati", () => {
   it("rifiuta un partito sconosciuto nel perimetro", () => {
     const per = structuredClone(base["perimetro.yaml"]!);
     per.partiti.push({ slug: "inventato", motivo: "x" });
-    expect(controllaRiferimenti({ ...base, "perimetro.yaml": per }).length).toBe(1);
+    const e = controllaRiferimenti({ ...base, "perimetro.yaml": per });
+    expect(e.filter((x) => x.file === "perimetro.yaml").map((x) => x.messaggio)).toEqual(["partito sconosciuto inventato"]);
+  });
+
+  it("rifiuta un partito seguito senza programma (ADR 0020)", () => {
+    const pr = structuredClone(base["programmi.yaml"]!);
+    pr.elezioni[0]!.programmi = pr.elezioni[0]!.programmi.filter((p) => !p.partiti.includes("lega"));
+    const e = controllaRiferimenti({ ...base, "programmi.yaml": pr });
+    expect(e.map((x) => x.messaggio)).toEqual(["2022-09-25: manca il programma di lega"]);
   });
 
   it("rifiuta un gruppo verificato senza identificativo", () => {
