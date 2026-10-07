@@ -50,16 +50,14 @@ I mock sono la versione più recente del prodotto. Dove divergevano dagli ADR, g
 | `vista-partito.html` | Promesse "Mantenuta / A metà / Non mantenuta" con motivazione | Stato da regole fisse su atti e serie ufficiali, collegamento promessa-atto con accordo tra due famiglie | Fase 1 pubblica lo stato (§4) |
 | `vista-questionario.html` | 3 risposte, casella "conta più degli altri", margine di pareggio 3, soglia 50%, dettaglio per domanda | Formula del mock adottata; niente intervallo, niente pesi per tema, niente scomposizione per tema | `@op/affinita` implementa esattamente il mock (§3.8) |
 
-Restano tre scostamenti voluti dal codice dei mock, già previsti dall'ADR 0037:
+I mock sono stati poi corretti dove il loro codice non rispettava le regole:
 
-- il mock conta come disaccordo una posizione del partito pari a 0 (`(mia>0)===(sua>0)`): qui è "neutrale";
-- il mock mostra 0% quando non ci sono domande confrontabili: qui non si mostra percentuale;
-- la riga "Frasi che non si possono controllare 41%" non ha il conteggio: qui il conteggio va nella riga sotto la cifra (ADR 0019).
+- `vista-questionario.html`: una posizione 0 del partito è neutra e ha una sua sezione ("Né sì né no"); senza domande confrontabili non si mostra una percentuale; il numero di domande nel testo viene dal catalogo;
+- `vista-soggetti.html`: elenchi in ordine alfabetico; "In breve" confronta solo soggetti sopra soglia e nomina tutti quelli a pari merito; il tasso di frasi non controllabili ha il conteggio ("26 frasi su 45"); l'esempio porta la riga di esito; link alla copertura delle fonti per partito (ADR 0006);
+- `vista-partito.html`: riga di esito sotto ogni accostamento numerico; l'affermazione non numerica resta un accostamento con la legge, senza esito e fuori dal conteggio; nota sul ruolo accanto alle promesse (ADR 0019);
+- `vista-comefunziona.html`: FAQ "Chi decide che un numero è sbagliato?" con le condizioni dell'ADR 0037, e la sospensione di un esito dopo una segnalazione.
 
-E due differenze di contenuto, non di regole:
-
-- il mock dice "Otto domande": il catalogo MVP ne ha 30 (ADR 0022, 0024), e il testo in pagina usa il numero reale;
-- le schede "Prima di rispondere" con numeri ("circa 900.000 ragazzi") prendono i numeri dal catalogo indicatori; finché non c'è la fase 3 il contesto usa solo dati del voto d'origine e gli argomenti a favore e contro (§3.7).
+Resta una differenza di contenuto, non di regole: le schede "Prima di rispondere" con numeri ("circa 900.000 ragazzi") prendono i numeri dal catalogo indicatori; finché non c'è la fase 3 il contesto usa solo dati del voto d'origine e gli argomenti a favore e contro (§3.7). Il mock usa 8 domande, il catalogo MVP ne ha 30.
 
 ### 1.3 Ambiguità degli ADR risolte in questo piano
 
