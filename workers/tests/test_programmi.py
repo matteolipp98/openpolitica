@@ -1,8 +1,16 @@
-"""Programmi elettorali (#36): indirizzo dall'elenco del Ministero e divisione in paragrafi."""
+"""Programmi elettorali (#36): indirizzo dall'elenco del Ministero, divisione in paragrafi, testo illeggibile (#62)."""
 
 import pytest
 
-from op_workers.programmi.scarica import Pagina, ProgrammaNonTrovato, paragrafi, paragrafi_documento, url_programma
+from op_workers.programmi.scarica import (
+    Pagina,
+    ProgrammaNonTrovato,
+    leggibile,
+    pagine,
+    paragrafi,
+    paragrafi_documento,
+    url_programma,
+)
 
 ELENCO_URL = "https://dait.interno.gov.it/documenti/trasparenza/POLITICHE_20220925/POLITICHE_20220925.json"
 STATUTO = {"tp_doc": 3, "desc_tp": "Statuto", "f_doc": "statuto.pdf"}
@@ -76,3 +84,54 @@ class TestParagrafiDocumento:
     def test_non_riunisce_dopo_un_punto(self):
         lette = [Pagina(1, f"{RIGA}.", False), Pagina(2, "minuscolo ma nuovo.", False)]
         assert [p for p, _, _ in paragrafi_documento(lette)] == [1, 2]
+
+
+# Dal programma AVS 2022, pagina 5: la stessa pagina ha un pezzo letto bene e uno letto male da chi ha fatto il PDF
+BUONO = (
+    "Senza azione, da qui al 2050 i giorni di ondate di calore possono aumentare fino al 400%. I costi diretti "
+    "del cambiamento climatico in Italia rischiano di raggiungere l'8% del PIL entro fine secolo, colpendo "
+    "principalmente le fasce più fragili della popolazione, le infrastrutture, i terreni agricoli e il settore "
+    "del turismo. L'adattamento deve diventare un investimento prioritario per evitare danni incalcolabili."
+)
+ILLEGGIBILE = (
+    "L'Italia iientia tia le aiee piu colpitee si suriiscaldapiu velocemente della media globale Negli ultimi "
+    "40 anni l'Italia ha registrato oltre 2Omila morti a causa di eventi estremi, seconda solo alla Francia; "
+    "con il maggioi numeio di decessi Guaidando al futuio, i Italia iischi di diventare invivibile con "
+    "tempelature estive che potrebbeio aumentale fino a 6 giadi le piecipitazioni estive diminuiie"
+)
+
+
+class TestLeggibile:
+    def test_testo_buono(self):
+        assert leggibile(BUONO)
+
+    def test_accenti_persi_e_maiuscole(self):
+        assert leggibile(BUONO.upper().replace("Ù", "U"))
+
+    def test_testo_illeggibile(self):
+        assert not leggibile(ILLEGGIBILE)
+
+    def test_basta_un_pezzo_illeggibile_nella_pagina(self):
+        assert not leggibile(f"{BUONO}\n{ILLEGGIBILE}\n{BUONO}")
+
+    def test_testo_corto(self):
+        assert leggibile("Programma elettorale")
+        assert not leggibile("iientia tia aiee")
+
+
+class TestPagine:
+    def test_pagine_illeggibili_e_vuote_con_ocr(self, monkeypatch):
+        import pdfplumber
+
+        class Doc:
+            pages = [type("P", (), {"extract_text": lambda self, t=t: t})() for t in (BUONO, ILLEGGIBILE, "")]
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *a):
+                pass
+
+        monkeypatch.setattr(pdfplumber, "open", lambda _: Doc())
+        lette = pagine(b"%PDF", ocr=lambda pdf, i: f"ocr {i}")
+        assert lette == [Pagina(1, BUONO, False), Pagina(2, "ocr 1", True), Pagina(3, "ocr 2", True)]

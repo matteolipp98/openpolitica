@@ -1,22 +1,30 @@
 """Scarica i programmi elettorali di content/programmi.yaml e ne salva il testo diviso in paragrafi (ADR 0020).
 
 Per ogni programma: indirizzo ricavato dall'elenco pubblico del Ministero dell'Interno, impronta sha256,
-testo pagina per pagina. Le pagine senza testo (scansioni) si leggono con l'OCR (tesseract, italiano),
-e i loro paragrafi restano segnati. Idempotente: un documento con la stessa impronta non si rilegge.
+testo pagina per pagina. Le pagine senza testo (scansioni) e quelle con un testo illeggibile (scansioni lette
+male da chi ha fatto il PDF) si leggono con l'OCR (tesseract, italiano), e i loro paragrafi restano segnati.
+Idempotente: un documento con la stessa impronta non si rilegge.
+
+parole_it.txt.gz: le 200.000 parole italiane più frequenti secondo wordfreq 3.1.1 (Robyn Speer, dati
+CC BY-SA 4.0), in minuscolo e senza accenti, solo quelle di almeno 3 lettere. Rigenerarla:
+  top_n_list("it", 200000) da wordfreq, poi le stesse trasformazioni di _normale e il filtro sulle 3 lettere.
 
 Uso: python -m op_workers.programmi.scarica  (con DATABASE_URL; tesseract serve solo per le scansioni)
 """
 
 from __future__ import annotations
 
+import gzip
 import hashlib
 import io
 import os
 import re
 import shutil
 import subprocess  # noqa: S404 - solo tesseract, con argomenti fissi
+import unicodedata
 from dataclasses import dataclass
 from datetime import date
+from functools import cache
 from pathlib import Path
 from typing import Any
 from urllib.parse import quote, urljoin
@@ -29,6 +37,9 @@ CONTENT = Path(__file__).resolve().parents[3] / "content"
 FONTE = "interno-trasparenza"
 TIPO_PROGRAMMA = 2  # "Programma elettorale del partito o gruppo politico" nell'elenco del Ministero
 MINIMO_TESTO = 30  # sotto questi caratteri una pagina è una scansione: si legge con l'OCR
+FINESTRA = 20  # parole di fila su cui si misura se il testo è leggibile
+MINIMO_NOTE = 0.8  # quota minima di parole conosciute in ogni finestra: sotto, la pagina si rilegge con l'OCR
+PAROLE = Path(__file__).with_name("parole_it.txt.gz")
 UA = "openpolitica/0.1 (+https://github.com/matteolipp98/openpolitica)"
 
 
@@ -83,6 +94,35 @@ def testo_ocr(pdf: bytes, indice: int) -> str:
     return esito.stdout.decode("utf8")
 
 
+def _normale(parola: str) -> str:
+    """Minuscolo e senza accenti: le scansioni lette male perdono spesso gli accenti ("piu", "priorita")."""
+    scomposta = unicodedata.normalize("NFD", parola.lower())
+    return "".join(c for c in scomposta if not unicodedata.combining(c))
+
+
+@cache
+def _dizionario() -> frozenset[str]:
+    return frozenset(gzip.decompress(PAROLE.read_bytes()).decode("utf8").split())
+
+
+def leggibile(testo: str) -> bool:
+    """Se il testo di una pagina è italiano leggibile, e non una scansione letta male ("iientia tia le aiee").
+
+    Si guardano le parole di almeno 3 lettere: in ogni gruppo di FINESTRA parole di fila, almeno MINIMO_NOTE
+    devono essere nel dizionario. Si guarda il gruppo peggiore e non la media, perché spesso solo un pezzo
+    della pagina è sbagliato. Un testo più corto della finestra si misura tutto insieme.
+    """
+    diz = _dizionario()
+    note = [_normale(p) in diz for p in re.findall(r"[^\W\d_]+", testo) if len(p) >= 3]
+    if len(note) < FINESTRA:
+        return sum(note) >= MINIMO_NOTE * len(note)
+    somma = peggiore = sum(note[:FINESTRA])
+    for i in range(FINESTRA, len(note)):
+        somma += note[i] - note[i - FINESTRA]
+        peggiore = min(peggiore, somma)
+    return peggiore >= MINIMO_NOTE * FINESTRA
+
+
 def pagine(pdf: bytes, ocr=testo_ocr) -> list[Pagina]:
     import pdfplumber
 
@@ -90,7 +130,7 @@ def pagine(pdf: bytes, ocr=testo_ocr) -> list[Pagina]:
         testi = [p.extract_text() or "" for p in doc.pages]
     out = []
     for i, t in enumerate(testi):
-        if len(t.strip()) >= MINIMO_TESTO:
+        if len(t.strip()) >= MINIMO_TESTO and leggibile(t):
             out.append(Pagina(i + 1, t, False))
         else:
             out.append(Pagina(i + 1, ocr(pdf, i), True))
