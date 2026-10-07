@@ -18,6 +18,7 @@ Il lavoro si segue sulle issue di GitHub di `matteolipp98/openpolitica`, mostrat
   - Fase: `fase-0` … `fase-5`, `trasversale`.
   - Area: `dati`, `catalogo`, `sito`, `modelli`, `contenuti`, `manutenzione`, `decisione`.
   - Le fasi sono issue con etichetta `epica` e contengono la lista dei loro task.
+- **Stato condiviso:** l'issue con etichetta `stato` ("📌 Stato del progetto", #53) non si chiude mai. Si legge **all'inizio di ogni sessione**, prima di tutto il resto, e si **riscrive alla fine** (o quando cambia qualcosa di importante). Contiene: dove siamo, cosa sta girando adesso, decisioni prese, cosa serve dall'utente, prossimi passi. Si aggiorna la riga "Aggiornato:" con data e ora. Le decisioni dell'utente prese in chat si scrivono subito lì, così non si perdono tra una sessione e l'altra.
 - **Prima di iniziare:** leggere le issue aperte dello sprint corrente e prendere la prima `da-fare` non bloccata, oppure quella che chiede l'utente. Metterla `in-corso` al posto di `da-fare`. Se il lavoro richiesto non ha un'issue, crearla prima, con l'elenco "Fatto quando".
 - **Durante:** commento breve sull'issue quando c'è qualcosa da ricordare (una misura, un problema trovato, una scelta). Se viene fuori lavoro nuovo si apre un'altra issue, non si allarga quella in corso.
 - **Alla fine:** il commit cita l'issue (`#N`, oppure `chiude #N`). Si spuntano i criteri "Fatto quando" e si chiude l'issue con un commento: cosa è stato fatto e come è stato verificato. Si aggiorna la lista nell'epica.

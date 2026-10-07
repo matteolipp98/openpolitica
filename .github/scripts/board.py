@@ -1,6 +1,7 @@
 """Tiene la board del GitHub Project allineata alle issue (CLAUDE.md, "Board e flusso di lavoro").
 
-Colonna (campo Status) decisa dalle etichette: issue chiusa → Done, `in-corso` → In Progress, il resto → Todo.
+Colonna (campo Status) decisa dalle etichette: `stato` (lo stato condiviso) e `in-corso` → In Progress,
+issue chiusa → Done, il resto → Todo.
 Uso:
   python board.py evento   # in un workflow `issues`: allinea l'issue dell'evento (GITHUB_EVENT_PATH)
   python board.py tutte    # allinea tutte le issue del repository
@@ -20,9 +21,11 @@ COLONNE = {"fatto": ["done", "fatto", "completato"], "in-corso": ["in progress",
 
 def colonna(issue: dict) -> str:
     """Stato della board per un'issue: 'fatto', 'in-corso' o 'da-fare'."""
+    etichette = {(e["name"] if isinstance(e, dict) else e) for e in issue.get("labels", [])}
+    if "stato" in etichette:  # l'issue con lo stato condiviso resta sempre in vista
+        return "in-corso"
     if issue.get("state") == "closed":
         return "fatto"
-    etichette = {(e["name"] if isinstance(e, dict) else e) for e in issue.get("labels", [])}
     return "in-corso" if "in-corso" in etichette else "da-fare"
 
 

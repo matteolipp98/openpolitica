@@ -18,6 +18,7 @@ jobs:
       - uses: actions/checkout@v4
         with: { sparse-checkout: .github/scripts }
       - name: Allinea la board
+        shell: bash   # pipefail: se lo script fallisce, il job fallisce anche con il tee
         env:
           PROJECT_TOKEN: ${{ secrets.PROJECT_TOKEN }}
           GITHUB_TOKEN: ${{ github.token }}
