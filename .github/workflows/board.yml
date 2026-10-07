@@ -1,0 +1,24 @@
+# Board del GitHub Project allineata alle issue (CLAUDE.md): ogni issue sulla board, colonna dalle etichette.
+name: Board
+
+on:
+  issues:
+    types: [opened, reopened, closed, labeled, unlabeled]
+  workflow_dispatch:   # allinea tutte le issue
+
+concurrency: { group: board, cancel-in-progress: false }
+
+jobs:
+  allinea:
+    runs-on: ubuntu-latest
+    environment: dev   # PROJECT_TOKEN è un secret dell'environment dev
+    timeout-minutes: 10
+    permissions: { issues: read }
+    steps:
+      - uses: actions/checkout@v4
+        with: { sparse-checkout: .github/scripts }
+      - name: Allinea la board
+        env:
+          PROJECT_TOKEN: ${{ secrets.PROJECT_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 .github/scripts/board.py ${{ github.event_name == 'issues' && 'evento' || 'tutte' }} | tee -a "$GITHUB_STEP_SUMMARY"
