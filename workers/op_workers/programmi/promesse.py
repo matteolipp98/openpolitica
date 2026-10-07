@@ -31,7 +31,7 @@ from op_workers.catalogo.gemini import Gemini, QuotaEsaurita, Risposta
 
 CONTENT = Path(__file__).resolve().parents[3] / "content"
 PROMPT_ID = "promesse/estrai"
-PROMPT_VERSIONE = "v1"
+PROMPT_VERSIONE = "v2"  # v2: leggere tutti i paragrafi, niente riassunti (#65)
 MAX_CARATTERI = 12000  # testo per lotto: pochi lotti per programma, risposta che resta nei limiti del modello
 MIN_CITAZIONE = 15  # una citazione più corta (dopo la normalizzazione) non basta a ritrovare la promessa
 LIVELLI = ["nazionale", "regionale", "ue", "costituzionale"]  # più "non_chiaro", che si salva vuoto

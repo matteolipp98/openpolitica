@@ -66,7 +66,7 @@ def test_estrae_salva_e_non_richiede_lo_stesso_lotto(conn):
     assert conn.execute(
         """select l.paragrafo_da, l.paragrafo_a, l.modello_id, l.prompt_versione, l.estratte, l.scartate, r.modello_id
            from core.promessa_lotto l join core.run_modello r on r.id = l.run_modello_id"""
-    ).fetchall() == [(1, 3, "finto", "promesse/estrai.v1", 2, 1, "finto-001")]
+    ).fetchall() == [(1, 3, "finto", "promesse/estrai.v2", 2, 1, "finto-001")]
 
     # seconda esecuzione: stesso modello e stesso prompt, nessuna chiamata
     conteggi, _ = pr.esegui(conn, gemini_finto([], chiamate))
