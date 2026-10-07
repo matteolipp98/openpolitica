@@ -15,7 +15,8 @@ on:
     paths:
       - supabase/migrations/**
       - content/**
-      - workers/op_workers/connettori/importa_voti.py
+      - workers/op_workers/connettori/**
+      - workers/op_workers/comuni/**
       - workers/op_workers/anagrafica/**
       - .github/workflows/database.yml
 
