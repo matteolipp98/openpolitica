@@ -1,0 +1,50 @@
+# Verifica e prepara i servizi esterni: Supabase (con la chiave segreta) e Render (job di import).
+name: Infrastruttura
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["claude/**"]
+    paths:
+      - .github/workflows/infrastruttura.yml
+      - .github/scripts/render_job.py
+
+jobs:
+  supabase:
+    runs-on: ubuntu-latest
+    env:
+      URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      CHIAVE: ${{ secrets.SUPABASE_SECRET_KEY }}
+      DB: ${{ secrets.SUPABASE_DB_URL }}
+    steps:
+      - name: Connessione con la chiave segreta
+        run: |
+          test -n "$URL" || { echo "Manca NEXT_PUBLIC_SUPABASE_URL"; exit 1; }
+          code=$(curl -s -o /tmp/r -w '%{http_code}' "$URL/storage/v1/bucket" -H "apikey: $CHIAVE" -H "Authorization: Bearer $CHIAVE")
+          echo "Storage: HTTP $code" | tee -a "$GITHUB_STEP_SUMMARY"
+          test "$code" = 200 || { cat /tmp/r; exit 1; }
+      - name: Contenitore pubblico dei rilasci (piano §3.9)
+        run: |
+          code=$(curl -s -o /tmp/r -w '%{http_code}' -X POST "$URL/storage/v1/bucket" \
+            -H "apikey: $CHIAVE" -H "Authorization: Bearer $CHIAVE" -H "Content-Type: application/json" \
+            -d '{"id":"rilasci","name":"rilasci","public":true}')
+          echo "Creazione bucket rilasci: HTTP $code $(cat /tmp/r)" | tee -a "$GITHUB_STEP_SUMMARY"
+          # 200 = creato; 400/409 = esiste già
+          case "$code" in 200|400|409) ;; *) exit 1 ;; esac
+      - name: Accesso diretto al database (serve per le migrazioni)
+        run: |
+          if [ -z "$DB" ]; then
+            echo "Manca SUPABASE_DB_URL: senza non si possono creare le tabelle né importare i voti." | tee -a "$GITHUB_STEP_SUMMARY"
+          else
+            echo "SUPABASE_DB_URL presente." | tee -a "$GITHUB_STEP_SUMMARY"
+          fi
+
+  render:
+    runs-on: ubuntu-latest
+    env:
+      RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+      DB: ${{ secrets.SUPABASE_DB_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Crea o trova il job di import dei voti
+        run: python3 .github/scripts/render_job.py
