@@ -4,7 +4,9 @@ version = "0.1.0"
 description = "Worker Python di openpolitica: connettori, pipeline, job di catalogo e rilascio"
 requires-python = ">=3.12"
 dependencies = [
+    "httpx>=0.27",
     "psycopg[binary]>=3.2",
+    "pyyaml>=6",
 ]
 
 [dependency-groups]
@@ -27,3 +29,5 @@ ignore = ["S101"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+markers = ["contratto: interroga le fonti vere, solo in GitHub Actions"]
+addopts = "-m 'not contratto'"
