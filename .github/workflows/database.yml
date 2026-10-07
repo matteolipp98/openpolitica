@@ -13,7 +13,7 @@ on:
   schedule:
     - cron: "41 */6 * * *"   # ogni 6 ore: riprende gli import interrotti dai limiti delle fonti
   push:
-    branches: [main, "claude/**"]
+    branches: [main]   # un solo database: i branch di lavoro non devono scavalcare main nella coda
     paths:
       - supabase/migrations/**
       - content/partiti.yaml
