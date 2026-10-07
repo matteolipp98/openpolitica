@@ -67,13 +67,38 @@ def test_selezione_bilanciata_per_tema():
 
 
 def _gemini(gestore, **kw):
-    return Gemini(chiave="k", client=httpx.Client(transport=httpx.MockTransport(gestore)), pausa=0, **kw)
+    return Gemini(
+        chiave="k", client=httpx.Client(transport=httpx.MockTransport(gestore)), pausa=0, attesa_errori=0, **kw
+    )
 
 
 def test_quota_giornaliera_ferma_senza_errore():
     g = _gemini(lambda req: httpx.Response(429, text='{"quotaId": "GenerateRequestsPerDayPerProjectPerModel"}'))
     with pytest.raises(QuotaEsaurita):
         g.json("p", {})
+
+
+def test_timeout_si_riprova_poi_ferma_senza_errore():
+    """Un timeout non fa fallire il job: si riprova e, se continua, ci si ferma come per la quota (#69)."""
+    tentativi = []
+
+    def sempre_timeout(req):
+        tentativi.append(req)
+        raise httpx.ReadTimeout("timed out", request=req)
+
+    with pytest.raises(QuotaEsaurita):
+        _gemini(sempre_timeout).json("p", {})
+    assert len(tentativi) == 4
+
+    risposte = iter([None, httpx.Response(200, json={"candidates": [{"content": {"parts": [{"text": "[2]"}]}}]})])
+
+    def poi_risponde(req):
+        r = next(risposte)
+        if r is None:
+            raise httpx.ReadTimeout("timed out", request=req)
+        return r
+
+    assert _gemini(poi_risponde).json("p", {}).dati == [2]
 
 
 def test_tetto_di_chiamate_e_cache(tmp_path):

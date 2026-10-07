@@ -43,6 +43,7 @@ class Gemini:
         max_chiamate: int = 20,
         pausa: float = 7.0,
         client: httpx.Client | None = None,
+        attesa_errori: float = 10.0,
     ) -> None:
         self.chiave = chiave or os.environ.get("GEMINI_API_KEY", "")
         if not self.chiave:
@@ -51,7 +52,8 @@ class Gemini:
         self.max_chiamate = max_chiamate
         self.chiamate = 0
         self.pausa = pausa  # i piani gratuiti limitano anche le chiamate al minuto
-        self.http = client or httpx.Client(timeout=180)
+        self.http = client or httpx.Client(timeout=300)
+        self.attesa_errori = attesa_errori  # secondi in più a ogni nuovo tentativo dopo un 5xx o un errore di rete
         self._ultima = 0.0
 
     def modelli(self) -> list[str]:
@@ -71,11 +73,16 @@ class Gemini:
             if attesa > 0:
                 time.sleep(attesa)
             inizio = time.monotonic()
-            r = self.http.post(
-                f"{API}/models/{self.modello}:generateContent",
-                headers={"x-goog-api-key": self.chiave, "Content-Type": "application/json"},
-                json=corpo,
-            )
+            try:
+                r = self.http.post(
+                    f"{API}/models/{self.modello}:generateContent",
+                    headers={"x-goog-api-key": self.chiave, "Content-Type": "application/json"},
+                    json=corpo,
+                )
+            except httpx.TransportError:  # timeout o rete: come un 5xx, si riprova (#69)
+                self._ultima = time.monotonic()
+                time.sleep(self.attesa_errori * (tentativo + 1))
+                continue
             self._ultima = time.monotonic()
             if r.status_code == 429:
                 testo = r.text
@@ -85,7 +92,7 @@ class Gemini:
                 time.sleep(int(m.group(1)) + 1 if m else 30 * (tentativo + 1))
                 continue
             if r.status_code >= 500:
-                time.sleep(10 * (tentativo + 1))
+                time.sleep(self.attesa_errori * (tentativo + 1))
                 continue
             if r.status_code != 200:
                 raise ErroreGemini(f"HTTP {r.status_code}: {r.text[:300]}")
@@ -104,4 +111,4 @@ class Gemini:
                 int((self._ultima - inizio) * 1000),
                 d.get("modelVersion", self.modello),
             )
-        raise QuotaEsaurita("Gemini continua a rifiutare le richieste (429/5xx): si riprova al prossimo giro")
+        raise QuotaEsaurita("Gemini continua a rifiutare le richieste (429, 5xx o rete): si riprova al prossimo giro")
