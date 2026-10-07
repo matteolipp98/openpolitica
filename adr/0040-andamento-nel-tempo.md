@@ -1,6 +1,6 @@
 # ADR 0040 — Andamento dei partiti nel tempo
 
-**Stato:** Proposto
+**Stato:** In pausa (7 ottobre 2026): la pagina è stata tolta dal sito perché non si capiva. Il calcolo dai voti resta nel pacchetto di rilascio; la vista va ripensata prima di tornare
 **Dettaglia:** ADR 0019, 0023, 0036, 0037, 0039
 
 ## Contesto

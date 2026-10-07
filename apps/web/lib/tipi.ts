@@ -8,6 +8,8 @@ export interface Manifest {
   generato_il: string;
   catalogo: { versione: string; stato: "provvisorio" | "definitivo" };
   sezioni: { posizioni: boolean; numeri: boolean; coerenza: boolean; promesse: boolean; letture: boolean };
+  /** Fin dove arrivano i voti caricati, per ramo (solo nei pacchetti veri). */
+  fonti?: Record<string, { legislatura: number; ultima_votazione: string }>;
 }
 
 export interface Conteggio { n: number; d: number }

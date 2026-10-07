@@ -9,10 +9,18 @@ import type { Soggetto } from "@/lib/tipi";
 function scheda(s: Soggetto): Scheda {
   return {
     slug: s.slug, tipo: s.tipo, nome: s.nome, ruolo: s.ruolo,
-    frase: fraseNumeri(s) ?? "Per ora non abbiamo ancora dati da mostrare.",
+    frase: fraseNumeri(s) ?? fraseVoti(s) ?? "Per ora non abbiamo ancora dati da mostrare.",
     righe: righe(s),
     esempio: pacchetto().accostamenti[s.id]?.[0],
   };
+}
+
+/** Senza dati controllati, per i partiti si dice almeno come votano: stessa metrica per tutti (ADR 0040). */
+function fraseVoti(s: Soggetto): string | null {
+  const serie = pacchetto().andamento.serie[s.id]?.vota_compatto;
+  if (!serie) return null;
+  const n = serie.reduce((a, p) => a + p.n, 0), d = serie.reduce((a, p) => a + p.d, 0);
+  return d ? `Nei voti finali in Parlamento, il partito ha votato unito ${n} volte su ${d}.` : null;
 }
 
 /** Mette in grassetto i nomi dentro una frase generata. */
@@ -49,7 +57,6 @@ export default function Indice() {
           </p>
         </>
       )}
-      <p className="piccolo" style={{ margin: "14px 0 0" }}><Link href="/nel-tempo">Com&apos;è cambiato nel tempo →</Link></p>
       <h2>Tutti</h2>
       <Elenco partiti={partiti().map(scheda)} persone={persone().map(scheda)} />
     </main>

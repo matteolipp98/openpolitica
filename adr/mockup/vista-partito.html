@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Scheda di un soggetto. Attua ADR 0036, 0014 (confronto con fonti ufficiali), 0020 (stato delle promesse), 0023 (voti con data e atto), 0019 (conteggi), 0037 (conteggi e stato delle promesse), 0039 (indicatori su promesse e annunci), 0040 (andamento nel tempo), 0001. Dati inventati. -->
+<!-- Scheda di un soggetto. Attua ADR 0036, 0014 (confronto con fonti ufficiali), 0020 (stato delle promesse), 0023 (voti con data e atto), 0019 (conteggi), 0037 (conteggi e stato delle promesse), 0039 (indicatori su promesse e annunci), 0001. Dati inventati. -->
 <html lang="it" data-theme="light">
 <head>
 <meta charset="utf-8">
@@ -107,10 +107,6 @@ footer{margin-top:30px;padding-top:16px;border-top:1px solid var(--rule);font-si
 <h2>Dati sbagliati, con quello vero accanto</h2>
 <div id="numeri"></div>
 
-<h2>Com'è cambiato nel tempo</h2>
-<div class="card" id="tempo"></div>
-<a class="link" href="vista-andamento.html">Vedi tutto e confronta con gli altri partiti →</a>
-
 <p class="chiusura">Qui non diciamo se le loro idee sono buone o cattive. Diciamo cosa hanno detto e cosa hanno fatto. Il resto lo decidi tu.</p>
 <footer>Fonti: voti di Camera e Senato, programma elettorale depositato, statistiche ISTAT ed Eurostat.</footer>
 </div>
@@ -191,17 +187,6 @@ const kpi=[
 ];
 document.getElementById("kpi").innerHTML=kpi.map(k=>`
  <div class="riga"><span class="cifra${k.b?" b":""}">${k.c}</span><div><p>${k.t}</p><p class="sotto">${k.s}</p></div></div>`).join("");
-
-/* ADR 0040: ultimo anno contro anno prima, con la regola fissa; niente "migliora" o "peggiora" */
-const tempo=[
- {t:"Il partito vota unito",s:"Nell'ultimo anno 231 volte su 248. L'anno prima 214 su 251. Più o meno come prima.",p:[.82,.86,.85,.9,.88,.91,.9,.93]},
- {t:"Promesse precise",s:"Nell'ultimo anno 19 su 61. L'anno prima 33 su 66. È meno di prima.",p:[.55,.5,.52,.48,.36,.33,.3,.31]},
- {t:"Frasi per attaccare gli altri partiti",s:"Nell'ultimo anno 172 su 430. L'anno prima 115 su 415. È più di prima.",p:[.25,.27,.28,.3,.36,.4,.41,.4]}
-];
-const mini=v=>{const x=i=>4+i*88/(v.length-1),y=q=>32-q*30;
- return `<svg viewBox="0 0 96 34" aria-hidden="true"><polyline class="l" points="${v.map((q,i)=>x(i)+","+y(q)).join(" ")}"/></svg>`};
-document.getElementById("tempo").innerHTML=tempo.map(r=>`
- <div class="trend">${mini(r.p)}<div><p>${r.t}</p><p class="sotto">${r.s}</p></div></div>`).join("");
 
 document.querySelectorAll(".tt").forEach(b=>b.addEventListener("click",()=>{
  const s=b.closest(".tema"),o=s.dataset.open!=="true";

@@ -23,7 +23,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <nav className="menu" aria-label="Sezioni">
             <Link href="/">Partiti e persone</Link>
             <Link href="/domande">Chi la pensa come te</Link>
-            <Link href="/nel-tempo">Nel tempo</Link>
             <Link href="/come-funziona">Come funziona</Link>
           </nav>
           {children}
