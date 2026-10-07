@@ -1,6 +1,6 @@
 # ADR 0008 — Algoritmo di affinità deterministico e spiegabile
 
-**Stato:** Proposto, modificato da ADR 0013 (LLM ammessi solo come intervistatore e spiegatore)
+**Stato:** Proposto, modificato da ADR 0013 (LLM ammessi solo come intervistatore e spiegatore) e ADR 0037 (formula, pareggi e risposte del questionario)
 
 ## Contesto
 Il calcolo di quanto un politico sia vicino ai valori dell'utente influenza direttamente l'orientamento di voto. Se questo calcolo fosse opaco o generato da un LLM, sarebbe impossibile verificarne l'imparzialità e spiegarlo.

@@ -1,6 +1,6 @@
 # ADR 0019 — Statistiche aggregate e regola del denominatore
 
-**Stato:** Proposto
+**Stato:** Proposto, modificato da ADR 0037 (pubblicazione da subito e letture comparative)
 **Precisa:** ADR 0009
 
 ## Contesto

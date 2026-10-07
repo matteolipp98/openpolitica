@@ -1,6 +1,6 @@
 # ADR 0013 — Assistente conversazionale con raccomandazione motivata
 
-**Stato:** Proposto
+**Stato:** Proposto, modificato da ADR 0037 (pareggio con margine fisso al posto dell'intervallo)
 **Modifica:** ADR 0007, 0008, 0009
 
 ## Contesto

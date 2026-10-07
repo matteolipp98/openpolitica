@@ -1,6 +1,6 @@
 # ADR 0007 — Profilo valoriale dell'utente calcolato lato client
 
-**Stato:** Proposto, modificato da ADR 0013 (elaborazione effimera della conversazione)
+**Stato:** Proposto, modificato da ADR 0013 (elaborazione effimera della conversazione) e ADR 0037 (importanza per domanda al posto dei pesi per tema)
 
 ## Contesto
 Per valutare i politici secondo il proprio credo etico l'utente deve esprimere posizioni e priorità. Queste informazioni sono opinioni politiche e convinzioni personali, cioè categorie particolari di dati ai sensi dell'art. 9 del GDPR. Un database centralizzato di opinioni politiche dei cittadini sarebbe un rischio grave di sicurezza, di abuso e di reputazione.

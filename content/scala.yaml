@@ -1,0 +1,8 @@
+# Stessi livelli per tutte le posizioni, in ogni enunciato e nel tempo (ADR 0035).
+versione: 1
+livelli:
+  - { valore: 2,  etichetta: "A favore",        descrizione: "Sostiene la misura senza riserve" }
+  - { valore: 1,  etichetta: "Più a favore",    descrizione: "Sostiene la misura con riserve o in parte" }
+  - { valore: 0,  etichetta: "Né sì né no",     descrizione: "Posizione divisa, astensione o non schierata" }
+  - { valore: -1, etichetta: "Più contro",      descrizione: "Si oppone alla misura con riserve o in parte" }
+  - { valore: -2, etichetta: "Contro",          descrizione: "Si oppone alla misura senza riserve" }

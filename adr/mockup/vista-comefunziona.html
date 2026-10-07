@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Pagina di metodo. Attua ADR 0036, 0012 (trasparenza e correzioni), 0030 (come nascono le domande), 0007 (risposte sul dispositivo), 0031 (ruolo dei modelli). Dati inventati. -->
+<!-- Pagina di metodo. Attua ADR 0036, 0012 (trasparenza e correzioni), 0030 (come nascono le domande), 0007 (risposte sul dispositivo), 0031 (ruolo dei modelli), 0037 (esito dell'esempio). Dati inventati. -->
 <html lang="it" data-theme="light">
 <head>
 <meta charset="utf-8">
@@ -95,7 +95,7 @@ a{color:var(--mark)}
   <div><p class="et">Ha detto</p><p>L'occupazione femminile è cresciuta di oltre un milione di posti.</p><cite>Conferenza stampa, marzo 2026</cite></div>
   <div><p class="et">Siamo andati a vedere</p><p>I dati ISTAT sul lavoro, stesso periodo: 412.000 posti in più.</p><cite>ISTAT, occupate marzo 2024 – marzo 2026</cite></div>
 </div>
-<div class="esito"><b>Numero sbagliato.</b> La differenza è troppo grande per essere un arrotondamento. Il dato vero resta comunque una crescita.</div>
+<div class="esito"><b>Numero sbagliato.</b> Il numero vero è meno della metà. Le donne che lavorano sono comunque aumentate.</div>
 
 <h2>Cosa facciamo e cosa no</h2>
 <div class="si-no">
@@ -131,9 +131,15 @@ a{color:var(--mark)}
 </section>
 
 <section class="faq" data-open="false">
+  <button type="button" aria-expanded="false"><span class="q">Chi decide che un numero è sbagliato?</span><span class="sg">apri ▾</span></button>
+  <div class="a"><p>Una regola uguale per tutti. Se il numero è solo arrotondato, va bene. Se è troppo lontano da quello vero, è sbagliato.</p>
+  <p>Prima controlliamo che la frase sia davvero sua. Se abbiamo un dubbio, non diciamo niente.</p></div>
+</section>
+
+<section class="faq" data-open="false">
   <button type="button" aria-expanded="false"><span class="q">Perché non dite "ha mentito"?</span><span class="sg">apri ▾</span></button>
   <div class="a"><p>Perché non possiamo sapere se uno sbaglia apposta o si è confuso.</p>
-  <p>Ti mettiamo davanti le due cose, quello che ha detto e quello che dice il dato ufficiale. Il giudizio è tuo.</p></div>
+  <p>Ti diciamo solo che il numero è sbagliato e qual è quello vero. Il resto lo giudichi tu.</p></div>
 </section>
 
 <section class="faq" data-open="false">
@@ -145,6 +151,7 @@ a{color:var(--mark)}
 <section class="faq" data-open="false">
   <button type="button" aria-expanded="false"><span class="q">Se trovo un errore?</span><span class="sg">apri ▾</span></button>
   <div class="a"><p>Scrivici: c'è un modulo per segnalarlo, e vale per tutti, anche per i politici e il loro staff.</p>
+  <p>Se ci dici che abbiamo sbagliato noi, togliamo quel numero finché non l'abbiamo ricontrollato.</p>
   <p>Quando correggiamo qualcosa lo scriviamo in una pagina pubblica, con la data. Non cancelliamo di nascosto.</p></div>
 </section>
 

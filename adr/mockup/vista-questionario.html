@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Questionario e risultato. Attua ADR 0036, 0008 (calcolo deterministico), 0007 (profilo sul client), 0013 (dati di contesto prima della domanda), 0021 (pareggi e caso nessuno ti rappresenta), 0030 (nessuna posizione stimata). Dati inventati. -->
+<!-- Questionario e risultato. Attua ADR 0036, 0008 (calcolo deterministico), 0007 (profilo sul client), 0013 (dati di contesto prima della domanda), 0021 (pareggi e caso nessuno ti rappresenta), 0030 (nessuna posizione stimata), 0037 (formula, pareggi, risposte). Dati inventati. -->
 <html lang="it" data-theme="light">
 <head>
 <meta charset="utf-8">
@@ -78,7 +78,7 @@ footer{margin-top:34px;font-size:14px;color:var(--muted);max-width:44ch}
 <div class="wrap">
 
 <h1>Chi la pensa come te</h1>
-<p class="lede">Otto domande. Poi ti diciamo chi ha votato come la pensi tu, e su cosa invece non siete d'accordo.</p>
+<p class="lede"><span id="quante"></span> domande. Poi ti diciamo chi ha votato come la pensi tu, e su cosa invece non siete d'accordo.</p>
 <p class="nota">Esempio per provare la pagina: partiti e numeri sono inventati.</p>
 
 <div id="gioco">
@@ -134,6 +134,8 @@ const partiti=[
 ];
 
 let i=0;const risp=[];
+const numeri=["Zero","Una","Due","Tre","Quattro","Cinque","Sei","Sette","Otto","Nove","Dieci"];
+document.getElementById("quante").textContent=numeri[domande.length]||domande.length;
 function mostra(){
  document.getElementById("avanz").innerHTML=domande.map((_,k)=>`<i class="${k<i?'on':''}"></i>`).join("");
  document.getElementById("conta").textContent=`Domanda ${i+1} di ${domande.length}`;
@@ -150,19 +152,30 @@ document.getElementById("back").addEventListener("click",()=>{if(i>0){i--;mostra
 
 function calcola(){
  const out=partiti.map(p=>{
-  let max=0,pt=0,ok=[],no=[],manca=0;
+  /* ADR 0037: posizione 0 = neutra, nessun dato = nessuna percentuale */
+  let max=0,pt=0,ok=[],no=[],neutre=[],manca=0;
   domande.forEach((d,k)=>{
    const mia=risp[k].v,sua=p.p[k],w=risp[k].peso;
    if(mia===0) return;
    if(sua===null){manca++;return;}
    max+=4*w;
    pt+=(4-Math.abs(mia-sua))*w;
-   (mia>0)===(sua>0)?ok.push(k):no.push(k);
+   if(sua===0) neutre.push(k);
+   else (mia>0)===(sua>0)?ok.push(k):no.push(k);
   });
-  return {...p,pct:max?Math.round(pt/max*100):0,ok,no,manca};
- }).sort((a,b)=>b.pct-a.pct);
+  return {...p,pct:max?Math.round(pt/max*100):null,ok,no,neutre,manca};
+ }).sort((a,b)=>(b.pct??-1)-(a.pct??-1)||a.n.localeCompare(b.n,"it"));
 
- const primo=out[0], pari=out.filter(p=>primo.pct-p.pct<=3);
+ const primo=out[0];
+ if(primo.pct===null){
+  document.getElementById("gioco").style.display="none";
+  const r=document.getElementById("risultato");r.style.display="block";
+  r.innerHTML=`<div class="avviso"><b>Così non possiamo dirti niente.</b> Hai risposto "non ho un'opinione" a tutto. Prova a rispondere almeno a qualche domanda.</div>
+   <button class="rifai" type="button" id="rifai">Rifai le domande</button>`;
+  document.getElementById("rifai").addEventListener("click",()=>location.reload());
+  return;
+ }
+ const pari=out.filter(p=>p.pct!==null&&primo.pct-p.pct<=3);
  let testa="";
  if(primo.pct<50){
   testa=`<div class="avviso"><b>Nessuno la pensa davvero come te.</b> Il più vicino arriva solo al ${primo.pct}%. Succede, e non è un errore tuo: vuol dire che le tue idee non stanno tutte dentro un partito solo.</div>`;
@@ -177,14 +190,16 @@ function calcola(){
  const lista=out.map(p=>`
   <section class="r" data-open="false">
    <button class="rt" type="button" aria-expanded="false">
-    <span class="p">${p.pct}%</span>
+    <span class="p">${p.pct===null?"—":p.pct+"%"}</span>
     <span class="nm"><b>${p.n}</b><span>${p.r} · d'accordo su ${p.ok.length} di ${domande.length}</span></span>
     <span style="color:var(--mark);font-size:14px">vedi ▾</span>
    </button>
-   <div class="barra"><i style="width:${p.pct}%"></i></div>
+   <div class="barra"><i style="width:${p.pct??0}%"></i></div>
    <div class="dett">
     ${p.ok.length?`<h3>Su queste cose siete d'accordo</h3>${p.ok.map(k=>`<div class="pt ok"><b>Sì</b><span>${domande[k].t}</span></div>`).join("")}`:""}
     ${p.no.length?`<h3>Su queste no</h3>${p.no.map(k=>`<div class="pt no"><b>No</b><span>${domande[k].t}</span></div>`).join("")}`:""}
+    ${p.neutre.length?`<h3>Su queste non hanno scelto</h3>${p.neutre.map(k=>`<div class="pt"><b>Né sì né no</b><span>${domande[k].t}</span></div>`).join("")}`:""}
+    ${p.pct===null?`<p class="vuoto">Non sappiamo come hanno votato sulle tue domande.</p>`:""}
     ${p.manca?`<p class="vuoto">Su ${p.manca} domande non abbiamo trovato nessun voto: non inventiamo la loro posizione.</p>`:""}
     <p class="vuoto">Ogni "sì" o "no" viene da un voto in Parlamento. Puoi vedere data e atto.</p>
    </div>

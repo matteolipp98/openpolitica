@@ -1,0 +1,18 @@
+versione: 1
+presentazione:
+  denominatoreMinimo: 30          # sotto: solo il conteggio, niente percentuale (ADR 0019, 0037)
+affinita:                         # questionario come nel mock (ADR 0037)
+  pesoImportante: 2               # casella "conta più degli altri"
+  margineParita: 3                # punti: entro questo margine dal primo si è "alla pari"
+  sogliaNessunoTiRappresenta: 50
+posizioni:
+  quotaMaggioranzaGruppo: 0.5     # (favorevoli - contrari) / votanti oltre cui il partito è a favore o contro
+  membriMinimi: 3
+  legislaturaRiferimento: 19      # ADR 0023
+catalogo:                         # ADR 0030
+  enunciatiPerTema: 5
+  minoranzaMinima: 0.25           # quota del fronte perdente sotto cui un voto non è "divisivo"
+equilibrio:                       # proposte, da fissare con i dati reali (piano §3.11)
+  scartoAffinitaMedia: 5
+  scartoQuotaPrimi: 10
+  riconoscimentoArea: 0.7

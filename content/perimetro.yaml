@@ -1,0 +1,30 @@
+# Chi seguiamo e perché (ADR 0002): un criterio pubblico, non una scelta redazionale.
+versione: 1
+aggiornato_il: 2026-10-07
+legislatura: 19
+criterio: >
+  Seguiamo i partiti che hanno un gruppo parlamentare tutto loro alla Camera o al Senato
+  nella legislatura in corso. Per ogni partito seguiamo chi lo guida (segretario, presidente
+  o portavoce). Se il partito è un'alleanza con più guide, le seguiamo tutte.
+  Seguiamo anche chi guida il governo.
+partiti:
+  - { slug: fratelli-d-italia, motivo: "gruppo autonomo alla Camera e al Senato" }
+  - { slug: partito-democratico, motivo: "gruppo autonomo alla Camera e al Senato" }
+  - { slug: lega, motivo: "gruppo autonomo alla Camera e al Senato" }
+  - { slug: movimento-5-stelle, motivo: "gruppo autonomo alla Camera e al Senato" }
+  - { slug: forza-italia, motivo: "gruppo autonomo alla Camera e al Senato" }
+  - { slug: alleanza-verdi-e-sinistra, motivo: "gruppo autonomo alla Camera" }
+  - { slug: noi-moderati, motivo: "gruppo autonomo alla Camera" }
+  - { slug: azione, motivo: "gruppo autonomo alla Camera (AZ-PER-RE); al Senato dal 9.11.2023 è nel gruppo misto" }
+  - { slug: italia-viva, motivo: "gruppo autonomo alla Camera (IV-CR, dal 20.11.2023) e al Senato (gruppo/91)" }
+persone:
+  - { slug: giorgia-meloni, partito: fratelli-d-italia, motivo: "guida il governo e il partito" }
+  - { slug: elly-schlein, partito: partito-democratico, motivo: "segretaria del partito" }
+  - { slug: matteo-salvini, partito: lega, motivo: "segretario del partito" }
+  - { slug: giuseppe-conte, partito: movimento-5-stelle, motivo: "presidente del partito" }
+  - { slug: antonio-tajani, partito: forza-italia, motivo: "segretario del partito" }
+  - { slug: angelo-bonelli, partito: alleanza-verdi-e-sinistra, motivo: "guida l'alleanza (Europa Verde)" }
+  - { slug: nicola-fratoianni, partito: alleanza-verdi-e-sinistra, motivo: "guida l'alleanza (Sinistra Italiana)" }
+  - { slug: maurizio-lupi, partito: noi-moderati, motivo: "presidente del partito" }
+  - { slug: carlo-calenda, partito: azione, motivo: "guida il partito" }
+  - { slug: matteo-renzi, partito: italia-viva, motivo: "guida il partito" }

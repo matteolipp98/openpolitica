@@ -1,6 +1,6 @@
 # ADR 0010 — Conformità normativa
 
-**Stato:** Proposto
+**Stato:** Proposto, modificato da ADR 0037 (esiti quantitativi pubblicati senza revisione umana)
 
 ## Contesto
 Un'applicazione pubblica basata sull'AI che aiuta i cittadini a valutare i politici tocca più ambiti normativi. Questo ADR fissa l'approccio; ogni punto richiede verifica con un legale prima del lancio.
@@ -10,7 +10,7 @@ Un'applicazione pubblica basata sull'AI che aiuta i cittadini a valutare i polit
 
 **GDPR.** Il profilo valoriale è gestito come descritto in ADR 0007. I dati sui politici riguardano l'attività pubblica e vanno limitati a questa, escludendo la vita privata. Valutazione d'impatto sulla protezione dei dati prima del lancio.
 
-**Diffamazione.** Nessun esito "contraddetto" senza fonte citata e revisione umana. Linguaggio descrittivo e non valutativo ("il dato citato differisce da quello ISTAT"), mai attributivo di intenzioni ("ha mentito").
+**Diffamazione.** Nessun esito "contraddetto" senza fonte citata. Per i claim quantitativi l'esito si pubblica senza revisione umana alle condizioni dell'ADR 0037 (citazione verificata, accordo tra famiglie di modelli, confronto deterministico con tolleranza pubblicata); "fuorviante per contesto" richiede revisione umana. Il parere legale deve esaminare esplicitamente questa scelta. Linguaggio descrittivo e non valutativo ("il dato citato differisce da quello ISTAT"), mai attributivo di intenzioni ("ha mentito").
 
 **Par condicio e periodi elettorali.** Durante le campagne elettorali vanno verificati gli obblighi applicabili ai servizi online e le indicazioni AGCOM. Si prevede una modalità elettorale con regole di parità di trattamento rafforzate e congelamento dei cambi metodologici.
 

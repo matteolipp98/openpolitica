@@ -1,0 +1,11 @@
+slug: giuseppe-conte
+nome: Giuseppe
+cognome: Conte
+forme: ["Giuseppe Conte"]
+forme_escluse:
+  - { forma: "Conte", motivo: "è anche una parola comune e un cognome molto diffuso" }
+cariche:
+  - { carica: "Presidente del partito", partito: movimento-5-stelle, valido_dal: 2021-08-06 }
+ids_esterni:
+  # dati.camera.it: deputato.rdf/d307926_19, verificato con la sonda del 2026-10-07
+  - { fonte: camera, id: "307926", valido_dal: 2022-10-13 }

@@ -1,0 +1,12 @@
+{
+  "name": "openpolitica",
+  "private": true,
+  "packageManager": "pnpm@10.28.0",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "content:check": "pnpm --filter @op/schema run content:check",
+    "content:schema": "pnpm --filter @op/schema run content:schema",
+    "typecheck": "pnpm -r run typecheck",
+    "test": "pnpm -r run test"
+  }
+}

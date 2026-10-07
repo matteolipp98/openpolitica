@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Scheda di un soggetto. Attua ADR 0036, 0014 (confronto con fonti ufficiali), 0020 (stato delle promesse), 0023 (voti con data e atto), 0019 (conteggi), 0001. Dati inventati. -->
+<!-- Scheda di un soggetto. Attua ADR 0036, 0014 (confronto con fonti ufficiali), 0020 (stato delle promesse), 0023 (voti con data e atto), 0019 (conteggi), 0037 (conteggi e stato delle promesse), 0001. Dati inventati. -->
 <html lang="it" data-theme="light">
 <head>
 <meta charset="utf-8">
@@ -51,6 +51,9 @@ h2{font-family:"IBM Plex Serif",serif;font-size:20px;margin:34px 0 12px}
 .conf .et{font-size:14px;color:var(--muted);margin:0 0 4px}
 .conf p{margin:0;font-size:16px}
 .conf cite{font-style:normal;display:block;margin-top:6px;font-size:13px;color:var(--muted)}
+.esito{padding:12px 15px;border-top:1px solid var(--rule-soft);font-size:15.5px}
+.esito b{color:var(--brass)}
+.ruolonota{margin:0 0 10px;font-size:15px;color:var(--muted);max-width:46ch}
 .prom{background:var(--surface);border:1px solid var(--rule);padding:4px 16px}
 .pr{display:flex;gap:12px;padding:13px 0;border-top:1px solid var(--rule-soft);align-items:flex-start}
 .pr:first-child{border-top:0}
@@ -88,6 +91,7 @@ footer{margin-top:30px;padding-top:16px;border-top:1px solid var(--rule);font-si
 <div id="temi"></div>
 
 <h2>Le promesse del programma</h2>
+<p class="ruolonota">Era al governo, quindi poteva fare le leggi. Chi sta all'opposizione ne mantiene meno per forza.</p>
 <div class="prom" id="promesse"></div>
 
 <h2>Numeri che non tornano</h2>
@@ -145,18 +149,23 @@ const et={f:"Mantenuta",m:"A metà",n:"Non mantenuta"};
 document.getElementById("promesse").innerHTML=promesse.map(p=>`
  <div class="pr"><span class="tag ${p.s}">${et[p.s]}</span><p>${p.t}<span>${p.n}</span></p></div>`).join("");
 
+/* ADR 0037: esito solo per i numeri; le altre affermazioni sono accostamenti con l'atto, senza esito e fuori dal conteggio */
 const numeri=[
  {said:"L'occupazione femminile è cresciuta di oltre un milione di posti.",dove:"Conferenza stampa, marzo 2026",
-  vero:"I dati ISTAT dicono 412.000 posti.",fonte:"ISTAT, dati sul lavoro"},
- {said:"Abbiamo abbassato le tasse a tutte le famiglie.",dove:"Intervista tv, gennaio 2026",
-  vero:"Il taglio ha riguardato i redditi da lavoro fino a 35.000 euro, non tutte le famiglie.",fonte:"Legge di bilancio 2026"},
+  vero:"I dati ISTAT dicono 412.000 posti.",fonte:"ISTAT, dati sul lavoro, marzo 2024 – marzo 2026",
+  esito:"<b>Numero sbagliato.</b> Il numero vero è meno della metà."},
  {said:"L'Italia cresce più della media europea.",dove:"Post sul canale ufficiale, luglio 2026",
-  vero:"La crescita italiana è stata inferiore alla media dell'area euro nello stesso periodo.",fonte:"Eurostat, PIL trimestrale"}
+  vero:"La crescita italiana è stata inferiore alla media dell'area euro nello stesso periodo.",fonte:"Eurostat, PIL trimestrale",
+  esito:"<b>Sbagliato.</b> L'Italia è cresciuta meno degli altri, non di più."},
+ {said:"Abbiamo abbassato le tasse a tutte le famiglie.",dove:"Intervista tv riportata da un'agenzia, gennaio 2026",
+  vero:"Il taglio ha riguardato i redditi da lavoro fino a 35.000 euro, non tutte le famiglie.",fonte:"Legge di bilancio 2026",
+  esito:"Qui non c'è un numero da controllare: ti mostriamo cosa dice la legge."}
 ];
 document.getElementById("numeri").innerHTML=`<div class="card">`+numeri.map(n=>`
  <div class="conf" style="border:0;border-top:1px solid var(--rule-soft)">
   <div><p class="et">Ha detto</p><p>${n.said}</p><cite>${n.dove}</cite></div>
   <div><p class="et">In realtà</p><p>${n.vero}</p><cite>${n.fonte}</cite></div>
+  <div class="esito">${n.esito}</div>
  </div>`).join("")+`</div>`;
 
 document.querySelectorAll(".tt").forEach(b=>b.addEventListener("click",()=>{

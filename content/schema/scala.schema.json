@@ -1,0 +1,47 @@
+{
+  "type": "object",
+  "properties": {
+    "versione": {
+      "type": "integer",
+      "exclusiveMinimum": 0
+    },
+    "livelli": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "valore": {
+            "type": "number",
+            "enum": [
+              -2,
+              -1,
+              0,
+              1,
+              2
+            ]
+          },
+          "etichetta": {
+            "type": "string"
+          },
+          "descrizione": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "valore",
+          "etichetta",
+          "descrizione"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 5,
+      "maxItems": 5
+    }
+  },
+  "required": [
+    "versione",
+    "livelli"
+  ],
+  "additionalProperties": false,
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

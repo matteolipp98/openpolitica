@@ -1,0 +1,82 @@
+{
+  "type": "object",
+  "properties": {
+    "versione": {
+      "type": "integer",
+      "exclusiveMinimum": 0
+    },
+    "frasiNumeri": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "se": {
+            "type": "string"
+          },
+          "altrimenti": {
+            "type": "boolean",
+            "const": true
+          },
+          "testo": {
+            "type": "string",
+            "maxLength": 120
+          }
+        },
+        "required": [
+          "testo"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 2
+    },
+    "letture": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "metrica": {
+            "type": "string",
+            "enum": [
+              "numeri_sbagliati",
+              "non_controllabili",
+              "voti_contrari",
+              "promesse_non_mantenute"
+            ]
+          },
+          "verso": {
+            "type": "string",
+            "enum": [
+              "max",
+              "min"
+            ]
+          },
+          "aggregata": {
+            "type": "boolean",
+            "default": false
+          },
+          "testo": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "sotto": {
+            "type": "string",
+            "maxLength": 120
+          }
+        },
+        "required": [
+          "metrica",
+          "testo",
+          "sotto"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "versione",
+    "frasiNumeri",
+    "letture"
+  ],
+  "additionalProperties": false,
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}
