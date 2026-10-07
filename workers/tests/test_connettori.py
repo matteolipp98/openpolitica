@@ -67,6 +67,7 @@ class TestCamera:
             ("Non ha votato", "Non ha partecipato", "assente"),
             ("Non ha votato", "In missione", "in_missione"),
             ("Non ha votato", "Presidente di turno", "presidente"),
+            ("Ha votato", None, "votante_segreto"),
         ],
     )
     def test_espressioni(self, tipo, descr, atteso):
@@ -150,12 +151,18 @@ class TestSenato:
             senato.voti_da_archi(righe)
 
     def test_query_senza_values(self):
-        assert "VALUES" not in senato.query_voti_del_giorno(date(2024, 3, 12))
+        assert "VALUES" not in senato.query_archi_votazione(SEN + "votazione/19-167-42")
         assert "VALUES" not in senato.query_votazioni(19, date(2022, 10, 13))
 
     def test_voti_di_altre_legislature_esclusi(self):
-        righe = [{"v": SEN + "votazione/18-1-1", "p": senato.OSR + "favorevole", "sen": SEN + "senatore/1"}]
-        assert list(senato.ConnettoreSenato(SparqlFinto(righe)).voti_del_giorno(19, date(2022, 10, 1))) == []
+        class Finto:
+            def pagine(self, query, pagina=5000):
+                if "BIND" in query:
+                    return [{"v": SEN + "votazione/19-1-1", "p": senato.OSR + "favorevole", "sen": SEN + "senatore/1"}]
+                return [{"v": SEN + "votazione/18-1-1"}, {"v": SEN + "votazione/19-1-1"}]
+
+        voti = list(senato.ConnettoreSenato(Finto()).voti_del_giorno(19, date(2022, 10, 20)))
+        assert [v.id_votazione_esterno for v in voti] == ["19-1-1"]
 
 
 class TestClientSparql:

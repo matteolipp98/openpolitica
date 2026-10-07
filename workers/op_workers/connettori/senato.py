@@ -22,6 +22,7 @@ from op_workers.connettori.base import (
 
 ENDPOINT = "https://dati.senato.it/sparql"
 OSR = "http://dati.senato.it/osr/"
+SENATO_VOTAZIONE = "http://dati.senato.it/votazione/"
 
 RE_VOTAZIONE = re.compile(r"/votazione/(\d+-\d+-\d+)$")
 RE_SENATORE = re.compile(r"/senatore/(\d+)$")
@@ -116,14 +117,22 @@ SELECT DISTINCT ?v ?data ?label ?fav ?con ?ast ?esito ?tipoVot ?titolo ?fase WHE
 }} ORDER BY ?data ?v"""
 
 
-def query_voti_del_giorno(giorno: date) -> str:
+def query_votazioni_del_giorno(giorno: date) -> str:
+    return f"""
+SELECT DISTINCT ?v WHERE {{
+  ?v a osr:Votazione ; osr:seduta ?s . ?s osr:dataSeduta ?data .
+  FILTER(STR(?data) = "{giorno.isoformat()}")
+}} ORDER BY ?v"""
+
+
+def query_archi_votazione(uri: str) -> str:
+    """I voti di una sola votazione: la query su un giorno intero è troppo pesante (HTTP 502)."""
     archi = ", ".join(f"osr:{a}" for a in ARCHI)
     return f"""
 SELECT DISTINCT ?v ?p ?sen WHERE {{
-  ?v a osr:Votazione ; osr:seduta ?s . ?s osr:dataSeduta ?data .
-  FILTER(STR(?data) = "{giorno.isoformat()}")
+  BIND(<{uri}> AS ?v)
   ?v ?p ?sen . FILTER(?p IN ({archi}))
-}} ORDER BY ?v ?sen ?p"""
+}} ORDER BY ?sen ?p"""
 
 
 def query_parlamentari(leg: int) -> str:
@@ -156,10 +165,10 @@ class ConnettoreSenato:
                 yield normalizza_votazione(r, legislatura)
 
     def voti_del_giorno(self, legislatura: int, giorno: date) -> Iterator[VotoGrezzo]:
-        prefisso = f"{legislatura}-"
-        for v in voti_da_archi(self.sparql.pagine(query_voti_del_giorno(giorno))):
-            if v.id_votazione_esterno.startswith(prefisso):
-                yield v
+        prefisso = f"{SENATO_VOTAZIONE}{legislatura}-"
+        for r in self.sparql.pagine(query_votazioni_del_giorno(giorno)):
+            if r["v"].startswith(prefisso):
+                yield from voti_da_archi(self.sparql.pagine(query_archi_votazione(r["v"])))
 
     def parlamentari(self, legislatura: int) -> Iterator[ParlamentareGrezzo]:
         visti: set[str] = set()

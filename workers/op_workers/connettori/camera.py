@@ -60,6 +60,8 @@ def espressione(tipo: str, descrizione: str | None) -> Espressione:
         return "contrario"
     if t == "astensione":
         return "astenuto"
+    if t == "ha votato":  # voto segreto: si sa solo che ha partecipato
+        return "votante_segreto"
     if t == "non ha votato":
         if d in ("", "non ha votato"):
             return "non_votante"

@@ -8,7 +8,9 @@ from datetime import date
 from typing import Literal, Protocol
 
 Ramo = Literal["camera", "senato"]
-Espressione = Literal["favorevole", "contrario", "astenuto", "non_votante", "assente", "in_missione", "presidente"]
+Espressione = Literal[
+    "favorevole", "contrario", "astenuto", "non_votante", "assente", "in_missione", "presidente", "votante_segreto"
+]
 
 
 class DatoInatteso(ValueError):
