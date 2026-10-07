@@ -167,7 +167,7 @@ def query_senato(leg: int) -> dict[str, str]:
     # La votazione ha URI http://dati.senato.it/votazione/<leg>-<seduta>-<numero>: si filtra sul prefisso.
     pref = f"http://dati.senato.it/votazione/{leg}-"
     voto = "<http://dati.senato.it/votazione/19-167-42>"
-    leader = " ".join(f"<http://dati.senato.it/senatore/{i}>" for i in (25407, 30742, 30110))
+    filtro_leader = ", ".join(f"<http://dati.senato.it/senatore/{i}>" for i in (25407, 30742, 30110))
     return {
         "classi": "SELECT ?classe (COUNT(?s) AS ?n) WHERE { ?s a ?classe } GROUP BY ?classe ORDER BY DESC(?n) LIMIT 60",
         "votazioni_legislatura": f"""
@@ -181,14 +181,24 @@ def query_senato(leg: int) -> dict[str, str]:
             SELECT ?p2 ?o2 WHERE {{ {voto} osr:oggetto ?s . ?s ?p ?x . ?x ?p2 ?o2 .
               FILTER(isIRI(?x) && STRSTARTS(STR(?x), "http://dati.senato.it/")) }} LIMIT 80""",
         "senatore": "SELECT ?p ?o WHERE { <http://dati.senato.it/senatore/30742> ?p ?o }",
+        # Il server del Senato rifiuta VALUES (HTTP 400): si filtra con IN.
         "mandati_leader": f"""
-            SELECT ?s ?m ?q ?o WHERE {{ VALUES ?s {{ {leader} }} ?s ?p ?m . ?m a ocd:mandatoSenato . ?m ?q ?o }}""",
-        "adesione_esempio": """
-            SELECT ?a ?p ?o WHERE { { SELECT ?a WHERE { ?a a ocd:adesioneGruppo } LIMIT 3 } ?a ?p ?o }""",
+            SELECT ?s ?m ?q ?o WHERE {{
+              ?s ?p ?m . ?m a ocd:mandatoSenato . ?m ?q ?o . FILTER(?s IN ({filtro_leader})) }}""",
         "adesioni_leader": f"""
-            SELECT ?s ?a ?p ?o WHERE {{ VALUES ?s {{ {leader} }} ?s ?r ?a . ?a a ocd:adesioneGruppo . ?a ?p ?o }}""",
-        "gruppi": """
-            SELECT ?g ?p ?o WHERE { ?g a ocd:gruppoParlamentare . ?g ?p ?o . FILTER(isLiteral(?o)) } LIMIT 800""",
+            SELECT ?s ?g ?inizio ?fine WHERE {{
+              ?s ocd:aderisce ?a . ?a osr:legislatura {leg} ; osr:gruppo ?g ; osr:inizio ?inizio .
+              OPTIONAL {{ ?a osr:fine ?fine }} FILTER(?s IN ({filtro_leader})) }}""",
+        "gruppo_esempio": "SELECT ?p ?o WHERE { <http://dati.senato.it/gruppo/49> ?p ?o }",
+        "gruppi_legislatura": f"""
+            SELECT DISTINCT ?g ?q ?o WHERE {{
+              ?a a ocd:adesioneGruppo ; osr:legislatura {leg} ; osr:gruppo ?g .
+              ?g ?p ?d . ?d a osr:Denominazione . ?d ?q ?o }} LIMIT 600""",
+        "astenuti_individuali": f"""
+            SELECT (COUNT(*) AS ?n) WHERE {{ ?v osr:astenuto ?s . FILTER(STRSTARTS(STR(?v), "{pref}")) }}""",
+        "duplicati_voto_esempio": f"""
+            SELECT (COUNT(?s) AS ?righe) (COUNT(DISTINCT ?s) AS ?distinti) WHERE {{ {voto} osr:favorevole ?s }}""",
+        "ddl_esempio": "SELECT ?p ?o WHERE { <http://dati.senato.it/ddl/58039> ?p ?o }",
     }
 
 
@@ -222,6 +232,13 @@ def query_camera_approfondimenti(leg: int) -> dict[str, str]:
         "adesioni_leader": f"""
             SELECT ?d ?p ?o WHERE {{ VALUES ?d {{ {leader} }} ?d ocd:aderisce ?a . ?a ?p ?o }}""",
         "deputato_esempio": f"SELECT ?p ?o WHERE {{ <http://dati.camera.it/ocd/deputato.rdf/d302103_{leg}> ?p ?o }}",
+        "atto_esempio": f"SELECT ?p ?o WHERE {{ <http://dati.camera.it/ocd/attocamera.rdf/ac{leg}_3118> ?p ?o }}",
+        "duplicati": f"""
+            SELECT (COUNT(?v) AS ?righe) (COUNT(DISTINCT ?v) AS ?distinte) WHERE {{
+              ?v a ocd:votazione ; ocd:rif_leg {legislatura} }}""",
+        "duplicati_voti_esempio": """
+            SELECT (COUNT(?x) AS ?righe) (COUNT(DISTINCT ?x) AS ?distinti) WHERE {
+              ?x a ocd:voto ; ocd:rif_votazione <http://dati.camera.it/ocd/votazione.rdf/vs19_718_011> }""",
     }
 
 
