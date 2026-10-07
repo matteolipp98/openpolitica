@@ -3,7 +3,9 @@ name = "op-workers"
 version = "0.1.0"
 description = "Worker Python di openpolitica: connettori, pipeline, job di catalogo e rilascio"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "psycopg[binary]>=3.2",
+]
 
 [dependency-groups]
 dev = ["pytest>=8", "ruff>=0.6"]
