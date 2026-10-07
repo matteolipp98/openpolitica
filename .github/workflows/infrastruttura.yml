@@ -4,7 +4,7 @@ name: Infrastruttura
 on:
   workflow_dispatch:
   push:
-    branches: [main, "claude/**"]
+    branches: [main, "claude/**", "task/**"]
     paths:
       - .github/workflows/infrastruttura.yml
       - .github/scripts/render_env.py
