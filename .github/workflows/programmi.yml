@@ -1,6 +1,7 @@
 # Programmi elettorali (ADR 0020, piano §4): scarica i programmi di content/programmi.yaml dal portale
 # del Ministero dell'Interno e ne salva il testo diviso in paragrafi. Le scansioni si leggono con l'OCR.
-# Idempotente: un documento già letto (stessa impronta) non si rilegge.
+# Idempotente: un documento già letto (stessa impronta) non si rilegge, se non cambia la versione
+# dell'estrazione (ESTRAZIONE in scarica.py, #63): allora si rilegge e la nuova lettura si aggiunge.
 name: Programmi
 
 on:

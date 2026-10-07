@@ -3,7 +3,9 @@
 Per ogni programma: indirizzo ricavato dall'elenco pubblico del Ministero dell'Interno, impronta sha256,
 testo pagina per pagina. Le pagine senza testo (scansioni) e quelle con un testo illeggibile (scansioni lette
 male da chi ha fatto il PDF) si leggono con l'OCR (tesseract, italiano), e i loro paragrafi restano segnati.
-Idempotente: un documento con la stessa impronta non si rilegge.
+Idempotente: un documento con la stessa impronta non si rilegge, se è già stato letto con la versione attuale
+dell'estrazione (ESTRAZIONE). Letto con una versione più vecchia, si rilegge: la nuova lettura è una riga nuova
+di core.documento (append-only, #63) e quella valida è la più recente (vista core.documento_attuale).
 
 parole_it.txt.gz: le 200.000 parole italiane più frequenti secondo wordfreq 3.1.1 (Robyn Speer, dati
 CC BY-SA 4.0), in minuscolo e senza accenti, solo quelle di almeno 3 lettere. Rigenerarla:
@@ -40,6 +42,9 @@ MINIMO_TESTO = 30  # sotto questi caratteri una pagina è una scansione: si legg
 FINESTRA = 20  # parole di fila su cui si misura se il testo è leggibile
 MINIMO_NOTE = 0.8  # quota minima di parole conosciute in ogni finestra: sotto, la pagina si rilegge con l'OCR
 PAROLE = Path(__file__).with_name("parole_it.txt.gz")
+# Versione dell'estrazione del testo: si aumenta quando cambia quello che si salva dallo stesso PDF.
+# 1 = pdfplumber, OCR solo sulle pagine senza testo; 2 = OCR anche sulle pagine illeggibili (#62).
+ESTRAZIONE = 2
 UA = "openpolitica/0.1 (+https://github.com/matteolipp98/openpolitica)"
 
 
@@ -192,12 +197,14 @@ def paragrafi_documento(lette: list[Pagina]) -> list[tuple[int, str, bool]]:
     return out
 
 
-def salva_documento(conn: psycopg.Connection, *, url: str, data: date, sha256: str, lette: list[Pagina]) -> int:
-    """Salva il documento e i suoi paragrafi. Restituisce il numero di paragrafi."""
+def salva_documento(
+    conn: psycopg.Connection, *, url: str, data: date, sha256: str, lette: list[Pagina], estrazione: int = ESTRAZIONE
+) -> int:
+    """Salva una lettura del documento e i suoi paragrafi. Restituisce il numero di paragrafi."""
     doc_id = conn.execute(
-        """insert into core.documento (fonte, livello, url, data, sha256, pagine, pagine_ocr)
-           values (%s, 'A', %s, %s, %s, %s, %s) returning id""",
-        (FONTE, url, data, sha256, len(lette), sum(p.ocr for p in lette)),
+        """insert into core.documento (fonte, livello, url, data, sha256, pagine, pagine_ocr, estrazione)
+           values (%s, 'A', %s, %s, %s, %s, %s, %s) returning id""",
+        (FONTE, url, data, sha256, len(lette), sum(p.ocr for p in lette), estrazione),
     ).fetchone()[0]
     par = paragrafi_documento(lette)
     for n, (pagina, testo, ocr) in enumerate(par, start=1):
@@ -209,12 +216,15 @@ def salva_documento(conn: psycopg.Connection, *, url: str, data: date, sha256: s
 
 
 def collega(conn: psycopg.Connection, *, partiti: list[str], elezione: date, sha256: str) -> int:
-    """Collega il documento ai partiti come loro programma. Restituisce i collegamenti nuovi."""
+    """Collega la lettura valida del documento ai partiti come loro programma. Restituisce i collegamenti nuovi.
+
+    Dopo una rilettura il partito ha un collegamento per ogni lettura: vale quello alla lettura più recente.
+    """
     nuovi = 0
     for slug in partiti:
         nuovi += conn.execute(
             """insert into core.programma (partito_id, elezione, documento_id)
-               select p.id, %s, d.id from core.partito p, core.documento d where p.slug = %s and d.sha256 = %s
+               select p.id, %s, d.id from core.partito p, core.documento_attuale d where p.slug = %s and d.sha256 = %s
                on conflict do nothing""",
             (elezione, slug, sha256),
         ).rowcount
@@ -236,13 +246,16 @@ def esegui(conn: psycopg.Connection, http: httpx.Client, cartella: Path = CONTEN
             if not pdf.content.startswith(b"%PDF"):
                 raise ProgrammaNonTrovato(f"{url}: non è un PDF")
             sha = hashlib.sha256(pdf.content).hexdigest()
-            noto = conn.execute("select pagine, pagine_ocr from core.documento where sha256 = %s", (sha,)).fetchone()
-            lette = [] if noto else pagine(pdf.content)  # l'OCR è lento: un documento già letto non si rilegge
+            letto = conn.execute(
+                "select estrazione, pagine, pagine_ocr from core.documento_attuale where sha256 = %s", (sha,)
+            ).fetchone()
+            noto = letto is not None and letto[0] >= ESTRAZIONE  # l'OCR è lento: non si rilegge senza motivo
+            lette = [] if noto else pagine(pdf.content)
             with conn.transaction():
                 par = 0 if noto else salva_documento(conn, url=url, data=elezione, sha256=sha, lette=lette)
                 collega(conn, partiti=prog["partiti"], elezione=elezione, sha256=sha)
-            pag, ocr = noto if noto else (len(lette), sum(p.ocr for p in lette))
-            stato = "già letto" if noto else "nuovo"
+            pag, ocr = letto[1:] if noto else (len(lette), sum(p.ocr for p in lette))
+            stato = "già letto" if noto else f"riletto ({letto[0]} → {ESTRAZIONE})" if letto else "nuovo"
             righe.append(f"| {', '.join(prog['partiti'])} | {elezione} | {pag} | {ocr} | {par} | {stato} |")
     return righe
 

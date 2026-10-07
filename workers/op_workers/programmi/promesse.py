@@ -178,10 +178,13 @@ def controlla(risposta: object, lotto: list[tuple[int, str]]) -> Esito:
 
 
 def documenti(conn: psycopg.Connection, partito: str | None = None) -> list[tuple[UUID, str]]:
-    """Documenti dei programmi da leggere: (id, partiti). Un documento comune a più partiti compare una volta."""
+    """Documenti dei programmi da leggere: (id, partiti). Un documento comune a più partiti compare una volta.
+
+    Di un documento riletto (#63) si prende solo la lettura più recente.
+    """
     return conn.execute(
         """select d.id, string_agg(pa.slug, ', ' order by pa.slug)
-           from core.documento d
+           from core.documento_attuale d
            join core.programma pr on pr.documento_id = d.id
            join core.partito pa on pa.id = pr.partito_id
            where %(p)s::text is null or d.id in (
@@ -295,8 +298,10 @@ def riepilogo(conn: psycopg.Connection, conteggi: list[Conteggio], fermo: bool, 
         *[f"| {c.partiti} | {c.lotti} | {c.gia_fatti} | {c.nuovi} | {c.estratte} | {c.scartate} |" for c in conteggi],
         "",
     ]
-    tot = conn.execute("select count(*) from core.promessa").fetchone()[0]
-    righe.append(f"Promesse nel database: {tot}." + (" Quota finita: restano lotti da fare." if fermo else ""))
+    tot = conn.execute("select count(*) from core.promessa_attuale").fetchone()[0]
+    righe.append(
+        f"Promesse nel database (letture valide): {tot}." + (" Quota finita: restano lotti da fare." if fermo else "")
+    )
     esempi = [e for c in conteggi for e in c.esempi_scartati]
     if esempi:
         righe += ["", "Esempi di scarti (citazione non trovata nel testo):", ""]
