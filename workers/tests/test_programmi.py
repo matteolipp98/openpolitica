@@ -30,6 +30,16 @@ class TestUrlProgramma:
         )
         assert url_programma(e, ELENCO_URL, 75).endswith("/Documenti/75A/p.pdf")
 
+    def test_stesso_programma_in_piu_fascicoli(self):
+        # AVS: una riga per fascicolo, sempre lo stesso file
+        righe = [{"n_ord": 65, "l_fasc": f, "e_file": [{"tp_doc": 2, "f_doc": "avs.pdf"}]} for f in (None, "A", "B")]
+        assert url_programma(_elenco(*righe), ELENCO_URL, 65).endswith("/Documenti/65/avs.pdf")
+
+    def test_programmi_diversi(self):
+        righe = [{"n_ord": 1, "l_fasc": None, "e_file": [{"tp_doc": 2, "f_doc": f}]} for f in ("a.pdf", "b.pdf")]
+        with pytest.raises(ProgrammaNonTrovato):
+            url_programma(_elenco(*righe), ELENCO_URL, 1)
+
     def test_programma_mancante(self):
         with pytest.raises(ProgrammaNonTrovato):
             url_programma(_elenco({"n_ord": 71, "l_fasc": None, "e_file": [STATUTO]}), ELENCO_URL, 71)

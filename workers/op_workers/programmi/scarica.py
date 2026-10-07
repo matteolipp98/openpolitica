@@ -45,7 +45,10 @@ class Pagina:
 
 def url_programma(elenco: dict[str, Any], url_elenco: str, contrassegno: int) -> str:
     """L'indirizzo del programma, costruito come fa il portale (dima-contrassegni.js):
-    <cartella dell'elenco>/Documenti/<contrassegno><fascicolo>/<file>."""
+    <cartella dell'elenco>/Documenti/<contrassegno><fascicolo>/<file>.
+
+    Un contrassegno può avere più righe (una per fascicolo) con lo stesso programma: si usa la prima.
+    """
     trovati = [
         (c, f)
         for c in elenco["contrass"]
@@ -53,8 +56,9 @@ def url_programma(elenco: dict[str, Any], url_elenco: str, contrassegno: int) ->
         for f in c.get("e_file") or []
         if f["tp_doc"] == TIPO_PROGRAMMA
     ]
-    if len(trovati) != 1:
-        raise ProgrammaNonTrovato(f"contrassegno {contrassegno}: {len(trovati)} programmi nell'elenco, atteso 1")
+    nomi = {f["f_doc"] for _, f in trovati}
+    if len(nomi) != 1:
+        raise ProgrammaNonTrovato(f"contrassegno {contrassegno}: {len(nomi)} programmi diversi nell'elenco, atteso 1")
     c, f = trovati[0]
     cartella = urljoin(url_elenco, "Documenti/")
     return f"{cartella}{contrassegno}{c.get('l_fasc') or ''}/{quote(f['f_doc'])}"
