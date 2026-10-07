@@ -1,6 +1,6 @@
 # ADR 0028 — Capacità di revisione umana e regole di pubblicazione
 
-**Stato:** Proposto, modificato da ADR 0030 (nessun verdetto pubblicato finché non c'è revisione)
+**Stato:** Proposto, modificato da ADR 0030 e ADR 0037 (esiti quantitativi e stato delle promesse pubblicati con regole fisse; resta la revisione per "fuorviante per contesto")
 **Dettaglia:** ADR 0004 stadio 7
 
 ## Contesto

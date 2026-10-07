@@ -1,6 +1,6 @@
 # ADR 0009 — Nessun punteggio unico e UX contro l'effetto bolla
 
-**Stato:** Proposto, modificato da ADR 0013 (graduatoria per affinità consentita con vincoli)
+**Stato:** Proposto, modificato da ADR 0013 (graduatoria per affinità consentita con vincoli) e ADR 0037 (letture comparative per singola metrica, scomposizione per domanda)
 
 ## Contesto
 Classifiche e punteggi sintetici ("affidabilità 62%") sono attraenti e condivisibili, ma amplificano ogni bias residuo, sono i più attaccabili e riducono il giudizio a un numero. Un'app che conferma soltanto le convinzioni dell'utente rischia inoltre di rafforzare la polarizzazione.

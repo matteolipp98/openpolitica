@@ -42,22 +42,23 @@ Formato: Contesto, Decisione, Alternative considerate, Conseguenze. Tutti gli AD
 | [0034](0034-adattamento-dominio.md) | Adattamento del modello al dominio politico italiano |
 | [0035](0035-progettazione-domande-tipizzate.md) | Progettazione delle domande tipizzate |
 | [0036](0036-viste-e-regole-di-presentazione.md) | Viste del prodotto e regole di presentazione |
+| [0037](0037-allineamento-ai-mock.md) | Allineamento delle regole ai mock delle viste |
 
 Documenti di accompagnamento: [architettura MVP e flussi logici](architettura-mvp.md) e i mock in `mockup/`, che sono la specifica visiva dell'ADR 0036.
 
 | Vista | File | ADR attuati |
 |---|---|---|
-| Indice dei soggetti | `mockup/vista-soggetti.html` | 0036, 0019, 0009, 0030, 0001 |
-| Questionario e risultato | `mockup/vista-questionario.html` | 0036, 0008, 0007, 0013, 0021, 0030 |
-| Scheda di un soggetto | `mockup/vista-partito.html` | 0036, 0014, 0020, 0023, 0019, 0001 |
-| Come funziona | `mockup/vista-comefunziona.html` | 0036, 0012, 0030, 0007, 0031 |
+| Indice dei soggetti | `mockup/vista-soggetti.html` | 0036, 0037, 0019, 0009, 0001 |
+| Questionario e risultato | `mockup/vista-questionario.html` | 0036, 0037, 0008, 0007, 0013, 0021, 0030 |
+| Scheda di un soggetto | `mockup/vista-partito.html` | 0036, 0037, 0014, 0020, 0023, 0019, 0001 |
+| Come funziona | `mockup/vista-comefunziona.html` | 0036, 0037, 0012, 0030, 0007, 0031 |
 
 ## Come leggerli
 
-Attivi: tutti tranne 0011 (sostituito da 0017) e 0018 (sostituito da 0031). In modalità iniziale senza revisori umani valgono le modifiche dell'ADR 0030 su 0022 e 0028.
+Attivi: tutti tranne 0011 (sostituito da 0017) e 0018 (sostituito da 0031). In modalità iniziale senza revisori umani valgono le modifiche dell'ADR 0030 su 0022 e 0028, a loro volta aggiornate dall'ADR 0037: i mock sono la versione più recente del prodotto, e dove divergevano dagli ADR sono stati gli ADR ad adeguarsi.
 
 Percorso di lettura consigliato: 0001 per il perché, 0024 per l'ordine di sviluppo, 0008 e 0022 per il cuore del calcolo, 0017 e 0032 per lo stack, 0033 prima di toccare qualsiasi soglia.
 
 ## Principi guida
 
-Il sistema non dichiara di essere neutrale: dichiara come misura il proprio bias e pubblica i risultati. Nessun verdetto senza fonte citata. Nessun LLM decide chi è "migliore" né quale partito è più affine all'utente: lo decide un algoritmo pubblico. Nessun numero viene prodotto da un LLM. I voti espressi valgono più delle dichiarazioni. Ogni output è riproducibile a partire da versioni note di fonti, prompt e modelli. Il progetto è anche un laboratorio pubblico per misurare il bias politico di modelli e famiglie di modelli.
+Il sistema non dichiara di essere neutrale: dichiara come misura il proprio bias e pubblica i risultati. Nessun verdetto senza fonte citata e senza confronto deterministico con un dato ufficiale. Nessun LLM decide chi è "migliore" né quale partito è più affine all'utente: lo decide un algoritmo pubblico. Nessun numero viene prodotto da un LLM. I voti espressi valgono più delle dichiarazioni. Ogni output è riproducibile a partire da versioni note di fonti, prompt e modelli. Il progetto è anche un laboratorio pubblico per misurare il bias politico di modelli e famiglie di modelli.

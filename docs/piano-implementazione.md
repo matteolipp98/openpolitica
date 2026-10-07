@@ -1,6 +1,6 @@
 # Piano di implementazione
 
-Piano tecnico derivato dagli ADR 0001–0036 (esclusi 0011 e 0018, sostituiti), da `adr/architettura-mvp.md` e dai mock in `adr/mockup/`. Segue l'ordine delle fasi dell'ADR 0024 e la modalità iniziale senza revisori dell'ADR 0030.
+Piano tecnico derivato dagli ADR 0001–0037 (esclusi 0011 e 0018, sostituiti), da `adr/architettura-mvp.md` e dai mock in `adr/mockup/`, che sono la versione più recente del prodotto. Segue l'ordine delle fasi dell'ADR 0024 e la modalità iniziale senza revisori degli ADR 0030 e 0037.
 
 La fase 0 è descritta al livello del codice: è quella da costruire subito, e le sue fondamenta (schema dati, formato dei contenuti, algoritmo di affinità, bundle di rilascio) non devono cambiare nelle fasi successive. Le fasi 1–5 sono descritte al livello di moduli, tabelle e interfacce, con il codice solo dove un vincolo degli ADR va fissato fin dall'inizio.
 
@@ -30,29 +30,36 @@ Indice
 | Affinità deterministica, senza LLM, uguale dalla fase 0 in poi | 0008, 0024, 0025 | Pacchetto `@op/affinita` puro, con casi di riferimento congelati in CI |
 | Il profilo dell'utente non lascia il dispositivo | 0007 | Nessuna API riceve risposte; test Playwright che intercetta tutte le richieste di rete durante il questionario |
 | Record pubblicati immutabili, correzioni come nuove righe | 0005, 0023 | Trigger Postgres che vieta `UPDATE`/`DELETE` sulle tabelle append-only |
-| Nessun verdetto pubblico senza revisione | 0028, 0030 | Le etichette di esito non compaiono nel bundle di rilascio pubblico finché un flag di governance resta spento |
+| Esito negativo solo con citazione verificata, accordo tra due famiglie e confronto fuori tolleranza; "fuorviante per contesto" mai senza revisione | 0037, 0028 | Il job di rilascio scarta gli esiti che non hanno tutte le condizioni registrate; `fuorviante_contesto` esce dal bundle finché `content/governance.yaml` non attiva la revisione |
+| Letture comparative: una metrica, soggetti sopra soglia, stessa finestra, pareggi nominati | 0037, 0019 | Generatore deterministico in `rilascio/letture.py` con regole da `content/letture.yaml`; test che verificano ogni condizione |
 | Percentuale sempre con conteggio, nascosta sotto soglia | 0019, 0036 | Unico componente `<Quota>` autorizzato a mostrare una percentuale; regola di lint che vieta `%` scritti a mano nei componenti delle viste |
 | Ordinamento neutro delle liste | 0009, 0036 | Ordine alfabetico come default nei loader; l'ordinamento per affinità esiste solo nella vista risultato |
 | "Non si sa" mai stimato | 0008, 0027, 0030 | `valore: null` è un tipo distinto e gestito esplicitamente dall'algoritmo e dai componenti |
 | Contenuto metodologico come dati versionati nel repository | 0022, 0025, 0035 | Cartella `content/` con schema validato in CI |
 | Nessuna soglia di confidenza prima della calibrazione | 0033 | Il client Laya restituisce `stato_soglia: "non_calibrata"` finché non esiste un file di calibrazione per quel checkpoint |
 
-### 1.2 Conflitti tra mock e ADR
+### 1.2 Mock e ADR: come sono stati allineati
 
-I mock sono la specifica visiva (ADR 0036) e mostrano lo stato finale del prodotto con dati inventati. Alcuni contenuti mostrati però non sono pubblicabili nella modalità iniziale, oppure richiedono dati che arrivano solo in fasi successive. Il piano li tratta così:
+I mock sono la versione più recente del prodotto. Dove divergevano dagli ADR, gli ADR sono stati aggiornati con l'**ADR 0037**, che modifica 0007, 0008, 0009, 0010, 0013, 0019, 0020, 0028, 0030 e 0036. Il piano segue i mock con le condizioni fissate da quell'ADR:
 
-| Mock | Cosa mostra | Conflitto | Trattamento |
+| Mock | Cosa mostra | Regola dopo l'ADR 0037 | Effetto sul piano |
 |---|---|---|---|
-| `vista-comefunziona.html` | Riga "**Numero sbagliato.** La differenza è troppo grande…" sotto l'esempio | È un'etichetta di esito, vietata dall'ADR 0030 finché non c'è revisione | In modalità iniziale l'esempio mostra solo l'accostamento "Ha detto / Siamo andati a vedere", senza la riga di esito |
-| `vista-soggetti.html` | "In breve": "X è quello che sbaglia più numeri", "X è il più vago" | Superlativi su metriche di fact-checking: sono classifiche del livello fattuale (vietate da 0009) e percentuali aggregate non pubblicabili prima della revisione (0030) | Sezione "In breve" spenta nelle fasi 0–2. Per riattivarla dopo la fase 3 con revisione serve una decisione esplicita (vedi §11) |
-| `vista-soggetti.html`, `vista-partito.html` | "Sbaglia i numeri 11 volte su 96", "ha votato al contrario 8 volte su 58", "ha mantenuto 7 promesse su 20" | Le prime due righe richiedono le fasi 2–3 e la revisione; la terza richiede la fase 1 e la revisione (0028) | Le righe sono guidate da `manifest.sezioni` del bundle. Una sezione assente mostra un testo di assenza spiegata, non una casella vuota (0036) |
-| `vista-partito.html` | Promesse con stato "Mantenuta / A metà / Non mantenuta" | Lo stato è un giudizio; per 0028 le schede delle promesse richiedono revisione | Fase 1 pubblica solo i campi descrittivi (quantificata sì/no, costo ufficiale disponibile sì/no, ricorrenza dal 2018). Lo stato appare quando esiste revisione |
-| `vista-questionario.html` | Classificazione concordanza con `(mia>0)===(sua>0)` | Una posizione del partito pari a 0 viene contata come discordanza | Nel pacchetto di affinità la posizione 0 è una categoria a parte ("neutrale") |
-| `vista-questionario.html` | `pct: max ? … : 0` | Senza dati mostra 0%, che si legge come disaccordo totale | Restituisce `affinita: null` e la vista mostra "non abbiamo abbastanza voti per confrontarvi" |
-| `vista-questionario.html` | Pareggio con margine fisso di 3 punti | ADR 0013 chiede un intervallo di incertezza | Intervallo deterministico che tiene conto delle posizioni mancanti, più il margine fisso (§3.8) |
-| `vista-questionario.html` | Graduatoria unica, nessuna scomposizione per tema | ADR 0009 chiede affinità scomposta per tema; 0013 chiede di mostrare come cambia il risultato al variare dei pesi | Il dettaglio di ogni soggetto aggiunge la scomposizione per tema; sotto la graduatoria c'è un pannello pesi per tema che ricalcola in tempo reale |
-| `vista-questionario.html` | 8 domande in ordine fisso | ADR 0013 chiede ordine casuale con copertura dei temi; il perimetro MVP ha 30 enunciati | 30 enunciati (5 per 6 temi), temi in ordine casuale, enunciati di un tema consecutivi; seme salvato in locale per poter tornare indietro |
-| `vista-questionario.html` | Contesti come "riguarda circa 900.000 ragazzi" | Un numero nella scheda di contesto deve arrivare da una serie ufficiale (0014); gli argomenti pro/contro richiedono panel (0012) | Fase 0: contesto a template generato dal voto d'origine (data, esito, ramo). I numeri entrano in fase 3 dal catalogo indicatori |
+| `vista-comefunziona.html`, `vista-partito.html` | "**Numero sbagliato.** La differenza è troppo grande per essere un arrotondamento", "Ha detto / In realtà" | Esiti dei claim quantitativi pubblicati senza revisione, se la citazione è verificata, le due famiglie concordano sull'interrogazione e il confronto è fuori tolleranza su tutte le definizioni ufficiali. "Fuorviante per contesto" resta in revisione | `<Accostamento>` ha la prop `esito`; il comparatore (§6.2) produce anche la frase di motivazione |
+| `vista-soggetti.html` | "In breve": "X è quello che sbaglia più numeri", "X è il più vago", frase qualitativa per soggetto | Letture comparative ammesse, una per metrica, solo tra soggetti sopra soglia e a parità di finestra, con regole e soglie pubblicate | Regole in `content/letture.yaml`, generatore deterministico nel job di rilascio (§3.9) |
+| `vista-soggetti.html`, `vista-partito.html` | Conteggi di numeri sbagliati, voti contrari a quanto dichiarato, promesse mantenute | Statistiche dell'ADR 0019 pubblicate da subito, con denominatore e soglia | Le righe appaiono quando la fase che produce i dati è attiva (`manifest.sezioni`); prima, assenza spiegata |
+| `vista-partito.html` | Promesse "Mantenuta / A metà / Non mantenuta" con motivazione | Stato da regole fisse su atti e serie ufficiali, collegamento promessa-atto con accordo tra due famiglie | Fase 1 pubblica lo stato (§4) |
+| `vista-questionario.html` | 3 risposte, casella "conta più degli altri", margine di pareggio 3, soglia 50%, dettaglio per domanda | Formula del mock adottata; niente intervallo, niente pesi per tema, niente scomposizione per tema | `@op/affinita` implementa esattamente il mock (§3.8) |
+
+Restano tre scostamenti voluti dal codice dei mock, già previsti dall'ADR 0037:
+
+- il mock conta come disaccordo una posizione del partito pari a 0 (`(mia>0)===(sua>0)`): qui è "neutrale";
+- il mock mostra 0% quando non ci sono domande confrontabili: qui non si mostra percentuale;
+- la riga "Frasi che non si possono controllare 41%" non ha il conteggio: qui il conteggio va nella riga sotto la cifra (ADR 0019).
+
+E due differenze di contenuto, non di regole:
+
+- il mock dice "Otto domande": il catalogo MVP ne ha 30 (ADR 0022, 0024), e il testo in pagina usa il numero reale;
+- le schede "Prima di rispondere" con numeri ("circa 900.000 ragazzi") prendono i numeri dal catalogo indicatori; finché non c'è la fase 3 il contesto usa solo dati del voto d'origine e gli argomenti a favore e contro (§3.7).
 
 ### 1.3 Ambiguità degli ADR risolte in questo piano
 
@@ -82,6 +89,8 @@ openpolitica/
 │   ├── temi.yaml
 │   ├── scala.yaml                # livelli -2..+2 con descrizioni fisse (ADR 0035)
 │   ├── parametri.yaml            # soglie di presentazione e di calcolo
+│   ├── letture.yaml              # regole delle letture "In breve" e delle frasi qualitative (ADR 0037)
+│   ├── governance.yaml           # revisione attiva sì/no, modalità campagna
 │   ├── perimetro.yaml            # criterio pubblico + elenco risultante (ADR 0002)
 │   ├── partiti.yaml              # anagrafica e successioni (ADR 0027)
 │   ├── gruppi.yaml               # gruppo parlamentare -> partito, con date
@@ -435,7 +444,6 @@ export const Parametri = z.object({
     pesoImportante: z.number().int().min(1),            // mock: 2
     margineParita: z.number().int().min(0),             // punti percentuali, mock: 3
     sogliaNessunoTiRappresenta: z.number().int(),       // mock: 50
-    coperturaMinima: z.number().min(0).max(1),          // quota di risposte confrontabili sotto cui non si dà percentuale
   }),
   posizioni: z.object({
     quotaMaggioranzaGruppo: z.number(),                 // 0.5: vedi §3.6
@@ -499,7 +507,6 @@ affinita:
   pesoImportante: 2
   margineParita: 3
   sogliaNessunoTiRappresenta: 50
-  coperturaMinima: 0.5
 posizioni:
   quotaMaggioranzaGruppo: 0.5
   membriMinimi: 3
@@ -842,26 +849,30 @@ I prompt stanno in `content/prompt/catalogo/{tema,genera,direzione,variante,oppo
 
 **Test di discriminazione.** Si calcolano le posizioni dei partiti sull'enunciato (§3.6) con il solo ancoraggio d'origine. Superato se esiste almeno un partito con valore ≥ 1 e almeno uno con valore ≤ -1.
 
+**Scheda "Prima di rispondere".** Per ogni enunciato il job produce anche il contesto mostrato prima della domanda (ADR 0013, mock del questionario): una frase fattuale a template dal voto d'origine ("In Parlamento se ne è votato nel 2023: la proposta è stata respinta") e, da modelli di due famiglie, una frase per chi è a favore e una per chi è contro, con la stessa lunghezza massima e la stessa struttura. Nessun numero nel testo generato: i numeri entrano solo come segnaposto risolti dal catalogo indicatori, dalla fase 3. Il contesto è nel file del catalogo e passa dalla stessa PR.
+
 **Selezione bilanciata.** Tra i candidati che passano tutti i test, per ogni tema si scelgono 5 enunciati: si preferiscono votazioni finali sugli emendamenti, poi le più recenti, poi le più divisive; mai due enunciati dallo stesso atto. Se un tema ha meno di 5 candidati, il job fallisce con un rapporto: il numero per tema resta uguale per tutti (0022), si riduce per tutti i temi oppure si cambia tassonomia, non si riempie a mano.
 
 **Rapporto.** `content/catalogo/v1/rapporto-test.json` contiene tutte le votazioni considerate, il motivo di ogni scarto e l'esito di ogni test, con gli id dei run. Diventa pubblico (pagina `/metodo/catalogo`).
 
 ### 3.8 Pacchetto di affinità `@op/affinita` (PR 9)
 
-È il cuore del prodotto e non cambia dalla fase 0 in poi (0024). Puro, senza dipendenze, deterministico, usato dal browser, dagli script di equilibrio e dai test.
+È il cuore del prodotto e non cambia dalla fase 0 in poi (0024). Puro, senza dipendenze, deterministico, usato dal browser, dagli script di equilibrio e dai test. Implementa la formula del mock `vista-questionario.html` come fissata dall'ADR 0037.
 
 Regole:
 
-- Per ogni enunciato risposto con valore ≠ 0: peso `w = (importante ? pesoImportante : 1) × pesoTema` (default `pesoTema = 1`, interi da 0 a 3 nel pannello pesi).
-- Se la posizione del soggetto è `null`: l'enunciato è **mancante**, non entra né nei punti né nel massimo, ma allarga l'intervallo.
+- Risposte dell'utente: +2 "Sono d'accordo", −2 "Sono contrario", 0 "Non ho un'opinione". Le domande con 0 o saltate non entrano nel calcolo.
+- Peso: `w = importante ? pesoImportante : 1` (casella "Questo argomento per me conta più degli altri", `pesoImportante = 2`).
+- Se la posizione del soggetto è `null`: la domanda è **mancante**, non entra nel calcolo e si conta per dire "su N domande non abbiamo trovato nessun voto".
 - Altrimenti: `punti += (4 - |u - p|) × w`, `massimo += 4 × w`.
 - Categoria della singola domanda: `concorde` se segni uguali e `p ≠ 0`; `discorde` se segni opposti; `neutrale` se `p = 0`.
-- `affinita = round(100 × punti / massimo)`; `null` se `massimo = 0` o se la quota di domande confrontabili è sotto `coperturaMinima`.
-- Intervallo di incertezza: con `m` = peso totale delle domande mancanti, `basso = punti / (massimo + 4m)` (tutte le mancanti in disaccordo totale), `alto = (punti + 4m) / (massimo + 4m)` (tutte d'accordo). Se non manca nulla l'intervallo coincide con il valore.
-- Pareggio con il primo: un soggetto è "alla pari" se `affinita ≥ primo.affinita - margineParita` oppure se il suo `alto ≥ primo.basso`.
-- "Nessuno ti rappresenta": `primo.affinita < sogliaNessunoTiRappresenta`.
-- Ordinamento: affinità decrescente, a parità per `id` crescente. Si usa l'id e non `localeCompare`, che dipende dall'ambiente.
+- `affinita = round(100 × punti / massimo)`; `null` se `massimo = 0`.
+- Pareggio: sono "alla pari" con il primo i soggetti con `affinita ≥ primo.affinita - margineParita` (`margineParita = 3`).
+- "Nessuno ti rappresenta": `primo.affinita < sogliaNessunoTiRappresenta` (50).
+- Ordinamento: affinità decrescente, a parità per `id` crescente. Si usa l'id e non `localeCompare`, che dipende dall'ambiente. I soggetti con `affinita = null` vanno in fondo.
 - Tutta l'aritmetica è su interi fino alla divisione finale: stessi input, stesso output su ogni browser.
+
+L'algoritmo accetta già i valori ±1 per l'utente: aggiungere pulsanti intermedi in futuro non cambierebbe il calcolo.
 
 `packages/affinita/src/index.ts`:
 
@@ -885,30 +896,28 @@ export interface Parametri {
   pesoImportante: number;
   margineParita: number;
   sogliaNessunoTiRappresenta: number;
-  coperturaMinima: number;
 }
 export type Categoria = "concorde" | "discorde" | "neutrale" | "mancante";
 
-export interface DettaglioDomanda { enunciatoId: string; categoria: Categoria; utente: Valore; soggetto: Valore | null; peso: number }
-export interface PerTema { tema: string; punti: number; massimo: number; affinita: number | null }
+export interface DettaglioDomanda {
+  enunciatoId: string; categoria: Categoria; utente: Valore; soggetto: Valore | null; peso: number;
+}
 
 export interface RisultatoSoggetto {
   id: string;
   nome: string;
   affinita: number | null;
-  intervallo: { basso: number; alto: number } | null;
-  copertura: { confrontabili: number; risposte: number };
+  risposte: number;              // domande con un'opinione
   concordi: string[];
   discordi: string[];
   neutrali: string[];
   mancanti: string[];
-  perTema: PerTema[];
-  dettaglio: DettaglioDomanda[];
+  dettaglio: DettaglioDomanda[]; // per domanda, nell'ordine del catalogo
 }
 
 export interface Risultato {
-  soggetti: RisultatoSoggetto[];         // ordinati per affinità
-  primi: string[];                       // ids alla pari in testa
+  soggetti: RisultatoSoggetto[]; // ordinati per affinità
+  primi: string[];               // ids alla pari in testa
   nessunoTiRappresenta: boolean;
   calcoloVersione: "aff-1";
 }
@@ -920,19 +929,15 @@ export function calcola(
   risposte: Readonly<Record<string, Risposta>>,
   soggetti: readonly Soggetto[],
   par: Parametri,
-  pesiTema: Readonly<Record<string, number>> = {},
 ): Risultato {
-  const risultati = soggetti.map((s) => valuta(catalogo, risposte, s, par, pesiTema));
+  const risultati = soggetti.map((s) => valuta(catalogo, risposte, s, par));
   risultati.sort((a, b) =>
     (b.affinita ?? -1) - (a.affinita ?? -1) || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
 
   const primo = risultati.find((r) => r.affinita !== null);
   const primi = primo
-    ? risultati
-        .filter((r) => r.affinita !== null &&
-          (r.affinita >= primo.affinita! - par.margineParita ||
-           (r.intervallo && primo.intervallo && r.intervallo.alto >= primo.intervallo.basso)))
-        .map((r) => r.id)
+    ? risultati.filter((r) => r.affinita !== null && r.affinita >= primo.affinita! - par.margineParita)
+               .map((r) => r.id)
     : [];
   return {
     soggetti: risultati,
@@ -943,56 +948,35 @@ export function calcola(
 }
 
 function valuta(
-  catalogo: readonly Enunciato[], risposte: Readonly<Record<string, Risposta>>, s: Soggetto,
-  par: Parametri, pesiTema: Readonly<Record<string, number>>,
+  catalogo: readonly Enunciato[], risposte: Readonly<Record<string, Risposta>>, s: Soggetto, par: Parametri,
 ): RisultatoSoggetto {
-  let punti = 0, massimo = 0, pesoMancante = 0, risposteValide = 0, confrontabili = 0;
+  let punti = 0, massimo = 0, conRisposta = 0;
   const concordi: string[] = [], discordi: string[] = [], neutrali: string[] = [], mancanti: string[] = [];
   const dettaglio: DettaglioDomanda[] = [];
-  const temi = new Map<string, { punti: number; massimo: number }>();
 
   for (const e of catalogo) {
     const r = risposte[e.id];
-    if (!r || r.valore === null || r.valore === 0) continue;       // saltata o "non ho un'opinione"
-    const pesoT = pesiTema[e.tema] ?? 1;
-    if (pesoT === 0) continue;                                      // tema escluso dall'utente
-    const w = (r.importante ? par.pesoImportante : 1) * pesoT;
-    risposteValide++;
+    if (!r || r.valore === null || r.valore === 0) continue;      // saltata o "non ho un'opinione"
+    const w = r.importante ? par.pesoImportante : 1;
+    conRisposta++;
     const p = s.posizioni[e.id]?.valore ?? null;
     if (p === null) {
-      pesoMancante += w;
       mancanti.push(e.id);
       dettaglio.push({ enunciatoId: e.id, categoria: "mancante", utente: r.valore, soggetto: null, peso: w });
       continue;
     }
-    confrontabili++;
-    const pt = (4 - Math.abs(r.valore - p)) * w;
-    punti += pt;
+    punti += (4 - Math.abs(r.valore - p)) * w;
     massimo += 4 * w;
-    const t = temi.get(e.tema) ?? { punti: 0, massimo: 0 };
-    t.punti += pt; t.massimo += 4 * w; temi.set(e.tema, t);
-
     const cat: Categoria = p === 0 ? "neutrale" : segno(p) === segno(r.valore) ? "concorde" : "discorde";
     (cat === "concorde" ? concordi : cat === "discorde" ? discordi : neutrali).push(e.id);
     dettaglio.push({ enunciatoId: e.id, categoria: cat, utente: r.valore, soggetto: p, peso: w });
   }
 
-  const sufficiente = massimo > 0 && confrontabili / Math.max(risposteValide, 1) >= par.coperturaMinima;
-  const affinita = sufficiente ? Math.round((100 * punti) / massimo) : null;
-  const den = massimo + 4 * pesoMancante;
-  const intervallo = sufficiente
-    ? { basso: Math.round((100 * punti) / den), alto: Math.round((100 * (punti + 4 * pesoMancante)) / den) }
-    : null;
-
   return {
-    id: s.id, nome: s.nome, affinita, intervallo,
-    copertura: { confrontabili, risposte: risposteValide },
-    concordi, discordi, neutrali, mancanti,
-    perTema: [...temi].map(([tema, v]) => ({
-      tema, punti: v.punti, massimo: v.massimo,
-      affinita: v.massimo ? Math.round((100 * v.punti) / v.massimo) : null,
-    })).sort((a, b) => (a.tema < b.tema ? -1 : 1)),
-    dettaglio,
+    id: s.id, nome: s.nome,
+    affinita: massimo > 0 ? Math.round((100 * punti) / massimo) : null,
+    risposte: conRisposta,
+    concordi, discordi, neutrali, mancanti, dettaglio,
   };
 }
 ```
@@ -1004,10 +988,10 @@ Test (`packages/affinita/test/`):
   - simmetria: invertendo i segni di tutte le risposte e di tutte le posizioni il risultato non cambia;
   - permutazione: l'ordine dei soggetti in input e l'ordine del catalogo non cambiano l'output;
   - monotonia: avvicinare una posizione alla risposta non riduce l'affinità;
-  - limiti: `0 ≤ basso ≤ affinita ≤ alto ≤ 100`;
+  - limiti: `0 ≤ affinita ≤ 100`; `concordi + discordi + neutrali + mancanti = risposte`;
   - un soggetto senza posizioni ha sempre `affinita = null`;
   - indipendenza: aggiungere un soggetto non cambia l'affinità degli altri.
-- **Regressione sul mock**: un test riproduce i dati di `vista-questionario.html` e documenta le due differenze volute (posizione 0 neutrale, `null` al posto di 0%).
+- **Regressione sul mock**: un test riproduce i dati di `vista-questionario.html` (8 domande, 8 partiti) e verifica che percentuali, pareggi e "nessuno ti rappresenta" coincidano con il mock, tranne le due differenze volute dell'ADR 0037 (posizione 0 neutrale, `null` al posto di 0%).
 
 ### 3.9 Bundle di rilascio (PR 10)
 
@@ -1046,16 +1030,47 @@ parametri.json       # copia di content/parametri.yaml
   "sezioni": {
     "posizioni": true,
     "promesse": false,
-    "accostamenti_numeri": false,
+    "numeri": false,
     "coerenza_parole_voti": false,
-    "esiti_fact_checking": false,
-    "statistiche_aggregate": false
+    "letture": false,
+    "fuorviante_contesto": false
   },
   "file": { "catalogo.json": "sha256:…", "soggetti.json": "sha256:…" }
 }
 ```
 
-`manifest.sezioni` decide cosa mostra il sito. I flag `esiti_fact_checking` e `statistiche_aggregate` sono letti da `content/governance.yaml`, non calcolati: si accendono solo quando esiste capacità di revisione (0030), con una PR che è anche una decisione documentata.
+`manifest.sezioni` decide cosa mostra il sito. `promesse`, `numeri` e `coerenza_parole_voti` si accendono quando la fase che produce quei dati è attiva e ha almeno un soggetto sopra soglia; `letture` quando esiste almeno una metrica con due soggetti sopra soglia. `fuorviante_contesto` è l'unico flag letto da `content/governance.yaml`: si accende solo quando esiste capacità di revisione (ADR 0028, 0037), con una PR che è anche una decisione documentata.
+
+**Letture e frasi qualitative (ADR 0037).** Il job di rilascio genera anche `letture.json` da `content/letture.yaml`:
+
+```yaml
+versione: 1
+denominatoreMinimo: 30
+frasi_numeri:                     # frase per soggetto nell'indice
+  - { se: "denominatore < 30", testo: "Ha detto pochi numeri controllabili, quindi su questo non possiamo dire molto." }
+  - { se: "quota >= 0.15",     testo: "Sbaglia spesso i numeri: {n} volte su {d}." }
+  - { se: "quota <= 0.06",     testo: "Quando dice un numero, di solito è giusto: sbagliato {n} volte su {d}." }
+  - { altrimenti: true,        testo: "Sui numeri va così così: sbagliati {n} su {d}." }
+letture:                          # "In breve", una per metrica
+  - { metrica: numeri_sbagliati,     verso: max, testo: "{soggetti} è quello che sbaglia più numeri.", sotto: "{n} numeri sbagliati su {d} che abbiamo potuto controllare." }
+  - { metrica: non_controllabili,    verso: max, testo: "{soggetti} è il più vago: parla senza dire niente di controllabile.", sotto: "{n} frasi su {d}." }
+  - { metrica: voti_contrari,        verso: max, testo: "{soggetti} dice una cosa e poi in aula vota il contrario.", sotto: "È successo {n} volte su {d}." }
+  - { metrica: promesse_non_mantenute, aggregata: true, testo: "Promesse rimaste solo sulla carta.", sotto: "Su {d} promesse scritte nei programmi." }
+```
+
+```python
+# workers/op_workers/rilascio/letture.py
+def lettura(regola: Regola, metriche: dict[str, Conteggio], minimo: int) -> Lettura | None:
+    ammessi = {s: c for s, c in metriche.items() if c.denominatore >= minimo}
+    if len(ammessi) < 2:                      # un confronto richiede almeno due soggetti sopra soglia
+        return None
+    quote = {s: Fraction(c.numeratore, c.denominatore) for s, c in ammessi.items()}
+    estremo = max(quote.values()) if regola.verso == "max" else min(quote.values())
+    vincitori = sorted(s for s, q in quote.items() if q == estremo)   # pareggi: tutti nominati
+    return Lettura(regola.id, vincitori, [ammessi[s] for s in vincitori])
+```
+
+Le metriche usano tutte la stessa finestra temporale e lo stesso paniere di fonti (ADR 0019, 0023); `Fraction` evita confronti instabili tra quote quasi uguali. Il rapporto di copertura per schieramento dell'ADR 0006 viene esportato insieme e linkato dalla sezione "In breve".
 
 Il job `op rilascio crea` valida ogni file con gli schemi di `packages/schema` (esportati in JSON Schema), carica su Supabase Storage nel bucket pubblico `rilasci/` e registra `core.rilascio`. `op rilascio pubblica <versione>` aggiorna il puntatore `rilasci/corrente.json` e chiama il deploy hook di Vercel. Il passaggio a una nuova versione è quindi un evento esplicito e registrato.
 
@@ -1088,7 +1103,7 @@ export const posizioni = () => leggi("posizioni.json", PosizioniPubbliche);
 | `/` | Indice dei soggetti (`vista-soggetti.html`) | Schede Partiti/Persone, ordine alfabetico |
 | `/partiti/[slug]`, `/persone/[slug]` | Scheda soggetto (`vista-partito.html`) | `generateStaticParams` dal bundle |
 | `/domande` | Questionario e risultato (`vista-questionario.html`) | Client component; scarica `/dati/questionario.json` statico |
-| `/come-funziona` | Come funziona (`vista-comefunziona.html`) | Esempio senza etichetta di esito (§1.2) |
+| `/come-funziona` | Come funziona (`vista-comefunziona.html`) | Esempio con esito "Numero sbagliato" e motivazione, come nel mock |
 | `/metodo/catalogo` | Elenco degli enunciati con votazione d'origine, direzione e test | Richiesto da 0022 e 0030 (mappatura pubblica) |
 | `/metodo/dati` | Download del bundle corrente e delle versioni precedenti | 0025 |
 | `/correzioni` | Storico delle correzioni | 0012, letto dal bundle |
@@ -1103,7 +1118,7 @@ export const posizioni = () => leggi("posizioni.json", PosizioniPubbliche);
 | `<Espandibile>` | `.card .top`, `.tema .tt`, `.faq button` | `aria-expanded`, testo "vedi ▾ / chiudi ▴", focus visibile |
 | `<RigaCifra>` | `.riga .cifra` | Cifra grande + frase + riga "sotto" |
 | `<Quota numeratore denominatore>` | `.cifra` con percentuale | Sotto `denominatoreMinimo` mostra il conteggio e "troppo pochi per fare una percentuale"; la percentuale ha sempre "N su D" accanto (0019). È l'unico componente autorizzato a stampare `%` |
-| `<Accostamento>` | `.conf` "Ha detto / In realtà" | Due blocchi con citazione e fonte; **nessuna prop per l'esito** finché `sezioni.esiti_fact_checking` è falso |
+| `<Accostamento esito?>` | `.conf` "Ha detto / In realtà" e `.esito` | Due blocchi con citazione e fonte, più la riga di esito in linguaggio comune ("Numero sbagliato." + motivazione). Il tipo di `esito` non include `fuorviante_contesto` se la revisione non è attiva. Nessun testo che attribuisca intenzioni |
 | `<AssenzaDato motivo>` | "Non si sa", "Non inventiamo la loro posizione" | Testo fisso per motivo (`nessun_voto`, `sezione_non_disponibile`, `sotto_soglia`) |
 | `<NotaEsempio>` | `.nota` | Solo in Storybook e ambienti di prova; in produzione i dati sono reali |
 | `<ChiusuraFattiValori>` | `.chiusura`, `.piccolo` | "Qui non diciamo se le loro idee sono buone…" (0001), obbligatoria in fondo a ogni scheda |
@@ -1111,9 +1126,9 @@ export const posizioni = () => leggi("posizioni.json", PosizioniPubbliche);
 
 Regola di lint personalizzata (`eslint-plugin-local/no-raw-percent`): nei file sotto `app/` e `components/` (tranne `Quota.tsx`) vieta stringhe JSX che terminano con `%` o template literal con `}%`.
 
-**Vista indice (`/`).** Fase 0: per ogni soggetto la frase è generata da regole fisse sulle posizioni, uguali per tutti, per esempio "Ha una posizione documentata da voti su 27 delle 30 domande". Il dettaglio mostra le righe delle sezioni attive nel manifest; per le sezioni non attive una sola riga di `<AssenzaDato motivo="sezione_non_disponibile">` che spiega quando arriveranno ("I numeri che dicono li controlleremo da quando avremo acceso la raccolta delle dichiarazioni"). La sezione "In breve" del mock non è resa (§1.2).
+**Vista indice (`/`).** Struttura del mock: "In breve" da `letture.json`, schede Partiti/Persone, per ogni soggetto la frase qualitativa e, aprendo, le righe di dettaglio (numeri sbagliati, frasi non controllabili con il conteggio nella riga sotto, voti contrari a quanto dichiarato, promesse mantenute) e un esempio "Ha detto / In realtà". Nella fase 0 esistono solo i voti: la frase per soggetto viene da regole fisse sulle posizioni ("Ha una posizione documentata da voti su 27 delle 30 domande"), "In breve" non è resa perché `sezioni.letture` è falso, e le righe non ancora disponibili mostrano `<AssenzaDato motivo="sezione_non_disponibile">` ("I numeri che dicono li controlleremo da quando avremo acceso la raccolta delle dichiarazioni"). Ogni sezione si accende da sola con il manifest, senza modifiche al codice delle viste.
 
-**Vista scheda soggetto.** Sezione "Come ha votato sulle cose che contano": un `<Espandibile>` per enunciato, raggruppati per tema, con etichetta da `valore` (≥1 "A favore", ≤-1 "Contro", 0 "Né sì né no", `null` "Non si sa"), le `<Evidenza>` con data e atto, e per lo stato `divergente` il riquadro "Attenzione" con le votazioni in conflitto. Per `confidenza = ridotta`: "Ultimo voto disponibile: <data>, legislatura precedente". Sezioni promesse e "Numeri che non tornano" guidate dal manifest. Chiusura obbligatoria.
+**Vista scheda soggetto.** Riepilogo in testa come nel mock ("Sbaglia i numeri 11 volte su 96 che abbiamo controllato", "Ha votato al contrario di quello che diceva 8 volte su 58", "Ha mantenuto 7 promesse su 20"), una riga per sezione attiva. Sezione "Come ha votato sulle cose che contano": un `<Espandibile>` per enunciato, raggruppati per tema, con etichetta da `valore` (≥1 "A favore", ≤-1 "Contro", 0 "Né sì né no", `null` "Non si sa"), le `<Evidenza>` con data e atto, e per lo stato `divergente` il riquadro "Attenzione" con le votazioni in conflitto. Per `confidenza = ridotta`: "Ultimo voto disponibile: <data>, legislatura precedente". Sezione promesse con stato e motivazione ("Non fatto: ha votato contro l'aumento del fondo"), sezione "Numeri che non tornano" con gli accostamenti a esito negativo, entrambe guidate dal manifest. Chiusura obbligatoria.
 
 **Vista questionario (`/domande`).** Client component, nessuna chiamata di rete dopo il caricamento della pagina e del JSON statico.
 
@@ -1125,9 +1140,7 @@ const CHIAVE = "op.profilo.v1";
 
 export interface Profilo {
   catalogoVersione: string;
-  seme: number;                              // ordine casuale dei temi, stabile per l'utente
   risposte: Record<string, Risposta>;
-  pesiTema: Record<string, number>;
   aggiornatoIl: string;
 }
 
@@ -1149,9 +1162,9 @@ export function cancella(): void {
 }
 ```
 
-Ordine delle domande (ADR 0013, copertura di tutti i temi in ordine casuale): i temi sono mescolati con un PRNG seminato (`mulberry32(seme)`), gli enunciati di ciascun tema seguono in ordine casuale con lo stesso seme. Risposte come nel mock ("Sono d'accordo" = +2, "Sono contrario" = -2, "Non ho un'opinione" = 0) più la casella "Questo argomento per me conta più degli altri". L'algoritmo accetta già i valori intermedi: estendere i pulsanti a 5 livelli non cambia il calcolo (§11).
+Ordine delle domande come nel mock: fisso, uguale per tutti, a temi alternati (ogni schermata un tema diverso), definito in `catalogo.json`. Barra di avanzamento, "Domanda N di 30", "← Torna indietro". Risposte "Sono d'accordo" (+2), "Sono contrario" (−2), "Non ho un'opinione" (0) più la casella "Questo argomento per me conta più degli altri". Ogni domanda ha la scheda "Prima di rispondere" da `catalogo.json`.
 
-Risultato: blocco in testa con i soggetti alla pari ("Sono alla pari" quando `primi.length > 1`), avviso "Nessuno la pensa davvero come te" se `nessunoTiRappresenta`, intervallo mostrato in linguaggio comune ("tra 58 e 71, perché su 3 domande non sappiamo come la pensano"), graduatoria completa con barre, dettaglio di ogni soggetto con concordanze, **discordanze sempre visibili** (0009), neutrali, mancanti con "non inventiamo la loro posizione", scomposizione per tema, link alle evidenze di ogni domanda. Sotto, il pannello "Cambia quanto conta ogni tema" (0, 1, 2, 3 per tema) che richiama `calcola` a ogni modifica. Pulsanti "Rifai le domande" e "Cancella le mie risposte da questo dispositivo".
+Risultato come nel mock: avviso "Nessuno la pensa davvero come te" se `nessunoTiRappresenta`; blocco in testa "Il più vicino a te" o "Sono alla pari" (`primi.length > 1`) con percentuale e "D'accordo con te su N domande su M. Non d'accordo su K"; graduatoria completa con percentuale, ruolo, barra; aprendo un soggetto "Su queste cose siete d'accordo", "Su queste no" (**discordanze sempre visibili**, 0009), le neutrali, "Su N domande non abbiamo trovato nessun voto: non inventiamo la loro posizione", e per ogni domanda il link a data e atto del voto. Un soggetto con `affinita = null` è in fondo con "Non abbiamo abbastanza voti per confrontarvi". Pulsanti "Rifai le domande" e "Cancella le mie risposte da questo dispositivo".
 
 Testo fisso in pagina (0010, 0013): il risultato viene da una formula pubblica, uguale per tutti, e non è un'indicazione di voto. Mai "dovresti votare".
 
@@ -1264,7 +1277,35 @@ create table core.promessa_ricorrenza (promessa_id uuid, promessa_precedente_id 
 - Test 5 (ricorrenza): embedding con pgvector sulle promesse dei programmi precedenti dello stesso partito, candidati sopra soglia confermati da accordo tra due famiglie. Mostra "presente dal 2018".
 - Affinità di coalizione (0021): posizioni della coalizione dal programma comune tramite `promessa_enunciato`, origine `dichiarazione`. Prima della calibrazione (0033) e senza revisione (0028) queste posizioni **non sono pubblicate**: la coalizione resta nella vista come "posizioni non ancora documentate".
 
-**Pubblicazione.** Bundle: `promesse.json` con i campi descrittivi e i test. Lo stato "mantenuta / a metà / non mantenuta" del mock resta fuori finché non c'è revisione (§1.2). Sezione `manifest.sezioni.promesse = true`.
+**Pubblicazione.** Bundle: `promesse.json` con i campi descrittivi, i test e lo stato. Sezione `manifest.sezioni.promesse = true`.
+
+**Stato della promessa (ADR 0037).** `pipeline/stato_promesse.py` applica regole fisse, rieseguite a ogni rilascio:
+
+```python
+def stato(p: Promessa, atti: list[AttoCollegato], serie: Serie | None) -> StatoPromessa:
+    # atti: collegati alla promessa con accordo tra due famiglie; senza accordo la promessa è "da_verificare"
+    if p.collegamento == "disaccordo":
+        return StatoPromessa("da_verificare", None, [])
+    if p.obiettivo_quantificato and serie:
+        progresso = serie.progresso_verso(p.obiettivo_quantificato, p.data_programma)   # aritmetica su dato ufficiale
+        if progresso >= 1:
+            return StatoPromessa("mantenuta", f"Fatto: {serie.frase_progresso()}", [serie.ref])
+        if progresso > 0:
+            return StatoPromessa("a_meta", f"A metà: {serie.frase_progresso()}, la promessa era {p.obiettivo_testo}", [serie.ref])
+    approvati = [a for a in atti if a.approvato and a.in_vigore]
+    if any(a.realizza == "piena" for a in approvati):
+        a = next(a for a in approvati if a.realizza == "piena")
+        return StatoPromessa("mantenuta", f"Fatto: {a.frase}", [a.ref])
+    if approvati:
+        a = approvati[0]
+        return StatoPromessa("a_meta", f"A metà: {a.frase}", [a.ref])
+    contro = [a for a in atti if a.voto_soggetto == "contrario"]
+    if contro:
+        return StatoPromessa("non_mantenuta", f"Non fatto: ha votato contro {contro[0].oggetto}", [contro[0].ref])
+    return StatoPromessa("non_mantenuta", "Non fatto: nessuna proposta presentata", [])
+```
+
+Le frasi di motivazione sono template con valori calcolati, mai testo libero di un modello. Accanto ai conteggi la scheda dichiara se il soggetto era al governo o all'opposizione (normalizzazione per ruolo, ADR 0019). Il campo `realizza` (piena o parziale) è deciso con accordo tra due famiglie; in disaccordo vale "parziale".
 
 ---
 
@@ -1446,15 +1487,34 @@ def confronta(q: Interrogazione, serie: Serie, tol: Tolleranze) -> Confronto:
 
 Definizioni ambigue: se l'indicatore ha più definizioni plausibili, si confronta con tutte e si dichiara. "Fuorviante per contesto" si calcola solo con regole scritte (finestra standard per tipo di confronto) e va sempre in revisione.
 
-### 6.3 Pubblicazione in modalità iniziale
+### 6.3 Pubblicazione degli esiti (ADR 0037)
 
-Senza revisori (0030) il bundle contiene solo **accostamenti**: claim con citazione e link, valore ufficiale della stessa serie e periodo con link, nessun esito. Gli esiti interni restano nel database con le statistiche interne. `sezioni.accostamenti_numeri = true`, `esiti_fact_checking = false`, `statistiche_aggregate = false`.
+Il job di rilascio pubblica un esito solo se la verifica registra tutte le condizioni dell'ADR 0037:
 
-Quando esiste revisione: `content/governance.yaml` accende i due flag, si applicano le regole di 0028 (doppia revisione sugli esiti negativi, revisori di orientamenti diversi) e 0019 (denominatore meccanico, soglia minima, conteggio sempre visibile). Esportazione ClaimReview per gli esiti rivisti.
+```python
+def pubblicabile(v: Verifica) -> bool:
+    if v.esito == "fuorviante_contesto":
+        return governance.revisione_attiva and v.revisioni_concordi >= 2
+    if v.esito in ("supportato", "non_verificabile"):
+        return True
+    # impreciso e contraddetto
+    return (
+        v.citazione_verificata
+        and (v.fonte_livello in ("A", "B") or v.fonti_c_indipendenti >= 2)
+        and v.interrogazione_concorde_tra_famiglie         # stessa metrica, periodo, territorio, unità
+        and v.fuori_tolleranza_su_tutte_le_definizioni
+        and v.valore_ufficiale is not None and v.serie_ref is not None
+        and not v.sospesa_da_segnalazione                 # ADR 0037: una segnalazione sospende fino alla verifica
+    )
+```
+
+La frase in pagina viene dal comparatore, con valori calcolati: "Numero sbagliato. La differenza è troppo grande per essere un arrotondamento." oppure "Il numero è arrotondato male: {dichiarato} invece di {ufficiale}.". Le statistiche aggregate dell'ADR 0019 (numeri sbagliati su controllati, frasi non controllabili, voti contrari a quanto dichiarato) si calcolano sugli esiti pubblicabili, con la regola del denominatore. `sezioni.numeri = true` quando almeno un soggetto supera la soglia.
+
+Quando esiste revisione, `content/governance.yaml` attiva "fuorviante per contesto" e il campionamento a posteriori e la doppia revisione dell'ADR 0028 sugli esiti negativi, senza cambiare cosa si pubblica. Esportazione ClaimReview per tutti gli esiti pubblicati.
 
 ### 6.4 Backoffice (`apps/backoffice`)
 
-Next.js interno, Supabase Auth, RLS per ruolo (`revisore`, `panel`, `admin`), log delle azioni append-only. Code: esiti negativi, ispezione (0026, 0027), promesse, golden set. Conflitti di interesse dichiarati per soggetto escludono il revisore. Doppia revisione indipendente: il secondo revisore non vede la decisione del primo.
+Next.js interno, Supabase Auth, RLS per ruolo (`revisore`, `panel`, `admin`), log delle azioni append-only. Code: segnalazioni che sospendono un esito (0037), "fuorviante per contesto", ispezione (0026, 0027), promesse "da verificare", golden set. Conflitti di interesse dichiarati per soggetto escludono il revisore. Doppia revisione indipendente: il secondo revisore non vede la decisione del primo.
 
 ---
 
@@ -1632,17 +1692,17 @@ Ogni PR è piccola, rilasciabile e con i propri test. Dimensioni indicative: S <
 | 7 | Gateway LiteLLM su Render + `run_modello` + wrapper `chiama_strutturato` | 2 | M |
 | 8 | Job catalogo ADR 0030 (selezione, tema, generazione, direzione, test) → PR con `catalogo/v1` | 6, 7 | L |
 | 9 | `@op/affinita` con casi congelati e test di proprietà | 3 | M |
-| 10 | Bundle di rilascio: build, validazione, Storage, manifest, deploy hook | 6, 8 | M |
+| 10 | Bundle di rilascio: build, validazione, Storage, manifest, letture, deploy hook | 6, 8 | M |
 | 11 | Web: token, componenti condivisi, lint `no-raw-percent`, layout, tema | 1 | M |
 | 12 | Web: indice soggetti e scheda soggetto | 10, 11 | M |
-| 13 | Web: questionario e risultato, pannello pesi, test privacy | 9, 10, 11 | L |
+| 13 | Web: questionario e risultato, test privacy | 9, 10, 11 | L |
 | 14 | Web: come funziona, metodo/catalogo, metodo/dati, correzioni | 10, 11 | M |
 | 15 | Web: segnalazioni (route, anti-bot, tabella) | 2, 11 | S |
 | 16 | Test di equilibrio in CI e prima del rilascio | 9, 10 | S |
 | — | **Fine fase 0** | | |
 | 17–20 | Fase 1: documenti e programmi, estrazione promesse, cinque test, pubblicazione descrittiva | 10 | L ×2, M ×2 |
 | 21–26 | Fase 2: connettori documenti, dedup, pgmq e stadi, `laya-serve`, client con rotazione, golden set e calibrazione | 10 | L ×3, M ×3 |
-| 27–31 | Fase 3: indicatori e connettori, comparatore, accostamenti, backoffice, governance flag | 21–26 | L ×2, M ×3 |
+| 27–31 | Fase 3: indicatori e connettori, comparatore con frasi di esito, regole di pubblicabilità, backoffice e sospensione da segnalazione | 21–26 | L ×2, M ×3 |
 | 32–35 | Fase 4: route chat, intervistatore, spiegatore e validatore, persone sintetiche | 27–31 | L ×3, M |
 | 36–39 | Fase 5: registro modelli, runner, metriche, cruscotto | 21–26 | L ×2, M ×2 |
 
@@ -1654,10 +1714,9 @@ I PR 9 e 11 possono partire in parallelo ai PR 2–6: dipendono solo dagli schem
 
 Da chiudere prima della fine della fase 0, ciascuna con una PR su un ADR o su `content/`:
 
-1. **Pulsanti del questionario: 3 come nel mock o 5 livelli come la scala dell'ADR 0035.** L'algoritmo supporta entrambi. Raccomandazione: tenere 3 nella fase 0 per semplicità di lettura, rivalutare con test utente.
-2. **Sezione "In breve" della vista indice.** Così com'è nel mock è una classifica del livello fattuale (0009). Raccomandazione: sostituirla con letture non comparative ("Su 30 domande, i partiti di governo hanno votato tutti allo stesso modo su 12"), oppure eliminarla. Va deciso prima della fase 3.
-3. **Soglie del catalogo e dell'equilibrio** (`minoranzaMinima`, tolleranze di §3.11). Proposte qui, da fissare con dati reali della XIX legislatura.
-4. **Licenza dei contenuti e del bundle** (per esempio CC BY 4.0 per i dati derivati, compatibilmente con le condizioni d'uso di Camera, Senato e Openpolis, ADR 0003, 0025).
-5. **Terza famiglia di modelli** (0016): utile già nella fase 0, perché l'accordo tra due sole famiglie nel job di catalogo è un controllo debole.
-6. **Mappatura gruppo → partito** per i gruppi composti da più partiti (per esempio liste comuni): attribuire al gruppo come soggetto a sé o dividere per persona tramite `appartenenza`. Raccomandazione: per persona, con il gruppo come fallback solo quando la persona non ha appartenenza di partito registrata.
-7. **Parere legale e valutazione d'impatto** (0010): prerequisiti del lancio pubblico, da avviare in parallelo alla fase 0.
+1. **Soglie del catalogo e dell'equilibrio** (`minoranzaMinima`, tolleranze di §3.11). Proposte qui, da fissare con dati reali della XIX legislatura.
+2. **Licenza dei contenuti e del bundle** (per esempio CC BY 4.0 per i dati derivati, compatibilmente con le condizioni d'uso di Camera, Senato e Openpolis, ADR 0003, 0025).
+3. **Terza famiglia di modelli** (0016). Con l'ADR 0037 l'accordo tra due famiglie è la condizione che permette di pubblicare un "Numero sbagliato" senza revisione: con due sole famiglie è un controllo debole. Raccomandazione: aggiungerne una terza prima della fase 3.
+4. **Mappatura gruppo → partito** per i gruppi composti da più partiti (per esempio liste comuni): attribuire al gruppo come soggetto a sé o dividere per persona tramite `appartenenza`. Raccomandazione: per persona, con il gruppo come fallback solo quando la persona non ha appartenenza di partito registrata.
+5. **Parere legale e valutazione d'impatto** (0010): prerequisiti del lancio pubblico, da avviare in parallelo alla fase 0. Il parere deve coprire esplicitamente gli esiti negativi, le letture comparative e lo stato delle promesse pubblicati senza revisione umana (ADR 0037).
+6. **Tempo di sospensione dopo una segnalazione** (ADR 0037): entro quanto un esito sospeso va verificato o ripubblicato, visto che senza revisori qualcuno deve comunque farlo.

@@ -1,6 +1,6 @@
 # ADR 0030 — Generazione automatica del catalogo e controlli sostitutivi della revisione umana
 
-**Stato:** Proposto
+**Stato:** Proposto, modificato da ADR 0037 (la sezione "Nessun giudizio pubblicato senza revisore" è superata)
 **Modifica:** ADR 0022, 0028
 
 ## Contesto
@@ -33,6 +33,8 @@ L'enunciato nasce così già ancorato alla votazione da cui proviene: la mappatu
 Tutti i test girano nella suite di valutazione (ADR 0025) e bloccano la pubblicazione del catalogo.
 
 ### Nessun giudizio pubblicato senza revisore
+> **Superata da ADR 0037.** Gli esiti dei claim quantitativi, le statistiche aggregate e lo stato delle promesse si pubblicano con le regole e le condizioni dell'ADR 0037; resta non pubblicato senza revisione solo l'esito "fuorviante per contesto". Testo originale:
+
 Finché non c'è revisione umana, il fact-checking non pubblica verdetti. Pubblica **accostamenti**: la dichiarazione con la citazione e il link, il valore della serie ufficiale per lo stesso periodo con il link, senza etichetta di esito.
 
 Le etichette "contraddetto" e "fuorviante per contesto" restano calcolate internamente e usate per le statistiche interne, ma non sono esposte al pubblico e non compaiono nelle pagine dei politici. Le percentuali aggregate dell'ADR 0019 restano non pubblicate finché non esiste capacità di revisione.

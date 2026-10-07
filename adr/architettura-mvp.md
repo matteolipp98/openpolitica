@@ -84,11 +84,11 @@ flowchart TB
   G --> H[Catalogo indicatori -> API ISTAT/Eurostat]
   H --> I[Confronto deterministico<br/>con tolleranze pubblicate]
   I --> J{Esito}
-  J -- supportato / non verificabile --> K[Pubblica]
-  J -- contraddetto / fuorviante --> L[Coda revisione umana] --> K
+  J -- supportato / impreciso / contraddetto<br/>non verificabile --> K[Pubblica<br/>condizioni ADR 0037]
+  J -- fuorviante per contesto --> L[Coda revisione umana] --> K
 ```
 
-Regola invariante: nessun numero è prodotto da un modello, e nessun esito negativo viene pubblicato senza revisione.
+Regola invariante: nessun numero è prodotto da un modello. Un esito negativo si pubblica solo con citazione verificata, accordo tra due famiglie sull'interrogazione e confronto deterministico (ADR 0037); "fuorviante per contesto" passa sempre dalla revisione umana.
 
 ### F3 — Posizioni dalle dichiarazioni
 
