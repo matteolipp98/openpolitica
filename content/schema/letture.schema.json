@@ -58,6 +58,10 @@
             "type": "string",
             "maxLength": 120
           },
+          "testoPiu": {
+            "type": "string",
+            "maxLength": 120
+          },
           "sotto": {
             "type": "string",
             "maxLength": 120

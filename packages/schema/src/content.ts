@@ -73,6 +73,7 @@ export const Letture = z.object({
       verso: z.enum(["max", "min"]).optional(),
       aggregata: z.boolean().default(false),
       testo: z.string().max(120),
+      testoPiu: z.string().max(120).optional(), // per i pareggi: si nominano tutti (ADR 0037)
       sotto: z.string().max(120),
     }),
   ),

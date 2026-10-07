@@ -1,0 +1,416 @@
+[
+ {
+  "id": "alleanza-progresso",
+  "slug": "alleanza-progresso",
+  "tipo": "partito",
+  "nome": "Alleanza Progresso",
+  "ruolo": "Al governo",
+  "numeri": {
+   "sbagliati": 11,
+   "controllati": 96
+  },
+  "vaghi": {
+   "n": 96,
+   "d": 234
+  },
+  "coerenza": {
+   "contrari": 8,
+   "confrontabili": 58
+  },
+  "promesse": {
+   "mantenute": 7,
+   "totali": 20
+  }
+ },
+ {
+  "id": "civica-riformista",
+  "slug": "civica-riformista",
+  "tipo": "partito",
+  "nome": "Civica Riformista",
+  "ruolo": "All'opposizione",
+  "numeri": {
+   "sbagliati": 4,
+   "controllati": 41
+  },
+  "vaghi": {
+   "n": 41,
+   "d": 111
+  },
+  "coerenza": {
+   "contrari": 3,
+   "confrontabili": 33
+  },
+  "promesse": {
+   "mantenute": 3,
+   "totali": 14
+  }
+ },
+ {
+  "id": "fronte-dei-territori",
+  "slug": "fronte-dei-territori",
+  "tipo": "partito",
+  "nome": "Fronte dei Territori",
+  "ruolo": "Al governo",
+  "numeri": {
+   "sbagliati": 14,
+   "controllati": 72
+  },
+  "vaghi": {
+   "n": 78,
+   "d": 150
+  },
+  "coerenza": {
+   "contrari": 12,
+   "confrontabili": 46
+  },
+  "promesse": {
+   "mantenute": 2,
+   "totali": 19
+  }
+ },
+ {
+  "id": "movimento-solidale",
+  "slug": "movimento-solidale",
+  "tipo": "partito",
+  "nome": "Movimento Solidale",
+  "ruolo": "All'opposizione",
+  "numeri": {
+   "sbagliati": 9,
+   "controllati": 88
+  },
+  "vaghi": {
+   "n": 69,
+   "d": 157
+  },
+  "coerenza": {
+   "contrari": 9,
+   "confrontabili": 51
+  },
+  "promesse": {
+   "mantenute": 5,
+   "totali": 19
+  }
+ },
+ {
+  "id": "patto-per-le-regioni",
+  "slug": "patto-per-le-regioni",
+  "tipo": "partito",
+  "nome": "Patto per le Regioni",
+  "ruolo": "Al governo",
+  "numeri": {
+   "sbagliati": 2,
+   "controllati": 19
+  },
+  "vaghi": {
+   "n": 26,
+   "d": 45
+  },
+  "coerenza": {
+   "contrari": 3,
+   "confrontabili": 15
+  },
+  "promesse": {
+   "mantenute": 1,
+   "totali": 9
+  }
+ },
+ {
+  "id": "partito-lavoro-e-comunita",
+  "slug": "partito-lavoro-e-comunita",
+  "tipo": "partito",
+  "nome": "Partito Lavoro e Comunità",
+  "ruolo": "All'opposizione",
+  "numeri": {
+   "sbagliati": 7,
+   "controllati": 63
+  },
+  "vaghi": {
+   "n": 40,
+   "d": 103
+  },
+  "coerenza": {
+   "contrari": 5,
+   "confrontabili": 44
+  },
+  "promesse": {
+   "mantenute": 4,
+   "totali": 18
+  }
+ },
+ {
+  "id": "unione-liberale",
+  "slug": "unione-liberale",
+  "tipo": "partito",
+  "nome": "Unione Liberale",
+  "ruolo": "Da solo",
+  "numeri": {
+   "sbagliati": 1,
+   "controllati": 14
+  },
+  "vaghi": {
+   "n": 13,
+   "d": 27
+  },
+  "coerenza": {
+   "contrari": 2,
+   "confrontabili": 11
+  },
+  "promesse": {
+   "mantenute": 2,
+   "totali": 8
+  }
+ },
+ {
+  "id": "verdi-e-territori",
+  "slug": "verdi-e-territori",
+  "tipo": "partito",
+  "nome": "Verdi e Territori",
+  "ruolo": "All'opposizione",
+  "numeri": {
+   "sbagliati": 0,
+   "controllati": 9
+  },
+  "vaghi": {
+   "n": 8,
+   "d": 17
+  },
+  "coerenza": {
+   "contrari": 1,
+   "confrontabili": 8
+  },
+  "promesse": {
+   "mantenute": 1,
+   "totali": 8
+  }
+ },
+ {
+  "id": "elena-marchi",
+  "slug": "elena-marchi",
+  "tipo": "persona",
+  "nome": "Elena Marchi",
+  "ruolo": "Alleanza Progresso · ministra",
+  "numeri": {
+   "sbagliati": 5,
+   "controllati": 38
+  },
+  "vaghi": {
+   "n": 29,
+   "d": 67
+  },
+  "coerenza": {
+   "contrari": 3,
+   "confrontabili": 26
+  },
+  "promesse": {
+   "mantenute": 3,
+   "totali": 8
+  }
+ },
+ {
+  "id": "davide-sartori",
+  "slug": "davide-sartori",
+  "tipo": "persona",
+  "nome": "Davide Sartori",
+  "ruolo": "Fronte dei Territori · capogruppo",
+  "numeri": {
+   "sbagliati": 7,
+   "controllati": 34
+  },
+  "vaghi": {
+   "n": 42,
+   "d": 76
+  },
+  "coerenza": {
+   "contrari": 6,
+   "confrontabili": 21
+  },
+  "promesse": {
+   "mantenute": 1,
+   "totali": 9
+  }
+ },
+ {
+  "id": "giulia-ferraro",
+  "slug": "giulia-ferraro",
+  "tipo": "persona",
+  "nome": "Giulia Ferraro",
+  "ruolo": "Movimento Solidale",
+  "numeri": {
+   "sbagliati": 3,
+   "controllati": 31
+  },
+  "vaghi": {
+   "n": 21,
+   "d": 52
+  },
+  "coerenza": {
+   "contrari": 4,
+   "confrontabili": 24
+  },
+  "promesse": {
+   "mantenute": 2,
+   "totali": 8
+  }
+ },
+ {
+  "id": "marco-benedetti",
+  "slug": "marco-benedetti",
+  "tipo": "persona",
+  "nome": "Marco Benedetti",
+  "ruolo": "Civica Riformista",
+  "numeri": {
+   "sbagliati": 2,
+   "controllati": 22
+  },
+  "vaghi": {
+   "n": 12,
+   "d": 34
+  },
+  "coerenza": {
+   "contrari": 1,
+   "confrontabili": 18
+  },
+  "promesse": {
+   "mantenute": 2,
+   "totali": 6
+  }
+ },
+ {
+  "id": "chiara-lombardi",
+  "slug": "chiara-lombardi",
+  "tipo": "persona",
+  "nome": "Chiara Lombardi",
+  "ruolo": "Partito Lavoro e Comunità",
+  "numeri": {
+   "sbagliati": 4,
+   "controllati": 26
+  },
+  "vaghi": {
+   "n": 19,
+   "d": 45
+  },
+  "coerenza": {
+   "contrari": 3,
+   "confrontabili": 19
+  },
+  "promesse": {
+   "mantenute": 1,
+   "totali": 8
+  }
+ },
+ {
+  "id": "stefano-riva",
+  "slug": "stefano-riva",
+  "tipo": "persona",
+  "nome": "Stefano Riva",
+  "ruolo": "Unione Liberale",
+  "numeri": {
+   "sbagliati": 1,
+   "controllati": 11
+  },
+  "vaghi": {
+   "n": 11,
+   "d": 22
+  },
+  "coerenza": {
+   "contrari": 2,
+   "confrontabili": 9
+  },
+  "promesse": {
+   "mantenute": 1,
+   "totali": 4
+  }
+ },
+ {
+  "id": "anna-pedretti",
+  "slug": "anna-pedretti",
+  "tipo": "persona",
+  "nome": "Anna Pedretti",
+  "ruolo": "Verdi e Territori",
+  "numeri": {
+   "sbagliati": 0,
+   "controllati": 7
+  },
+  "vaghi": {
+   "n": 6,
+   "d": 13
+  },
+  "coerenza": {
+   "contrari": 1,
+   "confrontabili": 6
+  },
+  "promesse": {
+   "mantenute": 0,
+   "totali": 4
+  }
+ },
+ {
+  "id": "luca-ortolani",
+  "slug": "luca-ortolani",
+  "tipo": "persona",
+  "nome": "Luca Ortolani",
+  "ruolo": "Patto per le Regioni",
+  "numeri": {
+   "sbagliati": 2,
+   "controllati": 13
+  },
+  "vaghi": {
+   "n": 20,
+   "d": 33
+  },
+  "coerenza": {
+   "contrari": 3,
+   "confrontabili": 10
+  },
+  "promesse": {
+   "mantenute": 1,
+   "totali": 5
+  }
+ },
+ {
+  "id": "paola-ventura",
+  "slug": "paola-ventura",
+  "tipo": "persona",
+  "nome": "Paola Ventura",
+  "ruolo": "Alleanza Progresso",
+  "numeri": {
+   "sbagliati": 3,
+   "controllati": 29
+  },
+  "vaghi": {
+   "n": 18,
+   "d": 47
+  },
+  "coerenza": {
+   "contrari": 3,
+   "confrontabili": 22
+  },
+  "promesse": {
+   "mantenute": 2,
+   "totali": 7
+  }
+ },
+ {
+  "id": "nicola-greco",
+  "slug": "nicola-greco",
+  "tipo": "persona",
+  "nome": "Nicola Greco",
+  "ruolo": "Movimento Solidale",
+  "numeri": {
+   "sbagliati": 2,
+   "controllati": 20
+  },
+  "vaghi": {
+   "n": 16,
+   "d": 36
+  },
+  "coerenza": {
+   "contrari": 3,
+   "confrontabili": 16
+  },
+  "promesse": {
+   "mantenute": 1,
+   "totali": 7
+  }
+ }
+]
