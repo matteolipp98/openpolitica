@@ -157,7 +157,7 @@ document.getElementById("breve").innerHTML=`
     <p>Promesse rimaste solo sulla carta.</p>
     <p class="sotto">Su ${promTot} promesse scritte nei programmi.</p></div></div>
 </div>
-<p class="piccolo" style="margin:10px 0 0">Confrontiamo solo chi ha almeno ${MIN} casi da controllare, nello stesso periodo e sulle stesse fonti. <a href="#">Quante dichiarazioni raccogliamo per ogni partito</a></p>`;
+<p class="piccolo" style="margin:10px 0 0">Mettiamo a confronto solo chi ha detto almeno ${MIN} numeri. <a href="#">Quante frasi raccogliamo per ogni partito</a></p>`;
 
 function frase(p){
   if(p.sbD<MIN) return "Ha detto pochi numeri controllabili, quindi su questo non possiamo dire molto.";
@@ -189,7 +189,7 @@ function render(){
       ${p.ex?`<div class="conf">
         <div class="a"><p class="et">Ha detto</p><p>${p.ex.said}</p><cite>${p.ex.dove}</cite></div>
         <div class="b2"><p class="et">In realtà</p><p>${p.ex.vero}</p><cite>${p.ex.fonte}</cite></div>
-        <div class="esito"><b>Numero sbagliato.</b> La differenza è troppo grande per essere un arrotondamento.</div>
+        <div class="esito"><b>Numero sbagliato.</b></div>
       </div>`:""}
       <p class="piccolo">Qui non diciamo se le sue idee sono buone: quello lo decidi tu.</p>
     </div>

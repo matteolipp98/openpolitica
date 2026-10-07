@@ -44,7 +44,7 @@ I mock sono la versione più recente del prodotto. Dove divergevano dagli ADR, g
 
 | Mock | Cosa mostra | Regola dopo l'ADR 0037 | Effetto sul piano |
 |---|---|---|---|
-| `vista-comefunziona.html`, `vista-partito.html` | "**Numero sbagliato.** La differenza è troppo grande per essere un arrotondamento", "Ha detto / In realtà" | Esiti dei claim quantitativi pubblicati senza revisione, se la citazione è verificata, le due famiglie concordano sull'interrogazione e il confronto è fuori tolleranza su tutte le definizioni ufficiali. "Fuorviante per contesto" resta in revisione | `<Accostamento>` ha la prop `esito`; il comparatore (§6.2) produce anche la frase di motivazione |
+| `vista-comefunziona.html`, `vista-partito.html` | "**Numero sbagliato.** Il numero vero è meno della metà", "Ha detto / In realtà" | Esiti dei claim quantitativi pubblicati senza revisione, se la citazione è verificata, le due famiglie concordano sull'interrogazione e il confronto è fuori tolleranza su tutte le definizioni ufficiali. "Fuorviante per contesto" resta in revisione | `<Accostamento>` ha la prop `esito`; il comparatore (§6.2) produce anche la frase di motivazione |
 | `vista-soggetti.html` | "In breve": "X è quello che sbaglia più numeri", "X è il più vago", frase qualitativa per soggetto | Letture comparative ammesse, una per metrica, solo tra soggetti sopra soglia e a parità di finestra, con regole e soglie pubblicate | Regole in `content/letture.yaml`, generatore deterministico nel job di rilascio (§3.9) |
 | `vista-soggetti.html`, `vista-partito.html` | Conteggi di numeri sbagliati, voti contrari a quanto dichiarato, promesse mantenute | Statistiche dell'ADR 0019 pubblicate da subito, con denominatore e soglia | Le righe appaiono quando la fase che produce i dati è attiva (`manifest.sezioni`); prima, assenza spiegata |
 | `vista-partito.html` | Promesse "Mantenuta / A metà / Non mantenuta" con motivazione | Stato da regole fisse su atti e serie ufficiali, collegamento promessa-atto con accordo tra due famiglie | Fase 1 pubblica lo stato (§4) |
@@ -1506,7 +1506,7 @@ def pubblicabile(v: Verifica) -> bool:
     )
 ```
 
-La frase in pagina viene dal comparatore, con valori calcolati: "Numero sbagliato. La differenza è troppo grande per essere un arrotondamento." oppure "Il numero è arrotondato male: {dichiarato} invece di {ufficiale}.". Le statistiche aggregate dell'ADR 0019 (numeri sbagliati su controllati, frasi non controllabili, voti contrari a quanto dichiarato) si calcolano sugli esiti pubblicabili, con la regola del denominatore. `sezioni.numeri = true` quando almeno un soggetto supera la soglia.
+La frase in pagina viene dal comparatore, con valori calcolati: "Numero sbagliato. Il numero vero è meno della metà." oppure "Quasi giusto: {ufficiale}, non {dichiarato}." Il confronto concreto ("meno della metà", "il doppio", "meno degli altri, non di più") si sceglie da una tabella fissa di frasi in base al rapporto tra i due valori, così resta immediato e uguale per tutti (ADR 0036). Le statistiche aggregate dell'ADR 0019 (numeri sbagliati su controllati, frasi non controllabili, voti contrari a quanto dichiarato) si calcolano sugli esiti pubblicabili, con la regola del denominatore. `sezioni.numeri = true` quando almeno un soggetto supera la soglia.
 
 Quando esiste revisione, `content/governance.yaml` attiva "fuorviante per contesto" e il campionamento a posteriori e la doppia revisione dell'ADR 0028 sugli esiti negativi, senza cambiare cosa si pubblica. Esportazione ClaimReview per tutti gli esiti pubblicati.
 

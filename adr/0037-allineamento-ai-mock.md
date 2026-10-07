@@ -21,8 +21,8 @@ Per i claim quantitativi l'esito si pubblica senza revisione umana, perché lo p
 | Esito interno | In pagina |
 |---|---|
 | supportato | "Il numero è giusto" |
-| impreciso | "Il numero è arrotondato male", con la differenza |
-| contraddetto | "Numero sbagliato", con la frase che dice perché la differenza supera l'arrotondamento |
+| impreciso | "Quasi giusto", con il numero vero |
+| contraddetto | "Numero sbagliato", con un confronto concreto ("il numero vero è meno della metà") |
 | non verificabile | "Non si può controllare", con il motivo |
 
 Un esito negativo si pubblica solo se valgono tutte queste condizioni:

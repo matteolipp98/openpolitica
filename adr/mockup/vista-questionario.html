@@ -170,7 +170,7 @@ function calcola(){
  if(primo.pct===null){
   document.getElementById("gioco").style.display="none";
   const r=document.getElementById("risultato");r.style.display="block";
-  r.innerHTML=`<div class="avviso"><b>Non possiamo ancora fare il confronto.</b> Hai risposto "non ho un'opinione" a tutte le domande, oppure sui temi che hai scelto non abbiamo trovato voti.</div>
+  r.innerHTML=`<div class="avviso"><b>Così non possiamo dirti niente.</b> Hai risposto "non ho un'opinione" a tutto. Prova a rispondere almeno a qualche domanda.</div>
    <button class="rifai" type="button" id="rifai">Rifai le domande</button>`;
   document.getElementById("rifai").addEventListener("click",()=>location.reload());
   return;
@@ -198,8 +198,8 @@ function calcola(){
    <div class="dett">
     ${p.ok.length?`<h3>Su queste cose siete d'accordo</h3>${p.ok.map(k=>`<div class="pt ok"><b>Sì</b><span>${domande[k].t}</span></div>`).join("")}`:""}
     ${p.no.length?`<h3>Su queste no</h3>${p.no.map(k=>`<div class="pt no"><b>No</b><span>${domande[k].t}</span></div>`).join("")}`:""}
-    ${p.neutre.length?`<h3>Su queste non hanno preso una posizione netta</h3>${p.neutre.map(k=>`<div class="pt"><b>Né sì né no</b><span>${domande[k].t}</span></div>`).join("")}`:""}
-    ${p.pct===null?`<p class="vuoto">Non abbiamo abbastanza voti per confrontarvi.</p>`:""}
+    ${p.neutre.length?`<h3>Su queste non hanno scelto</h3>${p.neutre.map(k=>`<div class="pt"><b>Né sì né no</b><span>${domande[k].t}</span></div>`).join("")}`:""}
+    ${p.pct===null?`<p class="vuoto">Non sappiamo come hanno votato sulle tue domande.</p>`:""}
     ${p.manca?`<p class="vuoto">Su ${p.manca} domande non abbiamo trovato nessun voto: non inventiamo la loro posizione.</p>`:""}
     <p class="vuoto">Ogni "sì" o "no" viene da un voto in Parlamento. Puoi vedere data e atto.</p>
    </div>

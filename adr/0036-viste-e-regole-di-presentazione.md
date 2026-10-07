@@ -20,7 +20,13 @@ Il pubblico è un elettore qualunque, senza competenze politiche o statistiche. 
 **Come funziona** (`mockup/vista-comefunziona.html`). Il metodo in quattro passaggi, un esempio applicato con il suo esito, la lista di cosa il sito fa e non fa, le domande scomode con risposta diretta. Attua l'ADR 0012: la credibilità si difende con la trasparenza, non con la dichiarazione di neutralità.
 
 ### Regole di presentazione, valide per ogni vista
-**Linguaggio comune.** Niente termini tecnici o statistici: si scrive "sbaglia i numeri 14 volte su 72", non "tasso di imprecisione con intervallo di confidenza". Le frasi sono brevi e dirette, senza condiscendenza.
+**Linguaggio comune.** Il lettore è l'italiano medio, che non sa nulla di politica, statistica o fonti: ogni testo deve capirsi al primo colpo. Niente termini tecnici o statistici: si scrive "sbaglia i numeri 14 volte su 72", non "tasso di imprecisione con intervallo di confidenza". Le frasi sono brevi e dirette, senza condiscendenza. In pratica:
+
+- una cosa per frase, possibilmente sotto le 15 parole;
+- parole di tutti i giorni: mai "soglia", "denominatore", "definizione", "fonte di livello A", "metrica", "tolleranza", "modello", "serie";
+- confronti concreti al posto delle quantità astratte: "il numero vero è meno della metà", non "scarto del 59%";
+- il motivo di una regola si dice in una frase sola, e il dettaglio tecnico sta nella pagina di metodo, non nella vista;
+- ogni testo nuovo si rilegge chiedendosi se lo capirebbe chi ha la terza media e non segue la politica: se no, si riscrive.
 
 **Il conteggio accompagna sempre la percentuale**, e sotto la soglia la percentuale sparisce (0019).
 
@@ -28,7 +34,7 @@ Il pubblico è un elettore qualunque, senza competenze politiche o statistiche. 
 
 **L'assenza di dato è visibile e spiegata.** "Non si sa" accompagnato da "non inventiamo la loro posizione", mai una casella vuota (0027, 0030).
 
-**Esiti in linguaggio comune, mai intenzioni.** Dichiarazione e dato ufficiale sono sempre affiancati; l'esito si scrive come "Numero sbagliato" con la ragione ("la differenza è troppo grande per essere un arrotondamento"), alle condizioni dell'ADR 0037. Mai "ha mentito". "Fuorviante per contesto" non compare senza revisione umana.
+**Esiti in linguaggio comune, mai intenzioni.** Dichiarazione e dato ufficiale sono sempre affiancati; l'esito si scrive come "Numero sbagliato" con la ragione con un confronto concreto ("il numero vero è meno della metà"), alle condizioni dell'ADR 0037. Mai "ha mentito". "Fuorviante per contesto" non compare senza revisione umana.
 
 **Le discordanze sono obbligatorie.** Ogni risultato di affinità mostra anche dove non si è d'accordo (0009).
 

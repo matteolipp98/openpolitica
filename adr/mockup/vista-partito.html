@@ -91,7 +91,7 @@ footer{margin-top:30px;padding-top:16px;border-top:1px solid var(--rule);font-si
 <div id="temi"></div>
 
 <h2>Le promesse del programma</h2>
-<p class="ruolonota">Era al governo, quindi poteva fare leggi. Per essere giusti, confrontalo con gli altri partiti di governo, non con chi stava all'opposizione.</p>
+<p class="ruolonota">Era al governo, quindi poteva fare le leggi. Chi sta all'opposizione ne mantiene meno per forza.</p>
 <div class="prom" id="promesse"></div>
 
 <h2>Numeri che non tornano</h2>
@@ -153,13 +153,13 @@ document.getElementById("promesse").innerHTML=promesse.map(p=>`
 const numeri=[
  {said:"L'occupazione femminile è cresciuta di oltre un milione di posti.",dove:"Conferenza stampa, marzo 2026",
   vero:"I dati ISTAT dicono 412.000 posti.",fonte:"ISTAT, dati sul lavoro, marzo 2024 – marzo 2026",
-  esito:"<b>Numero sbagliato.</b> La differenza è troppo grande per essere un arrotondamento."},
+  esito:"<b>Numero sbagliato.</b> Il numero vero è meno della metà."},
  {said:"L'Italia cresce più della media europea.",dove:"Post sul canale ufficiale, luglio 2026",
   vero:"La crescita italiana è stata inferiore alla media dell'area euro nello stesso periodo.",fonte:"Eurostat, PIL trimestrale",
-  esito:"<b>Numero sbagliato.</b> Nello stesso periodo l'Italia è cresciuta meno della media."},
+  esito:"<b>Sbagliato.</b> L'Italia è cresciuta meno degli altri, non di più."},
  {said:"Abbiamo abbassato le tasse a tutte le famiglie.",dove:"Intervista tv riportata da un'agenzia, gennaio 2026",
   vero:"Il taglio ha riguardato i redditi da lavoro fino a 35.000 euro, non tutte le famiglie.",fonte:"Legge di bilancio 2026",
-  esito:"Non è un numero, quindi non lo contiamo tra i numeri sbagliati. Ti mettiamo davanti la legge."}
+  esito:"Qui non c'è un numero da controllare: ti mostriamo cosa dice la legge."}
 ];
 document.getElementById("numeri").innerHTML=`<div class="card">`+numeri.map(n=>`
  <div class="conf" style="border:0;border-top:1px solid var(--rule-soft)">
