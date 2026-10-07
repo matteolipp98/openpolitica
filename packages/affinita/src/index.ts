@@ -134,3 +134,4 @@ function valuta(
     dettaglio,
   };
 }
+export * from "./equilibrio.js";

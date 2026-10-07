@@ -45,6 +45,8 @@ jobs:
           uv run python -m op_workers.rilascio.crea --uscita ../rilascio | tee -a "$GITHUB_STEP_SUMMARY"
       - name: Controlla il pacchetto
         run: pnpm --filter @op/schema valida-pacchetto "$PWD/rilascio" | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Test di equilibrio delle domande (piano §3.11)
+        run: pnpm --filter @op/affinita equilibrio "$PWD/rilascio" | tee -a "$GITHUB_STEP_SUMMARY"
       - name: Pubblica
         working-directory: workers
         run: uv run python -m op_workers.rilascio.pubblica ../rilascio | tee -a "$GITHUB_STEP_SUMMARY"

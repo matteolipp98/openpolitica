@@ -50,12 +50,18 @@ importers:
       fast-check:
         specifier: ^4.10.2
         version: 4.10.2
+      tsx:
+        specifier: ^4.23.15
+        version: 4.23.15
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
       vitest:
         specifier: ^3.2.7
         version: 3.2.7(@types/node@22.20.5)(tsx@4.23.15)(yaml@2.9.1)
+      yaml:
+        specifier: ^2.9.1
+        version: 2.9.1
 
   packages/schema:
     dependencies:
