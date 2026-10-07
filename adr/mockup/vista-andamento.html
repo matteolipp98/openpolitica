@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<!-- Andamento nel tempo. Attua ADR 0040 (una metrica per grafico, trimestri, niente punto sotto soglia, niente curve inventate, fascia del governo, frase anno contro anno con regola fissa), 0039 (indicatori su annunci e promesse), 0019 (conteggio sempre accanto alla percentuale), 0009 (ordine alfabetico, nessun indice), 0001 (non diciamo se è meglio o peggio). Dati inventati. -->
+<html lang="it" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Com'è cambiato nel tempo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#E9ECF0;--surface:#FFFFFF;--ink:#141B23;--muted:#5C6773;--rule:#C9D1DA;--rule-soft:#E2E7EC;
+ --mark:#1F4E79;--brass:#8A6A33;--focus:#1F4E79;--fascia:#EEF1F4;box-sizing:border-box;
+ padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;
+ font-size:17px;line-height:1.55;font-variant-numeric:tabular-nums}
+.wrap{max-width:720px;margin:0 auto;padding:24px 18px 80px}
+.back{color:var(--mark);font-size:15px;text-decoration:none;display:inline-block;margin-bottom:16px}
+h1{font-family:"IBM Plex Serif",Georgia,serif;font-size:clamp(27px,5.8vw,36px);line-height:1.15;margin:0 0 10px}
+.lede{margin:0;color:var(--muted);max-width:42ch}
+.nota{margin:18px 0 0;padding:10px 13px;background:#FBF7EE;border-left:3px solid var(--brass);font-size:14px;color:#574521}
+
+h2{font-family:"IBM Plex Serif",serif;font-size:20px;margin:30px 0 12px}
+.scelte{display:flex;flex-wrap:wrap;gap:8px}
+.scelte button{appearance:none;font:inherit;font-size:15px;padding:8px 13px;border:1px solid var(--rule);
+ background:var(--surface);color:var(--ink);cursor:pointer}
+.scelte button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.scelte button .presto{color:var(--muted);font-size:13px}
+.scelte button[aria-pressed="true"] .presto{color:#C9D1DA}
+.spiega{margin:14px 0 0;max-width:46ch}
+.legenda{display:flex;flex-wrap:wrap;gap:6px 18px;margin:12px 0 0;font-size:14px;color:var(--muted)}
+.legenda i{display:inline-block;width:18px;height:11px;vertical-align:-1px;margin-right:6px;background:var(--fascia);border:1px solid var(--rule)}
+.legenda i.p{width:9px;height:9px;border-radius:50%;background:var(--mark);border:0}
+
+.card{background:var(--surface);border:1px solid var(--rule);margin-top:12px;padding:16px 16px 12px}
+.nome{font-size:18px;font-weight:600;margin:0}
+.ruolo{color:var(--muted);font-size:14px;margin:0}
+.testa{display:flex;gap:14px;align-items:baseline;margin:12px 0 4px}
+.cifra{font-family:"IBM Plex Serif",serif;font-size:29px;font-weight:600;line-height:1;min-width:76px}
+.frase{margin:0;font-size:16px}
+.frase .sotto{display:block;color:var(--muted);font-size:14px;margin-top:3px}
+.verdetto{font-weight:600}
+svg{display:block;width:100%;height:auto;margin-top:8px;overflow:visible}
+svg text{font-family:"IBM Plex Sans",sans-serif;font-size:10px;fill:var(--muted)}
+svg .asse{stroke:var(--rule-soft);stroke-width:1}
+svg .fascia{fill:var(--fascia)}
+svg .linea{stroke:var(--mark);stroke-width:2;fill:none}
+svg .punto{fill:var(--mark);cursor:pointer}
+svg .punto.sel{fill:var(--brass)}
+svg .tocca{fill:transparent;cursor:pointer}
+.dettaglio{margin:6px 0 0;font-size:14px;color:var(--muted);min-height:1.5em}
+details{margin-top:6px;font-size:14px}
+summary{color:var(--mark);cursor:pointer}
+table{border-collapse:collapse;width:100%;margin-top:8px;font-size:14px}
+td,th{text-align:left;padding:4px 6px;border-bottom:1px solid var(--rule-soft);font-weight:400}
+th{color:var(--muted)}
+.chiusura{margin-top:26px;font-size:15px;color:var(--muted);max-width:44ch}
+footer{margin-top:30px;padding-top:16px;border-top:1px solid var(--rule);font-size:14px;color:var(--muted);max-width:44ch}
+a{color:var(--mark)}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#11161C;--surface:#171E26;--ink:#E7ECF1;
+ --muted:#9AA6B2;--rule:#2C3742;--rule-soft:#232C35;--mark:#7FB0E0;--brass:#C9A25E;--focus:#7FB0E0;--fascia:#1F2830}
+ :root:not([data-theme="light"]) .nota{background:#1E1B13;color:#D8C79D}
+ :root:not([data-theme="light"]) .scelte button[aria-pressed="true"]{color:#11161C}}
+:root[data-theme="dark"]{--paper:#11161C;--surface:#171E26;--ink:#E7ECF1;--muted:#9AA6B2;--rule:#2C3742;
+ --rule-soft:#232C35;--mark:#7FB0E0;--brass:#C9A25E;--focus:#7FB0E0;--fascia:#1F2830}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="#">← Tutti i partiti</a>
+<h1>Com'è cambiato nel tempo</h1>
+<p class="lede">Scegli cosa guardare. Ogni punto sono tre mesi. Confrontiamo l'ultimo anno con quello prima.</p>
+<p class="nota">Esempio per provare la pagina: partiti e numeri sono inventati.</p>
+
+<h2>Cosa vuoi guardare?</h2>
+<div class="scelte" id="scelte" role="group" aria-label="Cosa guardare"></div>
+<p class="spiega" id="spiega"></p>
+<div class="legenda">
+  <span><i></i>Al governo</span>
+  <span><i class="p"></i>Tre mesi</span>
+  <span>Punto mancante: in quei tre mesi abbiamo troppo pochi dati</span>
+</div>
+
+<div id="grafici"></div>
+
+<p class="chiusura">Non diciamo se un cambiamento è un bene o un male. Votare compatti, o insieme al governo, può essere un pregio o un difetto: lo decidi tu.</p>
+<footer>Fonti: voti di Camera e Senato e frasi raccolte dai canali pubblici dei partiti. <a href="#">Come contiamo</a></footer>
+</div>
+
+<script>
+/* ADR 0040: 16 trimestri, dall'inizio della legislatura (ottobre 2022) a settembre 2026 */
+const TRIM=[];for(let a=2022,t=4;TRIM.length<16;){TRIM.push({a,t});if(++t>4){t=1;a++}}
+const nomeTrim=x=>["Gennaio – marzo","Aprile – giugno","Luglio – settembre","Ottobre – dicembre"][x.t-1]+" "+x.a;
+const MIN=30;
+
+/* ruolo per trimestre: 1 = al governo (fascia). Patto per le Regioni entra nel governo a gennaio 2024 */
+const partiti=[
+ {n:"Alleanza Progresso",gov:i=>true},
+ {n:"Civica Riformista",gov:i=>false},
+ {n:"Fronte dei Territori",gov:i=>true},
+ {n:"Movimento Solidale",gov:i=>false},
+ {n:"Partito Lavoro e Comunità",gov:i=>false},
+ {n:"Patto per le Regioni",gov:i=>i>=5,cambio:"È entrato nel governo a gennaio 2024."},
+ {n:"Unione Liberale",gov:i=>false,ruolo:"Da solo"},
+ {n:"Verdi e Territori",gov:i=>false}
+].sort((a,b)=>a.n.localeCompare(b.n,"it")); /* ordine neutro (ADR 0009) */
+
+/* metriche (ADR 0040, 0039); 'presto' = arriva con le fasi successive */
+const metriche=[
+ {id:"gov",et:"Vota come il governo",
+  spiega:"Quante volte, nelle votazioni finali, il partito ha votato come la maggioranza di governo.",
+  frase:(n,d)=>`ha votato come il governo ${n} volte su ${d}`,
+  notaGov:"È normale che voti quasi sempre così."},
+ {id:"compatto",et:"Vota compatto",
+  spiega:"Quante volte almeno 9 parlamentari su 10 del partito hanno votato allo stesso modo.",
+  frase:(n,d)=>`ha votato compatto ${n} volte su ${d}`},
+ {id:"numeri",et:"Numeri sbagliati",presto:true,
+  spiega:"Quanti dei numeri che ha detto erano sbagliati, confrontati con i dati ufficiali.",
+  frase:(n,d)=>`ha sbagliato ${n} numeri su ${d}`},
+ {id:"precise",et:"Promesse con numero e data",presto:true,
+  spiega:"Quante promesse dicevano quanto e entro quando. Le altre non si possono controllare.",
+  frase:(n,d)=>`${n} promesse su ${d} avevano un numero e una data`},
+ {id:"seguiti",et:"Annunci seguiti da un atto",presto:true,
+  spiega:"Quando ha annunciato una cosa con una scadenza, quante volte è arrivata una legge o una proposta in tempo.",
+  frase:(n,d)=>`a ${n} annunci su ${d} è seguito un atto`,
+  notaOpp:"All'opposizione può solo presentare proposte: contano anche quelle."},
+ {id:"contro",et:"Frasi contro gli avversari",presto:true,
+  spiega:"Quante frasi parlavano degli avversari invece che delle proprie proposte.",
+  frase:(n,d)=>`${n} frasi su ${d} erano contro gli avversari`}
+];
+
+/* dati inventati ma stabili: generatore con seme */
+function rng(s){return()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const hash=s=>[...s].reduce((h,c)=>Math.imul(h^c.charCodeAt(0),16777619),2166136261);
+function serie(p,m){
+  const r=rng(hash(p.n+m.id)), base=0.15+r()*0.6, deriva=(r()-0.5)*0.06, piccolo=/Unione|Verdi/.test(p.n), salto=r()<0.5?(r()-0.5)*0.5:0; /* alcuni partiti cambiano nell'ultimo anno */
+  return TRIM.map((x,i)=>{
+    let q;
+    if(m.id==="gov") q=p.gov(i)?0.93+r()*0.06:0.18+r()*0.25;
+    else if(m.id==="compatto") q=Math.min(0.97,0.7+base*0.3+(i>=12?salto/3:0)+(r()-0.5)*0.12);
+    else if(m.id==="seguiti") q=(p.gov(i)?0.45:0.2)+base*0.3+(r()-0.5)*0.15;
+    else q=base+deriva*i+(i>=12?salto:0)+(r()-0.5)*0.12;
+    q=Math.max(0.02,Math.min(0.98,q));
+    let d=m.id==="gov"||m.id==="compatto"?40+Math.floor(r()*50):Math.floor((piccolo?10:28)+r()*(piccolo?30:60));
+    if(i===0&&(m.id==="gov"||m.id==="compatto")) d=12+Math.floor(r()*8); /* inizio legislatura: poche votazioni */
+    return {n:Math.round(q*d),d};
+  });
+}
+
+/* intervallo di Wilson al 95% (ADR 0040) */
+function wilson(n,d){const z=1.96,p=n/d,den=1+z*z/d,c=p+z*z/(2*d),m=z*Math.sqrt(p*(1-p)/d+z*z/(4*d*d));return[(c-m)/den,(c+m)/den]}
+function confronto(s){
+  const somma=a=>a.reduce((x,y)=>({n:x.n+y.n,d:x.d+y.d}),{n:0,d:0});
+  const ora=somma(s.slice(-4)),prima=somma(s.slice(-8,-4));
+  if(ora.d<MIN||prima.d<MIN) return {ora,prima,v:"Non abbiamo abbastanza dati per dire se è cambiato."};
+  const a=wilson(ora.n,ora.d),b=wilson(prima.n,prima.d);
+  const v=a[0]>b[1]?"È più di prima.":a[1]<b[0]?"È meno di prima.":"Più o meno come prima.";
+  return {ora,prima,v};
+}
+
+function grafico(p,s,id){
+  const W=320,H=118,X0=34,X1=W-6,Y0=8,Y1=H-20,x=i=>X0+(X1-X0)*i/(TRIM.length-1),y=q=>Y1-(Y1-Y0)*q;
+  let g="";
+  /* fascia del governo */
+  TRIM.forEach((_,i)=>{if(p.gov(i)){const a=i?(x(i-1)+x(i))/2:X0-4,b=i<TRIM.length-1?(x(i)+x(i+1))/2:X1+4;g+=`<rect class="fascia" x="${a}" y="${Y0}" width="${b-a}" height="${Y1-Y0}"/>`}});
+  [[0,"nessuna"],[0.5,"metà"],[1,"tutte"]].forEach(([q,t])=>{g+=`<line class="asse" x1="${X0}" x2="${X1}" y1="${y(q)}" y2="${y(q)}"/><text x="0" y="${y(q)+3}">${t}</text>`});
+  TRIM.forEach((t,i)=>{if(t.t===1)g+=`<text x="${x(i)-10}" y="${H-4}">${t.a}</text>`});
+  /* segmenti solo tra trimestri consecutivi sopra soglia: un buco non si unisce */
+  for(let i=1;i<s.length;i++) if(s[i].d>=MIN&&s[i-1].d>=MIN)
+    g+=`<line class="linea" x1="${x(i-1)}" y1="${y(s[i-1].n/s[i-1].d)}" x2="${x(i)}" y2="${y(s[i].n/s[i].d)}"/>`;
+  s.forEach((v,i)=>{if(v.d>=MIN)g+=`<circle class="punto" data-i="${i}" cx="${x(i)}" cy="${y(v.n/v.d)}" r="3.6"/><circle class="tocca" data-i="${i}" cx="${x(i)}" cy="${y(v.n/v.d)}" r="11"/>`});
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-labelledby="${id}">${g}</svg>`;
+}
+
+let scelta="gov";
+function render(){
+  const m=metriche.find(x=>x.id===scelta);
+  document.getElementById("scelte").innerHTML=metriche.map(x=>
+    `<button type="button" data-id="${x.id}" aria-pressed="${x.id===scelta}">${x.et}${x.presto?' <span class="presto">· in arrivo</span>':""}</button>`).join("");
+  document.getElementById("spiega").innerHTML=m.spiega+(m.presto?" <b>Per ora è un esempio:</b> arriva quando leggeremo anche cosa dicono i partiti.":"");
+  document.getElementById("grafici").innerHTML=partiti.map((p,k)=>{
+    const s=serie(p,m),c=confronto(s),ultimoGov=p.gov(TRIM.length-1),id=`g${k}`;
+    const pct=c.ora.d>=MIN?Math.round(c.ora.n/c.ora.d*100)+"%":"—";
+    const nota=[p.cambio,ultimoGov&&m.notaGov,!ultimoGov&&m.notaOpp].filter(Boolean).join(" ");
+    return `<section class="card" data-k="${k}">
+      <p class="nome" id="${id}">${p.n}</p>
+      <p class="ruolo">${p.ruolo&&!ultimoGov?p.ruolo:ultimoGov?"Al governo":"All'opposizione"}${nota?" · "+nota:""}</p>
+      <div class="testa"><span class="cifra">${pct}</span>
+        <p class="frase">Nell'ultimo anno ${m.frase(c.ora.n,c.ora.d)}. <span class="verdetto">${c.v}</span>
+        <span class="sotto">L'anno prima: ${c.prima.n} su ${c.prima.d}.</span></p></div>
+      ${grafico(p,s,id)}
+      <p class="dettaglio" aria-live="polite">Tocca un punto per vedere i numeri di quei tre mesi.</p>
+      <details><summary>Vedi tutti i numeri</summary><table>
+        <tr><th>Periodo</th><th>Volte</th><th>Su</th></tr>
+        ${s.map((v,i)=>`<tr><td>${nomeTrim(TRIM[i])}</td><td>${v.d>=MIN?v.n:"—"}</td><td>${v.d}${v.d<MIN?" (troppo pochi)":""}</td></tr>`).join("")}
+      </table></details>
+    </section>`}).join("");
+
+  document.querySelectorAll("#scelte button").forEach(b=>b.addEventListener("click",()=>{scelta=b.dataset.id;render()}));
+  document.querySelectorAll(".card").forEach(card=>{
+    const p=partiti[card.dataset.k],s=serie(p,m);
+    card.querySelectorAll(".tocca").forEach(t=>t.addEventListener("click",()=>{
+      const i=+t.dataset.i,v=s[i];
+      card.querySelectorAll(".punto").forEach(c=>c.classList.toggle("sel",c.dataset.i===t.dataset.i));
+      card.querySelector(".dettaglio").textContent=`${nomeTrim(TRIM[i])}: ${v.n} su ${v.d} (${Math.round(v.n/v.d*100)}%).${p.gov(i)?" Era al governo.":""}`;
+    }));
+  });
+}
+render();
+</script>
+</body>
+</html>

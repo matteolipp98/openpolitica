@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Scheda di un soggetto. Attua ADR 0036, 0014 (confronto con fonti ufficiali), 0020 (stato delle promesse), 0023 (voti con data e atto), 0019 (conteggi), 0037 (conteggi e stato delle promesse), 0001. Dati inventati. -->
+<!-- Scheda di un soggetto. Attua ADR 0036, 0014 (confronto con fonti ufficiali), 0020 (stato delle promesse), 0023 (voti con data e atto), 0019 (conteggi), 0037 (conteggi e stato delle promesse), 0039 (indicatori su promesse e annunci), 0040 (andamento nel tempo), 0001. Dati inventati. -->
 <html lang="it" data-theme="light">
 <head>
 <meta charset="utf-8">
@@ -61,6 +61,12 @@ h2{font-family:"IBM Plex Serif",serif;font-size:20px;margin:34px 0 12px}
 .tag.f{color:var(--mark)}.tag.m{color:var(--muted)}.tag.n{color:var(--brass)}
 .pr p{margin:0;flex:1;font-size:16px}
 .pr span{display:block;color:var(--muted);font-size:14px;margin-top:2px}
+.trend{display:flex;gap:14px;align-items:center;padding:14px 16px;border-top:1px solid var(--rule-soft)}
+.trend:first-child{border-top:0}
+.trend svg{width:96px;height:34px;flex:none}
+.trend svg .l{stroke:var(--mark);stroke-width:2;fill:none}
+.trend p{margin:0;flex:1}.trend .sotto{color:var(--muted);font-size:14px;margin-top:3px}
+.link{display:inline-block;margin-top:12px;color:var(--mark);font-size:15px}
 .chiusura{margin-top:26px;font-size:15px;color:var(--muted);max-width:44ch}
 footer{margin-top:30px;padding-top:16px;border-top:1px solid var(--rule);font-size:14px;color:var(--muted);max-width:44ch}
 :focus-visible{outline:2px solid var(--focus);outline-offset:2px}
@@ -94,8 +100,16 @@ footer{margin-top:30px;padding-top:16px;border-top:1px solid var(--rule);font-si
 <p class="ruolonota">Era al governo, quindi poteva fare le leggi. Chi sta all'opposizione ne mantiene meno per forza.</p>
 <div class="prom" id="promesse"></div>
 
+<h2>Come sono fatte le sue promesse</h2>
+<p class="ruolonota">Contiamo le promesse e gli annunci che ha fatto in aula, sui suoi canali e nelle interviste. Non diciamo se sono buone idee.</p>
+<div class="card" id="kpi"></div>
+
 <h2>Numeri che non tornano</h2>
 <div id="numeri"></div>
+
+<h2>Com'è cambiato nel tempo</h2>
+<div class="card" id="tempo"></div>
+<a class="link" href="vista-andamento.html">Vedi tutto e confronta con gli altri partiti →</a>
 
 <p class="chiusura">Qui non diciamo se le loro idee sono buone o cattive. Diciamo cosa hanno detto e cosa hanno fatto. Il resto lo decidi tu.</p>
 <footer>Fonti: voti di Camera e Senato, programma elettorale depositato, statistiche ISTAT ed Eurostat.</footer>
@@ -167,6 +181,27 @@ document.getElementById("numeri").innerHTML=`<div class="card">`+numeri.map(n=>`
   <div><p class="et">In realtà</p><p>${n.vero}</p><cite>${n.fonte}</cite></div>
   <div class="esito">${n.esito}</div>
  </div>`).join("")+`</div>`;
+
+/* ADR 0039: quattro indicatori separati, ognuno con il suo conteggio; nessun punteggio che li mette insieme */
+const kpi=[
+ {c:"41%",b:false,t:"Promesse con un numero e una data",s:"52 su 127. Le altre non dicono quanto o entro quando, quindi non si possono controllare."},
+ {c:"18%",b:true,t:"Promesse che dicono dove trovare i soldi",s:"14 su 78 promesse che costano soldi pubblici"},
+ {c:"23",b:false,t:"Annunci a cui è seguita una legge o una proposta in tempo",s:"Su 61 annunci con una scadenza già passata"},
+ {c:"34%",b:true,t:"Frasi contro gli avversari",s:"Il resto parla delle sue proposte o di cosa ha fatto. 287 frasi su 845."}
+];
+document.getElementById("kpi").innerHTML=kpi.map(k=>`
+ <div class="riga"><span class="cifra${k.b?" b":""}">${k.c}</span><div><p>${k.t}</p><p class="sotto">${k.s}</p></div></div>`).join("");
+
+/* ADR 0040: ultimo anno contro anno prima, con la regola fissa; niente "migliora" o "peggiora" */
+const tempo=[
+ {t:"Vota compatto",s:"Nell'ultimo anno 231 volte su 248. L'anno prima 214 su 251. Più o meno come prima.",p:[.82,.86,.85,.9,.88,.91,.9,.93]},
+ {t:"Promesse con un numero e una data",s:"Nell'ultimo anno 19 su 61. L'anno prima 33 su 66. È meno di prima.",p:[.55,.5,.52,.48,.36,.33,.3,.31]},
+ {t:"Frasi contro gli avversari",s:"Nell'ultimo anno 172 su 430. L'anno prima 115 su 415. È più di prima.",p:[.25,.27,.28,.3,.36,.4,.41,.4]}
+];
+const mini=v=>{const x=i=>4+i*88/(v.length-1),y=q=>32-q*30;
+ return `<svg viewBox="0 0 96 34" aria-hidden="true"><polyline class="l" points="${v.map((q,i)=>x(i)+","+y(q)).join(" ")}"/></svg>`};
+document.getElementById("tempo").innerHTML=tempo.map(r=>`
+ <div class="trend">${mini(r.p)}<div><p>${r.t}</p><p class="sotto">${r.s}</p></div></div>`).join("");
 
 document.querySelectorAll(".tt").forEach(b=>b.addEventListener("click",()=>{
  const s=b.closest(".tema"),o=s.dataset.open!=="true";

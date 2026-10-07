@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Pagina di metodo. Attua ADR 0036, 0012 (trasparenza e correzioni), 0030 (come nascono le domande), 0007 (risposte sul dispositivo), 0031 (ruolo dei modelli), 0037 (esito dell'esempio). Dati inventati. -->
+<!-- Pagina di metodo. Attua ADR 0036, 0012 (trasparenza e correzioni), 0030 (come nascono le domande), 0007 (risposte sul dispositivo), 0031 (ruolo dei modelli), 0037 (esito dell'esempio), 0039 (promesse precise), 0040 (confronto tra anni). Dati inventati. -->
 <html lang="it" data-theme="light">
 <head>
 <meta charset="utf-8">
@@ -102,6 +102,8 @@ a{color:var(--mark)}
   <div class="sn ok"><span class="seg">Sì</span><p>Controlliamo i numeri che dicono.</p></div>
   <div class="sn ok"><span class="seg">Sì</span><p>Mostriamo come hanno votato, con data e atto.</p></div>
   <div class="sn ok"><span class="seg">Sì</span><p>Segnaliamo quando dicono una cosa e poi votano il contrario.</p></div>
+  <div class="sn ok"><span class="seg">Sì</span><p>Guardiamo come sono fatte le promesse: se dicono quanto, entro quando e con quali soldi.</p></div>
+  <div class="sn ok"><span class="seg">Sì</span><p>Ti facciamo vedere come cambiano i partiti nel tempo.</p></div>
   <div class="sn ok"><span class="seg">Sì</span><p>Ti diciamo chi la pensa come te, se rispondi alle domande.</p></div>
   <div class="sn no"><span class="seg">No</span><p>Non ti diciamo per chi votare.</p></div>
   <div class="sn no"><span class="seg">No</span><p>Non diamo voti o pagelle ai politici.</p></div>
@@ -137,6 +139,18 @@ a{color:var(--mark)}
 </section>
 
 <section class="faq" data-open="false">
+  <button type="button" aria-expanded="false"><span class="q">Come fate a dire se una promessa è precisa?</span><span class="sg">apri ▾</span></button>
+  <div class="a"><p>Guardiamo solo due cose: se dice quanto ("20.000 insegnanti") e se dice entro quando ("entro il 2027"). Se mancano, non si può controllare se l'hanno mantenuta.</p>
+  <p>Non diciamo se la promessa è buona o se si può fare. Diciamo solo com'è scritta.</p></div>
+</section>
+
+<section class="faq" data-open="false">
+  <button type="button" aria-expanded="false"><span class="q">Cosa vuol dire "è più di prima"?</span><span class="sg">apri ▾</span></button>
+  <div class="a"><p>Confrontiamo l'ultimo anno con quello prima. Lo scriviamo solo se la differenza è grande abbastanza da non essere un caso.</p>
+  <p>Se è piccola scriviamo "più o meno come prima". Non diciamo mai se è un bene o un male.</p></div>
+</section>
+
+<section class="faq" data-open="false">
   <button type="button" aria-expanded="false"><span class="q">Perché non dite "ha mentito"?</span><span class="sg">apri ▾</span></button>
   <div class="a"><p>Perché non possiamo sapere se uno sbaglia apposta o si è confuso.</p>
   <p>Ti diciamo solo che il numero è sbagliato e qual è quello vero. Il resto lo giudichi tu.</p></div>
@@ -158,6 +172,7 @@ a{color:var(--mark)}
 <section class="faq" data-open="false">
   <button type="button" aria-expanded="false"><span class="q">Usate l'intelligenza artificiale?</span><span class="sg">apri ▾</span></button>
   <div class="a"><p>Sì, per leggere tanti documenti e tirarne fuori le frasi dei politici: a mano non ce la faremmo.</p>
+  <p>Per capire se una frase è una promessa, se ha una data o se attacca un avversario usiamo un programma che legge la frase senza sapere chi l'ha detta. Se non è sicuro, la frase non la contiamo.</p>
   <p>Ma i numeri non li scrive mai: quelli arrivano dalle banche dati ufficiali. E il calcolo di chi la pensa come te è una formula fissa, sempre la stessa per tutti.</p></div>
 </section>
 

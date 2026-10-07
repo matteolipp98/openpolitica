@@ -1,6 +1,6 @@
 # ADR 0036 — Viste del prodotto e regole di presentazione
 
-**Stato:** Proposto
+**Stato:** Proposto, esteso da ADR 0040 (vista "Com'è cambiato nel tempo")
 **Attua:** ADR 0001, 0008, 0009, 0019, 0027, 0030, 0037
 
 ## Contesto

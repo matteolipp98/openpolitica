@@ -1,6 +1,6 @@
 # ADR 0031 — Laya al posto di Jev come motore di decisione
 
-**Stato:** Proposto
+**Stato:** Proposto, usato dall'ADR 0039 per gli indicatori su promesse e annunci
 **Sostituisce:** ADR 0018
 
 ## Contesto

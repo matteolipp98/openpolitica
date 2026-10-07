@@ -1,6 +1,6 @@
 # ADR 0019 — Statistiche aggregate e regola del denominatore
 
-**Stato:** Proposto, modificato da ADR 0037 (pubblicazione da subito e letture comparative)
+**Stato:** Proposto, modificato da ADR 0037 (pubblicazione da subito e letture comparative); ADR 0039 (quattro indicatori su promesse e annunci) e 0040 (serie nel tempo)
 **Precisa:** ADR 0009
 
 ## Contesto
