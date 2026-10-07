@@ -21,10 +21,17 @@ export default function Domande() {
     <main>
       <h1>Chi la pensa come te</h1>
       <NotaEsempio />
-      {manifest.catalogo.stato === "provvisorio" && !manifest.esempio && (
+      {manifest.catalogo.stato === "provvisorio" && !manifest.esempio && domande.length > 0 && (
         <p className="nota">Le domande sono state scritte e controllate da un sistema di intelligenza artificiale. Le stiamo ancora verificando.</p>
       )}
-      <Questionario domande={domande} soggetti={soggetti} parametri={parametri().affinita} catalogo={manifest.catalogo.versione} />
+      {domande.length > 0 ? (
+        <Questionario domande={domande} soggetti={soggetti} parametri={parametri().affinita} catalogo={manifest.catalogo.versione} />
+      ) : (
+        <p className="vuota">
+          Le domande arrivano presto. Le ricaviamo dai voti in Parlamento su cui i partiti si sono divisi di più, e stiamo
+          finendo di caricarli.
+        </p>
+      )}
       <p className="chiusura">
         Le posizioni dei partiti vengono dai voti in Parlamento. Le tue risposte restano sul tuo telefono o sul tuo computer.{" "}
         <Link href="/come-funziona">Come funziona</Link>

@@ -1742,7 +1742,7 @@ Ogni PR è piccola, rilasciabile e con i propri test. Dimensioni indicative: S <
 | 7 | Gateway LiteLLM su Render + `run_modello` + wrapper `chiama_strutturato` | 2 | M |
 | 8 | Job catalogo ADR 0030 (selezione, tema, generazione, direzione, test) → PR con `catalogo/v1` | 6, 7 | L |
 | 9 | `@op/affinita` con casi congelati e test di proprietà | 3 | M |
-| 10 | Bundle di rilascio: build, validazione, Storage, manifest, letture, deploy hook | 6, 8 | M |
+| 10 | Bundle di rilascio: build, validazione, Storage, manifest, letture, deploy hook — **fatto (workflow Rilascio): letture e frasi qualitative restano nel sito finché non ci sono dati veri** | 6, 8 | M |
 | 11 | Web: token, componenti condivisi, lint `no-raw-percent`, layout, tema | 1 | M |
 | 12 | Web: indice soggetti e scheda soggetto | 10, 11 | M |
 | 13 | Web: questionario e risultato, test privacy | 9, 10, 11 | L |

@@ -30,6 +30,37 @@ jobs:
         with: { node-version-file: .nvmrc, cache: pnpm }
       - run: pnpm install --frozen-lockfile
       - run: pnpm content:check
+      # Dati del sito (piano §3.9): l'ultimo pacchetto pubblicato dal workflow Rilascio. Si usa solo se ha
+      # già le domande e le posizioni; altrimenti il sito resta sui dati di esempio, e lo dice in ogni pagina.
+      - name: Dati del sito
+        env:
+          SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+        shell: bash
+        run: |
+          base="${SUPABASE_URL%/}/storage/v1/object/public/rilasci"
+          if ! curl -sfL "$base/corrente.json" -o /tmp/corrente.json; then
+            echo "Nessun pacchetto pubblicato: il sito usa i dati di esempio." | tee -a "$GITHUB_STEP_SUMMARY"; exit 0
+          fi
+          v=$(python3 -c "import json;print(json.load(open('/tmp/corrente.json'))['versione'])")
+          mkdir -p apps/web/.data
+          curl -sfL "$base/$v/manifest.json" -o apps/web/.data/manifest.json
+          for f in $(python3 -c "import json;print(' '.join(json.load(open('apps/web/.data/manifest.json'))['file']))"); do
+            curl -sfL "$base/$v/$f" -o "apps/web/.data/$f"
+          done
+          python3 - <<'PY'
+          import hashlib, json, pathlib, sys
+          d = pathlib.Path("apps/web/.data"); m = json.loads((d / "manifest.json").read_text())
+          for f, h in m["file"].items():
+              if "sha256:" + hashlib.sha256((d / f).read_bytes()).hexdigest() != h:
+                  sys.exit(f"Impronta sbagliata per {f}: il pacchetto non si usa")
+          PY
+          pnpm --filter @op/schema valida-pacchetto "$PWD/apps/web/.data"
+          if python3 -c "import json,sys;sys.exit(0 if json.load(open('apps/web/.data/manifest.json'))['sezioni']['posizioni'] else 1)"; then
+            echo "Il sito usa i dati veri: pacchetto $v." | tee -a "$GITHUB_STEP_SUMMARY"
+          else
+            rm -r apps/web/.data
+            echo "Il pacchetto $v non ha ancora le domande: il sito resta sui dati di esempio." | tee -a "$GITHUB_STEP_SUMMARY"
+          fi
       - name: Collega o crea il progetto Vercel
         working-directory: apps/web
         run: npx --yes vercel@latest link --yes --project openpolitica --token "$VERCEL_TOKEN"
