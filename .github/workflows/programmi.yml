@@ -28,7 +28,9 @@ jobs:
       - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v10.2.0
       - name: OCR in italiano
-        run: sudo apt-get update -q && sudo apt-get install -y -q tesseract-ocr tesseract-ocr-ita
+        timeout-minutes: 10  # una volta apt si è bloccato per un'ora e mezza: meglio fallire presto
+        env: { DEBIAN_FRONTEND: noninteractive }
+        run: sudo apt-get update -q && sudo apt-get install -y -q --no-install-recommends tesseract-ocr tesseract-ocr-ita
       - run: uv sync --frozen
       - name: Migrazioni
         run: uv run python -m op_workers.comuni.migrazioni | tee -a "$GITHUB_STEP_SUMMARY"
