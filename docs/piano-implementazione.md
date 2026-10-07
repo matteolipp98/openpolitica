@@ -1225,6 +1225,30 @@ Il rapporto è pubblicato in `/metodo/catalogo`. Le soglie sono proposte da ques
 - Test Playwright di privacy verde (§9.4).
 - Parere legale e valutazione d'impatto avviati (0010): sono prerequisiti del **lancio pubblico**, non del completamento tecnico.
 
+### 3.13 Andamento nel tempo dai voti (ADR 0040)
+
+Le due metriche sui voti si calcolano dai conteggi per gruppo, senza modelli, e si pubblicano con la fase 0.
+
+```sql
+-- core.v_andamento_voti: una riga per (gruppo, votazione finale) con l'orientamento del gruppo e quello del governo
+with g as (
+  select vg.votazione_id, vg.gruppo_id, v.data, vg.favorevoli, vg.contrari, vg.astenuti,
+         vg.favorevoli + vg.contrari + vg.astenuti as votanti
+  from core.votazione_gruppo vg join core.votazione v on v.id = vg.votazione_id
+  where v.finale
+)
+select g.*, date_trunc('quarter', g.data) as trimestre,
+       greatest(favorevoli, contrari, astenuti) >= 0.9 * votanti as compatto
+from g where votanti >= :membriMinimi;
+```
+
+- `vota_con_governo`: il voto prevalente del gruppo (favorevole, contrario, astenuto) coincide con quello prevalente della somma dei gruppi di governo alla data (`core.partito_alla_data` e `content/partiti.yaml`, ruolo `governo`).
+- `vota_compatto`: almeno 9 votanti su 10 nella stessa scelta.
+- Il bundle aggiunge `andamento.json`: `{soggetto, metrica, trimestre, num, den, versione}`. La frase anno contro anno (intervalli di Wilson al 95%, ultimi quattro trimestri contro i quattro precedenti) si calcola nel bundle, non nel browser, e porta la versione della regola di `letture.yaml`.
+- Web: pagina `/nel-tempo` con scelta della metrica e un grafico SVG per partito (nessuna libreria), tabella equivalente in `<details>`; sezione "Com'è cambiato nel tempo" nella scheda del partito.
+- Test: punto assente sotto soglia, nessun segmento tra trimestri non consecutivi, frase "non abbastanza dati" se uno dei due anni è sotto soglia, ordine alfabetico.
+- Presenze escluse: `votazione_gruppo.altri` mescola assenti, missioni e presidenza. Una migrazione futura può separare `assenti` se servirà.
+
 ---
 
 ## 4. Fase 1 — Programmi
@@ -1319,7 +1343,7 @@ Le frasi di motivazione sono template con valori calcolati, mai testo libero di 
 
 ## 5. Fase 2 — Dichiarazioni
 
-ADR 0002, 0003, 0004, 0026, 0027, 0031–0035.
+ADR 0002, 0003, 0004, 0026, 0027, 0031–0035, 0039.
 
 ### 5.1 Ingestion
 
@@ -1421,6 +1445,23 @@ Client nei worker (`comuni/laya.py`):
 ### 5.5 Golden set e calibrazione (prerequisito per pubblicare decisioni)
 
 Tabelle `core.golden_item`, `core.golden_etichetta` (annotatore, orientamento dichiarato, valore, data). Interfaccia di annotazione nel backoffice (§6.4). Script `op calibrazione stima --checkpoint <rev>`: temperatura per bucket su partizione di addestramento, ricalibrazione a istogramma se l'errore di calibrazione resta alto, rapporto con ECE, Brier, accuratezza selettiva, e scelta della soglia dalla curva. Scrive `content/calibrazione/<rev>.yaml` tramite PR.
+
+### 5.6 Indicatori su promesse e annunci (ADR 0039)
+
+Domande tipizzate in `content/domande-laya/` (versionate, schema in `@op/schema`):
+
+| Domanda | Primitivo | Opzioni |
+|---|---|---|
+| `tipo-frase.v1` | `choice`, ruotata | promessa, annuncio, numero, critica a un avversario, altro |
+| `dice-quanto.v1` | `noul` | — (risposta no senza modello se nel testo non c'è una cifra) |
+| `dice-quando.v1` | `noul` | — (no senza modello se non c'è una data o un'espressione di tempo) |
+| `costa-soldi.v1`, `dice-come-pagare.v1` | `noul` | — |
+| `contenuto-principale.v1` | `choice`, ruotata | proposta propria, bilancio di ciò che ha fatto, critica a un avversario, commento su un fatto |
+
+- Stadio `indicatori` dopo la classificazione (§5.3), su testo anonimizzato. Tabella `core.decisione_frase` (append-only): frase, domanda, versione, checkpoint, probabilità calibrata, `stato_soglia`.
+- Collegamento frase–atto per `annunci_seguiti`: Gemini propone fino a 5 atti candidati da una ricerca testuale sugli atti della legislatura, Laya `noul` conferma ciascuno; vale solo l'accordo. Scadenza estratta dal testo in forma normalizzata (data o trimestre); senza scadenza la frase non entra nel denominatore.
+- Gli indicatori entrano nel bundle come le metriche dell'ADR 0019 e in `andamento.json` (ADR 0040).
+- Prerequisito: le sei domande nel golden set (§5.5), con etichette di annotatori di orientamento diverso; finché `content/calibrazione/<rev>.yaml` non le copre, il bundle le omette.
 
 ---
 
@@ -1708,9 +1749,11 @@ Ogni PR è piccola, rilasciabile e con i propri test. Dimensioni indicative: S <
 | 14 | Web: come funziona, metodo/catalogo, metodo/dati, correzioni | 10, 11 | M |
 | 15 | Web: segnalazioni (route, anti-bot, tabella) | 2, 11 | S |
 | 16 | Test di equilibrio in CI e prima del rilascio | 9, 10 | S |
+| 16b | Andamento nel tempo dai voti: vista SQL, `andamento.json`, pagina `/nel-tempo` e sezione nella scheda (ADR 0040) | 6, 10, 12 | M |
 | — | **Fine fase 0** | | |
 | 17–20 | Fase 1: documenti e programmi, estrazione promesse, cinque test, pubblicazione descrittiva | 10 | L ×2, M ×2 |
 | 21–26 | Fase 2: connettori documenti, dedup, pgmq e stadi, `laya-serve`, client con rotazione, golden set e calibrazione | 10 | L ×3, M ×3 |
+| 26b | Indicatori su promesse e annunci: domande tipizzate, stadio `indicatori`, collegamento frase–atto, righe nella scheda (ADR 0039) | 21–26 | L |
 | 27–31 | Fase 3: indicatori e connettori, comparatore con frasi di esito, regole di pubblicabilità, backoffice e sospensione da segnalazione | 21–26 | L ×2, M ×3 |
 | 32–35 | Fase 4: route chat, intervistatore, spiegatore e validatore, persone sintetiche | 27–31 | L ×3, M |
 | 36–39 | Fase 5: registro modelli, runner, metriche, cruscotto | 21–26 | L ×2, M ×2 |

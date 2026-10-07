@@ -44,6 +44,8 @@ Formato: Contesto, Decisione, Alternative considerate, Conseguenze. Tutti gli AD
 | [0036](0036-viste-e-regole-di-presentazione.md) | Viste del prodotto e regole di presentazione |
 | [0037](0037-allineamento-ai-mock.md) | Allineamento delle regole ai mock delle viste |
 | [0038](0038-gemini-fornitore-iniziale.md) | Gemini come unico fornitore di modelli iniziale |
+| [0039](0039-kpi-annunci-promesse-laya.md) | Indicatori su annunci e promesse con Laya |
+| [0040](0040-andamento-nel-tempo.md) | Andamento dei partiti nel tempo |
 
 Documenti di accompagnamento: [architettura MVP e flussi logici](architettura-mvp.md) e i mock in `mockup/`, che sono la specifica visiva dell'ADR 0036.
 
@@ -51,8 +53,9 @@ Documenti di accompagnamento: [architettura MVP e flussi logici](architettura-mv
 |---|---|---|
 | Indice dei soggetti | `mockup/vista-soggetti.html` | 0036, 0037, 0019, 0009, 0001 |
 | Questionario e risultato | `mockup/vista-questionario.html` | 0036, 0037, 0008, 0007, 0013, 0021, 0030 |
-| Scheda di un soggetto | `mockup/vista-partito.html` | 0036, 0037, 0014, 0020, 0023, 0019, 0001 |
-| Come funziona | `mockup/vista-comefunziona.html` | 0036, 0037, 0012, 0030, 0007, 0031 |
+| Scheda di un soggetto | `mockup/vista-partito.html` | 0036, 0037, 0039, 0040, 0014, 0020, 0023, 0019, 0001 |
+| Andamento nel tempo | `mockup/vista-andamento.html` | 0040, 0039, 0019, 0009, 0001 |
+| Come funziona | `mockup/vista-comefunziona.html` | 0036, 0037, 0039, 0040, 0012, 0030, 0007, 0031 |
 
 ## Come leggerli
 

@@ -1,6 +1,6 @@
 # ADR 0020 — Analisi dei programmi e realismo delle promesse
 
-**Stato:** Proposto, modificato da ADR 0037 (stato delle promesse da regole fisse)
+**Stato:** Proposto, modificato da ADR 0037 (stato delle promesse da regole fisse); ADR 0039 (indicatori su promesse e annunci, Laya come seconda famiglia per il collegamento promessa–atto)
 
 ## Contesto
 I programmi elettorali sono il documento su cui si decide il voto e nessuno li legge. Sono pochi, finiti e disponibili dal 2018 sul portale del Ministero dell'Interno, quindi sono il corpus ideale da analizzare per primo. La domanda dell'utente è se le promesse siano realistiche, ma un sistema che dichiara "irrealistica" emette una previsione contestabile e si espone.

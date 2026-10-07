@@ -1,6 +1,6 @@
 # ADR 0038 — Gemini come unico fornitore di modelli iniziale
 
-**Stato:** Proposto
+**Stato:** Proposto, modificato da ADR 0039 (Laya come seconda famiglia per le sole decisioni chiuse)
 **Modifica:** ADR 0016, 0017, 0030
 
 ## Contesto
