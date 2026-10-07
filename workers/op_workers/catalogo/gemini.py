@@ -15,7 +15,7 @@ from dataclasses import dataclass
 import httpx
 
 API = "https://generativelanguage.googleapis.com/v1beta"
-MODELLO_PREDEFINITO = "gemini-2.5-flash"
+MODELLO_PREDEFINITO = "gemini-3.5-flash"  # versione 3.5-flash-05-2026; 2.5-flash non è più disponibile (#64)
 
 
 class QuotaEsaurita(RuntimeError):
