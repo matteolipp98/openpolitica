@@ -3,7 +3,7 @@ nome: Nicola
 cognome: Fratoianni
 forme: ["Nicola Fratoianni", "Fratoianni"]
 cariche:
-  - { carica: "Segretario di Sinistra Italiana", partito: alleanza-verdi-e-sinistra, valido_dal: null, da_verificare: true }
+  - { carica: "Segretario di Sinistra Italiana", partito: alleanza-verdi-e-sinistra, valido_dal: 2017-02-19, fonte: "https://www.ilpost.it/2017/02/20/nicola-fratoianni/" }
 ids_esterni:
   # dati.camera.it: deputato.rdf/d305880_19, verificato con la sonda del 2026-10-07
   - { fonte: camera, id: "305880", valido_dal: 2022-10-13 }

@@ -3,7 +3,7 @@ nome: Carlo
 cognome: Calenda
 forme: ["Carlo Calenda", "Calenda"]
 cariche:
-  - { carica: "Leader del partito", partito: azione, valido_dal: 2019-11-21, da_verificare: true }
+  - { carica: "Segretario del partito", partito: azione, valido_dal: 2019-11-21, fonte: "https://www.ilpost.it/2020/09/12/azione-partito-carlo-calenda/" }
 ids_esterni:
   # dati.senato.it: senatore/30110, mandato XIX verificato con la sonda del 2026-10-07
   - { fonte: senato, id: "30110", valido_dal: 2022-10-13 }
