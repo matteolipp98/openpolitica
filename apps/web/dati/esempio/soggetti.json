@@ -20,6 +20,24 @@
   "promesse": {
    "mantenute": 7,
    "totali": 20
+  },
+  "indicatori": {
+   "precise": {
+    "n": 52,
+    "d": 127
+   },
+   "soldi": {
+    "n": 14,
+    "d": 78
+   },
+   "inTempo": {
+    "n": 23,
+    "d": 61
+   },
+   "attacchi": {
+    "n": 287,
+    "d": 845
+   }
   }
  },
  {

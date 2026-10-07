@@ -11,7 +11,7 @@ Una serie nel tempo è anche il modo più facile per far dire ai dati quello che
 ## Decisione
 
 ### Cosa si mostra
-Una pagina "Com'è cambiato nel tempo" e, nella scheda di ogni partito, una sezione con le stesse serie per quel partito.
+Una pagina "Com'è cambiato nel tempo" (testi secondo le parole fisse dell'ADR 0036) e, nella scheda di ogni partito, una sezione con le stesse serie per quel partito.
 
 - **Una metrica per grafico.** Si sceglie la metrica; si vede un piccolo grafico per ogni partito, in ordine alfabetico, tutti con la stessa scala e lo stesso periodo. Nessun grafico mette insieme due metriche, nessun indice composto (0009, 0019).
 - **Periodo: il trimestre.** Ogni punto è un trimestre solare con il suo numeratore e il suo denominatore, leggibili toccando il punto.
@@ -36,7 +36,7 @@ Due metriche vengono solo dai voti, si calcolano dai conteggi per gruppo (`core.
 | Metrica | In pagina | Come si calcola |
 |---|---|---|
 | `vota_con_governo` | "Vota come il governo" | votazioni finali in cui la maggioranza dei votanti del gruppo vota come la maggioranza dei votanti dei gruppi di governo, sul totale delle votazioni finali in cui il gruppo ha almeno `membriMinimi` votanti |
-| `vota_compatto` | "Vota compatto" | votazioni in cui almeno 9 votanti del gruppo su 10 votano allo stesso modo, sullo stesso denominatore |
+| `vota_compatto` | "Il partito vota unito" | votazioni in cui almeno 9 votanti del gruppo su 10 votano allo stesso modo, sullo stesso denominatore |
 
 Per un partito di governo `vota_con_governo` è vicino a "tutte" per costruzione: la pagina lo dice invece di nasconderlo. Le presenze in aula non si mostrano: i conteggi per gruppo oggi mettono insieme assenti, in missione e presidenza (`altri`), e non si può separare chi manca senza motivo. Servirà una colonna in più nella tabella.
 

@@ -30,9 +30,9 @@ export function fraseNumeri(s: Soggetto): string | null {
 }
 
 /** Cifra grande e testo del conteggio: sotto la soglia niente percentuale (ADR 0019). */
-export function quota(n: number, d: number): { cifra: string; sotto: string; percentuale: boolean } {
-  if (d < minimo()) return { cifra: String(n), sotto: `${n} su ${d} (troppo pochi per fare una percentuale)`, percentuale: false };
-  return { cifra: `${Math.round((n / d) * 100)}%`, sotto: `${n} su ${d}`, percentuale: true };
+export function quota(n: number, d: number): { cifra: string; sotto: string; percentuale: boolean; pochi: string } {
+  if (d < minimo()) return { cifra: String(n), sotto: `${n} su ${d}`, percentuale: false, pochi: " Sono ancora pochi per fare un confronto." };
+  return { cifra: `${Math.round((n / d) * 100)}%`, sotto: `${n} su ${d}`, percentuale: true, pochi: "" };
 }
 
 export interface Lettura { cifra: string; testo: string; sotto: string; nomi: string[] }

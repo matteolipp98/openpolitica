@@ -74,12 +74,98 @@
         ],
         "additionalProperties": false
       }
+    },
+    "andamento": {
+      "type": "object",
+      "properties": {
+        "confronto": {
+          "type": "object",
+          "properties": {
+            "piu": {
+              "type": "string"
+            },
+            "meno": {
+              "type": "string"
+            },
+            "uguale": {
+              "type": "string"
+            },
+            "pochi": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "piu",
+            "meno",
+            "uguale",
+            "pochi"
+          ],
+          "additionalProperties": false
+        },
+        "metriche": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "enum": [
+                  "vota_con_governo",
+                  "vota_compatto",
+                  "numeri_sbagliati",
+                  "promesse_precise",
+                  "annunci_seguiti",
+                  "frasi_contro"
+                ]
+              },
+              "nome": {
+                "type": "string",
+                "maxLength": 40
+              },
+              "spiega": {
+                "type": "string",
+                "maxLength": 160
+              },
+              "frase": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "notaGoverno": {
+                "type": "string",
+                "maxLength": 100
+              },
+              "notaOpposizione": {
+                "type": "string",
+                "maxLength": 100
+              },
+              "presto": {
+                "type": "boolean",
+                "default": false
+              }
+            },
+            "required": [
+              "id",
+              "nome",
+              "spiega",
+              "frase"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "confronto",
+        "metriche"
+      ],
+      "additionalProperties": false
     }
   },
   "required": [
     "versione",
     "frasiNumeri",
-    "letture"
+    "letture",
+    "andamento"
   ],
   "additionalProperties": false,
   "$schema": "http://json-schema.org/draft-07/schema#"

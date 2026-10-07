@@ -1,27 +1,66 @@
 # Frasi generate da regole fisse, uguali per tutti (ADR 0037). Linguaggio dell'ADR 0036.
 versione: 1
 frasiNumeri:
-  - { se: "denominatore < 30", testo: "Ha detto pochi numeri controllabili, quindi su questo non possiamo dire molto." }
-  - { se: "quota >= 0.15",     testo: "Sbaglia spesso i numeri: {n} volte su {d}." }
-  - { se: "quota <= 0.06",     testo: "Quando dice un numero, di solito è giusto: sbagliato {n} volte su {d}." }
-  - { altrimenti: true,        testo: "Sui numeri va così così: sbagliati {n} su {d}." }
+  - { se: "denominatore < 30", testo: "Ha detto pochi dati da controllare: per ora non possiamo giudicare." }
+  - { se: "quota >= 0.15",     testo: "Dice spesso dati sbagliati: {n} volte su {d}." }
+  - { se: "quota <= 0.06",     testo: "Quando dice un dato, di solito è giusto: sbagliato {n} volte su {d}." }
+  - { altrimenti: true,        testo: "A volte dice dati sbagliati: {n} volte su {d}." }
 letture:
   - metrica: numeri_sbagliati
     verso: max
-    testo: "{soggetti} è quello che sbaglia più numeri."
-    testoPiu: "{soggetti} sono quelli che sbagliano più numeri."
-    sotto: "{n} numeri sbagliati su {d} che abbiamo potuto controllare."
+    testo: "{soggetti} è quello che dice più dati sbagliati."
+    testoPiu: "{soggetti} sono quelli che dicono più dati sbagliati."
+    sotto: "{n} dati sbagliati su {d} che abbiamo controllato."
   - metrica: non_controllabili
     verso: max
-    testo: "{soggetti} è il più vago: parla senza dire niente di controllabile."
-    testoPiu: "{soggetti} sono i più vaghi: parlano senza dire niente di controllabile."
-    sotto: "{n} frasi su {d} non si possono controllare."
+    testo: "{soggetti} è il più vago: parla senza dire niente di preciso."
+    testoPiu: "{soggetti} sono i più vaghi: parlano senza dire niente di preciso."
+    sotto: "{n} frasi su {d} sono vaghe: niente dati, niente date, niente impegni."
   - metrica: voti_contrari
     verso: max
-    testo: "{soggetti} dice una cosa e poi in aula vota il contrario."
-    testoPiu: "{soggetti} dicono una cosa e poi in aula votano il contrario."
+    testo: "{soggetti} dice una cosa e poi in Parlamento vota il contrario."
+    testoPiu: "{soggetti} dicono una cosa e poi in Parlamento votano il contrario."
     sotto: "È successo {n} volte su {d}."
   - metrica: promesse_non_mantenute
     aggregata: true
     testo: "Promesse rimaste solo sulla carta."
     sotto: "Su {d} promesse scritte nei programmi."
+
+# Andamento nel tempo (ADR 0040). Parole fisse dell'ADR 0036.
+andamento:
+  confronto:
+    piu: "È più di prima."
+    meno: "È meno di prima."
+    uguale: "Più o meno come prima."
+    pochi: "Non abbiamo abbastanza dati per dire se è cambiato."
+  metriche:
+    - id: vota_con_governo
+      nome: "Vota come il governo"
+      spiega: "Quante volte, nelle votazioni finali, il partito ha votato come la maggioranza di governo."
+      frase: "ha votato come il governo {n} volte su {d}"
+      notaGoverno: "È normale che voti quasi sempre così."
+    - id: vota_compatto
+      nome: "Il partito vota unito"
+      spiega: "Quante volte almeno 9 parlamentari su 10 del partito hanno votato allo stesso modo."
+      frase: "ha votato unito {n} volte su {d}"
+    - id: numeri_sbagliati
+      nome: "Dati sbagliati"
+      spiega: "Quando ha detto un dato, per esempio quanti posti di lavoro ci sono, quante volte quello vero era diverso."
+      frase: "ha detto {n} dati sbagliati su {d}"
+      presto: true
+    - id: promesse_precise
+      nome: "Promesse precise"
+      spiega: "Quante promesse dicevano quanto e entro quando, per esempio «20.000 insegnanti entro il 2027»."
+      frase: "{n} promesse su {d} erano precise"
+      presto: true
+    - id: annunci_seguiti
+      nome: "Annunci fatti in tempo"
+      spiega: "Quando ha detto «lo faremo entro giugno», quante volte entro giugno c'era una legge o una proposta."
+      frase: "ha fatto in tempo {n} annunci su {d}"
+      notaOpposizione: "All'opposizione può solo presentare proposte: contano anche quelle."
+      presto: true
+    - id: frasi_contro
+      nome: "Attacchi agli altri partiti"
+      spiega: "Quante frasi servivano ad attaccare gli altri partiti invece che a dire cosa vuole fare."
+      frase: "{n} frasi su {d} attaccavano gli altri partiti"
+      presto: true

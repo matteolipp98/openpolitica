@@ -123,7 +123,7 @@ export function Questionario({ domande, soggetti, parametri, catalogo }: Props) 
             {s.neutrali.length > 0 && <><h3>Su queste non hanno scelto</h3>{s.neutrali.map((k) => <div className="pt" key={k}><b>Né sì né no</b><span>{testoDi(k)}</span></div>)}</>}
             {s.affinita === null && <p className="vuoto">Non sappiamo come hanno votato sulle tue domande.</p>}
             {s.mancanti.length > 0 && <p className="vuoto">Su {s.mancanti.length} domande non abbiamo trovato nessun voto: non inventiamo la loro posizione.</p>}
-            <p className="vuoto">Ogni &quot;sì&quot; o &quot;no&quot; viene da un voto in Parlamento. Nella scheda del partito vedi data e atto.</p>
+            <p className="vuoto">Ogni &quot;sì&quot; o &quot;no&quot; viene da un voto in Parlamento. Nella scheda del partito vedi quale legge e quando.</p>
           </div>
         </details>
       ))}
