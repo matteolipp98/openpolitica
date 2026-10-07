@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: dev   # PROJECT_TOKEN è un secret dell'environment dev
     timeout-minutes: 10
-    permissions: { issues: read }
+    permissions: { issues: read, contents: read }
     steps:
       - uses: actions/checkout@v4
         with: { sparse-checkout: .github/scripts }
