@@ -150,15 +150,16 @@ class TestSenato:
         with pytest.raises(DatoInatteso):
             senato.voti_da_archi(righe)
 
-    def test_query_senza_values(self):
-        assert "VALUES" not in senato.query_archi_votazione(SEN + "votazione/19-167-42")
+    def test_query_senza_values_ne_bind(self):
+        q = senato.query_archi_votazione(SEN + "votazione/19-167-42")
+        assert "VALUES" not in q and "BIND" not in q
         assert "VALUES" not in senato.query_votazioni(19, date(2022, 10, 13))
 
     def test_voti_di_altre_legislature_esclusi(self):
         class Finto:
             def pagine(self, query, pagina=5000):
-                if "BIND" in query:
-                    return [{"v": SEN + "votazione/19-1-1", "p": senato.OSR + "favorevole", "sen": SEN + "senatore/1"}]
+                if "?p ?sen" in query and "osr:dataSeduta" not in query:
+                    return [{"p": senato.OSR + "favorevole", "sen": SEN + "senatore/1"}]
                 return [{"v": SEN + "votazione/18-1-1"}, {"v": SEN + "votazione/19-1-1"}]
 
         voti = list(senato.ConnettoreSenato(Finto()).voti_del_giorno(19, date(2022, 10, 20)))

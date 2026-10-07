@@ -126,12 +126,14 @@ SELECT DISTINCT ?v WHERE {{
 
 
 def query_archi_votazione(uri: str) -> str:
-    """I voti di una sola votazione: la query su un giorno intero è troppo pesante (HTTP 502)."""
+    """I voti di una sola votazione: la query su un giorno intero è troppo pesante (HTTP 502).
+
+    Il server rifiuta anche BIND (HTTP 400): la votazione va scritta direttamente come soggetto.
+    """
     archi = ", ".join(f"osr:{a}" for a in ARCHI)
     return f"""
-SELECT DISTINCT ?v ?p ?sen WHERE {{
-  BIND(<{uri}> AS ?v)
-  ?v ?p ?sen . FILTER(?p IN ({archi}))
+SELECT DISTINCT ?p ?sen WHERE {{
+  <{uri}> ?p ?sen . FILTER(?p IN ({archi}))
 }} ORDER BY ?sen ?p"""
 
 
@@ -168,7 +170,8 @@ class ConnettoreSenato:
         prefisso = f"{SENATO_VOTAZIONE}{legislatura}-"
         for r in self.sparql.pagine(query_votazioni_del_giorno(giorno)):
             if r["v"].startswith(prefisso):
-                yield from voti_da_archi(self.sparql.pagine(query_archi_votazione(r["v"])))
+                archi = [{**x, "v": r["v"]} for x in self.sparql.pagine(query_archi_votazione(r["v"]))]
+                yield from voti_da_archi(archi)
 
     def parlamentari(self, legislatura: int) -> Iterator[ParlamentareGrezzo]:
         visti: set[str] = set()
