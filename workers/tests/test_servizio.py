@@ -30,3 +30,11 @@ def test_head_risponde(monkeypatch):
             assert r.status == 200
     finally:
         srv.shutdown()
+
+
+def test_import_notturno_spento_salvo_richiesta(monkeypatch):
+    monkeypatch.setenv("DATABASE_URL", "postgresql://x")
+    monkeypatch.delenv("IMPORT_NOTTURNO", raising=False)
+    assert not servizio.import_notturno_attivo()
+    monkeypatch.setenv("IMPORT_NOTTURNO", "1")
+    assert servizio.import_notturno_attivo()

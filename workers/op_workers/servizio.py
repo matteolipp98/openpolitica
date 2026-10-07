@@ -1,13 +1,17 @@
-"""Servizio dei worker su Render (ADR 0017): risponde ai controlli di salute e importa i voti ogni notte.
+"""Servizio dei worker su Render (ADR 0017): risponde ai controlli di salute.
+
+L'import dei voti parte da un solo posto, il workflow `Database` di GitHub Actions (ogni 6 ore, con il
+rilascio del sito a valle): due import insieme sprecano le richieste ai server di Camera e Senato (#30).
+Qui l'import notturno resta disponibile solo se si imposta IMPORT_NOTTURNO=1.
 
 Il sito non dipende da questo servizio: legge pagine statiche (ADR 0021, 0029). Se il servizio è giù,
 il sito resta in piedi; i voti nuovi arrivano al giro successivo.
 
 Endpoint:
   GET /         breve descrizione
-  GET /salute   stato in JSON: versione, database raggiungibile, ultimo import
+  GET /salute   stato in JSON: versione, database raggiungibile, fin dove arrivano i voti per ramo
 
-Uso: python -m op_workers.servizio  (PORT, DATABASE_URL facoltativo, ORA_IMPORT=3)
+Uso: python -m op_workers.servizio  (PORT, DATABASE_URL facoltativo, IMPORT_NOTTURNO=0, ORA_IMPORT=3)
 """
 
 from __future__ import annotations
@@ -30,19 +34,24 @@ STATO: dict[str, object] = {
 }
 
 
-def database_raggiungibile() -> bool | None:
+def stato_database() -> tuple[bool | None, dict[str, str]]:
+    """(database raggiungibile, data dell'ultima votazione importata per ramo)."""
     url = os.environ.get("DATABASE_URL")
     if not url:
-        return None
+        return None, {}
     try:
         import psycopg
 
         with psycopg.connect(url, connect_timeout=5) as c:
-            c.execute("select 1")
-        return True
+            righe = c.execute("select ramo, max(data) from core.votazione group by ramo").fetchall()
+        return True, {r: d.isoformat() for r, d in righe}
     except Exception:  # noqa: BLE001 - lo stato si riporta, non si solleva
         log.exception("database non raggiungibile")
-        return False
+        return False, {}
+
+
+def import_notturno_attivo() -> bool:
+    return bool(os.environ.get("DATABASE_URL")) and os.environ.get("IMPORT_NOTTURNO", "0") == "1"
 
 
 class Gestore(BaseHTTPRequestHandler):
@@ -56,8 +65,8 @@ class Gestore(BaseHTTPRequestHandler):
 
     def do_GET(self) -> None:  # noqa: N802
         if self.path == "/salute":
-            db = database_raggiungibile()
-            self._json(200 if db is not False else 503, {**STATO, "database": db})
+            db, ultime = stato_database()
+            self._json(200 if db is not False else 503, {**STATO, "database": db, "ultime_votazioni": ultime})
         elif self.path == "/":
             self._json(200, {"servizio": "openpolitica worker", "salute": "/salute"})
         else:
@@ -105,10 +114,10 @@ def ciclo_import(ora: int) -> None:
 
 def main() -> int:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
-    if os.environ.get("DATABASE_URL"):
+    if import_notturno_attivo():
         threading.Thread(target=ciclo_import, args=(int(os.environ.get("ORA_IMPORT", "3")),), daemon=True).start()
     else:
-        log.warning("DATABASE_URL non impostata: l'import notturno è spento")
+        log.info("import notturno spento: lo fa il workflow Database di GitHub Actions")
     porta = int(os.environ.get("PORT", "10000"))
     log.info("in ascolto sulla porta %s", porta)
     ThreadingHTTPServer(("0.0.0.0", porta), Gestore).serve_forever()  # noqa: S104 - richiesto da Render
