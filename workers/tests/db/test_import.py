@@ -120,3 +120,24 @@ def test_votazione_incoerente_viene_marcata(conn):
     r = importa(conn, ConnettoreFinto(_voti(("302103", "favorevole", "gr4133"))), 19)
     assert r.incoerenti == ["camera:vs19_1_1"]
     assert conn.execute("select coerente from core.votazione where id_esterno = 'vs19_1_1'").fetchone()[0] is False
+
+
+def test_blocco_della_fonte_ferma_senza_errore_e_tiene_i_giorni_fatti(conn):
+    from op_workers.comuni.sparql import ErroreSparql
+
+    sincronizza(conn)
+
+    class Bloccato(ConnettoreFinto):
+        def votazioni(self, leg, dal):
+            yield _votazione("vs19_1_1", date(2023, 1, 10), fav=1, con=0)
+            yield _votazione("vs19_2_1", date(2023, 1, 11), fav=1, con=0)
+
+        def voti_del_giorno(self, leg, giorno):
+            if giorno == date(2023, 1, 11):
+                raise ErroreSparql("https://dati.senato.it/sparql: HTTP 403")
+            yield VotoGrezzo("vs19_1_1", "302103", "favorevole", "gr4133")
+
+    r = importa(conn, Bloccato([]), 19)
+    assert r.interrotto and "2023-01-11" in r.interrotto
+    assert r.votazioni_nuove == 1
+    assert conn.execute("select count(*) from core.votazione").fetchone()[0] == 1

@@ -25,6 +25,7 @@ from datetime import date
 
 import psycopg
 
+from op_workers.comuni.sparql import ErroreSparql
 from op_workers.connettori.base import ConnettoreVoti, ParlamentareGrezzo, VotazioneGrezza, VotoGrezzo
 
 log = logging.getLogger(__name__)
@@ -48,6 +49,7 @@ class Rapporto:
     conteggi_gruppo: int = 0
     non_attribuiti: int = 0
     incoerenti: list[str] = field(default_factory=list)
+    interrotto: str | None = None  # la fonte ci ha bloccato: si riprende al prossimo giro
 
 
 def coerente(v: VotazioneGrezza, voti: Iterable[VotoGrezzo]) -> bool:
@@ -268,8 +270,16 @@ def importa(conn: psycopg.Connection, c: ConnettoreVoti, leg: int, dal: date | N
         per_giorno[v.data].append(v)
     giorni = sorted(per_giorno)
     for i, giorno in enumerate(giorni, 1):
-        with conn.transaction():
-            importa_giorno(ctx, c, giorno, per_giorno[giorno], r)
+        try:
+            with conn.transaction():
+                importa_giorno(ctx, c, giorno, per_giorno[giorno], r)
+        except ErroreSparql as e:
+            if "HTTP 403" not in str(e) and "HTTP 429" not in str(e):
+                raise
+            # Blocco per troppe richieste: i giorni già fatti sono salvati, il prossimo giro riparte da qui
+            r.interrotto = f"{c.ramo}: bloccato dalla fonte al {giorno} ({e})"
+            log.warning(r.interrotto)
+            break
         if i % 20 == 0 or i == len(giorni):
             log.info("%s: %d/%d giorni, %d votazioni nuove", c.ramo, i, len(giorni), r.votazioni_nuove)
     return r

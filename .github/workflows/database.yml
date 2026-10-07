@@ -10,6 +10,8 @@ on:
         type: choice
         options: [entrambi, camera, senato, nessuno]
         default: entrambi
+  schedule:
+    - cron: "41 */6 * * *"   # ogni 6 ore: riprende gli import interrotti dai limiti delle fonti
   push:
     branches: [main, "claude/**"]
     paths:
@@ -45,7 +47,7 @@ jobs:
 
   importa:
     needs: migra
-    if: github.event_name == 'push' || inputs.importa != 'nessuno'
+    if: github.event_name != 'workflow_dispatch' || inputs.importa != 'nessuno'
     runs-on: ubuntu-latest
     environment: dev
     timeout-minutes: 340
@@ -58,11 +60,11 @@ jobs:
     defaults: { run: { working-directory: workers, shell: bash } }  # bash = pipefail: un errore fa fallire il job
     steps:
       - uses: actions/checkout@v4
-        if: github.event_name == 'push' || inputs.importa == 'entrambi' || inputs.importa == matrix.ramo
+        if: github.event_name != 'workflow_dispatch' || inputs.importa == 'entrambi' || inputs.importa == matrix.ramo
       - uses: astral-sh/setup-uv@v6
-        if: github.event_name == 'push' || inputs.importa == 'entrambi' || inputs.importa == matrix.ramo
+        if: github.event_name != 'workflow_dispatch' || inputs.importa == 'entrambi' || inputs.importa == matrix.ramo
       - name: Import ${{ matrix.ramo }}
-        if: github.event_name == 'push' || inputs.importa == 'entrambi' || inputs.importa == matrix.ramo
+        if: github.event_name != 'workflow_dispatch' || inputs.importa == 'entrambi' || inputs.importa == matrix.ramo
         run: |
           uv sync --frozen
           uv run python -m op_workers.connettori.importa_voti ${{ matrix.ramo }} | tail -5 | tee -a "$GITHUB_STEP_SUMMARY"
