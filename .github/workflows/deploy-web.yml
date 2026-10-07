@@ -19,6 +19,7 @@ jobs:
   vercel:
     runs-on: ubuntu-latest
     environment: dev   # i secret sono nell'environment dev
+    timeout-minutes: 15
     env:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       NEXT_TELEMETRY_DISABLED: "1"
