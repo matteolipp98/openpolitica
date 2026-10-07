@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<!-- Indice dei soggetti. Attua ADR 0036, 0019 (conteggio sempre accanto alla percentuale, soglia minima), 0009 (nessun punteggio unico, ordine alfabetico), 0030 (accostamenti, nessun verdetto), 0001 (fatti separati dai valori). Dati inventati. -->
+<html lang="it" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cosa hanno fatto davvero</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#E9ECF0;--surface:#FFFFFF;--ink:#141B23;--muted:#5C6773;
+  --rule:#C9D1DA;--rule-soft:#E2E7EC;--mark:#1F4E79;--brass:#8A6A33;--focus:#1F4E79;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:17px;line-height:1.55;font-variant-numeric:tabular-nums}
+.wrap{max-width:720px;margin:0 auto;padding:28px 18px 80px}
+h1{font-family:"IBM Plex Serif",Georgia,serif;font-size:clamp(28px,6vw,38px);line-height:1.15;margin:0 0 12px;max-width:16ch}
+.lede{margin:0;color:var(--muted);max-width:40ch}
+.nota{margin:18px 0 0;padding:10px 13px;background:#FBF7EE;border-left:3px solid var(--brass);font-size:14px;color:#574521}
+
+h2{font-family:"IBM Plex Serif",serif;font-size:21px;margin:40px 0 14px}
+.tabs{display:flex;border:1px solid var(--rule);background:var(--surface);margin-bottom:16px}
+.tabs button{flex:1;appearance:none;border:0;background:none;font:inherit;padding:11px 10px;cursor:pointer;color:var(--muted)}
+.tabs button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.tabs button+button{border-left:1px solid var(--rule)}
+
+.card{background:var(--surface);border:1px solid var(--rule);margin-bottom:12px}
+.top{display:block;width:100%;text-align:left;appearance:none;border:0;background:none;font:inherit;
+  padding:18px 18px 16px;cursor:pointer}
+.top:hover{background:#F6F8FA}
+.nome{font-size:19px;font-weight:600}
+.ruolo{color:var(--muted);font-size:14px;margin-top:1px}
+.frase{margin:12px 0 0;font-size:17px;max-width:42ch}
+.apri{display:inline-block;margin-top:12px;color:var(--mark);font-size:15px}
+
+.riga{display:flex;gap:14px;align-items:baseline;padding:14px 18px;border-top:1px solid var(--rule-soft)}
+.cifra{font-family:"IBM Plex Serif",serif;font-size:30px;font-weight:600;line-height:1;min-width:92px}
+.cifra.b{color:var(--brass)}
+.testo{flex:1}
+.testo p{margin:0}
+.testo .sotto{color:var(--muted);font-size:14px;margin-top:3px}
+.dett{display:none;padding:0 0 10px}
+.card[data-open="true"] .dett{display:block}
+
+.conf{margin:14px 18px 4px;border:1px solid var(--rule-soft)}
+.conf .a,.conf .b2{padding:13px 15px}
+.conf .b2{border-top:1px solid var(--rule-soft);background:#F7F9FB}
+.conf .et{font-size:14px;color:var(--muted);margin:0 0 4px}
+.conf p{margin:0;font-size:16px}
+.conf cite{font-style:normal;display:block;margin-top:6px;font-size:13px;color:var(--muted)}
+.piccolo{margin:14px 18px 18px;font-size:14px;color:var(--muted);max-width:44ch}
+footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--rule);font-size:14px;color:var(--muted);max-width:44ch}
+a{color:var(--mark)}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#11161C;--surface:#171E26;--ink:#E7ECF1;--muted:#9AA6B2;--rule:#2C3742;--rule-soft:#232C35;
+  --mark:#7FB0E0;--brass:#C9A25E;--focus:#7FB0E0}
+  :root:not([data-theme="light"]) .nota{background:#1E1B13;color:#D8C79D}
+  :root:not([data-theme="light"]) .top:hover{background:#1C242D}
+  :root:not([data-theme="light"]) .conf .b2{background:#1B232B}}
+:root[data-theme="dark"]{--paper:#11161C;--surface:#171E26;--ink:#E7ECF1;--muted:#9AA6B2;
+  --rule:#2C3742;--rule-soft:#232C35;--mark:#7FB0E0;--brass:#C9A25E;--focus:#7FB0E0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Cosa hanno fatto davvero</h1>
+<p class="lede">Controlliamo i numeri che dicono e li confrontiamo con come votano in Parlamento. Tutto qui.</p>
+<p class="nota">Esempio per provare la pagina: nomi e numeri sono inventati.</p>
+
+<h2>In breve</h2>
+<div id="breve"></div>
+
+<h2>Tutti</h2>
+<div class="tabs" role="group" aria-label="Partiti o persone">
+  <button type="button" data-v="partiti" aria-pressed="true">Partiti</button>
+  <button type="button" data-v="politici" aria-pressed="false">Persone</button>
+</div>
+<div id="lista"></div>
+
+<footer>I dati vengono dai voti di Camera e Senato, dai programmi elettorali e dalle statistiche ufficiali ISTAT ed Eurostat.</footer>
+</div>
+
+<script>
+const partiti=[
+ {n:"Alleanza Progresso",r:"Al governo",sbN:11,sbD:96,vago:41,votoK:50,votoD:58,prom:[7,20],
+  ex:{said:"L'occupazione femminile è cresciuta di oltre un milione di posti.",dove:"Conferenza stampa, marzo 2026",
+      vero:"I dati ISTAT dicono 412.000 posti.",fonte:"ISTAT, dati sul lavoro"}},
+ {n:"Civica Riformista",r:"All'opposizione",sbN:4,sbD:41,vago:37,votoK:30,votoD:33,prom:[3,14],
+  ex:{said:"Siamo il paese che spende meno in istruzione di tutta Europa.",dove:"Intervento in aula, febbraio 2026",
+      vero:"Secondo Eurostat cinque paesi spendono meno di noi.",fonte:"Eurostat, spesa pubblica"}},
+ {n:"Fronte dei Territori",r:"Al governo",sbN:14,sbD:72,vago:52,votoK:34,votoD:46,prom:[2,19],
+  ex:{said:"La bolletta della luce è tornata ai livelli del 2019.",dove:"Post sul canale ufficiale, settembre 2026",
+      vero:"Costa ancora il 28% in più rispetto al 2019.",fonte:"ISTAT, prezzi al consumo"}},
+ {n:"Movimento Solidale",r:"All'opposizione",sbN:9,sbD:88,vago:44,votoK:42,votoD:51,prom:[5,19],
+  ex:{said:"Il fondo per gli anziani non autosufficienti è stato tagliato di un terzo.",dove:"Comunicato, novembre 2025",
+      vero:"Il taglio è stato dell'11%.",fonte:"Bilancio dello Stato 2026"}},
+ {n:"Patto per le Regioni",r:"Al governo",sbN:2,sbD:19,vago:58,votoK:12,votoD:15,prom:[1,9],ex:null},
+ {n:"Partito Lavoro e Comunità",r:"All'opposizione",sbN:7,sbD:63,vago:39,votoK:39,votoD:44,prom:[4,18],ex:null},
+ {n:"Unione Liberale",r:"Da solo",sbN:1,sbD:14,vago:49,votoK:9,votoD:11,prom:[2,8],ex:null},
+ {n:"Verdi e Territori",r:"All'opposizione",sbN:0,sbD:9,vago:46,votoK:7,votoD:8,prom:[1,8],ex:null}
+];
+const politici=[
+ {n:"Elena Marchi",r:"Alleanza Progresso · ministra",sbN:5,sbD:38,vago:43,votoK:23,votoD:26,prom:[3,8],
+  ex:{said:"Abbiamo dimezzato i tempi di attesa per una visita.",dove:"Intervista radio, giugno 2026",
+      vero:"Il ministero segnala una riduzione del 17%.",fonte:"Ministero della Salute"}},
+ {n:"Davide Sartori",r:"Fronte dei Territori · capogruppo",sbN:7,sbD:34,vago:55,votoK:15,votoD:21,prom:[1,9],
+  ex:{said:"Oggi un giovane su due non trova lavoro.",dove:"Comizio, luglio 2026",
+      vero:"Senza lavoro è circa un giovane su cinque.",fonte:"ISTAT, dati sul lavoro"}},
+ {n:"Giulia Ferraro",r:"Movimento Solidale",sbN:3,sbD:31,vago:40,votoK:20,votoD:24,prom:[2,8],ex:null},
+ {n:"Marco Benedetti",r:"Civica Riformista",sbN:2,sbD:22,vago:36,votoK:17,votoD:18,prom:[2,6],ex:null},
+ {n:"Chiara Lombardi",r:"Partito Lavoro e Comunità",sbN:4,sbD:26,vago:42,votoK:16,votoD:19,prom:[1,8],ex:null},
+ {n:"Stefano Riva",r:"Unione Liberale",sbN:1,sbD:11,vago:51,votoK:7,votoD:9,prom:[1,4],ex:null},
+ {n:"Anna Pedretti",r:"Verdi e Territori",sbN:0,sbD:7,vago:48,votoK:5,votoD:6,prom:[0,4],ex:null},
+ {n:"Luca Ortolani",r:"Patto per le Regioni",sbN:2,sbD:13,vago:60,votoK:7,votoD:10,prom:[1,5],ex:null},
+ {n:"Paola Ventura",r:"Alleanza Progresso",sbN:3,sbD:29,vago:38,votoK:19,votoD:22,prom:[2,7],ex:null},
+ {n:"Nicola Greco",r:"Movimento Solidale",sbN:2,sbD:20,vago:45,votoK:13,votoD:16,prom:[1,7],ex:null}
+];
+
+const MIN=30;
+/* in breve: tre frasi corte, regole uguali per tutti */
+const forti=partiti.filter(p=>p.sbD>=MIN);
+const peggio=forti.slice().sort((a,b)=>b.sbN/b.sbD-a.sbN/a.sbD)[0];
+const vago=partiti.slice().sort((a,b)=>b.vago-a.vago)[0];
+const giroK=partiti.filter(p=>p.votoD>=MIN).sort((a,b)=>a.votoK/a.votoD-b.votoK/b.votoD)[0];
+const promNo=partiti.reduce((s,p)=>s+(p.prom[1]-p.prom[0]),0), promTot=partiti.reduce((s,p)=>s+p.prom[1],0);
+
+document.getElementById("breve").innerHTML=`
+<div class="card">
+  <div class="riga"><span class="cifra">${peggio.sbN}</span><div class="testo">
+    <p><b>${peggio.n}</b> è quello che sbaglia più numeri.</p>
+    <p class="sotto">${peggio.sbN} numeri sbagliati su ${peggio.sbD} che abbiamo potuto controllare.</p></div></div>
+  <div class="riga"><span class="cifra b">${vago.vago}%</span><div class="testo">
+    <p><b>${vago.n}</b> è il più vago: parla senza dire niente di controllabile.</p>
+    <p class="sotto">Vale per quasi la metà di quello che dicono tutti.</p></div></div>
+  <div class="riga"><span class="cifra">${giroK.votoD-giroK.votoK}</span><div class="testo">
+    <p><b>${giroK.n}</b> dice una cosa e poi in aula vota il contrario.</p>
+    <p class="sotto">È successo ${giroK.votoD-giroK.votoK} volte su ${giroK.votoD}.</p></div></div>
+  <div class="riga"><span class="cifra b">${promNo}</span><div class="testo">
+    <p>Promesse rimaste solo sulla carta.</p>
+    <p class="sotto">Su ${promTot} promesse scritte nei programmi.</p></div></div>
+</div>`;
+
+function frase(p){
+  if(p.sbD<MIN) return "Ha detto pochi numeri controllabili, quindi su questo non possiamo dire molto.";
+  const q=p.sbN/p.sbD;
+  if(q>=.15) return `Sbaglia spesso i numeri: ${p.sbN} volte su ${p.sbD}.`;
+  if(q<=.06) return `Quando dice un numero, di solito è giusto: sbagliato ${p.sbN} volte su ${p.sbD}.`;
+  return `Sui numeri va così così: sbagliati ${p.sbN} su ${p.sbD}.`;
+}
+let v="partiti";
+function render(){
+  const d=(v==="partiti"?partiti:politici);
+  document.getElementById("lista").innerHTML=d.map(p=>`
+  <section class="card" data-open="false">
+    <button class="top" type="button" aria-expanded="false">
+      <span class="nome">${p.n}</span>
+      <div class="ruolo">${p.r}</div>
+      <p class="frase">${frase(p)}</p>
+      <span class="apri">Vedi i dettagli ▾</span>
+    </button>
+    <div class="dett">
+      <div class="riga"><span class="cifra">${p.sbD<MIN?p.sbN:Math.round(p.sbN/p.sbD*100)+"%"}</span><div class="testo">
+        <p>Numeri sbagliati</p><p class="sotto">${p.sbN} su ${p.sbD} controllati${p.sbD<MIN?" (troppo pochi per fare una percentuale)":""}</p></div></div>
+      <div class="riga"><span class="cifra b">${p.vago}%</span><div class="testo">
+        <p>Frasi che non si possono controllare</p><p class="sotto">Niente numeri, niente date, niente impegni precisi</p></div></div>
+      <div class="riga"><span class="cifra">${p.votoD-p.votoK}</span><div class="testo">
+        <p>Volte in cui ha votato al contrario di quello che diceva</p><p class="sotto">Su ${p.votoD} occasioni in cui possiamo confrontare</p></div></div>
+      <div class="riga"><span class="cifra">${p.prom[0]}</span><div class="testo">
+        <p>Promesse mantenute</p><p class="sotto">Su ${p.prom[1]} promesse del programma</p></div></div>
+      ${p.ex?`<div class="conf">
+        <div class="a"><p class="et">Ha detto</p><p>${p.ex.said}</p><cite>${p.ex.dove}</cite></div>
+        <div class="b2"><p class="et">In realtà</p><p>${p.ex.vero}</p><cite>${p.ex.fonte}</cite></div>
+      </div>`:""}
+      <p class="piccolo">Qui non diciamo se le sue idee sono buone: quello lo decidi tu.</p>
+    </div>
+  </section>`).join("");
+
+  document.querySelectorAll(".top").forEach(b=>b.addEventListener("click",()=>{
+    const c=b.closest(".card"),o=c.dataset.open!=="true";
+    c.dataset.open=o;b.setAttribute("aria-expanded",o);
+    b.querySelector(".apri").textContent=o?"Chiudi ▴":"Vedi i dettagli ▾";}));
+}
+document.querySelectorAll(".tabs button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll(".tabs button").forEach(x=>x.setAttribute("aria-pressed",x===b));
+  v=b.dataset.v;render();}));
+render();
+</script>
+</body>
+</html>

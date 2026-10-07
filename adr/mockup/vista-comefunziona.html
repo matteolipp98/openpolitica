@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<!-- Pagina di metodo. Attua ADR 0036, 0012 (trasparenza e correzioni), 0030 (come nascono le domande), 0007 (risposte sul dispositivo), 0031 (ruolo dei modelli). Dati inventati. -->
+<html lang="it" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Come funziona</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#E9ECF0;--surface:#FFFFFF;--ink:#141B23;--muted:#5C6773;--rule:#C9D1DA;--rule-soft:#E2E7EC;
+ --mark:#1F4E79;--brass:#8A6A33;--focus:#1F4E79;box-sizing:border-box;
+ padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;
+ font-size:17px;line-height:1.6;font-variant-numeric:tabular-nums}
+.wrap{max-width:660px;margin:0 auto;padding:26px 18px 80px}
+h1{font-family:"IBM Plex Serif",Georgia,serif;font-size:clamp(27px,5.6vw,36px);line-height:1.15;margin:0 0 12px;max-width:16ch}
+.lede{margin:0 0 26px;color:var(--muted);max-width:42ch}
+
+h2{font-family:"IBM Plex Serif",serif;font-size:21px;margin:36px 0 10px}
+p{max-width:44ch}
+.box{background:var(--surface);border:1px solid var(--rule);padding:18px;margin-top:14px}
+.box p{margin:0 0 12px}.box p:last-child{margin:0}
+
+.passi{counter-reset:p}
+.passo{display:flex;gap:16px;background:var(--surface);border:1px solid var(--rule);padding:16px 18px;margin-bottom:10px}
+.passo .num{font-family:"IBM Plex Serif",serif;font-size:26px;font-weight:600;color:var(--mark);line-height:1.1;min-width:28px}
+.passo h3{margin:0 0 4px;font-size:17px;font-weight:600}
+.passo p{margin:0;color:var(--muted);font-size:15.5px}
+
+.conf{border:1px solid var(--rule);margin-top:14px;background:var(--surface)}
+.conf div{padding:14px 16px}
+.conf div+div{border-top:1px solid var(--rule-soft);background:#F7F9FB}
+.conf .et{font-size:14px;color:var(--muted);margin:0 0 4px}
+.conf p{margin:0;font-size:16px}
+.conf cite{font-style:normal;display:block;margin-top:6px;font-size:13px;color:var(--muted)}
+.esito{padding:13px 16px;border-top:1px solid var(--rule-soft);font-size:15.5px;background:var(--surface)}
+.esito b{color:var(--brass)}
+
+.si-no{background:var(--surface);border:1px solid var(--rule)}
+.sn{display:flex;gap:12px;padding:13px 16px;border-top:1px solid var(--rule-soft);align-items:flex-start}
+.sn:first-child{border-top:0}
+.sn .seg{min-width:26px;font-weight:600;font-size:18px;line-height:1.5}
+.sn.ok .seg{color:var(--mark)}.sn.no .seg{color:var(--brass)}
+.sn p{margin:0;flex:1;font-size:16px}
+
+.faq{background:var(--surface);border:1px solid var(--rule);margin-bottom:10px}
+.faq button{width:100%;appearance:none;border:0;background:none;font:inherit;text-align:left;
+ padding:15px 16px;cursor:pointer;display:flex;justify-content:space-between;gap:14px;align-items:center}
+.faq button:hover{background:#F6F8FA}
+.faq .q{font-weight:500}
+.faq .sg{color:var(--mark);font-size:15px}
+.faq .a{display:none;padding:0 16px 16px;color:var(--muted);font-size:16px}
+.faq[data-open="true"] .a{display:block}
+.faq .a p{margin:0 0 10px}.faq .a p:last-child{margin:0}
+footer{margin-top:38px;padding-top:18px;border-top:1px solid var(--rule);font-size:14px;color:var(--muted);max-width:44ch}
+a{color:var(--mark)}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#11161C;--surface:#171E26;--ink:#E7ECF1;
+ --muted:#9AA6B2;--rule:#2C3742;--rule-soft:#232C35;--mark:#7FB0E0;--brass:#C9A25E;--focus:#7FB0E0}
+ :root:not([data-theme="light"]) .conf div+div{background:#1B232B}
+ :root:not([data-theme="light"]) .faq button:hover{background:#1C242D}}
+:root[data-theme="dark"]{--paper:#11161C;--surface:#171E26;--ink:#E7ECF1;--muted:#9AA6B2;--rule:#2C3742;
+ --rule-soft:#232C35;--mark:#7FB0E0;--brass:#C9A25E;--focus:#7FB0E0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Come funziona</h1>
+<p class="lede">In breve: prendiamo quello che i politici dicono, lo confrontiamo con i dati ufficiali e con come votano davvero in Parlamento. Poi te lo mostriamo.</p>
+
+<h2>I quattro passaggi</h2>
+<div class="passi">
+  <div class="passo"><span class="num">1</span><div>
+    <h3>Raccogliamo quello che dicono</h3>
+    <p>Comunicati, interviste, post sui canali ufficiali, interventi in aula. Ogni giorno.</p></div></div>
+  <div class="passo"><span class="num">2</span><div>
+    <h3>Controlliamo i numeri</h3>
+    <p>Se dicono una cifra, andiamo a vedere quella vera sui siti ufficiali: ISTAT, Eurostat, Banca d'Italia, bilancio dello Stato.</p></div></div>
+  <div class="passo"><span class="num">3</span><div>
+    <h3>Guardiamo come votano</h3>
+    <p>Ogni voto in Parlamento è pubblico, nome per nome. Lo confrontiamo con quello che avevano dichiarato.</p></div></div>
+  <div class="passo"><span class="num">4</span><div>
+    <h3>Te lo raccontiamo semplice</h3>
+    <p>Con sotto sempre la data, l'atto e il link, così puoi controllare tu.</p></div></div>
+</div>
+
+<h2>Un esempio vero</h2>
+<p>Così controlliamo un numero, passo per passo.</p>
+<div class="conf">
+  <div><p class="et">Ha detto</p><p>L'occupazione femminile è cresciuta di oltre un milione di posti.</p><cite>Conferenza stampa, marzo 2026</cite></div>
+  <div><p class="et">Siamo andati a vedere</p><p>I dati ISTAT sul lavoro, stesso periodo: 412.000 posti in più.</p><cite>ISTAT, occupate marzo 2024 – marzo 2026</cite></div>
+</div>
+<div class="esito"><b>Numero sbagliato.</b> La differenza è troppo grande per essere un arrotondamento. Il dato vero resta comunque una crescita.</div>
+
+<h2>Cosa facciamo e cosa no</h2>
+<div class="si-no">
+  <div class="sn ok"><span class="seg">Sì</span><p>Controlliamo i numeri che dicono.</p></div>
+  <div class="sn ok"><span class="seg">Sì</span><p>Mostriamo come hanno votato, con data e atto.</p></div>
+  <div class="sn ok"><span class="seg">Sì</span><p>Segnaliamo quando dicono una cosa e poi votano il contrario.</p></div>
+  <div class="sn ok"><span class="seg">Sì</span><p>Ti diciamo chi la pensa come te, se rispondi alle domande.</p></div>
+  <div class="sn no"><span class="seg">No</span><p>Non ti diciamo per chi votare.</p></div>
+  <div class="sn no"><span class="seg">No</span><p>Non diamo voti o pagelle ai politici.</p></div>
+  <div class="sn no"><span class="seg">No</span><p>Non giudichiamo se un'idea è giusta o sbagliata: quello dipende da cosa pensi tu.</p></div>
+  <div class="sn no"><span class="seg">No</span><p>Non inventiamo niente: se un dato non c'è, scriviamo che non c'è.</p></div>
+</div>
+
+<h2>Domande che ci fanno</h2>
+
+<section class="faq" data-open="false">
+  <button type="button" aria-expanded="false"><span class="q">Siete di destra o di sinistra?</span><span class="sg">apri ▾</span></button>
+  <div class="a"><p>Né l'una né l'altra, e non ti chiediamo di crederci sulla parola.</p>
+  <p>Tutto quello che usiamo è pubblico: le domande, i voti che collegiamo a ogni domanda, il modo in cui facciamo i conti. Chiunque può controllare e dirci che abbiamo sbagliato.</p>
+  <p>Non prendiamo soldi da partiti, candidati o comitati elettorali.</p></div>
+</section>
+
+<section class="faq" data-open="false">
+  <button type="button" aria-expanded="false"><span class="q">Chi ha scelto le domande?</span><span class="sg">apri ▾</span></button>
+  <div class="a"><p>Non le abbiamo scritte noi a tavolino. Partiamo dai voti che in Parlamento hanno davvero diviso i partiti, e da quelli ricaviamo le domande.</p>
+  <p>Così le domande non sono le nostre idee: sono le cose su cui loro si sono già divisi.</p></div>
+</section>
+
+<section class="faq" data-open="false">
+  <button type="button" aria-expanded="false"><span class="q">Perché a volte scrivete "non si sa"?</span><span class="sg">apri ▾</span></button>
+  <div class="a"><p>Perché su quell'argomento non abbiamo trovato né un voto né una dichiarazione chiara.</p>
+  <p>Potremmo tirare a indovinare. Preferiamo lasciare vuoto.</p></div>
+</section>
+
+<section class="faq" data-open="false">
+  <button type="button" aria-expanded="false"><span class="q">Perché non dite "ha mentito"?</span><span class="sg">apri ▾</span></button>
+  <div class="a"><p>Perché non possiamo sapere se uno sbaglia apposta o si è confuso.</p>
+  <p>Ti mettiamo davanti le due cose, quello che ha detto e quello che dice il dato ufficiale. Il giudizio è tuo.</p></div>
+</section>
+
+<section class="faq" data-open="false">
+  <button type="button" aria-expanded="false"><span class="q">Le mie risposte dove finiscono?</span><span class="sg">apri ▾</span></button>
+  <div class="a"><p>Restano sul tuo telefono o sul tuo computer. Non le vediamo e non le salviamo da nessuna parte.</p>
+  <p>Le tue idee politiche sono fatti tuoi.</p></div>
+</section>
+
+<section class="faq" data-open="false">
+  <button type="button" aria-expanded="false"><span class="q">Se trovo un errore?</span><span class="sg">apri ▾</span></button>
+  <div class="a"><p>Scrivici: c'è un modulo per segnalarlo, e vale per tutti, anche per i politici e il loro staff.</p>
+  <p>Quando correggiamo qualcosa lo scriviamo in una pagina pubblica, con la data. Non cancelliamo di nascosto.</p></div>
+</section>
+
+<section class="faq" data-open="false">
+  <button type="button" aria-expanded="false"><span class="q">Usate l'intelligenza artificiale?</span><span class="sg">apri ▾</span></button>
+  <div class="a"><p>Sì, per leggere tanti documenti e tirarne fuori le frasi dei politici: a mano non ce la faremmo.</p>
+  <p>Ma i numeri non li scrive mai: quelli arrivano dalle banche dati ufficiali. E il calcolo di chi la pensa come te è una formula fissa, sempre la stessa per tutti.</p></div>
+</section>
+
+<h2>Quello che ancora non facciamo</h2>
+<div class="box">
+  <p>Non guardiamo i video e la tv: se una cosa la dicono solo in televisione, ci arriva solo se poi un giornale la scrive.</p>
+  <p>Seguiamo i partiti principali e i loro leader, non tutti i parlamentari.</p>
+  <p>Sulle dichiarazioni partiamo da quando abbiamo acceso il sito. Sui voti in Parlamento invece andiamo indietro di anni.</p>
+</div>
+
+<footer>Questo è un progetto indipendente. Il codice e il metodo sono pubblici: chiunque può controllarli.</footer>
+</div>
+
+<script>
+document.querySelectorAll(".faq button").forEach(b=>b.addEventListener("click",()=>{
+ const s=b.closest(".faq"),o=s.dataset.open!=="true";
+ s.dataset.open=o;b.setAttribute("aria-expanded",o);
+ b.querySelector(".sg").textContent=o?"chiudi ▴":"apri ▾";}));
+</script>
+</body>
+</html>

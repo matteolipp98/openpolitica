@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<!-- Scheda di un soggetto. Attua ADR 0036, 0014 (confronto con fonti ufficiali), 0020 (stato delle promesse), 0023 (voti con data e atto), 0019 (conteggi), 0001. Dati inventati. -->
+<html lang="it" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Alleanza Progresso — scheda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#E9ECF0;--surface:#FFFFFF;--ink:#141B23;--muted:#5C6773;--rule:#C9D1DA;--rule-soft:#E2E7EC;
+ --mark:#1F4E79;--brass:#8A6A33;--focus:#1F4E79;box-sizing:border-box;
+ padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;
+ font-size:17px;line-height:1.55;font-variant-numeric:tabular-nums}
+.wrap{max-width:680px;margin:0 auto;padding:24px 18px 80px}
+.back{color:var(--mark);font-size:15px;text-decoration:none;display:inline-block;margin-bottom:16px}
+h1{font-family:"IBM Plex Serif",Georgia,serif;font-size:clamp(27px,5.6vw,35px);line-height:1.14;margin:0 0 4px}
+.ruolo{color:var(--muted);margin:0 0 16px}
+.sommario{background:var(--surface);border:1px solid var(--rule);padding:18px;font-size:18px;margin-bottom:22px}
+.sommario p{margin:0 0 10px}.sommario p:last-child{margin:0}
+.nota{margin:0 0 22px;padding:10px 13px;background:#FBF7EE;border-left:3px solid var(--brass);font-size:14px;color:#574521}
+
+h2{font-family:"IBM Plex Serif",serif;font-size:20px;margin:34px 0 12px}
+.card{background:var(--surface);border:1px solid var(--rule)}
+.riga{display:flex;gap:14px;align-items:baseline;padding:14px 16px;border-top:1px solid var(--rule-soft)}
+.riga:first-child{border-top:0}
+.cifra{font-family:"IBM Plex Serif",serif;font-size:29px;font-weight:600;line-height:1;min-width:86px}
+.cifra.b{color:var(--brass)}
+.riga p{margin:0}.riga .sotto{color:var(--muted);font-size:14px;margin-top:3px}
+
+.tema{background:var(--surface);border:1px solid var(--rule);margin-bottom:10px}
+.tt{display:flex;gap:12px;align-items:center;width:100%;appearance:none;border:0;background:none;font:inherit;
+ text-align:left;padding:14px 16px;cursor:pointer}
+.tt:hover{background:#F6F8FA}
+.pos{min-width:92px;font-weight:600;font-size:15px}
+.pos.si{color:var(--mark)}.pos.no{color:var(--brass)}.pos.vuoto{color:var(--muted);font-weight:400}
+.tt .q{flex:1}
+.apri{color:var(--mark);font-size:14px}
+.dett{display:none;padding:0 16px 16px;border-top:1px solid var(--rule-soft)}
+.tema[data-open="true"] .dett{display:block}
+.voto{padding:12px 0;border-bottom:1px solid var(--rule-soft);font-size:15.5px}
+.voto:last-child{border-bottom:0}
+.voto b{font-weight:600}
+.voto span{display:block;color:var(--muted);font-size:14px;margin-top:2px}
+.conf{border:1px solid var(--rule-soft);margin:14px 0 0}
+.conf div{padding:13px 15px}
+.conf div+div{border-top:1px solid var(--rule-soft);background:#F7F9FB}
+.conf .et{font-size:14px;color:var(--muted);margin:0 0 4px}
+.conf p{margin:0;font-size:16px}
+.conf cite{font-style:normal;display:block;margin-top:6px;font-size:13px;color:var(--muted)}
+.prom{background:var(--surface);border:1px solid var(--rule);padding:4px 16px}
+.pr{display:flex;gap:12px;padding:13px 0;border-top:1px solid var(--rule-soft);align-items:flex-start}
+.pr:first-child{border-top:0}
+.tag{min-width:100px;font-size:14px;font-weight:500}
+.tag.f{color:var(--mark)}.tag.m{color:var(--muted)}.tag.n{color:var(--brass)}
+.pr p{margin:0;flex:1;font-size:16px}
+.pr span{display:block;color:var(--muted);font-size:14px;margin-top:2px}
+.chiusura{margin-top:26px;font-size:15px;color:var(--muted);max-width:44ch}
+footer{margin-top:30px;padding-top:16px;border-top:1px solid var(--rule);font-size:14px;color:var(--muted);max-width:44ch}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#11161C;--surface:#171E26;--ink:#E7ECF1;
+ --muted:#9AA6B2;--rule:#2C3742;--rule-soft:#232C35;--mark:#7FB0E0;--brass:#C9A25E;--focus:#7FB0E0}
+ :root:not([data-theme="light"]) .nota{background:#1E1B13;color:#D8C79D}
+ :root:not([data-theme="light"]) .tt:hover{background:#1C242D}
+ :root:not([data-theme="light"]) .conf div+div{background:#1B232B}}
+:root[data-theme="dark"]{--paper:#11161C;--surface:#171E26;--ink:#E7ECF1;--muted:#9AA6B2;--rule:#2C3742;
+ --rule-soft:#232C35;--mark:#7FB0E0;--brass:#C9A25E;--focus:#7FB0E0}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="#">← Tutti i partiti</a>
+<h1>Alleanza Progresso</h1>
+<p class="ruolo">Al governo · 54 parlamentari</p>
+
+<div class="sommario">
+  <p>Sbaglia i numeri 11 volte su 96 che abbiamo controllato.</p>
+  <p>Ha votato al contrario di quello che diceva 8 volte su 58.</p>
+  <p>Ha mantenuto 7 promesse su 20.</p>
+</div>
+<p class="nota">Esempio per provare la pagina: nomi, numeri e citazioni sono inventati.</p>
+
+<h2>Come ha votato sulle cose che contano</h2>
+<div id="temi"></div>
+
+<h2>Le promesse del programma</h2>
+<div class="prom" id="promesse"></div>
+
+<h2>Numeri che non tornano</h2>
+<div id="numeri"></div>
+
+<p class="chiusura">Qui non diciamo se le loro idee sono buone o cattive. Diciamo cosa hanno detto e cosa hanno fatto. Il resto lo decidi tu.</p>
+<footer>Fonti: voti di Camera e Senato, programma elettorale depositato, statistiche ISTAT ed Eurostat.</footer>
+</div>
+
+<script>
+const temi=[
+ {q:"Salario minimo per legge",pos:"contro",voti:[
+   {t:"Ha votato contro la proposta di salario minimo a 9 euro",d:"Camera, 11 maggio 2023"},
+   {t:"Ha votato contro l'emendamento che lo introduceva nel bilancio",d:"Senato, 18 dicembre 2024"}]},
+ {q:"Più tasse sui grandi patrimoni",pos:"contro",voti:[
+   {t:"Ha votato contro l'imposta sui patrimoni oltre i 5 milioni",d:"Camera, 3 ottobre 2025"}]},
+ {q:"Cittadinanza ai figli di stranieri nati in Italia",pos:"contro",voti:[
+   {t:"Ha votato contro il passaggio in aula della riforma",d:"Camera, 7 marzo 2026"}],
+  nota:"Nel programma del 2022 scriveva di voler \u201criformare le regole sulla cittadinanza\u201d, senza dire in che direzione."},
+ {q:"Nuove centrali nucleari",pos:"a favore",voti:[
+   {t:"Ha votato a favore del piano che riapre al nucleare",d:"Camera, 22 gennaio 2026"}]},
+ {q:"Più soldi alla sanità pubblica",pos:"contro",voti:[
+   {t:"Ha votato contro l'aumento del fondo sanitario",d:"Senato, 28 novembre 2025"}],
+  nota:"In campagna elettorale aveva promesso di aumentare la spesa sanitaria. È il caso in cui parole e voto si contraddicono di più."},
+ {q:"Pensione anticipata più facile",pos:"contro",voti:[
+   {t:"Ha votato contro l'uscita a 62 anni",d:"Camera, 15 dicembre 2025"}]},
+ {q:"Invio di armi ai paesi sotto attacco",pos:"a favore",voti:[
+   {t:"Ha votato a favore della proroga degli invii",d:"Camera, 9 febbraio 2026"}]},
+ {q:"Più autonomia dall'Unione Europea",pos:"nessun voto",voti:[]}
+];
+document.getElementById("temi").innerHTML=temi.map(t=>{
+ const cls=t.pos==="a favore"?"si":t.pos==="contro"?"no":"vuoto";
+ return `<section class="tema" data-open="false">
+  <button class="tt" type="button" aria-expanded="false">
+   <span class="pos ${cls}">${t.pos==="nessun voto"?"Non si sa":t.pos==="a favore"?"A favore":"Contro"}</span>
+   <span class="q">${t.q}</span><span class="apri">vedi ▾</span>
+  </button>
+  <div class="dett">
+   ${t.voti.length?t.voti.map(v=>`<div class="voto"><b>${v.t}</b><span>${v.d}</span></div>`).join("")
+     :`<div class="voto"><b>In Parlamento non si è mai votato su questo.</b><span>Non inventiamo la loro posizione.</span></div>`}
+   ${t.nota?`<div class="conf"><div><p class="et">Attenzione</p><p>${t.nota}</p></div></div>`:""}
+  </div>
+ </section>`}).join("");
+
+const promesse=[
+ {s:"f",t:"Assumere 20.000 insegnanti di sostegno",n:"Fatto: assunzioni partite nel 2024."},
+ {s:"f",t:"Aumentare gli asili nido nei comuni piccoli",n:"Fatto: fondi stanziati e primi 180 nidi aperti."},
+ {s:"m",t:"Tagliare le tasse sul lavoro",n:"A metà: il taglio è arrivato ma solo per un anno."},
+ {s:"m",t:"Ridurre i tempi di attesa per le visite mediche",n:"A metà: calati del 17%, la promessa era dimezzarli."},
+ {s:"n",t:"Aumentare la spesa per la sanità pubblica",n:"Non fatto: ha votato contro l'aumento del fondo."},
+ {s:"n",t:"Una legge sul conflitto d'interessi",n:"Non fatto: nessuna proposta presentata in quattro anni."},
+ {s:"n",t:"Rivedere le regole sulla cittadinanza",n:"Non fatto: ha votato contro la riforma arrivata in aula."}
+];
+const et={f:"Mantenuta",m:"A metà",n:"Non mantenuta"};
+document.getElementById("promesse").innerHTML=promesse.map(p=>`
+ <div class="pr"><span class="tag ${p.s}">${et[p.s]}</span><p>${p.t}<span>${p.n}</span></p></div>`).join("");
+
+const numeri=[
+ {said:"L'occupazione femminile è cresciuta di oltre un milione di posti.",dove:"Conferenza stampa, marzo 2026",
+  vero:"I dati ISTAT dicono 412.000 posti.",fonte:"ISTAT, dati sul lavoro"},
+ {said:"Abbiamo abbassato le tasse a tutte le famiglie.",dove:"Intervista tv, gennaio 2026",
+  vero:"Il taglio ha riguardato i redditi da lavoro fino a 35.000 euro, non tutte le famiglie.",fonte:"Legge di bilancio 2026"},
+ {said:"L'Italia cresce più della media europea.",dove:"Post sul canale ufficiale, luglio 2026",
+  vero:"La crescita italiana è stata inferiore alla media dell'area euro nello stesso periodo.",fonte:"Eurostat, PIL trimestrale"}
+];
+document.getElementById("numeri").innerHTML=`<div class="card">`+numeri.map(n=>`
+ <div class="conf" style="border:0;border-top:1px solid var(--rule-soft)">
+  <div><p class="et">Ha detto</p><p>${n.said}</p><cite>${n.dove}</cite></div>
+  <div><p class="et">In realtà</p><p>${n.vero}</p><cite>${n.fonte}</cite></div>
+ </div>`).join("")+`</div>`;
+
+document.querySelectorAll(".tt").forEach(b=>b.addEventListener("click",()=>{
+ const s=b.closest(".tema"),o=s.dataset.open!=="true";
+ s.dataset.open=o;b.setAttribute("aria-expanded",o);
+ b.querySelector(".apri").textContent=o?"chiudi ▴":"vedi ▾";}));
+</script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<!-- Questionario e risultato. Attua ADR 0036, 0008 (calcolo deterministico), 0007 (profilo sul client), 0013 (dati di contesto prima della domanda), 0021 (pareggi e caso nessuno ti rappresenta), 0030 (nessuna posizione stimata). Dati inventati. -->
+<html lang="it" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chi la pensa come te</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#E9ECF0;--surface:#FFFFFF;--ink:#141B23;--muted:#5C6773;--rule:#C9D1DA;--rule-soft:#E2E7EC;
+ --mark:#1F4E79;--brass:#8A6A33;--focus:#1F4E79;box-sizing:border-box;
+ padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;
+ font-size:17px;line-height:1.55;font-variant-numeric:tabular-nums}
+.wrap{max-width:680px;margin:0 auto;padding:24px 18px 80px}
+h1{font-family:"IBM Plex Serif",Georgia,serif;font-size:clamp(26px,5.6vw,34px);line-height:1.16;margin:0 0 10px;max-width:17ch}
+.lede{margin:0 0 22px;color:var(--muted);max-width:40ch}
+.nota{margin:0 0 22px;padding:10px 13px;background:#FBF7EE;border-left:3px solid var(--brass);font-size:14px;color:#574521}
+
+.avanz{display:flex;gap:4px;margin-bottom:20px}
+.avanz i{flex:1;height:4px;background:var(--rule)}
+.avanz i.on{background:var(--mark)}
+
+.box{background:var(--surface);border:1px solid var(--rule);padding:20px 18px}
+.conta{color:var(--muted);font-size:14px;margin:0 0 8px}
+.dom{font-family:"IBM Plex Serif",serif;font-size:23px;line-height:1.35;margin:0 0 6px}
+.contesto{margin:14px 0 0;padding:13px 15px;background:#F3F6F9;border-left:3px solid var(--rule);font-size:15px;color:#3B4651}
+.contesto b{font-weight:600}
+.scelte{display:grid;gap:9px;margin-top:20px}
+.scelte button{appearance:none;font:inherit;text-align:left;padding:14px 16px;background:var(--surface);
+ border:1px solid var(--rule);cursor:pointer}
+.scelte button:hover{border-color:var(--mark);background:#F6F8FA}
+.conta-imp{display:flex;align-items:center;gap:9px;margin-top:16px;font-size:15px;color:var(--muted)}
+.conta-imp input{width:18px;height:18px}
+.indietro{appearance:none;border:0;background:none;font:inherit;color:var(--mark);padding:14px 0 0;cursor:pointer}
+
+/* risultato */
+.risultato{display:none}
+.vinc{background:var(--surface);border:1px solid var(--rule);padding:22px 18px;margin-bottom:14px}
+.vinc .et{color:var(--muted);font-size:15px;margin:0}
+.vinc h2{font-family:"IBM Plex Serif",serif;font-size:27px;margin:4px 0 2px}
+.vinc .pct{font-family:"IBM Plex Serif",serif;font-size:44px;font-weight:600;line-height:1;margin:14px 0 2px;color:var(--mark)}
+.vinc .sotto{color:var(--muted);font-size:15px;margin:0}
+.lista .r{background:var(--surface);border:1px solid var(--rule);margin-bottom:10px}
+.lista .rt{display:flex;gap:14px;align-items:center;padding:14px 16px;width:100%;appearance:none;border:0;background:none;font:inherit;text-align:left;cursor:pointer}
+.lista .rt:hover{background:#F6F8FA}
+.lista .p{font-family:"IBM Plex Serif",serif;font-size:24px;font-weight:600;min-width:62px;color:var(--mark)}
+.lista .nm{flex:1}
+.lista .nm b{font-weight:600}
+.lista .nm span{display:block;color:var(--muted);font-size:14px}
+.barra{height:4px;background:var(--rule-soft);margin:0 16px 14px}
+.barra i{display:block;height:100%;background:var(--mark)}
+.dett{display:none;padding:2px 16px 18px;border-top:1px solid var(--rule-soft)}
+.r[data-open="true"] .dett{display:block}
+.dett h3{font-size:15px;margin:14px 0 8px;font-weight:600}
+.pt{display:flex;gap:10px;padding:9px 0;border-top:1px solid var(--rule-soft);font-size:15.5px}
+.pt b{min-width:74px;font-weight:500;color:var(--muted)}
+.ok b{color:var(--mark)} .no b{color:var(--brass)}
+.vuoto{color:var(--muted);font-size:14.5px;margin:12px 0 0}
+.avviso{background:#FBF7EE;border-left:3px solid var(--brass);padding:14px 15px;margin-bottom:14px;font-size:15.5px;color:#574521}
+.rifai{appearance:none;border:1px solid var(--rule);background:var(--surface);font:inherit;padding:12px 18px;cursor:pointer;margin-top:18px}
+footer{margin-top:34px;font-size:14px;color:var(--muted);max-width:44ch}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#11161C;--surface:#171E26;--ink:#E7ECF1;
+ --muted:#9AA6B2;--rule:#2C3742;--rule-soft:#232C35;--mark:#7FB0E0;--brass:#C9A25E;--focus:#7FB0E0}
+ :root:not([data-theme="light"]) .nota,:root:not([data-theme="light"]) .avviso{background:#1E1B13;color:#D8C79D}
+ :root:not([data-theme="light"]) .contesto{background:#1B232B;color:#BAC4CE}
+ :root:not([data-theme="light"]) .scelte button:hover,:root:not([data-theme="light"]) .lista .rt:hover{background:#1C242D}}
+:root[data-theme="dark"]{--paper:#11161C;--surface:#171E26;--ink:#E7ECF1;--muted:#9AA6B2;--rule:#2C3742;
+ --rule-soft:#232C35;--mark:#7FB0E0;--brass:#C9A25E;--focus:#7FB0E0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Chi la pensa come te</h1>
+<p class="lede">Otto domande. Poi ti diciamo chi ha votato come la pensi tu, e su cosa invece non siete d'accordo.</p>
+<p class="nota">Esempio per provare la pagina: partiti e numeri sono inventati.</p>
+
+<div id="gioco">
+  <div class="avanz" id="avanz"></div>
+  <div class="box">
+    <p class="conta" id="conta"></p>
+    <p class="dom" id="dom"></p>
+    <div class="contesto" id="contesto"></div>
+    <div class="scelte">
+      <button type="button" data-v="2">Sono d'accordo</button>
+      <button type="button" data-v="-2">Sono contrario</button>
+      <button type="button" data-v="0">Non ho un'opinione</button>
+    </div>
+    <label class="conta-imp"><input type="checkbox" id="imp"> Questo argomento per me conta più degli altri</label>
+    <button class="indietro" type="button" id="back" hidden>← Torna indietro</button>
+  </div>
+</div>
+
+<div class="risultato" id="risultato"></div>
+
+<footer>Le posizioni dei partiti vengono dai voti in Parlamento. Le tue risposte restano sul tuo telefono.</footer>
+</div>
+
+<script>
+const domande=[
+ {t:"Lo Stato deve fissare per legge un salario minimo.",
+  c:"Oggi in Italia non esiste. In Parlamento se ne è votato nel 2023: la proposta è stata respinta."},
+ {t:"Bisogna tassare di più chi ha grandi patrimoni per abbassare le tasse sul lavoro.",
+  c:"Chi è a favore dice che riduce le disuguaglianze. Chi è contro teme la fuga di capitali."},
+ {t:"L'Italia deve continuare a inviare armi ai paesi sotto attacco.",
+  c:"Dal 2022 il Parlamento ha votato più volte su questo, con maggioranze diverse ogni volta."},
+ {t:"Chi nasce in Italia da genitori stranieri deve diventare cittadino italiano subito.",
+  c:"Oggi deve aspettare i 18 anni e fare domanda. Riguarda circa 900.000 ragazzi."},
+ {t:"Bisogna costruire nuove centrali nucleari in Italia.",
+  c:"Due referendum le hanno bocciate, nel 1987 e nel 2011. Oggi la legge le vieta."},
+ {t:"La sanità privata convenzionata va ridotta a favore di quella pubblica.",
+  c:"Circa un euro su cinque della spesa sanitaria pubblica va a strutture private convenzionate."},
+ {t:"Serve più flessibilità per andare in pensione prima, anche se costa allo Stato.",
+  c:"Ogni anno di anticipo per tutti costa qualche miliardo l'anno secondo le stime ufficiali."},
+ {t:"L'Italia deve avere più autonomia dalle decisioni dell'Unione Europea.",
+  c:"Riguarda materie come bilancio, migranti e ambiente, dove oggi decidono anche le istituzioni europee."}
+];
+/* posizioni di esempio: -2 contrario, +2 favorevole, null = nessun voto trovato */
+const partiti=[
+ {n:"Alleanza Progresso",r:"Al governo",p:[-2,-1,2,-2,2,-1,-2,1]},
+ {n:"Civica Riformista",r:"All'opposizione",p:[1,1,1,2,0,1,-1,-2]},
+ {n:"Fronte dei Territori",r:"Al governo",p:[-2,-2,1,-2,2,-2,2,2]},
+ {n:"Movimento Solidale",r:"All'opposizione",p:[2,2,-2,2,-2,2,2,-1]},
+ {n:"Partito Lavoro e Comunità",r:"All'opposizione",p:[2,2,-1,1,-1,2,1,null]},
+ {n:"Unione Liberale",r:"Da solo",p:[-2,-2,2,1,2,-2,-2,-1]},
+ {n:"Verdi e Territori",r:"All'opposizione",p:[2,2,-1,2,-2,2,1,-2]},
+ {n:"Patto per le Regioni",r:"Al governo",p:[-1,-2,null,-1,1,-1,1,2]}
+];
+
+let i=0;const risp=[];
+function mostra(){
+ document.getElementById("avanz").innerHTML=domande.map((_,k)=>`<i class="${k<i?'on':''}"></i>`).join("");
+ document.getElementById("conta").textContent=`Domanda ${i+1} di ${domande.length}`;
+ document.getElementById("dom").textContent=domande[i].t;
+ document.getElementById("contesto").innerHTML=`<b>Prima di rispondere:</b> ${domande[i].c}`;
+ document.getElementById("imp").checked=false;
+ document.getElementById("back").hidden=i===0;
+}
+document.querySelectorAll(".scelte button").forEach(b=>b.addEventListener("click",()=>{
+ risp[i]={v:+b.dataset.v,peso:document.getElementById("imp").checked?2:1};
+ i++;i<domande.length?mostra():calcola();
+}));
+document.getElementById("back").addEventListener("click",()=>{if(i>0){i--;mostra();}});
+
+function calcola(){
+ const out=partiti.map(p=>{
+  let max=0,pt=0,ok=[],no=[],manca=0;
+  domande.forEach((d,k)=>{
+   const mia=risp[k].v,sua=p.p[k],w=risp[k].peso;
+   if(mia===0) return;
+   if(sua===null){manca++;return;}
+   max+=4*w;
+   pt+=(4-Math.abs(mia-sua))*w;
+   (mia>0)===(sua>0)?ok.push(k):no.push(k);
+  });
+  return {...p,pct:max?Math.round(pt/max*100):0,ok,no,manca};
+ }).sort((a,b)=>b.pct-a.pct);
+
+ const primo=out[0], pari=out.filter(p=>primo.pct-p.pct<=3);
+ let testa="";
+ if(primo.pct<50){
+  testa=`<div class="avviso"><b>Nessuno la pensa davvero come te.</b> Il più vicino arriva solo al ${primo.pct}%. Succede, e non è un errore tuo: vuol dire che le tue idee non stanno tutte dentro un partito solo.</div>`;
+ }
+ testa+=`<div class="vinc">
+   <p class="et">${pari.length>1?"Sono alla pari":"Il più vicino a te"}</p>
+   <h2>${pari.map(p=>p.n).join(" · ")}</h2>
+   <p class="pct">${primo.pct}%</p>
+   <p class="sotto">D'accordo con te su ${primo.ok.length} domande su ${domande.length}. Non d'accordo su ${primo.no.length}.</p>
+ </div>`;
+
+ const lista=out.map(p=>`
+  <section class="r" data-open="false">
+   <button class="rt" type="button" aria-expanded="false">
+    <span class="p">${p.pct}%</span>
+    <span class="nm"><b>${p.n}</b><span>${p.r} · d'accordo su ${p.ok.length} di ${domande.length}</span></span>
+    <span style="color:var(--mark);font-size:14px">vedi ▾</span>
+   </button>
+   <div class="barra"><i style="width:${p.pct}%"></i></div>
+   <div class="dett">
+    ${p.ok.length?`<h3>Su queste cose siete d'accordo</h3>${p.ok.map(k=>`<div class="pt ok"><b>Sì</b><span>${domande[k].t}</span></div>`).join("")}`:""}
+    ${p.no.length?`<h3>Su queste no</h3>${p.no.map(k=>`<div class="pt no"><b>No</b><span>${domande[k].t}</span></div>`).join("")}`:""}
+    ${p.manca?`<p class="vuoto">Su ${p.manca} domande non abbiamo trovato nessun voto: non inventiamo la loro posizione.</p>`:""}
+    <p class="vuoto">Ogni "sì" o "no" viene da un voto in Parlamento. Puoi vedere data e atto.</p>
+   </div>
+  </section>`).join("");
+
+ document.getElementById("gioco").style.display="none";
+ const r=document.getElementById("risultato");
+ r.style.display="block";
+ r.innerHTML=testa+`<div class="lista">${lista}</div>
+  <button class="rifai" type="button" id="rifai">Rifai le domande</button>`;
+ r.querySelectorAll(".rt").forEach(b=>b.addEventListener("click",()=>{
+  const s=b.closest(".r"),o=s.dataset.open!=="true";s.dataset.open=o;b.setAttribute("aria-expanded",o);}));
+ document.getElementById("rifai").addEventListener("click",()=>{
+  i=0;risp.length=0;r.style.display="none";document.getElementById("gioco").style.display="block";mostra();window.scrollTo(0,0);});
+ window.scrollTo(0,0);
+}
+mostra();
+</script>
+</body>
+</html>
