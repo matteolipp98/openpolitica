@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import html
+import re
 from collections.abc import Iterator
 from dataclasses import dataclass
 from datetime import date, timedelta
@@ -105,3 +107,26 @@ def finestre_mensili(dal: date, al: date | None = None) -> list[tuple[date, date
         out.append((inizio, min(prossimo - timedelta(days=1), al)))
         inizio = prossimo
     return out
+
+
+def pulisci_titolo(testo: str | None) -> str | None:
+    """Titolo di una legge leggibile (#73). La Camera lo dà con il tipo RDF in coda
+    (^^http://www.w3.org/2001/XMLSchema#string), entità HTML (&quot;, &egrave;) e tag (<em>)."""
+    if testo is None:
+        return None
+    t = re.sub(r"\^\^<?https?://\S+$", "", testo.strip())
+    t = html.unescape(html.unescape(t))  # alcuni titoli sono codificati due volte (&amp;quot;)
+    t = re.sub(r"<[^>]+>", "", t).replace("\xa0", " ").replace('\\"', '"')
+    t = re.sub(r"\s+", " ", t).strip()
+    return t or None
+
+
+def chiave_atto(titolo: str) -> str:
+    """La stessa legge votata nei due rami ha titoli quasi uguali: senza numero dell'atto, note tra parentesi
+    in coda, virgolette e punteggiatura (ADR 0030: mai due domande dallo stesso atto)."""
+    t = pulisci_titolo(titolo) or ""
+    if dl := re.search(r"decreto-legge (\d{1,2}°? \w+ \d{4}), n\. ?(\d+)", t):  # conversione: conta il decreto
+        return f"decreto-legge {dl.group(1).replace('°', '')} n {dl.group(2)}".lower()
+    t = re.sub(r"^S\. ?\d+\. ?- ?", "", t)  # "S. 899. - " davanti ai disegni di legge arrivati dal Senato
+    t = re.sub(r"(\s*\([^()]*\))+\s*$", "", t)  # "(approvato dal Senato) (1551)" in coda
+    return re.sub(r"\W+", " ", t.lower()).strip()[:160]

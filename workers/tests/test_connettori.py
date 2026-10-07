@@ -301,3 +301,41 @@ def test_camera_voti_scelti_in_query_separate_e_gruppo_rimesso():
         ("302103", "gr4133"),
         ("2", "gr4135"),
     ]
+
+
+class TestTitoli:
+    """Titoli delle leggi (#73): la Camera li dà con il tipo RDF, entità HTML e tag."""
+
+    SPORCO = (
+        "S. 899. - &quot;Conversione in legge, con modificazioni, del decreto-legge 29 settembre 2023, n. 132, "
+        "recante disposizioni urgenti in materia di proroga di termini normativi e versamenti fiscali&quot;"
+        "&nbsp;&lt;em&gt;(approvato dal Senato)&lt;/em&gt; (1551) ^^http://www.w3.org/2001/XMLSchema#string"
+    )
+
+    def test_pulisci(self):
+        from op_workers.connettori.base import pulisci_titolo
+
+        assert pulisci_titolo(self.SPORCO) == (
+            'S. 899. - "Conversione in legge, con modificazioni, del decreto-legge 29 settembre 2023, n. 132, '
+            'recante disposizioni urgenti in materia di proroga di termini normativi e versamenti fiscali" '
+            "(approvato dal Senato) (1551)"
+        )
+        assert pulisci_titolo('"Istituzione del premio di &ldquo;Maestro&rdquo;" (1419)') == (
+            '"Istituzione del premio di “Maestro”" (1419)'
+        )
+        assert pulisci_titolo(None) is None
+
+    def test_stessa_legge_nei_due_rami(self):
+        from op_workers.connettori.base import chiave_atto
+
+        camera = (
+            '"Disposizioni organiche per la valorizzazione, la promozione e la tutela del '
+            '&lt;em&gt;made in Italy&lt;/em&gt;" (1341) ^^http://www.w3.org/2001/XMLSchema#string'
+        )
+        senato = "Disposizioni organiche per la valorizzazione, la promozione e la tutela del made in Italy"
+        assert chiave_atto(camera) == chiave_atto(senato)
+        # conversione dello stesso decreto, con e senza modificazioni: conta il decreto
+        assert chiave_atto(self.SPORCO) == "decreto-legge 29 settembre 2023 n 132"
+        assert chiave_atto("Conversione in legge del decreto-legge 29 settembre 2023, n. 132, recante x") == (
+            chiave_atto(self.SPORCO)
+        )

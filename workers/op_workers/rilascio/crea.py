@@ -24,6 +24,7 @@ import yaml
 
 from op_workers.andamento.da_voti import CALCOLO_VERSIONE as CALCOLO_ANDAMENTO
 from op_workers.andamento.da_voti import da_database as andamento_da_database
+from op_workers.connettori.base import pulisci_titolo
 from op_workers.posizioni.da_voti import (
     CALCOLO_VERSIONE as CALCOLO_POSIZIONI,
 )
@@ -170,7 +171,7 @@ def posizioni(conn, catalogo: dict | None, sogg: list[dict], p: Parametri) -> di
                 "stato": pos.stato,
                 "evidenze": [
                     {
-                        "testo": _accorcia(f"{frasi[orient]}: {v[5]}" if v[5] else frasi[orient]),
+                        "testo": _accorcia(f"{frasi[orient]}: {pulisci_titolo(v[5])}" if v[5] else frasi[orient]),
                         "quando": quando(v[1], v[4]),
                         "url": v[6],
                     }

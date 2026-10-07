@@ -20,6 +20,7 @@ from op_workers.connettori.base import (
     VotazioneGrezza,
     VotoGrezzo,
     finestre_mensili,
+    pulisci_titolo,
 )
 
 ENDPOINT = "https://dati.camera.it/sparql"
@@ -97,7 +98,7 @@ def normalizza_votazione(riga: dict[str, str], leg: int) -> VotazioneGrezza:
         titolo=titolo,
         descrizione=descr,
         atto_ref=atto_ref(riga.get("atto"), descr),
-        atto_titolo=(riga.get("atto_titolo") or "").strip() or None,
+        atto_titolo=pulisci_titolo(riga.get("atto_titolo")),
         finale=_bool(riga.get("finale")),
         fiducia=_bool(riga.get("fiducia")),
         segreta=_bool(riga.get("segreta")),

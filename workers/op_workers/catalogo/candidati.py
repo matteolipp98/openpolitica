@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import re
 from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import date
@@ -10,6 +9,7 @@ from decimal import Decimal
 
 import psycopg
 
+from op_workers.connettori.base import chiave_atto, pulisci_titolo
 from op_workers.posizioni.da_voti import Parametri, orientamento_da_conteggi
 
 QUERY = """
@@ -58,7 +58,7 @@ class Candidata:
     @property
     def chiave_atto(self) -> str:
         """Stessa legge votata alla Camera e al Senato: una sola domanda (ADR 0030, mai due dallo stesso atto)."""
-        return re.sub(r"\W+", " ", self.atto_titolo.lower()).strip()[:160]
+        return chiave_atto(self.atto_titolo)
 
 
 def candidate(
@@ -69,7 +69,9 @@ def candidate(
     for vid, ramo, ide, data, atto_ref, atto_tit, _descr, appr, fav, con, ast, partito, pf, pc, pa in conn.execute(
         QUERY, {"leg": leg}
     ):
-        c = per_votazione.setdefault(vid, Candidata(vid, ramo, ide, data, atto_ref, atto_tit, appr, fav, con, ast))
+        c = per_votazione.setdefault(
+            vid, Candidata(vid, ramo, ide, data, atto_ref, pulisci_titolo(atto_tit), appr, fav, con, ast)
+        )
         if partito in perimetro:
             o = orientamento_da_conteggi(pf, pc, pa, p)
             if o is not None:
