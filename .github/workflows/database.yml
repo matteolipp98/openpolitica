@@ -16,7 +16,10 @@ on:
     branches: [main, "claude/**"]
     paths:
       - supabase/migrations/**
-      - content/**
+      - content/partiti.yaml
+      - content/gruppi.yaml
+      - content/perimetro.yaml
+      - content/alias/**
       - workers/op_workers/connettori/**
       - workers/op_workers/comuni/**
       - workers/op_workers/anagrafica/**
@@ -68,3 +71,23 @@ jobs:
         run: |
           uv sync --frozen
           uv run python -m op_workers.connettori.importa_voti ${{ matrix.ramo }} | tail -5 | tee -a "$GITHUB_STEP_SUMMARY"
+
+  # Andamento nel tempo dai voti (ADR 0040): due metriche senza modelli. Gira anche se un import si è
+  # fermato per i limiti delle fonti: usa quello che c'è nel database.
+  andamento:
+    needs: importa
+    if: always() && needs.importa.result != 'cancelled'
+    runs-on: ubuntu-latest
+    environment: dev
+    timeout-minutes: 15
+    env:
+      DATABASE_URL: ${{ secrets.SESSION_POOLER }}
+    defaults: { run: { working-directory: workers, shell: bash } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --frozen
+      - name: Calcola "vota come il governo" e "il partito vota unito"
+        run: uv run python -m op_workers.andamento.da_voti --uscita ../andamento/andamento.json | tee -a "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with: { name: andamento, path: andamento/andamento.json, retention-days: 30 }

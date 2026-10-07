@@ -1749,7 +1749,7 @@ Ogni PR è piccola, rilasciabile e con i propri test. Dimensioni indicative: S <
 | 14 | Web: come funziona, metodo/catalogo, metodo/dati, correzioni | 10, 11 | M |
 | 15 | Web: segnalazioni (route, anti-bot, tabella) | 2, 11 | S |
 | 16 | Test di equilibrio in CI e prima del rilascio | 9, 10 | S |
-| 16b | Andamento nel tempo dai voti: vista SQL, `andamento.json`, pagina `/nel-tempo` e sezione nella scheda (ADR 0040) | 6, 10, 12 | M |
+| 16b | Andamento nel tempo dai voti: calcolo (`op_workers.andamento.da_voti`, nel workflow Database), pagina `/nel-tempo` e sezione nella scheda (ADR 0040) — **fatto; resta da metterlo nel pacchetto di rilascio (PR 10)** | 6, 10, 12 | M |
 | — | **Fine fase 0** | | |
 | 17–20 | Fase 1: documenti e programmi, estrazione promesse, cinque test, pubblicazione descrittiva | 10 | L ×2, M ×2 |
 | 21–26 | Fase 2: connettori documenti, dedup, pgmq e stadi, `laya-serve`, client con rotazione, golden set e calibrazione | 10 | L ×3, M ×3 |
