@@ -1,0 +1,25 @@
+# Controllo quotidiano della pipeline (#31): un'issue "Qualcosa si è fermato" quando import, rilascio o
+# deploy non vanno, chiusa da sola quando tutto riparte.
+name: Controllo
+
+on:
+  schedule:
+    - cron: "17 7 * * *"
+  workflow_dispatch:
+
+jobs:
+  controlla:
+    runs-on: ubuntu-latest
+    environment: dev
+    timeout-minutes: 10
+    permissions: { issues: write, actions: read, contents: read }
+    env:
+      DATABASE_URL: ${{ secrets.SESSION_POOLER }}
+      GITHUB_TOKEN: ${{ github.token }}
+    defaults: { run: { working-directory: workers, shell: bash } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --frozen
+      - name: Controlla import, rilascio e deploy
+        run: uv run python ../.github/scripts/controllo.py | tee -a "$GITHUB_STEP_SUMMARY"
