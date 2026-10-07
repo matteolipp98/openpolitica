@@ -210,7 +210,7 @@ def esegui(conn: psycopg.Connection, http: httpx.Client, cartella: Path = CONTEN
 def main() -> int:
     url_db = os.environ["DATABASE_URL"]
     with (
-        psycopg.connect(url_db) as conn,
+        psycopg.connect(url_db, autocommit=True) as conn,  # ogni programma si salva appena letto
         httpx.Client(timeout=300, headers={"User-Agent": UA}, follow_redirects=True) as http,
     ):
         righe = esegui(conn, http)
