@@ -158,7 +158,8 @@ class ConnettoreSenato:
     ramo = "senato"
 
     def __init__(self, sparql: ClientSparql | None = None) -> None:
-        self.sparql = sparql or ClientSparql(ENDPOINT)
+        # Il Senato blocca (403) chi fa richieste troppo ravvicinate: almeno mezzo secondo tra l'una e l'altra
+        self.sparql = sparql or ClientSparql(ENDPOINT, pausa=0.5)
 
     def votazioni(self, legislatura: int, dal: date) -> Iterator[VotazioneGrezza]:
         visti: set[str] = set()

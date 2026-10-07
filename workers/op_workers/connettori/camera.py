@@ -133,12 +133,13 @@ WHERE {{
 }} ORDER BY ?data ?v"""
 
 
-def query_voti_del_giorno(leg: int, giorno: date) -> str:
+def query_voti_del_giorno(leg: int, giorno: date, dopo: str = "") -> str:
     return f"""
 SELECT DISTINCT ?x ?v ?dep ?tipo ?descr ?gruppo WHERE {{
   ?v a ocd:votazione ; ocd:rif_leg {legislatura_uri(leg)} ; dc:date ?data .
   FILTER(STR(?data) = "{giorno:%Y%m%d}")
   ?x a ocd:voto ; ocd:rif_votazione ?v ; ocd:rif_deputato ?dep ; dc:type ?tipo .
+  FILTER(STR(?x) > "{dopo}")
   OPTIONAL {{ ?x dc:description ?descr }} OPTIONAL {{ ?x ocd:rif_gruppoParlamentare ?gruppo }}
 }} ORDER BY ?x"""
 
@@ -185,7 +186,8 @@ class ConnettoreCamera:
                     yield normalizza_votazione(r, legislatura)
 
     def voti_del_giorno(self, legislatura: int, giorno: date) -> Iterator[VotoGrezzo]:
-        for r in _unici(self.sparql.pagine(query_voti_del_giorno(legislatura, giorno)), "x"):
+        righe = self.sparql.pagine_dopo(lambda dopo: query_voti_del_giorno(legislatura, giorno, dopo), "x")
+        for r in _unici(righe, "x"):
             yield normalizza_voto(r)
 
     def parlamentari(self, legislatura: int) -> Iterator[ParlamentareGrezzo]:
