@@ -178,7 +178,7 @@ function calcola(){
  const pari=out.filter(p=>p.pct!==null&&primo.pct-p.pct<=3);
  let testa="";
  if(primo.pct<50){
-  testa=`<div class="avviso"><b>Nessuno la pensa davvero come te.</b> Il più vicino arriva solo al ${primo.pct}%. Succede, e non è un errore tuo: vuol dire che le tue idee non stanno tutte dentro un partito solo.</div>`;
+  testa=`<div class="avviso"><b>Nessuno la pensa davvero come te.</b> Il più vicino è d'accordo con te solo su ${primo.ok.length} domande su ${domande.length}. Succede, e non è un errore tuo: vuol dire che le tue idee non stanno tutte dentro un partito solo.</div>`;
  }
  testa+=`<div class="vinc">
    <p class="et">${pari.length>1?"Sono alla pari":"Il più vicino a te"}</p>

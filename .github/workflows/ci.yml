@@ -29,7 +29,7 @@ jobs:
         run: pnpm --filter @op/affinita equilibrio "$PWD/apps/web/dati/esempio"
 
   web:
-    name: Sito nel browser (privacy del questionario, segnalazioni)
+    name: Sito nel browser (privacy, segnalazioni, percentuali con il conteggio)
     runs-on: ubuntu-latest
     env:   # Supabase finto: i test intercettano le chiamate, nessuna richiesta esce
       NEXT_PUBLIC_SUPABASE_URL: http://supabase.test
@@ -43,7 +43,7 @@ jobs:
       - name: Build del sito con i dati di esempio
         run: pnpm --filter @op/web build
       - run: pnpm --filter @op/web exec playwright install --with-deps chromium
-      - name: Le risposte restano nel browser (ADR 0007, #27)
+      - name: Test nel browser (ADR 0007, 0019, #27, #58)
         run: pnpm --filter @op/web test:e2e
   py:
     name: Worker Python e database

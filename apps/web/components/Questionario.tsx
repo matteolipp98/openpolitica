@@ -101,7 +101,7 @@ export function Questionario({ domande, soggetti, parametri, catalogo }: Props) 
   return (
     <>
       {risultato.nessunoTiRappresenta && (
-        <div className="avviso"><b>Nessuno la pensa davvero come te.</b> Il più vicino arriva solo al {primo.affinita}%. Succede, e non è un errore tuo: vuol dire che le tue idee non stanno tutte dentro un partito solo.</div>
+        <div className="avviso"><b>Nessuno la pensa davvero come te.</b> Il più vicino è d&apos;accordo con te solo su {primo.concordi.length} domande su {domande.length}. Succede, e non è un errore tuo: vuol dire che le tue idee non stanno tutte dentro un partito solo.</div>
       )}
       <div className="vinc">
         <p className="et">{pari.length > 1 ? "Sono alla pari" : "Il più vicino a te"}</p>

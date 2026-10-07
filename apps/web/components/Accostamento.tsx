@@ -3,7 +3,7 @@ import type { Accostamento as A } from "@/lib/tipi";
 /** "Ha detto / In realtà" con la riga di esito in linguaggio comune (ADR 0036, 0037). */
 export function Accostamento({ a }: { a: A }) {
   return (
-    <div className="conf">
+    <div className="conf" data-citazioni>
       <div>
         <p className="et">Ha detto</p>
         <p>{a.detto}</p>
