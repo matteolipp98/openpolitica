@@ -24,7 +24,7 @@ from pathlib import Path
 from typing import Any
 
 UA = "openpolitica-sonda/0.1 (+https://github.com/matteolipp98/openpolitica)"
-TIMEOUT = 90
+TIMEOUT = 180
 
 CAMERA = "https://dati.camera.it/sparql"
 SENATO = "https://dati.senato.it/sparql"
@@ -44,8 +44,8 @@ LEADER = ["Meloni", "Schlein", "Salvini", "Conte", "Tajani", "Bonelli", "Fratoia
 # Endpoint HTTP delle altre fonti previste (ADR 0002, 0014, 0020)
 ALTRE_FONTI = {
     "openpolis": "https://www.openpolis.it/",
-    "openparlamento_api": "https://service.openpolis.it/",
     "istat_sdmx": "https://esploradati.istat.it/SDMXWS/rest/dataflow/IT1/all/latest?detail=allstubs",
+    "istat_sdmx_legacy": "https://sdmx.istat.it/SDMXWS/rest/dataflow/IT1/all/latest?detail=allstubs",
     "eurostat": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/une_rt_m?geo=IT&sex=T&age=TOTAL&unit=PC_ACT&s_adj=SA&lastTimePeriod=1",
     "gdelt_doc": "https://api.gdeltproject.org/api/v2/doc/doc?query=%22Giorgia%20Meloni%22&mode=artlist&maxrecords=1&format=json",
     "wayback_cdx": "https://web.archive.org/cdx/search/cdx?url=dait.interno.gov.it&limit=1&output=json",
@@ -98,20 +98,24 @@ def sparql(endpoint: str, nome: str, query: str, tentativi: int = 2) -> Esito:
     return Esito(nome, False, int((time.monotonic() - inizio) * 1000), errore=ultimo[:500], query=query.strip())
 
 
-def http(nome: str, url: str) -> Esito:
+def http(nome: str, url: str, attese: tuple[int, ...] = (15, 45)) -> Esito:
+    """GET semplice; su 429 (troppe richieste, tipico di GDELT) riprova dopo le attese indicate."""
     inizio = time.monotonic()
-    try:
-        stato, corpo = _get(url, "*/*")
-        return Esito(
-            nome,
-            200 <= stato < 400,
-            int((time.monotonic() - inizio) * 1000),
-            [{"stato": str(stato), "byte": str(len(corpo)), "inizio": corpo[:200].decode("utf8", "replace")}],
-        )
-    except urllib.error.HTTPError as e:
-        return Esito(nome, False, int((time.monotonic() - inizio) * 1000), errore=f"HTTP {e.code}")
-    except (urllib.error.URLError, TimeoutError) as e:
-        return Esito(nome, False, int((time.monotonic() - inizio) * 1000), errore=f"{type(e).__name__}: {e}"[:300])
+    errore = ""
+    for i in range(len(attese) + 1):
+        try:
+            stato, corpo = _get(url, "*/*")
+            riga = {"stato": str(stato), "byte": str(len(corpo)), "inizio": corpo[:200].decode("utf8", "replace")}
+            return Esito(nome, 200 <= stato < 400, int((time.monotonic() - inizio) * 1000), [riga])
+        except urllib.error.HTTPError as e:
+            errore = f"HTTP {e.code}"
+            if e.code != 429 or i == len(attese):
+                break
+            time.sleep(attese[i])
+        except (urllib.error.URLError, TimeoutError) as e:
+            errore = f"{type(e).__name__}: {e}"[:300]
+            break
+    return Esito(nome, False, int((time.monotonic() - inizio) * 1000), errore=errore)
 
 
 def _filtro_cognomi(var: str) -> str:
@@ -160,37 +164,64 @@ def query_camera(leg: int) -> dict[str, str]:
 
 
 def query_senato(leg: int) -> dict[str, str]:
+    # La votazione ha URI http://dati.senato.it/votazione/<leg>-<seduta>-<numero>: si filtra sul prefisso.
+    pref = f"http://dati.senato.it/votazione/{leg}-"
+    voto = "<http://dati.senato.it/votazione/19-167-42>"
+    leader = " ".join(f"<http://dati.senato.it/senatore/{i}>" for i in (25407, 30742, 30110))
     return {
         "classi": "SELECT ?classe (COUNT(?s) AS ?n) WHERE { ?s a ?classe } GROUP BY ?classe ORDER BY DESC(?n) LIMIT 60",
-        "proprieta_votazione": """
-            SELECT ?p (COUNT(*) AS ?n) (SAMPLE(?o) AS ?esempio) WHERE {
-              { SELECT ?s WHERE { ?s a osr:Votazione } LIMIT 50 } ?s ?p ?o
-            } GROUP BY ?p ORDER BY ?p""",
-        "proprieta_senatore": """
-            SELECT ?p (COUNT(*) AS ?n) (SAMPLE(?o) AS ?esempio) WHERE {
-              { SELECT ?s WHERE { ?s a osr:Senatore } LIMIT 50 } ?s ?p ?o
-            } GROUP BY ?p ORDER BY ?p""",
-        "proprieta_gruppo": """
-            SELECT ?p (COUNT(*) AS ?n) (SAMPLE(?o) AS ?esempio) WHERE {
-              { SELECT ?s WHERE { ?s a osr:Gruppo } LIMIT 50 } ?s ?p ?o
-            } GROUP BY ?p ORDER BY ?p""",
         "votazioni_legislatura": f"""
-            SELECT (COUNT(?v) AS ?n) (MIN(?d) AS ?prima) (MAX(?d) AS ?ultima) WHERE {{
-              ?v a osr:Votazione ; osr:legislatura {leg} ; osr:dataSeduta ?d }}""",
-        "esempio_votazione": f"""
-            SELECT ?v ?p ?o WHERE {{
-              {{ SELECT ?v WHERE {{ ?v a osr:Votazione ; osr:legislatura {leg} }} LIMIT 1 }}
-              ?v ?p ?o }}""",
-        "gruppi_legislatura": f"""
-            SELECT DISTINCT ?g ?nome WHERE {{
-              ?g a osr:Gruppo . ?g ?pn ?nome . FILTER(isLiteral(?nome))
-              ?adesione osr:gruppo ?g ; osr:legislatura {leg} .
-            }} LIMIT 200""",
-        "leader": f"""
-            SELECT DISTINCT ?s ?nome ?cognome WHERE {{
-              ?s a osr:Senatore ; foaf:lastName ?cognome ; foaf:firstName ?nome .
-              {_filtro_cognomi("?cognome")}
-            }} ORDER BY ?cognome""",
+            SELECT (COUNT(?v) AS ?n) WHERE {{ ?v a osr:Votazione . FILTER(STRSTARTS(STR(?v), "{pref}")) }}""",
+        "predicati_votazione": f"SELECT DISTINCT ?p WHERE {{ {voto} ?p ?o }}",
+        "conteggi_voto_esempio": f"""
+            SELECT ?p (COUNT(?o) AS ?n) WHERE {{ {voto} ?p ?o . FILTER(isIRI(?o)) }} GROUP BY ?p""",
+        "seduta": f"SELECT ?p ?o WHERE {{ {voto} osr:seduta ?s . ?s ?p ?o }}",
+        "oggetto": f"SELECT ?p ?o WHERE {{ {voto} osr:oggetto ?s . ?s ?p ?o }}",
+        "oggetto_atto": f"""
+            SELECT ?p2 ?o2 WHERE {{ {voto} osr:oggetto ?s . ?s ?p ?x . ?x ?p2 ?o2 .
+              FILTER(isIRI(?x) && STRSTARTS(STR(?x), "http://dati.senato.it/")) }} LIMIT 80""",
+        "senatore": "SELECT ?p ?o WHERE { <http://dati.senato.it/senatore/30742> ?p ?o }",
+        "mandati_leader": f"""
+            SELECT ?s ?m ?q ?o WHERE {{ VALUES ?s {{ {leader} }} ?s ?p ?m . ?m a ocd:mandatoSenato . ?m ?q ?o }}""",
+        "adesione_esempio": """
+            SELECT ?a ?p ?o WHERE { { SELECT ?a WHERE { ?a a ocd:adesioneGruppo } LIMIT 3 } ?a ?p ?o }""",
+        "adesioni_leader": f"""
+            SELECT ?s ?a ?p ?o WHERE {{ VALUES ?s {{ {leader} }} ?s ?r ?a . ?a a ocd:adesioneGruppo . ?a ?p ?o }}""",
+        "gruppi": """
+            SELECT ?g ?p ?o WHERE { ?g a ocd:gruppoParlamentare . ?g ?p ?o . FILTER(isLiteral(?o)) } LIMIT 800""",
+    }
+
+
+def query_camera_approfondimenti(leg: int) -> dict[str, str]:
+    legislatura = f"<http://dati.camera.it/ocd/legislatura.rdf/repubblica_{leg}>"
+    leader = " ".join(
+        f"<http://dati.camera.it/ocd/deputato.rdf/d{i}_{leg}>"
+        for i in (302080, 307926, 305880, 300447, 302103, 308930, 308838)
+    )
+    return {
+        "tipi_votazioni": f"""
+            SELECT ?tipo ?finale (COUNT(?v) AS ?n) (COUNT(?atto) AS ?con_atto) WHERE {{
+              ?v a ocd:votazione ; ocd:rif_leg {legislatura} ; dc:type ?tipo ; ocd:votazioneFinale ?finale .
+              OPTIONAL {{ ?v ocd:rif_attoCamera ?atto }}
+            }} GROUP BY ?tipo ?finale ORDER BY DESC(?n)""",
+        "finali_con_atto": f"""
+            SELECT ?v ?data ?titolo ?descr ?atto ?titolo_atto ?fav ?con ?ast WHERE {{
+              ?v a ocd:votazione ; ocd:rif_leg {legislatura} ; ocd:votazioneFinale 1 ; dc:date ?data ;
+                 dc:title ?titolo ; ocd:favorevoli ?fav ; ocd:contrari ?con ; ocd:astenuti ?ast .
+              OPTIONAL {{ ?v ocd:rif_attoCamera ?atto . OPTIONAL {{ ?atto dc:title ?titolo_atto }} }}
+              OPTIONAL {{ ?v dc:description ?descr }}
+            }} ORDER BY DESC(?data) LIMIT 15""",
+        "tipi_voto_esempio": """
+            SELECT ?tipo ?descr (COUNT(?x) AS ?n) WHERE {
+              ?x a ocd:voto ; ocd:rif_votazione <http://dati.camera.it/ocd/votazione.rdf/vs19_718_011> ; dc:type ?tipo .
+              OPTIONAL { ?x dc:description ?descr }
+            } GROUP BY ?tipo ?descr""",
+        "storia_gruppo_azione": """
+            SELECT ?d ?p ?o WHERE {
+              <http://dati.camera.it/ocd/gruppoParlamentare.rdf/gr4135> ocd:denominazione ?d . ?d ?p ?o }""",
+        "adesioni_leader": f"""
+            SELECT ?d ?p ?o WHERE {{ VALUES ?d {{ {leader} }} ?d ocd:aderisce ?a . ?a ?p ?o }}""",
+        "deputato_esempio": f"SELECT ?p ?o WHERE {{ <http://dati.camera.it/ocd/deputato.rdf/d302103_{leg}> ?p ?o }}",
     }
 
 
@@ -203,6 +234,8 @@ def esegui(leg: int) -> dict[str, Any]:
         "altre_fonti": {},
     }
     for nome, q in query_camera(leg).items():
+        rapporto["camera"][nome] = asdict(sparql(CAMERA, nome, q))
+    for nome, q in query_camera_approfondimenti(leg).items():
         rapporto["camera"][nome] = asdict(sparql(CAMERA, nome, q))
     for nome, q in query_senato(leg).items():
         rapporto["senato"][nome] = asdict(sparql(SENATO, nome, q))

@@ -777,7 +777,17 @@ Il job `op posizioni calcola --catalogo v1` calcola le posizioni per ogni partit
 
 ### 3.7 Generazione automatica del catalogo (PR 7–8)
 
-ADR 0030, eseguito offline dal job `op catalogo genera --versione v1`. È l'unico punto della fase 0 che usa modelli, tramite il gateway LiteLLM (§9.1) con alias pinnati, e ogni chiamata è registrata in `core.run_modello` (tabella creata già ora, schema in §8).
+ADR 0030, eseguito offline dal job `op catalogo genera --versione v1`. È l'unico punto della fase 0 che usa modelli, con alias pinnati (§9.1), e ogni chiamata è registrata in `core.run_modello` (tabella creata già ora, schema in §8).
+
+**Dove gira.** Come workflow GitHub Actions avviato a mano (`catalogo.yml`, `workflow_dispatch`), che alla fine apre una pull request con `content/catalogo/vN/`. Le chiavi stanno nei secret del repository e il job usa LiteLLM come libreria con la stessa configurazione del gateway (`services/litellm/config.yaml`), quindi gli alias restano identici. Così la fase 0 non richiede il gateway su Render, che arriva con la fase 2. Secret richiesti:
+
+| Secret | Uso |
+|---|---|
+| `ANTHROPIC_API_KEY` | famiglia A del job di catalogo |
+| `OPENAI_API_KEY` | famiglia B del job di catalogo |
+| `SUPABASE_DB_URL` | lettura di votazioni e posizioni, scrittura di `run_modello` (ruolo `worker`, non la service key) |
+
+L'ADR 0025 vuole le chiavi dei fornitori solo nel gateway: questo resta vero per tutto ciò che gira in produzione; un job offline in CI che produce una PR è un'eccezione dichiarata, senza chiavi nell'app web.
 
 Passi:
 
@@ -1681,9 +1691,10 @@ Ogni PR è piccola, rilasciabile e con i propri test. Dimensioni indicative: S <
 
 | # | PR | Dipende da | Dim. |
 |---|---|---|---|
-| 1 | Fondamenta monorepo, CI, licenze | — | S |
+| 1 | Fondamenta monorepo, CI, licenze — **fatto, tranne le licenze** | — | S |
 | 2 | Migrazioni `core` fase 0, RLS, trigger append-only, test DB | 1 | M |
-| 3 | `packages/schema` + `content/` iniziale (temi, scala, parametri, perimetro, partiti, gruppi) + `content:check` | 1 | M |
+| 3 | `packages/schema` + `content/` iniziale (temi, scala, parametri, perimetro, partiti, gruppi) + `content:check` — **fatto; restano da confermare i campi `da_verificare`** | 1 | M |
+| 3b | Sonda open data in CI (`verifica-open-data.yml`), settimanale — **fatto** | 1 | S |
 | 4 | Anagrafica: sync contenuti, riconciliazione identità, controlli | 2, 3 | M |
 | 5 | Connettori Camera e Senato con test di contratto; backfill XIX | 4 | L |
 | 6 | Posizioni dai voti (`pos-voti-1`) | 5 | M |
