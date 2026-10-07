@@ -66,6 +66,10 @@ export const Pacchetto = z.object({
     stato: z.enum(["mantenuta", "a_meta", "non_mantenuta"]), testo: z.string(), motivo: z.string(),
   }))),
   "andamento.json": PAndamento,
+  // Facoltativo: i pacchetti pubblicati prima del 7 ottobre 2026 non lo hanno
+  "correzioni.json": z.array(z.object({
+    quando: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), oggetto: z.string(), prima: z.string(), dopo: z.string(), motivo: z.string().min(3),
+  })).optional(),
 }).superRefine((p, ctx) => {
   const ids = new Set(p["soggetti.json"].map((s) => s.id));
   if (ids.size !== p["soggetti.json"].length) ctx.addIssue({ code: "custom", message: "soggetti ripetuti" });

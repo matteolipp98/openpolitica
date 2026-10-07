@@ -22,6 +22,7 @@ export function pacchetto(): Pacchetto {
     accostamenti: leggi("accostamenti.json"),
     promesse: leggi("promesse.json"),
     andamento: leggi("andamento.json"),
+    correzioni: existsSync(path.join(dir, "correzioni.json")) ? leggi("correzioni.json") : [],
   };
   return cache;
 }

@@ -179,6 +179,30 @@ def posizioni(conn, catalogo: dict | None, sogg: list[dict], p: Parametri) -> di
     return dict(out)
 
 
+# ---------- correzioni (ADR 0012) ----------
+
+
+def _in_parole(valore) -> str:
+    """prima/dopo sono jsonb: si mostra il campo `testo` se c'è, altrimenti il valore così com'è."""
+    if isinstance(valore, dict) and "testo" in valore:
+        return str(valore["testo"])
+    return valore if isinstance(valore, str) else json.dumps(valore, ensure_ascii=False)
+
+
+def correzioni(conn) -> list[dict]:
+    """Tutte le correzioni pubblicate, dalla più recente. Non si cancella niente di nascosto."""
+    with conn.cursor() as cur:
+        cur.execute(
+            """select pubblicata_il, oggetto_tipo, oggetto_id, prima, dopo, motivazione
+               from core.correzione order by pubblicata_il desc"""
+        )
+        return [
+            {"quando": q.date().isoformat(), "oggetto": f"{t}:{i}", "prima": _in_parole(p), "dopo": _in_parole(d),
+             "motivo": m}
+            for q, t, i, p, d, m in cur.fetchall()
+        ]  # fmt: skip
+
+
 # ---------- pacchetto ----------
 
 
@@ -222,6 +246,7 @@ def costruisci(conn, oggi: date | None = None, ora: datetime | None = None) -> d
         "accostamenti.json": {},
         "promesse.json": {},
         "andamento.json": andamento,
+        "correzioni.json": correzioni(conn),
     }
 
 

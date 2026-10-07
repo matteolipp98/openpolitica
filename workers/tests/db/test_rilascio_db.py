@@ -61,3 +61,13 @@ def test_costruisci_senza_catalogo(conn):
     assert m["esempio"] is False and m["sezioni"]["posizioni"] is (len(file["domande.json"]) > 0)
     assert m["fonti"]["camera"]["ultima_votazione"] == "2023-05-11"
     assert any(s["tipo"] == "persona" for s in file["soggetti.json"])
+
+
+def test_correzioni_nel_pacchetto(conn):
+    _prepara(conn)
+    conn.execute(
+        """insert into core.correzione (oggetto_tipo, oggetto_id, prima, dopo, motivazione)
+           values ('posizione', 'aa:e-1', '{"testo": "A favore"}', '{"testo": "Contro"}', 'Voto letto al contrario')"""
+    )
+    c = costruisci(conn)["correzioni.json"]
+    assert c[0]["prima"] == "A favore" and c[0]["dopo"] == "Contro" and c[0]["motivo"] == "Voto letto al contrario"

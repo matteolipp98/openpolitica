@@ -146,4 +146,5 @@ scrivi("posizioni.json", posizioni);
 scrivi("accostamenti.json", accostamenti);
 scrivi("promesse.json", promesse);
 scrivi("andamento.json", andamento);
+scrivi("correzioni.json", []);
 console.log(`Esempio scritto: ${soggetti.length} soggetti, ${domande.length} domande.`);

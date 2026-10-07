@@ -1,10 +1,16 @@
 // Valida un pacchetto dati del sito: pnpm --filter @op/schema valida-pacchetto <cartella>
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { FILE_PACCHETTO, Pacchetto } from "../src/pacchetto.js";
 
 const cartella = path.resolve(process.argv[2] ?? "");
-const dati = Object.fromEntries(FILE_PACCHETTO.map((f) => [f, JSON.parse(readFileSync(path.join(cartella, f), "utf8"))]));
+const FACOLTATIVI = new Set(["correzioni.json"]);
+const dati = Object.fromEntries(
+  FILE_PACCHETTO.filter((f) => !FACOLTATIVI.has(f) || existsSync(path.join(cartella, f))).map((f) => [
+    f,
+    JSON.parse(readFileSync(path.join(cartella, f), "utf8")),
+  ]),
+);
 const r = Pacchetto.safeParse(dati);
 if (!r.success) {
   for (const e of r.error.issues.slice(0, 20)) console.error(`- ${e.path.join(".")}: ${e.message}`);

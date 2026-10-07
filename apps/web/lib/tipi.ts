@@ -67,6 +67,8 @@ export interface Andamento {
   serie: Record<string, Partial<Record<MetricaTempo, Conteggio[]>>>;
 }
 
+export interface Correzione { quando: string; oggetto: string; prima: string; dopo: string; motivo: string }
+
 export interface Pacchetto {
   manifest: Manifest;
   domande: Domanda[];
@@ -75,4 +77,5 @@ export interface Pacchetto {
   accostamenti: Record<string, Accostamento[]>;
   promesse: Record<string, Promessa[]>;
   andamento: Andamento;
+  correzioni: Correzione[];
 }

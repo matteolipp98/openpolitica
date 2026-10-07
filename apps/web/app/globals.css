@@ -168,3 +168,8 @@ details.r h3{font-size:15px;margin:14px 0 8px;font-weight:600}
 .segnala .trappola{position:absolute;left:-9999px;width:1px;height:1px}
 .segnala-errore{margin:0;color:var(--brass)}
 .segnala-esito{margin-top:24px;background:var(--surface);border:1px solid var(--rule);padding:14px 16px}
+.correzione{padding:13px 16px;border-top:1px solid var(--rule-soft)}
+.correzione:first-child{border-top:0}
+.correzione p{margin:0}
+.correzione .quando{color:var(--muted);font-size:14px}
+.correzione .sotto{color:var(--muted);font-size:14px;margin-top:3px}

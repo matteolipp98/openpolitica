@@ -43,7 +43,7 @@ const FONTI: [string, string, string | null][] = [
 ];
 
 export default function Metodo() {
-  const { domande, manifest } = pacchetto();
+  const { domande, manifest, correzioni } = pacchetto();
   const temi = contenuto<{ temi: { id: string }[] }>("temi.yaml").temi;
   const conti = temi.map((t) => domande.filter((d) => d.tema === t.id).length);
   const uguali = domande.length > 0 && conti.every((c) => c === conti[0]);
@@ -107,7 +107,19 @@ export default function Metodo() {
 
       <h2 id="correzioni">Correzioni</h2>
       <p>Quando sbagliamo lo scriviamo qui, con la data e cosa abbiamo cambiato. Non cancelliamo niente di nascosto.</p>
-      <div className="box"><p className="vuoto">Finora nessuna correzione.</p></div>
+      {correzioni.length === 0 ? (
+        <div className="box"><p className="vuoto">Finora nessuna correzione.</p></div>
+      ) : (
+        <div className="fonti">
+          {correzioni.map((c) => (
+            <div className="correzione" key={`${c.quando}-${c.oggetto}`}>
+              <p className="quando">{inParole(c.quando)}</p>
+              <p>{c.motivo}</p>
+              <p className="sotto">Prima: {c.prima}. Ora: {c.dopo}.</p>
+            </div>
+          ))}
+        </div>
+      )}
       <Segnala dove="/metodo" />
     </main>
   );
