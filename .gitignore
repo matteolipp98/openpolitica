@@ -13,3 +13,4 @@ sonde/
 out/
 test-results/
 playwright-report/
+*.tsbuildinfo
