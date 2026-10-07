@@ -26,6 +26,20 @@ jobs:
       - name: Test di equilibrio sul pacchetto di esempio (piano §3.11)
         run: pnpm --filter @op/affinita equilibrio "$PWD/apps/web/dati/esempio"
 
+  web:
+    name: Sito nel browser (privacy del questionario)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version-file: .nvmrc, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - name: Build del sito con i dati di esempio
+        run: pnpm --filter @op/web build
+      - run: pnpm --filter @op/web exec playwright install --with-deps chromium
+      - name: Le risposte restano nel browser (ADR 0007, #27)
+        run: pnpm --filter @op/web test:e2e
   py:
     name: Worker Python e database
     runs-on: ubuntu-latest
