@@ -156,3 +156,15 @@ details.r h3{font-size:15px;margin:14px 0 8px;font-weight:600}
 .fonte .fin.no{color:var(--muted)}
 .esito-prova{font-weight:600;color:var(--mark)}
 .box .vuoto{color:var(--muted)}
+
+/* Segnalazioni (#26) */
+.segnala-apri{margin-top:24px}
+.link-bottone{appearance:none;border:0;background:none;padding:0;font:inherit;color:var(--mark);text-decoration:underline;cursor:pointer}
+.segnala{background:var(--surface);border:1px solid var(--rule);padding:16px;margin-top:24px;display:grid;gap:12px}
+.segnala label{display:grid;gap:6px;font-weight:500}
+.segnala textarea,.segnala input{font:inherit;font-weight:400;padding:10px;border:1px solid var(--rule);background:var(--paper);color:var(--ink)}
+.segnala .sotto{margin:0;color:var(--muted);font-size:14px}
+.segnala button[type=submit]{justify-self:start;appearance:none;border:1px solid var(--ink);background:var(--ink);color:var(--paper);font:inherit;padding:10px 16px;cursor:pointer}
+.segnala .trappola{position:absolute;left:-9999px;width:1px;height:1px}
+.segnala-errore{margin:0;color:var(--brass)}
+.segnala-esito{margin-top:24px;background:var(--surface);border:1px solid var(--rule);padding:14px 16px}

@@ -27,8 +27,11 @@ jobs:
         run: pnpm --filter @op/affinita equilibrio "$PWD/apps/web/dati/esempio"
 
   web:
-    name: Sito nel browser (privacy del questionario)
+    name: Sito nel browser (privacy del questionario, segnalazioni)
     runs-on: ubuntu-latest
+    env:   # Supabase finto: i test intercettano le chiamate, nessuna richiesta esce
+      NEXT_PUBLIC_SUPABASE_URL: http://supabase.test
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: prova
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4

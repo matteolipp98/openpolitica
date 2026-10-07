@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { equilibrio, type Soggetto as SoggettoAffinita } from "@op/affinita";
 import { NotaEsempio } from "@/components/NotaEsempio";
+import { Segnala } from "@/components/Segnala";
 import { contenuto, pacchetto, parametri, partiti } from "@/lib/dati";
 
 export const metadata: Metadata = { title: "Il metodo" };
@@ -107,6 +108,7 @@ export default function Metodo() {
       <h2 id="correzioni">Correzioni</h2>
       <p>Quando sbagliamo lo scriviamo qui, con la data e cosa abbiamo cambiato. Non cancelliamo niente di nascosto.</p>
       <div className="box"><p className="vuoto">Finora nessuna correzione.</p></div>
+      <Segnala dove="/metodo" />
     </main>
   );
 }

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Accostamento } from "./Accostamento";
 import { NotaEsempio } from "./NotaEsempio";
+import { Segnala } from "./Segnala";
 import { pacchetto } from "@/lib/dati";
 import { quota } from "@/lib/letture";
 import type { Posizione, Soggetto } from "@/lib/tipi";
@@ -130,6 +131,8 @@ export function SchedaSoggetto({ s }: { s: Soggetto }) {
       ) : (
         <p className="vuota">Non controlliamo ancora i dati che dice. Quando lo faremo, qui vedrai quelli sbagliati con il dato vero accanto.</p>
       )}
+
+      <Segnala dove={`/${s.tipo === "partito" ? "partiti" : "persone"}/${s.slug}`} />
 
       <p className="chiusura">
         Qui non diciamo se le {chi} idee sono buone o cattive. Diciamo cosa {s.tipo === "partito" ? "hanno detto e cosa hanno fatto" : "ha detto e cosa ha fatto"}. Il resto lo decidi tu.
