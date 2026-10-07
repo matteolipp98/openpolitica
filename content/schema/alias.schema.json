@@ -1,0 +1,157 @@
+{
+  "type": "object",
+  "properties": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "nome": {
+      "type": "string"
+    },
+    "cognome": {
+      "type": "string"
+    },
+    "forme": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 5
+      },
+      "minItems": 1
+    },
+    "forme_escluse": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "forma": {
+            "type": "string"
+          },
+          "motivo": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "forma",
+          "motivo"
+        ],
+        "additionalProperties": false
+      },
+      "default": []
+    },
+    "cariche": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "valido_dal": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "valido_al": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          },
+          "da_verificare": {
+            "type": "boolean",
+            "default": false
+          },
+          "carica": {
+            "type": "string"
+          },
+          "partito": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "fonte": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "required": [
+          "valido_dal",
+          "carica"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "ids_esterni": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "valido_dal": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "valido_al": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          },
+          "da_verificare": {
+            "type": "boolean",
+            "default": false
+          },
+          "fonte": {
+            "type": "string",
+            "enum": [
+              "camera",
+              "senato",
+              "openpolis"
+            ]
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "valido_dal",
+          "fonte",
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "default": []
+    }
+  },
+  "required": [
+    "slug",
+    "nome",
+    "cognome",
+    "forme",
+    "cariche"
+  ],
+  "additionalProperties": false,
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

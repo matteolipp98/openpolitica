@@ -1,0 +1,58 @@
+# Anagrafica dei partiti (ADR 0027). Il ruolo è una relazione con date, non un attributo.
+# Governo Meloni in carica dal 2022-10-22; da verificare a ogni aggiornamento che nulla sia cambiato.
+versione: 1
+aggiornato_il: 2026-10-07
+coalizioni:
+  - { slug: centrodestra-2022, nome: "Centrodestra", elezione: 2022-09-25 }
+  - { slug: centrosinistra-2022, nome: "Centrosinistra", elezione: 2022-09-25 }
+  - { slug: azione-italia-viva-2022, nome: "Azione - Italia Viva", elezione: 2022-09-25 }
+partiti:
+  - slug: fratelli-d-italia
+    nome: Fratelli d'Italia
+    nomi_alternativi: [FdI]
+    ruolo: [{ valore: governo, valido_dal: 2022-10-22 }]
+    coalizioni: [{ elezione: 2022-09-25, coalizione: centrodestra-2022 }]
+  - slug: lega
+    nome: Lega
+    nomi_alternativi: [Lega per Salvini Premier, Lega Salvini Premier]
+    ruolo: [{ valore: governo, valido_dal: 2022-10-22 }]
+    coalizioni: [{ elezione: 2022-09-25, coalizione: centrodestra-2022 }]
+  - slug: forza-italia
+    nome: Forza Italia
+    nomi_alternativi: [FI]
+    ruolo: [{ valore: governo, valido_dal: 2022-10-22 }]
+    coalizioni: [{ elezione: 2022-09-25, coalizione: centrodestra-2022 }]
+  - slug: noi-moderati
+    nome: Noi Moderati
+    ruolo: [{ valore: governo, valido_dal: 2022-10-22 }]
+    coalizioni: [{ elezione: 2022-09-25, coalizione: centrodestra-2022 }]
+  - slug: partito-democratico
+    nome: Partito Democratico
+    nomi_alternativi: [PD]
+    ruolo: [{ valore: opposizione, valido_dal: 2022-10-22 }]
+    coalizioni: [{ elezione: 2022-09-25, coalizione: centrosinistra-2022 }]
+  - slug: movimento-5-stelle
+    nome: Movimento 5 Stelle
+    nomi_alternativi: [M5S, Movimento Cinque Stelle]
+    ruolo: [{ valore: opposizione, valido_dal: 2022-10-22 }]
+  - slug: alleanza-verdi-e-sinistra
+    nome: Alleanza Verdi e Sinistra
+    nomi_alternativi: [AVS]
+    ruolo: [{ valore: opposizione, valido_dal: 2022-10-22 }]
+    coalizioni: [{ elezione: 2022-09-25, coalizione: centrosinistra-2022 }]
+    note: Alleanza elettorale e gruppo comune di Europa Verde e Sinistra Italiana.
+  - slug: azione
+    nome: Azione
+    ruolo: [{ valore: opposizione, valido_dal: 2022-10-22 }]
+    coalizioni: [{ elezione: 2022-09-25, coalizione: azione-italia-viva-2022 }]
+  - slug: italia-viva
+    nome: Italia Viva
+    nomi_alternativi: [IV]
+    ruolo: [{ valore: opposizione, valido_dal: 2022-10-22 }]
+    coalizioni: [{ elezione: 2022-09-25, coalizione: azione-italia-viva-2022 }]
+  - slug: piu-europa
+    nome: Più Europa
+    nomi_alternativi: [+Europa]
+    ruolo: [{ valore: opposizione, valido_dal: 2022-10-22 }]
+    coalizioni: [{ elezione: 2022-09-25, coalizione: centrosinistra-2022 }]
+    note: Senza gruppo autonomo, quindi fuori dal perimetro; serve per attribuire i voti dei suoi parlamentari nel gruppo misto.

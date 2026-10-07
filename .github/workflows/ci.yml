@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main, "claude/**"]
+
+jobs:
+  ts:
+    name: TypeScript e contenuti
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version-file: .nvmrc, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - name: Schemi JSON allineati a zod
+        run: pnpm content:schema && git diff --exit-code content/schema
+      - name: Validazione dei contenuti
+        run: pnpm content:check
+      - run: pnpm typecheck
+      - run: pnpm test
+
+  py:
+    name: Worker Python
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: workers } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --frozen
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+      - run: uv run pytest -q

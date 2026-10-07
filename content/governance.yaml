@@ -1,0 +1,7 @@
+versione: 1
+revisioneUmana:          # finché è spenta: niente "fuorviante per contesto" (ADR 0028, 0037)
+  attiva: false
+  revisori: 0
+campagna:                # dalla convocazione dei comizi la metodologia si congela (ADR 0021)
+  attiva: false
+  dal: null

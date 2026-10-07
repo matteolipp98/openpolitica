@@ -1,0 +1,8 @@
+slug: angelo-bonelli
+nome: Angelo
+cognome: Bonelli
+forme: ["Angelo Bonelli"]
+forme_escluse:
+  - { forma: "Bonelli", motivo: "cognome diffuso" }
+cariche:
+  - { carica: "Co-portavoce di Europa Verde", partito: alleanza-verdi-e-sinistra, valido_dal: null, da_verificare: true }

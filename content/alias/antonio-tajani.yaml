@@ -1,0 +1,7 @@
+slug: antonio-tajani
+nome: Antonio
+cognome: Tajani
+forme: ["Antonio Tajani", "Tajani"]
+cariche:
+  - { carica: "Segretario del partito", partito: forza-italia, valido_dal: 2023-07-15 }
+  - { carica: "Vicepresidente del Consiglio e ministro degli Esteri", valido_dal: 2022-10-22 }

@@ -1,0 +1,62 @@
+{
+  "type": "object",
+  "properties": {
+    "versione": {
+      "type": "integer",
+      "exclusiveMinimum": 0
+    },
+    "stato": {
+      "type": "string",
+      "enum": [
+        "proposta",
+        "approvata"
+      ]
+    },
+    "temi": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "nome": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 40
+          },
+          "descrizione": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 140
+          },
+          "esempi": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "maxItems": 6
+          }
+        },
+        "required": [
+          "id",
+          "nome",
+          "descrizione",
+          "esempi"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 2,
+      "maxItems": 19
+    }
+  },
+  "required": [
+    "versione",
+    "stato",
+    "temi"
+  ],
+  "additionalProperties": false,
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

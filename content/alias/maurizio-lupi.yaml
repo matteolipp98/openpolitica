@@ -1,0 +1,8 @@
+slug: maurizio-lupi
+nome: Maurizio
+cognome: Lupi
+forme: ["Maurizio Lupi"]
+forme_escluse:
+  - { forma: "Lupi", motivo: "è anche una parola comune" }
+cariche:
+  - { carica: "Presidente del partito", partito: noi-moderati, valido_dal: null, da_verificare: true }

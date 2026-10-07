@@ -1,0 +1,123 @@
+{
+  "type": "object",
+  "properties": {
+    "versione": {
+      "type": "integer",
+      "exclusiveMinimum": 0
+    },
+    "presentazione": {
+      "type": "object",
+      "properties": {
+        "denominatoreMinimo": {
+          "type": "integer",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": [
+        "denominatoreMinimo"
+      ],
+      "additionalProperties": false
+    },
+    "affinita": {
+      "type": "object",
+      "properties": {
+        "pesoImportante": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "margineParita": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sogliaNessunoTiRappresenta": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        }
+      },
+      "required": [
+        "pesoImportante",
+        "margineParita",
+        "sogliaNessunoTiRappresenta"
+      ],
+      "additionalProperties": false
+    },
+    "posizioni": {
+      "type": "object",
+      "properties": {
+        "quotaMaggioranzaGruppo": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "exclusiveMaximum": 1
+        },
+        "membriMinimi": {
+          "type": "integer",
+          "exclusiveMinimum": 0
+        },
+        "legislaturaRiferimento": {
+          "type": "integer",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": [
+        "quotaMaggioranzaGruppo",
+        "membriMinimi",
+        "legislaturaRiferimento"
+      ],
+      "additionalProperties": false
+    },
+    "catalogo": {
+      "type": "object",
+      "properties": {
+        "enunciatiPerTema": {
+          "type": "integer",
+          "exclusiveMinimum": 0
+        },
+        "minoranzaMinima": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "exclusiveMaximum": 0.5
+        }
+      },
+      "required": [
+        "enunciatiPerTema",
+        "minoranzaMinima"
+      ],
+      "additionalProperties": false
+    },
+    "equilibrio": {
+      "type": "object",
+      "properties": {
+        "scartoAffinitaMedia": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "scartoQuotaPrimi": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "riconoscimentoArea": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "exclusiveMaximum": 1
+        }
+      },
+      "required": [
+        "scartoAffinitaMedia",
+        "scartoQuotaPrimi",
+        "riconoscimentoArea"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "versione",
+    "presentazione",
+    "affinita",
+    "posizioni",
+    "catalogo",
+    "equilibrio"
+  ],
+  "additionalProperties": false,
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

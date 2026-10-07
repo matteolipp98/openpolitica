@@ -1,0 +1,31 @@
+# Sonda delle fonti open data (ADR 0002, 0025): controlla che rispondano e ne registra la forma.
+# Gira ogni settimana per accorgersi presto se una fonte cambia, e a mano quando serve.
+name: Verifica open data
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 5 * * 1"
+  push:
+    branches: ["claude/**"]
+    paths:
+      - workers/op_workers/connettori/sonda_open_data.py
+      - .github/workflows/verifica-open-data.yml
+
+jobs:
+  sonda:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults: { run: { working-directory: workers } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --frozen
+      - name: Esegui la sonda
+        run: uv run python -m op_workers.connettori.sonda_open_data --uscita ../sonde
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sonda-open-data
+          path: sonde/
+          retention-days: 90

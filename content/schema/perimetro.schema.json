@@ -1,0 +1,75 @@
+{
+  "type": "object",
+  "properties": {
+    "versione": {
+      "type": "integer",
+      "exclusiveMinimum": 0
+    },
+    "aggiornato_il": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "legislatura": {
+      "type": "integer"
+    },
+    "criterio": {
+      "type": "string",
+      "minLength": 40
+    },
+    "partiti": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "motivo": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug",
+          "motivo"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "persone": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "partito": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "motivo": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug",
+          "partito",
+          "motivo"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "versione",
+    "aggiornato_il",
+    "legislatura",
+    "criterio",
+    "partiti",
+    "persone"
+  ],
+  "additionalProperties": false,
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

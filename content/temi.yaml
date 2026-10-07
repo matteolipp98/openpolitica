@@ -1,0 +1,29 @@
+# Proposta di tassonomia (ADR 0022: 6 temi nell'MVP, 5 domande per tema).
+# Pochi temi, sotto le venti opzioni (ADR 0035). Nomi e descrizioni sono quelli che vede l'utente.
+versione: 1
+stato: proposta
+temi:
+  - id: economia
+    nome: Lavoro, tasse e pensioni
+    descrizione: Stipendi, contratti, tasse su lavoro e patrimoni, età della pensione.
+    esempi: [salario minimo, tasse sui patrimoni, pensione anticipata]
+  - id: welfare
+    nome: Sanità, scuola e famiglie
+    descrizione: Ospedali e liste d'attesa, scuola, aiuti a chi ha figli o è in difficoltà.
+    esempi: [fondo sanitario, sanità privata convenzionata, reddito di cittadinanza]
+  - id: diritti
+    nome: Diritti e immigrazione
+    descrizione: Cittadinanza, arrivi dei migranti, diritti civili.
+    esempi: [cittadinanza ai figli di stranieri, centri per migranti all'estero, fine vita]
+  - id: ambiente
+    nome: Energia e ambiente
+    descrizione: Da dove prendiamo l'energia, bollette, clima, trasporti.
+    esempi: [centrali nucleari, auto elettriche, rinnovabili]
+  - id: istituzioni
+    nome: Giustizia e regole dello Stato
+    descrizione: Come funzionano tribunali, governo e regioni.
+    esempi: [separazione delle carriere, elezione diretta del premier, autonomia delle regioni]
+  - id: esteri
+    nome: Europa, esteri e difesa
+    descrizione: Rapporti con l'Unione Europea, guerre in corso, spese militari.
+    esempi: [armi all'Ucraina, spesa per la difesa, regole europee sui conti]

@@ -1,0 +1,6 @@
+slug: matteo-renzi
+nome: Matteo
+cognome: Renzi
+forme: ["Matteo Renzi", "Renzi"]
+cariche:
+  - { carica: "Leader del partito", partito: italia-viva, valido_dal: 2019-09-18, da_verificare: true }

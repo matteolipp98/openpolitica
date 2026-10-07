@@ -1,0 +1,8 @@
+slug: giuseppe-conte
+nome: Giuseppe
+cognome: Conte
+forme: ["Giuseppe Conte"]
+forme_escluse:
+  - { forma: "Conte", motivo: "è anche una parola comune e un cognome molto diffuso" }
+cariche:
+  - { carica: "Presidente del partito", partito: movimento-5-stelle, valido_dal: 2021-08-06 }

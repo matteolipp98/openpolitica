@@ -1,0 +1,28 @@
+# Gruppi parlamentari della XIX legislatura -> partiti (ADR 0027).
+# id_esterno e sigla si compilano dai risultati della sonda open data; finché manca, stato: da_verificare.
+# Gruppo misto: partiti vuoto, i voti si attribuiscono per persona tramite le appartenenze.
+versione: 1
+gruppi:
+  # ---- Camera ----
+  - { ramo: camera, legislatura: 19, nome_contiene: "Fratelli d'Italia", id_esterno: null, sigla: null, partiti: [fratelli-d-italia], periodo: { valido_dal: 2022-10-13 }, stato: da_verificare }
+  - { ramo: camera, legislatura: 19, nome_contiene: "Partito Democratico", id_esterno: null, sigla: null, partiti: [partito-democratico], periodo: { valido_dal: 2022-10-13 }, stato: da_verificare }
+  - { ramo: camera, legislatura: 19, nome_contiene: "Lega", id_esterno: null, sigla: null, partiti: [lega], periodo: { valido_dal: 2022-10-13 }, stato: da_verificare }
+  - { ramo: camera, legislatura: 19, nome_contiene: "Movimento 5 Stelle", id_esterno: null, sigla: null, partiti: [movimento-5-stelle], periodo: { valido_dal: 2022-10-13 }, stato: da_verificare }
+  - { ramo: camera, legislatura: 19, nome_contiene: "Forza Italia", id_esterno: null, sigla: null, partiti: [forza-italia], periodo: { valido_dal: 2022-10-13 }, stato: da_verificare }
+  - { ramo: camera, legislatura: 19, nome_contiene: "Alleanza Verdi e Sinistra", id_esterno: null, sigla: null, partiti: [alleanza-verdi-e-sinistra], periodo: { valido_dal: 2022-10-13 }, stato: da_verificare }
+  - { ramo: camera, legislatura: 19, nome_contiene: "Noi Moderati", id_esterno: null, sigla: null, partiti: [noi-moderati], periodo: { valido_dal: 2022-10-13 }, stato: da_verificare }
+  # Azione e Italia Viva: gruppo comune a inizio legislatura, poi separati; date dalla sonda
+  - { ramo: camera, legislatura: 19, nome_contiene: "Azione-Italia Viva", id_esterno: null, sigla: null, partiti: [azione, italia-viva], periodo: { valido_dal: 2022-10-13, da_verificare: true }, stato: da_verificare }
+  - { ramo: camera, legislatura: 19, nome_contiene: "Azione-Popolari", id_esterno: null, sigla: null, partiti: [azione], periodo: { valido_dal: null, da_verificare: true }, stato: da_verificare }
+  - { ramo: camera, legislatura: 19, nome_contiene: "Italia Viva-il Centro", id_esterno: null, sigla: null, partiti: [italia-viva], periodo: { valido_dal: null, da_verificare: true }, stato: da_verificare }
+  - { ramo: camera, legislatura: 19, nome_contiene: "Misto", id_esterno: null, sigla: null, partiti: [], periodo: { valido_dal: 2022-10-13 }, stato: da_verificare }
+  # ---- Senato ----
+  - { ramo: senato, legislatura: 19, nome_contiene: "Fratelli d'Italia", id_esterno: null, sigla: null, partiti: [fratelli-d-italia], periodo: { valido_dal: 2022-10-13 }, stato: da_verificare }
+  - { ramo: senato, legislatura: 19, nome_contiene: "Partito Democratico", id_esterno: null, sigla: null, partiti: [partito-democratico], periodo: { valido_dal: 2022-10-13 }, stato: da_verificare }
+  - { ramo: senato, legislatura: 19, nome_contiene: "Lega", id_esterno: null, sigla: null, partiti: [lega], periodo: { valido_dal: 2022-10-13 }, stato: da_verificare }
+  - { ramo: senato, legislatura: 19, nome_contiene: "Movimento 5 Stelle", id_esterno: null, sigla: null, partiti: [movimento-5-stelle], periodo: { valido_dal: 2022-10-13 }, stato: da_verificare }
+  - { ramo: senato, legislatura: 19, nome_contiene: "Forza Italia", id_esterno: null, sigla: null, partiti: [forza-italia], periodo: { valido_dal: 2022-10-13 }, stato: da_verificare }
+  - { ramo: senato, legislatura: 19, nome_contiene: "Noi Moderati", id_esterno: null, sigla: null, partiti: [noi-moderati], periodo: { valido_dal: 2022-10-13 }, stato: da_verificare }
+  - { ramo: senato, legislatura: 19, nome_contiene: "Italia Viva", id_esterno: null, sigla: null, partiti: [azione, italia-viva], periodo: { valido_dal: 2022-10-13, da_verificare: true }, stato: da_verificare }
+  - { ramo: senato, legislatura: 19, nome_contiene: "Autonomie", id_esterno: null, sigla: null, partiti: [], periodo: { valido_dal: 2022-10-13 }, stato: da_verificare }
+  - { ramo: senato, legislatura: 19, nome_contiene: "Misto", id_esterno: null, sigla: null, partiti: [], periodo: { valido_dal: 2022-10-13 }, stato: da_verificare }

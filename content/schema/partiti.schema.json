@@ -1,0 +1,151 @@
+{
+  "type": "object",
+  "properties": {
+    "versione": {
+      "type": "integer",
+      "exclusiveMinimum": 0
+    },
+    "aggiornato_il": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "partiti": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "nomi_alternativi": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          },
+          "sito": {
+            "type": "string",
+            "format": "uri"
+          },
+          "ruolo": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "valido_dal": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "valido_al": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null
+                },
+                "da_verificare": {
+                  "type": "boolean",
+                  "default": false
+                },
+                "valore": {
+                  "type": "string",
+                  "enum": [
+                    "governo",
+                    "opposizione"
+                  ]
+                }
+              },
+              "required": [
+                "valido_dal",
+                "valore"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1
+          },
+          "coalizioni": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "elezione": {
+                  "type": "string",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                },
+                "coalizione": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+                }
+              },
+              "required": [
+                "elezione",
+                "coalizione"
+              ],
+              "additionalProperties": false
+            },
+            "default": []
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug",
+          "nome",
+          "ruolo"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "coalizioni": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "elezione": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          }
+        },
+        "required": [
+          "slug",
+          "nome",
+          "elezione"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "versione",
+    "aggiornato_il",
+    "partiti",
+    "coalizioni"
+  ],
+  "additionalProperties": false,
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

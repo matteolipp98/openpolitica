@@ -1,0 +1,110 @@
+{
+  "type": "object",
+  "properties": {
+    "versione": {
+      "type": "integer",
+      "exclusiveMinimum": 0
+    },
+    "gruppi": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "ramo": {
+            "type": "string",
+            "enum": [
+              "camera",
+              "senato"
+            ]
+          },
+          "legislatura": {
+            "type": "integer"
+          },
+          "nome_contiene": {
+            "type": "string",
+            "minLength": 3
+          },
+          "id_esterno": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "sigla": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "partiti": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+            }
+          },
+          "periodo": {
+            "type": "object",
+            "properties": {
+              "valido_dal": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "valido_al": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "da_verificare": {
+                "type": "boolean",
+                "default": false
+              }
+            },
+            "required": [
+              "valido_dal"
+            ],
+            "additionalProperties": false
+          },
+          "stato": {
+            "type": "string",
+            "enum": [
+              "da_verificare",
+              "verificato"
+            ]
+          }
+        },
+        "required": [
+          "ramo",
+          "legislatura",
+          "nome_contiene",
+          "id_esterno",
+          "sigla",
+          "partiti",
+          "periodo",
+          "stato"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "versione",
+    "gruppi"
+  ],
+  "additionalProperties": false,
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

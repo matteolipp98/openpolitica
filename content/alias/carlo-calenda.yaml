@@ -1,0 +1,6 @@
+slug: carlo-calenda
+nome: Carlo
+cognome: Calenda
+forme: ["Carlo Calenda", "Calenda"]
+cariche:
+  - { carica: "Leader del partito", partito: azione, valido_dal: 2019-11-21, da_verificare: true }
