@@ -33,9 +33,14 @@ class Risposta:
     token_out: int
     latenza_ms: int
     modello: str
+    fornitore: str = "google"
+    famiglia: str = "gemini"
 
 
 class Gemini:
+    fornitore = "google"
+    famiglia = "gemini"
+
     def __init__(
         self,
         chiave: str | None = None,

@@ -28,6 +28,7 @@ from uuid import UUID
 import psycopg
 
 from op_workers.catalogo.gemini import Gemini, QuotaEsaurita, Risposta
+from op_workers.catalogo.manuale import RispostaMancante, client
 
 CONTENT = Path(__file__).resolve().parents[3] / "content"
 PROMPT_ID = "promesse/estrai"
@@ -220,9 +221,9 @@ def salva_lotto(
     with conn.transaction():
         for m in {modello, r.modello}:
             conn.execute(
-                """insert into core.modello (id, fornitore, famiglia) values (%s, 'google', 'gemini')
+                """insert into core.modello (id, fornitore, famiglia) values (%s, %s, %s)
                    on conflict do nothing""",
-                (m,),
+                (m, r.fornitore, r.famiglia),
             )
         run_id = conn.execute(
             """insert into core.run_modello (stadio, modello_id, prompt_id, prompt_versione, input_sha256,
@@ -258,6 +259,7 @@ class Conteggio:
     nuovi: int = 0
     estratte: int = 0
     scartate: int = 0
+    mancanti: int = 0
     esempi_scartati: list[dict] = field(default_factory=list)
 
 
@@ -277,6 +279,9 @@ def esegui(
                 continue
             try:
                 r = gemini.json(testo, SCHEMA)
+            except RispostaMancante:  # client a mano (#71): il lotto aspetta la risposta, si va avanti
+                c.mancanti += 1
+                continue
             except QuotaEsaurita as e:
                 print(f"Fermo: {e}. Si riprende alla prossima esecuzione.")
                 return out, True
@@ -293,9 +298,12 @@ def riepilogo(conn: psycopg.Connection, conteggi: list[Conteggio], fermo: bool, 
     righe = [
         f"Modello: `{modello}`, prompt `{PROMPT_ID}.{PROMPT_VERSIONE}`.",
         "",
-        "| Partiti | Lotti | Già fatti | Fatti ora | Promesse tenute ora | Scartate ora |",
-        "|---|---|---|---|---|---|",
-        *[f"| {c.partiti} | {c.lotti} | {c.gia_fatti} | {c.nuovi} | {c.estratte} | {c.scartate} |" for c in conteggi],
+        "| Partiti | Lotti | Già fatti | Fatti ora | Senza risposta | Promesse tenute ora | Scartate ora |",
+        "|---|---|---|---|---|---|---|",
+        *[
+            f"| {c.partiti} | {c.lotti} | {c.gia_fatti} | {c.nuovi} | {c.mancanti} | {c.estratte} | {c.scartate} |"
+            for c in conteggi
+        ],
         "",
     ]
     tot = conn.execute("select count(*) from core.promessa_attuale").fetchone()[0]
@@ -314,7 +322,7 @@ def main() -> int:
     ap.add_argument("--partito", help="slug di un partito: solo il suo programma")
     ap.add_argument("--max-chiamate", type=int, default=20)
     a = ap.parse_args()
-    gemini = Gemini(max_chiamate=a.max_chiamate)
+    gemini = client(a.max_chiamate)
     with psycopg.connect(os.environ["DATABASE_URL"], autocommit=True) as conn:
         conteggi, fermo = esegui(conn, gemini, a.partito)
         print(riepilogo(conn, conteggi, fermo, gemini.modello))

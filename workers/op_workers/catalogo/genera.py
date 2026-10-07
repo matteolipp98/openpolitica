@@ -31,6 +31,7 @@ import yaml
 
 from op_workers.catalogo.candidati import Candidata, candidate, parametri_da_contenuti
 from op_workers.catalogo.gemini import Gemini, QuotaEsaurita
+from op_workers.catalogo.manuale import RispostaMancante, client
 
 CONTENT = Path(__file__).resolve().parents[3] / "content"
 PROMPT_VERSIONE = "v1"
@@ -134,8 +135,8 @@ def chiama(gemini: Gemini, cache: Cache, tipo: str, prompt: str, schema: dict, c
 
 def registra_run(conn, tipo: str, r, prompt: str) -> None:
     conn.execute(
-        """insert into core.modello (id, fornitore, famiglia) values (%s, 'google', 'gemini') on conflict do nothing""",
-        (r.modello,),
+        """insert into core.modello (id, fornitore, famiglia) values (%s, %s, %s) on conflict do nothing""",
+        (r.modello, r.fornitore, r.famiglia),
     )
     conn.execute(
         """insert into core.run_modello (stadio, modello_id, prompt_id, prompt_versione, input_sha256,
@@ -263,7 +264,7 @@ def main(argv: list[str] | None = None) -> int:
     p, minoranza = parametri_da_contenuti(parametri)
     cartella = CONTENT / "catalogo" / a.versione
     cache = Cache(cartella / "lavoro")
-    gemini = Gemini(max_chiamate=a.max_chiamate)
+    gemini = client(a.max_chiamate)
 
     conn = psycopg.connect(os.environ["DATABASE_URL"])
     if motivo := import_incompleto(conn):
@@ -286,7 +287,11 @@ def main(argv: list[str] | None = None) -> int:
     try:
         for n, lotto in enumerate(lotti, 1):
             seme = f"{a.versione}-{n}"
-            g = chiama(gemini, cache, "genera", prompt_genera(lotto, temi, seme), schema_genera(temi_ids), conn)
+            try:
+                g = chiama(gemini, cache, "genera", prompt_genera(lotto, temi, seme), schema_genera(temi_ids), conn)
+            except RispostaMancante:  # client a mano (#71): il lotto aspetta la risposta, si va avanti
+                completo = False
+                continue
             modello = g["modello"]
             elaborate += len(lotto)
             per_id = {x["id"]: x for x in g["risposta"]}
@@ -298,7 +303,11 @@ def main(argv: list[str] | None = None) -> int:
             if not voci:
                 continue
             pv, mappa = prompt_verifica(voci, temi, seme)
-            v = chiama(gemini, cache, "verifica", pv, schema_verifica(temi_ids), conn)
+            try:
+                v = chiama(gemini, cache, "verifica", pv, schema_verifica(temi_ids), conn)
+            except RispostaMancante:
+                completo = False
+                continue
             for atto in v["risposta"]:
                 ide, _ = mappa.get(atto["atto"], (None, None))
                 if ide is None:
@@ -311,6 +320,8 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Fermato: {e}. Le risposte già ottenute sono in cache: si riprende al prossimo giro.")
     finally:
         conn.close()
+    if getattr(gemini, "mancanti", None):
+        print(f"Prompt in attesa di una risposta scritta a mano: {len(gemini.mancanti)} (#71)")
 
     per_cand = {c.id_esterno: c for c in cands}
     costruiti = [costruisci_enunciato(per_cand[i], generate[i], verifiche[i], modello)
