@@ -1,11 +1,11 @@
 # Deploy del sito su Vercel (ADR 0017). Build fatto qui, poi caricato già pronto (--prebuilt).
-# Per ora va in produzione anche da questo branch, finché non c'è un main con il codice.
+# Si pubblica solo da main. Vercel non costruisce da solo a ogni push (vercel.json, git.deploymentEnabled).
 name: Deploy sito
 
 on:
   workflow_dispatch:
   push:
-    branches: [main, "claude/**"]
+    branches: [main]
     paths:
       - apps/web/**
       - packages/**
@@ -13,7 +13,7 @@ on:
       - pnpm-lock.yaml
       - .github/workflows/deploy-web.yml
 
-concurrency: { group: deploy-web, cancel-in-progress: true }
+concurrency: { group: deploy-web, cancel-in-progress: false }
 
 jobs:
   vercel:
@@ -42,7 +42,13 @@ jobs:
       - name: Deploy
         id: deploy
         working-directory: apps/web
+        # Si carica da una cartella senza storia git: Vercel blocca i deploy se non riconosce
+        # l'email dell'autore del commit (per esempio quella noreply di GitHub dei merge).
         run: |
+          dir=$(mktemp -d)
+          mkdir -p "$dir/.vercel"
+          cp -r .vercel/output .vercel/project.json "$dir/.vercel/"
+          cd "$dir"
           url=$(npx --yes vercel@latest deploy --prebuilt --prod --token "$VERCEL_TOKEN")
           echo "url=$url" >> "$GITHUB_OUTPUT"
           echo "Sito pubblicato: $url" | tee -a "$GITHUB_STEP_SUMMARY"
@@ -50,8 +56,10 @@ jobs:
         # L'indirizzo del singolo deploy è protetto da login Vercel (302); quello di produzione dev'essere pubblico.
         run: |
           base=https://openpolitica.vercel.app
-          for p in / /come-funziona /domande /partiti/lega /persone/elly-schlein; do
+          partito=$(curl -s "$base/" | grep -o 'href="/partiti/[a-z0-9-]*"' | head -1 | cut -d'"' -f2)
+          for p in / /come-funziona /domande "$partito"; do
             code=$(curl -s -o /dev/null -w '%{http_code}' "$base$p")
             echo "$base$p -> $code" | tee -a "$GITHUB_STEP_SUMMARY"
+            test "$code" = 200
           done
           curl -s "$base/" | grep -o "<h1>[^<]*</h1>" | tee -a "$GITHUB_STEP_SUMMARY"
