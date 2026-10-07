@@ -26,7 +26,7 @@ jobs:
     defaults: { run: { working-directory: workers, shell: bash } }  # bash = pipefail: un errore fa fallire il job
     steps:
       - uses: actions/checkout@v7
-      - uses: astral-sh/setup-uv@v10
+      - uses: astral-sh/setup-uv@v10.2.0
       - name: OCR in italiano
         run: sudo apt-get update -q && sudo apt-get install -y -q tesseract-ocr tesseract-ocr-ita
       - run: uv sync --frozen
