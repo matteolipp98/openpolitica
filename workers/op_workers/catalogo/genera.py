@@ -227,6 +227,23 @@ def costruisci_enunciato(c: Candidata, g: dict, v: dict, modello: str) -> dict:
     }  # fmt: skip
 
 
+def chiave_votazione(e: dict) -> tuple[str, str]:
+    v = e["origine"]["votazione"]
+    return v["ramo"], v["idEsterno"]
+
+
+def esclusioni(cartella: Path) -> set[tuple[str, str]]:
+    """Votazioni tolte a mano con motivo pubblico (esclusioni.yaml): dopo la generazione, così la cache resta valida."""
+    f = cartella / "esclusioni.yaml"
+    if not f.exists():
+        return set()
+    voci = yaml.safe_load(f.read_text(encoding="utf8")).get("esclusioni") or []
+    for x in voci:
+        if not str(x.get("motivo", "")).strip():
+            raise ValueError(f"esclusione senza motivo: {x}")
+    return {(x["votazione"]["ramo"], str(x["votazione"]["idEsterno"])) for x in voci}
+
+
 def seleziona(enunciati: list[dict], temi_ids: list[str], per_tema: int) -> tuple[list[dict], int]:
     """Stesso numero per tema (ADR 0022): k = il minimo tra per_tema e il tema più povero."""
     per = defaultdict(list)
@@ -235,6 +252,15 @@ def seleziona(enunciati: list[dict], temi_ids: list[str], per_tema: int) -> tupl
     for lista in per.values():  # preferenza: più divisive; a parità, più recenti
         lista.sort(key=lambda e: e["origine"]["data"], reverse=True)
         lista.sort(key=lambda e: -e["test"]["divisivita"]["dettagli"]["minoranza"])
+    visti: set[str] = set()  # la stessa legge votata due volte può dare la stessa domanda: una sola (ADR 0030)
+    for t in list(per):
+        unici = []
+        for e in per[t]:
+            chiave = " ".join(e.get("testo", "").casefold().split())
+            if not chiave or chiave not in visti:
+                visti.add(chiave)
+                unici.append(e)
+        per[t] = unici
     k = min([per_tema] + [len(per[t]) for t in temi_ids])
     return [e for t in temi_ids for e in per[t][:k]], k
 
@@ -326,6 +352,8 @@ def main(argv: list[str] | None = None) -> int:
     per_cand = {c.id_esterno: c for c in cands}
     costruiti = [costruisci_enunciato(per_cand[i], generate[i], verifiche[i], modello)
                  for i in generate if i in verifiche]  # fmt: skip
+    esclusi = esclusioni(cartella)
+    costruiti_tutti, costruiti = costruiti, [e for e in costruiti if chiave_votazione(e) not in esclusi]
     superati = [e for e in costruiti if all(t["superato"] for t in e["test"].values())]
     rapporto = {
         "versione": a.versione,
@@ -336,7 +364,8 @@ def main(argv: list[str] | None = None) -> int:
         "scartate_dai_dati": scarti,
         "scartate_dal_modello": elaborate - len(generate),
         "generate": len(generate),
-        "verificate": len(costruiti),
+        "verificate": len(costruiti_tutti),
+        "escluse_a_mano": len(costruiti_tutti) - len(costruiti),
         "test_superati": len(superati),
         "test_falliti": {
             k: sum(1 for e in costruiti if not e["test"][k]["superato"]) for k in ("tema", "sensibilita", "polarita")

@@ -1,0 +1,229 @@
+{
+ "modello": "claude-opus-5-5",
+ "prompt_sha256": "36c98594468508575b2f363569bd499c843b45543f049fdcd1cd6af1483c08da",
+ "risposta": [
+  {
+   "atto": "A1",
+   "tema": "esteri",
+   "frasi": [
+    {
+     "id": "A1F1",
+     "risposta": "contrario"
+    },
+    {
+     "id": "A1F2",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A1F3",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A1F4",
+     "risposta": "d_accordo"
+    }
+   ]
+  },
+  {
+   "atto": "A2",
+   "tema": "ambiente",
+   "frasi": [
+    {
+     "id": "A2F1",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A2F2",
+     "risposta": "contrario"
+    },
+    {
+     "id": "A2F3",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A2F4",
+     "risposta": "d_accordo"
+    }
+   ]
+  },
+  {
+   "atto": "A3",
+   "tema": "istituzioni",
+   "frasi": [
+    {
+     "id": "A3F1",
+     "risposta": "contrario"
+    },
+    {
+     "id": "A3F2",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A3F3",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A3F4",
+     "risposta": "d_accordo"
+    }
+   ]
+  },
+  {
+   "atto": "A4",
+   "tema": "ambiente",
+   "frasi": [
+    {
+     "id": "A4F1",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A4F2",
+     "risposta": "contrario"
+    },
+    {
+     "id": "A4F3",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A4F4",
+     "risposta": "d_accordo"
+    }
+   ]
+  },
+  {
+   "atto": "A5",
+   "tema": "diritti",
+   "frasi": [
+    {
+     "id": "A5F1",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A5F2",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A5F3",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A5F4",
+     "risposta": "contrario"
+    }
+   ]
+  },
+  {
+   "atto": "A6",
+   "tema": "welfare",
+   "frasi": [
+    {
+     "id": "A6F1",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A6F2",
+     "risposta": "contrario"
+    },
+    {
+     "id": "A6F3",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A6F4",
+     "risposta": "d_accordo"
+    }
+   ]
+  },
+  {
+   "atto": "A7",
+   "tema": "ambiente",
+   "frasi": [
+    {
+     "id": "A7F1",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A7F2",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A7F3",
+     "risposta": "contrario"
+    },
+    {
+     "id": "A7F4",
+     "risposta": "d_accordo"
+    }
+   ]
+  },
+  {
+   "atto": "A8",
+   "tema": "ambiente",
+   "frasi": [
+    {
+     "id": "A8F1",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A8F2",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A8F3",
+     "risposta": "contrario"
+    },
+    {
+     "id": "A8F4",
+     "risposta": "d_accordo"
+    }
+   ]
+  },
+  {
+   "atto": "A9",
+   "tema": "istituzioni",
+   "frasi": [
+    {
+     "id": "A9F1",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A9F2",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A9F3",
+     "risposta": "contrario"
+    },
+    {
+     "id": "A9F4",
+     "risposta": "d_accordo"
+    }
+   ]
+  },
+  {
+   "atto": "A10",
+   "tema": "ambiente",
+   "frasi": [
+    {
+     "id": "A10F1",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A10F2",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A10F3",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A10F4",
+     "risposta": "contrario"
+    }
+   ]
+  }
+ ],
+ "token_in": 0,
+ "token_out": 0,
+ "creato_il": "2026-10-07T23:42:21.005398+00:00"
+}

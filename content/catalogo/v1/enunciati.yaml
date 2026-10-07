@@ -1,0 +1,1152 @@
+versione: v1
+stato: provvisorio
+nota: Domande scritte e controllate da un solo sistema di intelligenza artificiale (ADR 0038).
+generato_il: '2026-10-07T23:43:26+00:00'
+enunciatiPerTema: 4
+enunciati:
+- id: e-camera-vs19-034-001
+  versione: 1
+  testo: I professionisti che lavorano per grandi aziende o enti pubblici devono avere un compenso minimo garantito.
+  tema: economia
+  livelloGoverno: nazionale
+  stato: attivo
+  contesto:
+    fatto: 'Se n''è votato alla Camera il 12 gennaio 2023: la legge è stata approvata.'
+    favorevoli: Chi è a favore dice che così i professionisti non devono accettare paghe troppo basse.
+    contrari: Chi è contro dice che i compensi minimi fissati rendono i servizi più cari per tutti.
+  origine:
+    votazione:
+      ramo: camera
+      legislatura: 19
+      idEsterno: vs19_034_001
+    atto: C.338
+    data: '2023-01-12'
+    direzione: 1
+    generazione:
+      modello: claude-opus-5-5
+      promptVersione: v1
+      inputSha256: 83d5541d06e819920dac9223966a155957bcec4970d0ceb84c125a4bcdaa6b79
+  test:
+    divisivita:
+      superato: true
+      dettagli:
+        minoranza: 0.436
+    discriminazione:
+      superato: true
+      dettagli:
+        orientamenti:
+          partito-democratico: -1
+          forza-italia: 1
+          alleanza-verdi-e-sinistra: -1
+          fratelli-d-italia: 1
+          lega: 1
+          movimento-5-stelle: -1
+    tema:
+      superato: true
+      dettagli:
+        verifica: economia
+    sensibilita:
+      superato: true
+      dettagli: {}
+    polarita:
+      superato: true
+      dettagli: {}
+- id: e-camera-vs19-210-001
+  versione: 1
+  testo: La paga minima deve essere fissata dai contratti di lavoro, non da una cifra uguale per tutti.
+  tema: economia
+  livelloGoverno: nazionale
+  stato: attivo
+  contesto:
+    fatto: 'Se n''è votato alla Camera il 6 dicembre 2023: la legge è stata approvata.'
+    favorevoli: Chi è a favore dice che ogni settore conosce meglio i suoi lavoratori.
+    contrari: Chi è contro dice che senza una soglia unica restano stipendi troppo bassi.
+  origine:
+    votazione:
+      ramo: camera
+      legislatura: 19
+      idEsterno: vs19_210_001
+    atto: C.1275
+    data: '2023-12-06'
+    direzione: 1
+    generazione:
+      modello: claude-opus-5-5
+      promptVersione: v1
+      inputSha256: a77c445acd3d7bf2b715a7a0a6f6a1add9a682c8e93b8cb240c08400dd6fcc1a
+  test:
+    divisivita:
+      superato: true
+      dettagli:
+        minoranza: 0.435
+    discriminazione:
+      superato: true
+      dettagli:
+        orientamenti:
+          movimento-5-stelle: -1
+          partito-democratico: -1
+          alleanza-verdi-e-sinistra: -1
+          forza-italia: 1
+          fratelli-d-italia: 1
+          italia-viva: -1
+          lega: 1
+    tema:
+      superato: true
+      dettagli:
+        verifica: economia
+    sensibilita:
+      superato: true
+      dettagli: {}
+    polarita:
+      superato: true
+      dettagli: {}
+- id: e-senato-19-314-4
+  versione: 1
+  testo: Le aziende private devono avere un permesso dello Stato per mandare satelliti nello spazio.
+  tema: economia
+  livelloGoverno: nazionale
+  stato: attivo
+  contesto:
+    fatto: 'Se n''è votato al Senato il 11 giugno 2025: la legge è stata approvata.'
+    favorevoli: Chi è a favore dice che regole chiare danno sicurezza e attirano nuove imprese.
+    contrari: Chi è contro dice che troppi permessi rallentano le imprese in un settore che corre.
+  origine:
+    votazione:
+      ramo: senato
+      legislatura: 19
+      idEsterno: 19-314-4
+    atto: S.1415
+    data: '2025-06-11'
+    direzione: 1
+    generazione:
+      modello: claude-opus-5-5
+      promptVersione: v1
+      inputSha256: 9685dc79524630890c8a46d86ed5bf65a712419ecb748b1bb07b2b51d6da69a6
+  test:
+    divisivita:
+      superato: true
+      dettagli:
+        minoranza: 0.429
+    discriminazione:
+      superato: true
+      dettagli:
+        orientamenti:
+          italia-viva: -1
+          partito-democratico: -1
+          movimento-5-stelle: -1
+          forza-italia: 1
+          fratelli-d-italia: 1
+          lega: 1
+          noi-moderati: 1
+    tema:
+      superato: true
+      dettagli:
+        verifica: economia
+    sensibilita:
+      superato: true
+      dettagli: {}
+    polarita:
+      superato: true
+      dettagli: {}
+- id: e-camera-vs19-587-020
+  versione: 1
+  testo: Servono più controlli nei luoghi di lavoro per evitare incidenti.
+  tema: economia
+  livelloGoverno: nazionale
+  stato: attivo
+  contesto:
+    fatto: 'Se n''è votato alla Camera il 18 dicembre 2025: la legge è stata approvata.'
+    favorevoli: Chi è a favore dice che troppe persone si fanno male o muoiono lavorando.
+    contrari: Chi è contro dice che più controlli pesano sulle aziende senza cambiare molto.
+  origine:
+    votazione:
+      ramo: camera
+      legislatura: 19
+      idEsterno: vs19_587_020
+    atto: C.2736
+    data: '2025-12-18'
+    direzione: 1
+    generazione:
+      modello: claude-opus-5-5
+      promptVersione: v1
+      inputSha256: b10abc1bb25b085c040d9d239564027cb7847b8dbf7ec67dc0f9e2719e45d57a
+  test:
+    divisivita:
+      superato: true
+      dettagli:
+        minoranza: 0.423
+    discriminazione:
+      superato: true
+      dettagli:
+        orientamenti:
+          fratelli-d-italia: 1
+          lega: 1
+          movimento-5-stelle: -1
+          partito-democratico: -1
+          alleanza-verdi-e-sinistra: -1
+          forza-italia: 1
+    tema:
+      superato: true
+      dettagli:
+        verifica: economia
+    sensibilita:
+      superato: true
+      dettagli: {}
+    polarita:
+      superato: true
+      dettagli: {}
+- id: e-camera-vs19-288-019
+  versione: 1
+  testo: Le associazioni senza scopo di lucro devono poter usare qualunque locale per le loro attività.
+  tema: welfare
+  livelloGoverno: nazionale
+  stato: attivo
+  contesto:
+    fatto: 'Se n''è votato alla Camera il 7 maggio 2024: la legge è stata approvata.'
+    favorevoli: Chi è a favore dice che le associazioni fanno un lavoro utile e vanno aiutate.
+    contrari: Chi è contro dice che così si aggirano regole fatte per tutelare i quartieri.
+  origine:
+    votazione:
+      ramo: camera
+      legislatura: 19
+      idEsterno: vs19_288_019
+    atto: C.1018
+    data: '2024-05-07'
+    direzione: 1
+    generazione:
+      modello: claude-opus-5-5
+      promptVersione: v1
+      inputSha256: bc66daa00e3aa28e2ff1e1b5ca5500277319daa5519f5e2eb9444835d0c7ae9f
+  test:
+    divisivita:
+      superato: true
+      dettagli:
+        minoranza: 0.453
+    discriminazione:
+      superato: true
+      dettagli:
+        orientamenti:
+          movimento-5-stelle: -1
+          partito-democratico: -1
+          alleanza-verdi-e-sinistra: -1
+          forza-italia: 1
+          fratelli-d-italia: 1
+          italia-viva: -1
+          lega: 1
+    tema:
+      superato: true
+      dettagli:
+        verifica: welfare
+    sensibilita:
+      superato: true
+      dettagli: {}
+    polarita:
+      superato: true
+      dettagli: {}
+- id: e-camera-vs19-332-001
+  versione: 1
+  testo: Gli esami e le visite negli ospedali pubblici devono potersi fare anche la sera e nel fine settimana.
+  tema: welfare
+  livelloGoverno: nazionale
+  stato: attivo
+  contesto:
+    fatto: 'Se n''è votato alla Camera il 24 luglio 2024: la legge è stata approvata.'
+    favorevoli: Chi è a favore dice che così si accorciano le lunghe attese per curarsi.
+    contrari: Chi è contro dice che senza più medici e infermieri le attese restano uguali.
+  origine:
+    votazione:
+      ramo: camera
+      legislatura: 19
+      idEsterno: vs19_332_001
+    atto: C.1975
+    data: '2024-07-24'
+    direzione: 1
+    generazione:
+      modello: claude-opus-5-5
+      promptVersione: v1
+      inputSha256: 035fefd994f46f0e9b1c4d57c1c02ca90dbf5f587d5c90f431494002932aa542
+  test:
+    divisivita:
+      superato: true
+      dettagli:
+        minoranza: 0.416
+    discriminazione:
+      superato: true
+      dettagli:
+        orientamenti:
+          italia-viva: -1
+          partito-democratico: -1
+          movimento-5-stelle: -1
+          lega: 1
+          fratelli-d-italia: 1
+          forza-italia: 1
+          alleanza-verdi-e-sinistra: -1
+    tema:
+      superato: true
+      dettagli:
+        verifica: welfare
+    sensibilita:
+      superato: true
+      dettagli: {}
+    polarita:
+      superato: true
+      dettagli: {}
+- id: e-camera-vs19-554-073
+  versione: 1
+  testo: All'esame di maturità chi si rifiuta di fare l'orale deve essere bocciato.
+  tema: welfare
+  livelloGoverno: nazionale
+  stato: attivo
+  contesto:
+    fatto: 'Se n''è votato alla Camera il 28 ottobre 2025: la legge è stata approvata.'
+    favorevoli: Chi è a favore dice che l'esame è una prova completa e va fatto per intero.
+    contrari: Chi è contro dice che bocciare per questo è una punizione troppo pesante.
+  origine:
+    votazione:
+      ramo: camera
+      legislatura: 19
+      idEsterno: vs19_554_073
+    atto: C.2662
+    data: '2025-10-28'
+    direzione: 1
+    generazione:
+      modello: claude-opus-5-5
+      promptVersione: v1
+      inputSha256: 33483b889557b49437bf16069a49a7bc5e5763cee6ad941c5c0399b817b2a141
+  test:
+    divisivita:
+      superato: true
+      dettagli:
+        minoranza: 0.397
+    discriminazione:
+      superato: true
+      dettagli:
+        orientamenti:
+          lega: 1
+          italia-viva: -1
+          fratelli-d-italia: 1
+          forza-italia: 1
+          alleanza-verdi-e-sinistra: -1
+          partito-democratico: -1
+          movimento-5-stelle: -1
+    tema:
+      superato: true
+      dettagli:
+        verifica: welfare
+    sensibilita:
+      superato: true
+      dettagli: {}
+    polarita:
+      superato: true
+      dettagli: {}
+- id: e-camera-vs19-354-001
+  versione: 1
+  testo: Lo studente con cinque in condotta deve essere bocciato.
+  tema: welfare
+  livelloGoverno: nazionale
+  stato: attivo
+  contesto:
+    fatto: 'Se n''è votato alla Camera il 25 settembre 2024: la legge è stata approvata.'
+    favorevoli: Chi è a favore dice che così si insegna il rispetto per insegnanti e compagni.
+    contrari: Chi è contro dice che bocciare non aiuta i ragazzi difficili a cambiare.
+  origine:
+    votazione:
+      ramo: camera
+      legislatura: 19
+      idEsterno: vs19_354_001
+    atto: C.1830
+    data: '2024-09-25'
+    direzione: 1
+    generazione:
+      modello: claude-opus-5-5
+      promptVersione: v1
+      inputSha256: 0f22ec8bc275981b170befaf955555ffe10076aa2310f6464d20949f8f0bfdac
+  test:
+    divisivita:
+      superato: true
+      dettagli:
+        minoranza: 0.386
+    discriminazione:
+      superato: true
+      dettagli:
+        orientamenti:
+          italia-viva: -1
+          partito-democratico: -1
+          movimento-5-stelle: -1
+          lega: 1
+          fratelli-d-italia: 1
+          forza-italia: 1
+          alleanza-verdi-e-sinistra: -1
+    tema:
+      superato: true
+      dettagli:
+        verifica: welfare
+    sensibilita:
+      superato: true
+      dettagli: {}
+    polarita:
+      superato: true
+      dettagli: {}
+- id: e-senato-19-42-122
+  versione: 1
+  testo: Le navi che salvano i migranti in mare devono andare subito nel porto indicato dal governo.
+  tema: diritti
+  livelloGoverno: nazionale
+  stato: attivo
+  contesto:
+    fatto: 'Se n''è votato al Senato il 23 febbraio 2023: la legge è stata approvata.'
+    favorevoli: Chi è a favore dice che così lo Stato controlla meglio gli arrivi e i soccorsi in mare.
+    contrari: Chi è contro dice che così si salvano meno persone e le navi passano più tempo in viaggio.
+  origine:
+    votazione:
+      ramo: senato
+      legislatura: 19
+      idEsterno: 19-42-122
+    atto: S.553
+    data: '2023-02-23'
+    direzione: 1
+    generazione:
+      modello: claude-opus-5-5
+      promptVersione: v1
+      inputSha256: f8caaa4733ba2f153f5d6e27df21d0f0f9cd4b67376158fc5123b4cc4f706076
+  test:
+    divisivita:
+      superato: true
+      dettagli:
+        minoranza: 0.421
+    discriminazione:
+      superato: true
+      dettagli:
+        orientamenti:
+          noi-moderati: 1
+          partito-democratico: -1
+          fratelli-d-italia: 1
+          lega: 1
+          movimento-5-stelle: -1
+          forza-italia: 1
+    tema:
+      superato: true
+      dettagli:
+        verifica: diritti
+    sensibilita:
+      superato: true
+      dettagli: {}
+    polarita:
+      superato: true
+      dettagli: {}
+- id: e-senato-19-232-24
+  versione: 1
+  testo: Un italiano che ricorre all'utero in affitto all'estero deve essere punito come se l'avesse fatto in Italia.
+  tema: diritti
+  livelloGoverno: nazionale
+  stato: attivo
+  contesto:
+    fatto: 'Se n''è votato al Senato il 16 ottobre 2024: la legge è stata approvata.'
+    favorevoli: Chi è a favore dice che il corpo delle donne e i bambini non si possono comprare.
+    contrari: Chi è contro dice che così si puniscono famiglie che fanno una cosa legale altrove.
+  origine:
+    votazione:
+      ramo: senato
+      legislatura: 19
+      idEsterno: 19-232-24
+    atto: S.163
+    data: '2024-10-16'
+    direzione: 1
+    generazione:
+      modello: claude-opus-5-5
+      promptVersione: v1
+      inputSha256: e43dab83817aa733dab399745a7e8998d9979e333471ba9588c4fa47ee372613
+  test:
+    divisivita:
+      superato: true
+      dettagli:
+        minoranza: 0.408
+    discriminazione:
+      superato: true
+      dettagli:
+        orientamenti:
+          italia-viva: -1
+          lega: 1
+          movimento-5-stelle: -1
+          noi-moderati: 1
+          partito-democratico: -1
+          forza-italia: 1
+          fratelli-d-italia: 1
+    tema:
+      superato: true
+      dettagli:
+        verifica: diritti
+    sensibilita:
+      superato: true
+      dettagli: {}
+    polarita:
+      superato: true
+      dettagli: {}
+- id: e-senato-19-159-1
+  versione: 1
+  testo: L'Italia deve portare in centri in Albania una parte dei migranti soccorsi in mare.
+  tema: diritti
+  livelloGoverno: nazionale
+  stato: attivo
+  contesto:
+    fatto: 'Se n''è votato al Senato il 15 febbraio 2024: la legge è stata approvata.'
+    favorevoli: Chi è a favore dice che così si scoraggiano le partenze verso l'Italia.
+    contrari: Chi è contro dice che così si spendono molti soldi e si limitano i diritti.
+  origine:
+    votazione:
+      ramo: senato
+      legislatura: 19
+      idEsterno: 19-159-1
+    atto: S.995
+    data: '2024-02-15'
+    direzione: 1
+    generazione:
+      modello: claude-opus-5-5
+      promptVersione: v1
+      inputSha256: 87aaafe8578f7afb6f6a0ab149cc0729c4326ca4580399b552942f427be8a3be
+  test:
+    divisivita:
+      superato: true
+      dettagli:
+        minoranza: 0.396
+    discriminazione:
+      superato: true
+      dettagli:
+        orientamenti:
+          fratelli-d-italia: 1
+          partito-democratico: -1
+          noi-moderati: 1
+          movimento-5-stelle: -1
+          lega: 1
+          italia-viva: -1
+          forza-italia: 1
+    tema:
+      superato: true
+      dettagli:
+        verifica: diritti
+    sensibilita:
+      superato: true
+      dettagli: {}
+    polarita:
+      superato: true
+      dettagli: {}
+- id: e-camera-vs19-204-047
+  versione: 1
+  testo: Servono controlli più severi sull'età dei migranti che dicono di essere minorenni.
+  tema: diritti
+  livelloGoverno: nazionale
+  stato: attivo
+  contesto:
+    fatto: 'Se n''è votato alla Camera il 28 novembre 2023: la legge è stata approvata.'
+    favorevoli: Chi è a favore dice che alcuni adulti si dichiarano minorenni per avere più tutele.
+    contrari: Chi è contro dice che così si rischia di trattare da adulti dei veri ragazzi.
+  origine:
+    votazione:
+      ramo: camera
+      legislatura: 19
+      idEsterno: vs19_204_047
+    atto: C.1458
+    data: '2023-11-28'
+    direzione: 1
+    generazione:
+      modello: claude-opus-5-5
+      promptVersione: v1
+      inputSha256: 85aef0a7a48192afe82de73652539d5d57bf5e4b6adf2eca4382f5aefd779ce8
+  test:
+    divisivita:
+      superato: true
+      dettagli:
+        minoranza: 0.396
+    discriminazione:
+      superato: true
+      dettagli:
+        orientamenti:
+          fratelli-d-italia: 1
+          lega: 1
+          italia-viva: -1
+          forza-italia: 1
+          movimento-5-stelle: -1
+          partito-democratico: -1
+          alleanza-verdi-e-sinistra: -1
+    tema:
+      superato: true
+      dettagli:
+        verifica: diritti
+    sensibilita:
+      superato: true
+      dettagli: {}
+    polarita:
+      superato: true
+      dettagli: {}
+- id: e-senato-19-342-1
+  versione: 1
+  testo: I permessi per costruire nelle zone protette per la bellezza del paesaggio vanno resi più semplici.
+  tema: ambiente
+  livelloGoverno: nazionale
+  stato: attivo
+  contesto:
+    fatto: 'Se n''è votato al Senato il 17 settembre 2025: la legge è stata approvata.'
+    favorevoli: Chi è a favore dice che oggi le attese sono troppo lunghe per lavori anche piccoli.
+    contrari: Chi è contro dice che regole più facili mettono a rischio il paesaggio italiano.
+  origine:
+    votazione:
+      ramo: senato
+      legislatura: 19
+      idEsterno: 19-342-1
+    atto: S.1372
+    data: '2025-09-17'
+    direzione: 1
+    generazione:
+      modello: claude-opus-5-5
+      promptVersione: v1
+      inputSha256: 902bbc483bb14244cef2ad2f2228e84344a8f5015ca6667555b864f23ebf861c
+  test:
+    divisivita:
+      superato: true
+      dettagli:
+        minoranza: 0.399
+    discriminazione:
+      superato: true
+      dettagli:
+        orientamenti:
+          partito-democratico: -1
+          noi-moderati: 1
+          movimento-5-stelle: -1
+          lega: 1
+          italia-viva: -1
+          fratelli-d-italia: 1
+          forza-italia: 1
+    tema:
+      superato: true
+      dettagli:
+        verifica: ambiente
+    sensibilita:
+      superato: true
+      dettagli: {}
+    polarita:
+      superato: true
+      dettagli: {}
+- id: e-camera-vs19-055-016
+  versione: 1
+  testo: I benzinai devono esporre il prezzo medio della zona accanto al proprio prezzo.
+  tema: ambiente
+  livelloGoverno: nazionale
+  stato: attivo
+  contesto:
+    fatto: 'Se n''è votato alla Camera il 21 febbraio 2023: la legge è stata approvata.'
+    favorevoli: Chi è a favore dice che così chi fa benzina può confrontare i prezzi più facilmente.
+    contrari: Chi è contro dice che è un obbligo in più per i benzinai che non fa scendere i prezzi.
+  origine:
+    votazione:
+      ramo: camera
+      legislatura: 19
+      idEsterno: vs19_055_016
+    atto: C.771
+    data: '2023-02-21'
+    direzione: 1
+    generazione:
+      modello: claude-opus-5-5
+      promptVersione: v1
+      inputSha256: ed34b2c41977b90d2eb069f7ddd6be0f33436badfa0dcef8f7d9e4d7bf69edc4
+  test:
+    divisivita:
+      superato: true
+      dettagli:
+        minoranza: 0.399
+    discriminazione:
+      superato: true
+      dettagli:
+        orientamenti:
+          forza-italia: 1
+          lega: 1
+          movimento-5-stelle: -1
+          partito-democratico: -1
+          fratelli-d-italia: 1
+          alleanza-verdi-e-sinistra: -1
+    tema:
+      superato: true
+      dettagli:
+        verifica: ambiente
+    sensibilita:
+      superato: true
+      dettagli: {}
+    polarita:
+      superato: true
+      dettagli: {}
+- id: e-camera-vs19-271-001
+  versione: 1
+  testo: Chi usa il telefono mentre guida deve avere multe più alte e la sospensione della patente.
+  tema: ambiente
+  livelloGoverno: nazionale
+  stato: attivo
+  contesto:
+    fatto: 'Se n''è votato alla Camera il 27 marzo 2024: la legge è stata approvata.'
+    favorevoli: Chi è a favore dice che il telefono alla guida causa molti incidenti gravi.
+    contrari: Chi è contro dice che servono più controlli, non solo punizioni più dure.
+  origine:
+    votazione:
+      ramo: camera
+      legislatura: 19
+      idEsterno: vs19_271_001
+    atto: C.1435
+    data: '2024-03-27'
+    direzione: 1
+    generazione:
+      modello: claude-opus-5-5
+      promptVersione: v1
+      inputSha256: 44b0915795ca574adcf77d8ba9564c18a7639f845bf154d9cc0f917ecc048608
+  test:
+    divisivita:
+      superato: true
+      dettagli:
+        minoranza: 0.396
+    discriminazione:
+      superato: true
+      dettagli:
+        orientamenti:
+          fratelli-d-italia: 1
+          alleanza-verdi-e-sinistra: -1
+          forza-italia: 1
+          italia-viva: -1
+          lega: 1
+          movimento-5-stelle: -1
+          partito-democratico: -1
+    tema:
+      superato: true
+      dettagli:
+        verifica: ambiente
+    sensibilita:
+      superato: true
+      dettagli: {}
+    polarita:
+      superato: true
+      dettagli: {}
+- id: e-camera-vs19-468-001
+  versione: 1
+  testo: Lo Stato deve usare soldi pubblici per aiutare le famiglie a pagare le bollette di luce e gas.
+  tema: ambiente
+  livelloGoverno: nazionale
+  stato: attivo
+  contesto:
+    fatto: 'Se n''è votato alla Camera il 16 aprile 2025: la legge è stata approvata.'
+    favorevoli: Chi è a favore dice che le bollette alte pesano troppo sui bilanci delle famiglie.
+    contrari: Chi è contro dice che questi aiuti costano tanto e non risolvono il problema.
+  origine:
+    votazione:
+      ramo: camera
+      legislatura: 19
+      idEsterno: vs19_468_001
+    atto: C.2281
+    data: '2025-04-16'
+    direzione: 1
+    generazione:
+      modello: claude-opus-5-5
+      promptVersione: v1
+      inputSha256: baa8a848f54caec4c32a5a3e69e0b1d5783f728051dd74e90223d1730d61beee
+  test:
+    divisivita:
+      superato: true
+      dettagli:
+        minoranza: 0.395
+    discriminazione:
+      superato: true
+      dettagli:
+        orientamenti:
+          fratelli-d-italia: 1
+          partito-democratico: -1
+          movimento-5-stelle: -1
+          lega: 1
+          italia-viva: -1
+          forza-italia: 1
+          alleanza-verdi-e-sinistra: -1
+    tema:
+      superato: true
+      dettagli:
+        verifica: ambiente
+    sensibilita:
+      superato: true
+      dettagli: {}
+    polarita:
+      superato: true
+      dettagli: {}
+- id: e-senato-19-342-2
+  versione: 1
+  testo: L'uso dell'intelligenza artificiale deve seguire regole fissate da una legge italiana.
+  tema: istituzioni
+  livelloGoverno: nazionale
+  stato: attivo
+  contesto:
+    fatto: 'Se n''è votato al Senato il 17 settembre 2025: la legge è stata approvata.'
+    favorevoli: Chi è a favore dice che servono regole per proteggere le persone dai rischi della tecnologia.
+    contrari: Chi è contro dice che le regole europee bastano e che altre regole frenano le imprese.
+  origine:
+    votazione:
+      ramo: senato
+      legislatura: 19
+      idEsterno: 19-342-2
+    atto: S.1146-B
+    data: '2025-09-17'
+    direzione: 1
+    generazione:
+      modello: claude-opus-5-5
+      promptVersione: v1
+      inputSha256: 10dd4c4bda1b4dd1fca944060868644dc0d4b5631dd88cb3bcb1f6e164075e35
+  test:
+    divisivita:
+      superato: true
+      dettagli:
+        minoranza: 0.417
+    discriminazione:
+      superato: true
+      dettagli:
+        orientamenti:
+          partito-democratico: -1
+          forza-italia: 1
+          fratelli-d-italia: 1
+          italia-viva: -1
+          lega: 1
+          movimento-5-stelle: -1
+          noi-moderati: 1
+    tema:
+      superato: true
+      dettagli:
+        verifica: istituzioni
+    sensibilita:
+      superato: true
+      dettagli: {}
+    polarita:
+      superato: true
+      dettagli: {}
+- id: e-senato-19-199-1
+  versione: 1
+  testo: Il capo del governo deve essere eletto direttamente dai cittadini.
+  tema: istituzioni
+  livelloGoverno: nazionale
+  stato: attivo
+  contesto:
+    fatto: 'Se n''è votato al Senato il 18 giugno 2024: la legge è stata approvata.'
+    favorevoli: Chi è a favore dice che così i governi durano di più e i cittadini decidono.
+    contrari: Chi è contro dice che così si toglie potere al Parlamento e al Presidente della Repubblica.
+  origine:
+    votazione:
+      ramo: senato
+      legislatura: 19
+      idEsterno: 19-199-1
+    atto: S.830
+    data: '2024-06-18'
+    direzione: 1
+    generazione:
+      modello: claude-opus-5-5
+      promptVersione: v1
+      inputSha256: 0dd3e114813b4e5c397f66ee188502ca824c963cb9b2a4ec3a8e521301f00e88
+  test:
+    divisivita:
+      superato: true
+      dettagli:
+        minoranza: 0.414
+    discriminazione:
+      superato: true
+      dettagli:
+        orientamenti:
+          partito-democratico: -1
+          forza-italia: 1
+          fratelli-d-italia: 1
+          movimento-5-stelle: -1
+          noi-moderati: 1
+          italia-viva: -1
+          lega: 1
+    tema:
+      superato: true
+      dettagli:
+        verifica: istituzioni
+    sensibilita:
+      superato: true
+      dettagli: {}
+    polarita:
+      superato: true
+      dettagli: {}
+- id: e-senato-19-433-11
+  versione: 1
+  testo: Nella pubblica amministrazione, carriere e premi devono dipendere di più dai risultati.
+  tema: istituzioni
+  livelloGoverno: nazionale
+  stato: attivo
+  contesto:
+    fatto: 'Se n''è votato al Senato il 30 giugno 2026: la legge è stata approvata.'
+    favorevoli: Chi è a favore dice che premiare chi lavora bene migliora gli uffici pubblici.
+    contrari: Chi è contro dice che misurare i risultati negli uffici pubblici è difficile e ingiusto.
+  origine:
+    votazione:
+      ramo: senato
+      legislatura: 19
+      idEsterno: 19-433-11
+    atto: S.1778
+    data: '2026-06-30'
+    direzione: 1
+    generazione:
+      modello: claude-opus-5-5
+      promptVersione: v1
+      inputSha256: 685c8479683768a29bbfa0dae8e9177d9413c8b346d535c984cd09caf741f5c4
+  test:
+    divisivita:
+      superato: true
+      dettagli:
+        minoranza: 0.407
+    discriminazione:
+      superato: true
+      dettagli:
+        orientamenti:
+          partito-democratico: -1
+          forza-italia: 1
+          noi-moderati: 1
+          movimento-5-stelle: -1
+          lega: 1
+          italia-viva: -1
+          fratelli-d-italia: 1
+    tema:
+      superato: true
+      dettagli:
+        verifica: istituzioni
+    sensibilita:
+      superato: true
+      dettagli: {}
+    polarita:
+      superato: true
+      dettagli: {}
+- id: e-camera-vs19-229-029
+  versione: 1
+  testo: Chi sporca o danneggia monumenti deve pagare multe più alte.
+  tema: istituzioni
+  livelloGoverno: nazionale
+  stato: attivo
+  contesto:
+    fatto: 'Se n''è votato alla Camera il 18 gennaio 2024: la legge è stata approvata.'
+    favorevoli: Chi è a favore dice che i monumenti sono di tutti e vanno protetti.
+    contrari: Chi è contro dice che le pene ci sono già e queste servono a zittire le proteste.
+  origine:
+    votazione:
+      ramo: camera
+      legislatura: 19
+      idEsterno: vs19_229_029
+    atto: C.1297
+    data: '2024-01-18'
+    direzione: 1
+    generazione:
+      modello: claude-opus-5-5
+      promptVersione: v1
+      inputSha256: f7ad83b0301cc0f59e019223318006997112cfdd3ab6aaaeda94f8a256f28422
+  test:
+    divisivita:
+      superato: true
+      dettagli:
+        minoranza: 0.4
+    discriminazione:
+      superato: true
+      dettagli:
+        orientamenti:
+          lega: 1
+          movimento-5-stelle: -1
+          partito-democratico: -1
+          alleanza-verdi-e-sinistra: -1
+          forza-italia: 1
+          fratelli-d-italia: 1
+          italia-viva: 0
+    tema:
+      superato: true
+      dettagli:
+        verifica: istituzioni
+    sensibilita:
+      superato: true
+      dettagli: {}
+    polarita:
+      superato: true
+      dettagli: {}
+- id: e-camera-vs19-223-028
+  versione: 1
+  testo: L'Italia deve investire in progetti di sviluppo nei Paesi africani.
+  tema: esteri
+  livelloGoverno: nazionale
+  stato: attivo
+  contesto:
+    fatto: 'Se n''è votato alla Camera il 10 gennaio 2024: la legge è stata approvata.'
+    favorevoli: Chi è a favore dice che aiutare l'Africa a crescere riduce le partenze dei migranti.
+    contrari: Chi è contro dice che questi soldi servono prima ai problemi di casa nostra.
+  origine:
+    votazione:
+      ramo: camera
+      legislatura: 19
+      idEsterno: vs19_223_028
+    atto: C.1624
+    data: '2024-01-10'
+    direzione: 1
+    generazione:
+      modello: claude-opus-5-5
+      promptVersione: v1
+      inputSha256: 997a0901a537a49665f66ef3991f3fefcc6ef1caa3d1c4786432618b4a55c6da
+  test:
+    divisivita:
+      superato: true
+      dettagli:
+        minoranza: 0.413
+    discriminazione:
+      superato: true
+      dettagli:
+        orientamenti:
+          alleanza-verdi-e-sinistra: -1
+          movimento-5-stelle: -1
+          lega: 1
+          forza-italia: 1
+          italia-viva: -1
+          fratelli-d-italia: 1
+          partito-democratico: -1
+    tema:
+      superato: true
+      dettagli:
+        verifica: esteri
+    sensibilita:
+      superato: true
+      dettagli: {}
+    polarita:
+      superato: true
+      dettagli: {}
+- id: e-camera-vs19-618-011
+  versione: 1
+  testo: Le opere d'arte prestate da altri Paesi non devono poter essere sequestrate mentre sono in mostra in Italia.
+  tema: esteri
+  livelloGoverno: nazionale
+  stato: attivo
+  contesto:
+    fatto: 'Se n''è votato alla Camera il 18 febbraio 2026: la legge è stata approvata.'
+    favorevoli: Chi è a favore dice che così i musei stranieri prestano più volentieri le loro opere.
+    contrari: Chi è contro dice che così chi ha diritto a un risarcimento non può farsi pagare.
+  origine:
+    votazione:
+      ramo: camera
+      legislatura: 19
+      idEsterno: vs19_618_011
+    atto: C.182
+    data: '2026-02-18'
+    direzione: 1
+    generazione:
+      modello: claude-opus-5-5
+      promptVersione: v1
+      inputSha256: 1b1390dbacba564325bec36e3e18a0c24a6fe39e3c5b3ddbf15a9aae6c7ffcce
+  test:
+    divisivita:
+      superato: true
+      dettagli:
+        minoranza: 0.381
+    discriminazione:
+      superato: true
+      dettagli:
+        orientamenti:
+          fratelli-d-italia: 1
+          lega: 1
+          movimento-5-stelle: -1
+          partito-democratico: -1
+          forza-italia: 1
+          alleanza-verdi-e-sinistra: -1
+    tema:
+      superato: true
+      dettagli:
+        verifica: esteri
+    sensibilita:
+      superato: true
+      dettagli: {}
+    polarita:
+      superato: true
+      dettagli: {}
+- id: e-senato-19-161-29
+  versione: 1
+  testo: Le regole per vendere armi italiane all'estero devono essere più semplici.
+  tema: esteri
+  livelloGoverno: nazionale
+  stato: attivo
+  contesto:
+    fatto: 'Se n''è votato al Senato il 21 febbraio 2024: la legge è stata approvata.'
+    favorevoli: Chi è a favore dice che così le aziende italiane della difesa restano competitive.
+    contrari: Chi è contro dice che così si sa meno a chi vanno le armi fatte in Italia.
+  origine:
+    votazione:
+      ramo: senato
+      legislatura: 19
+      idEsterno: 19-161-29
+    atto: S.855
+    data: '2024-02-21'
+    direzione: 1
+    generazione:
+      modello: claude-opus-5-5
+      promptVersione: v1
+      inputSha256: 465099807a722bc40749fecff02015ef16ca6a3c92bb24fdcaa297e1a859cdf2
+  test:
+    divisivita:
+      superato: true
+      dettagli:
+        minoranza: 0.336
+    discriminazione:
+      superato: true
+      dettagli:
+        orientamenti:
+          fratelli-d-italia: 1
+          italia-viva: 1
+          partito-democratico: -1
+          noi-moderati: 1
+          movimento-5-stelle: -1
+          lega: 1
+          forza-italia: 1
+    tema:
+      superato: true
+      dettagli:
+        verifica: esteri
+    sensibilita:
+      superato: true
+      dettagli: {}
+    polarita:
+      superato: true
+      dettagli: {}
+- id: e-camera-vs19-560-008
+  versione: 1
+  testo: Le persone condannate in Italia devono poter scontare la pena nel loro Paese, se è la Libia.
+  tema: esteri
+  livelloGoverno: nazionale
+  stato: attivo
+  contesto:
+    fatto: 'Se n''è votato alla Camera il 5 novembre 2025: la legge è stata approvata.'
+    favorevoli: Chi è a favore dice che così le carceri italiane sono meno piene.
+    contrari: Chi è contro dice che così non si sa se la pena viene scontata davvero.
+  origine:
+    votazione:
+      ramo: camera
+      legislatura: 19
+      idEsterno: vs19_560_008
+    atto: C.2590
+    data: '2025-11-05'
+    direzione: 1
+    generazione:
+      modello: claude-opus-5-5
+      promptVersione: v1
+      inputSha256: 72d00a6dd515b2abdb6b7f4e6150d68f0c2e12cc9f3892888e714cdce30ecb5b
+  test:
+    divisivita:
+      superato: true
+      dettagli:
+        minoranza: 0.309
+    discriminazione:
+      superato: true
+      dettagli:
+        orientamenti:
+          partito-democratico: -1
+          alleanza-verdi-e-sinistra: -1
+          forza-italia: 1
+          fratelli-d-italia: 1
+          lega: 1
+          movimento-5-stelle: -1
+    tema:
+      superato: true
+      dettagli:
+        verifica: esteri
+    sensibilita:
+      superato: true
+      dettagli: {}
+    polarita:
+      superato: true
+      dettagli: {}

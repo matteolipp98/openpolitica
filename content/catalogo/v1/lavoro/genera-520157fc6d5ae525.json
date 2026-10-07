@@ -1,0 +1,246 @@
+{
+ "modello": "claude-opus-5-5",
+ "prompt_sha256": "c8a866add4af1877fd0cf58697f87a2d9bc7845746f3c0d5e81196785b37c7c8",
+ "risposta": [
+  {
+   "id": "vs19_168_053",
+   "scarta": true,
+   "motivo_scarto": "decreto con molte misure diverse, senza una principale"
+  },
+  {
+   "id": "vs19_172_018",
+   "scarta": true,
+   "motivo_scarto": "decreto con molte misure diverse, senza una principale"
+  },
+  {
+   "id": "vs19_183_068",
+   "scarta": false,
+   "tema": "ambiente",
+   "enunciato": "Il divieto di circolare per le auto diesel più vecchie deve essere rinviato.",
+   "opposto": "Il divieto di circolare per le auto diesel più vecchie non deve essere rinviato.",
+   "varianti": [
+    "Le auto diesel più vecchie devono poter circolare ancora per un po'.",
+    "Bisogna spostare più avanti lo stop alle vecchie auto diesel."
+   ],
+   "favorevoli": "Chi è a favore dice che molte famiglie non possono cambiare auto subito.",
+   "contrari": "Chi è contro dice che le auto più vecchie inquinano l'aria che respiriamo."
+  },
+  {
+   "id": "vs19_188_002",
+   "scarta": true,
+   "motivo_scarto": "decreto con molte misure diverse, senza una principale"
+  },
+  {
+   "id": "19-122-112",
+   "scarta": false,
+   "tema": "istituzioni",
+   "enunciato": "Il Parlamento deve fare un'indagine su come è stata gestita la pandemia di Covid.",
+   "opposto": "Il Parlamento non deve fare un'indagine su come è stata gestita la pandemia di Covid.",
+   "varianti": [
+    "Serve una commissione del Parlamento che controlli le scelte fatte durante il Covid.",
+    "Deputati e senatori devono indagare sulla gestione dell'emergenza Covid."
+   ],
+   "favorevoli": "Chi è a favore dice che bisogna capire gli errori fatti per non ripeterli.",
+   "contrari": "Chi è contro dice che l'indagine serve solo ad attaccare chi governava allora."
+  },
+  {
+   "id": "vs19_191_019",
+   "scarta": false,
+   "tema": "istituzioni",
+   "enunciato": "Per i reati commessi dai minorenni servono regole più severe.",
+   "opposto": "Per i reati commessi dai minorenni non servono regole più severe.",
+   "varianti": [
+    "I ragazzi sotto i diciotto anni che commettono reati devono essere puniti di più.",
+    "Bisogna inasprire le regole per i minorenni che violano la legge."
+   ],
+   "favorevoli": "Chi è a favore dice che oggi molti ragazzi commettono reati senza conseguenze.",
+   "contrari": "Chi è contro dice che per i ragazzi servono scuola e aiuto, non solo punizioni."
+  },
+  {
+   "id": "vs19_192_032",
+   "scarta": false,
+   "tema": "economia",
+   "enunciato": "Lo Stato deve dare aiuti speciali ai giovani che aprono un'azienda agricola.",
+   "opposto": "Lo Stato non deve dare aiuti speciali ai giovani che aprono un'azienda agricola.",
+   "varianti": [
+    "I giovani che vogliono fare gli agricoltori devono ricevere sostegni dallo Stato.",
+    "Chi è giovane e avvia un'impresa agricola deve avere agevolazioni pubbliche."
+   ],
+   "favorevoli": "Chi è a favore dice che servono giovani nei campi per non far morire l'agricoltura.",
+   "contrari": "Chi è contro dice che gli aiuti vanno dati a chi ne ha bisogno, non in base all'età."
+  },
+  {
+   "id": "vs19_196_066",
+   "scarta": true,
+   "motivo_scarto": "decreto con molte misure diverse, senza una principale"
+  },
+  {
+   "id": "vs19_197_061",
+   "scarta": false,
+   "tema": "ambiente",
+   "enunciato": "In Italia deve essere vietato produrre e vendere carne coltivata in laboratorio.",
+   "opposto": "In Italia deve essere permesso produrre e vendere carne coltivata in laboratorio.",
+   "varianti": [
+    "La carne fatta in laboratorio non deve poter essere prodotta né venduta in Italia.",
+    "Bisogna proibire in Italia la carne ottenuta da cellule in laboratorio."
+   ],
+   "favorevoli": "Chi è a favore dice che bisogna proteggere il cibo tradizionale e gli allevatori.",
+   "contrari": "Chi è contro dice che vietarla blocca la ricerca e una possibile scelta in più."
+  },
+  {
+   "id": "vs19_201_019",
+   "scarta": true,
+   "motivo_scarto": "proroga di termini"
+  },
+  {
+   "id": "vs19_204_047",
+   "scarta": false,
+   "tema": "diritti",
+   "enunciato": "Servono controlli più severi sull'età dei migranti che dicono di essere minorenni.",
+   "opposto": "Non servono controlli più severi sull'età dei migranti che dicono di essere minorenni.",
+   "varianti": [
+    "Bisogna verificare meglio se un migrante che si dichiara minorenne lo è davvero.",
+    "L'età dei migranti che dicono di avere meno di diciotto anni va controllata di più."
+   ],
+   "favorevoli": "Chi è a favore dice che alcuni adulti si dichiarano minorenni per avere più tutele.",
+   "contrari": "Chi è contro dice che così si rischia di trattare da adulti dei veri ragazzi."
+  },
+  {
+   "id": "vs19_210_001",
+   "scarta": false,
+   "tema": "economia",
+   "enunciato": "La paga minima deve essere fissata dai contratti di lavoro, non da una cifra uguale per tutti.",
+   "opposto": "La paga minima deve essere fissata per legge, con una cifra uguale per tutti.",
+   "varianti": [
+    "Non serve una paga minima per legge: devono decidere i contratti di ogni settore.",
+    "Gli stipendi più bassi devono dipendere dai contratti, non da una soglia unica."
+   ],
+   "favorevoli": "Chi è a favore dice che ogni settore conosce meglio i suoi lavoratori.",
+   "contrari": "Chi è contro dice che senza una soglia unica restano stipendi troppo bassi."
+  },
+  {
+   "id": "vs19_214_001",
+   "scarta": true,
+   "motivo_scarto": "decreto con molte misure diverse, senza una principale"
+  },
+  {
+   "id": "vs19_216_152",
+   "scarta": true,
+   "motivo_scarto": "legge annuale con molte misure diverse"
+  },
+  {
+   "id": "19-139-149",
+   "scarta": true,
+   "motivo_scarto": "molte misure diverse, senza una principale"
+  },
+  {
+   "id": "vs19_220_165",
+   "scarta": true,
+   "motivo_scarto": "bilancio o rendiconto dello Stato"
+  },
+  {
+   "id": "vs19_223_028",
+   "scarta": false,
+   "tema": "esteri",
+   "enunciato": "L'Italia deve investire in progetti di sviluppo nei Paesi africani.",
+   "opposto": "L'Italia non deve investire in progetti di sviluppo nei Paesi africani.",
+   "varianti": [
+    "Bisogna usare soldi italiani per aiutare la crescita dei Paesi dell'Africa.",
+    "L'Italia deve finanziare progetti di lavoro e crescita in Africa."
+   ],
+   "favorevoli": "Chi è a favore dice che aiutare l'Africa a crescere riduce le partenze dei migranti.",
+   "contrari": "Chi è contro dice che questi soldi servono prima ai problemi di casa nostra."
+  },
+  {
+   "id": "vs19_227_046",
+   "scarta": false,
+   "tema": "istituzioni",
+   "enunciato": "Se il processo dura troppo, il reato deve potersi estinguere anche dopo la prima condanna.",
+   "opposto": "Dopo la prima condanna, il reato non deve più potersi estinguere anche se il processo dura troppo.",
+   "varianti": [
+    "Anche dopo una prima condanna, il tempo passato deve poter chiudere il processo.",
+    "Un processo troppo lungo deve potersi fermare anche se c'è già stata una condanna."
+   ],
+   "favorevoli": "Chi è a favore dice che nessuno deve restare sotto processo per tantissimi anni.",
+   "contrari": "Chi è contro dice che così molti colpevoli restano senza una pena finale."
+  },
+  {
+   "id": "vs19_229_029",
+   "scarta": false,
+   "tema": "istituzioni",
+   "enunciato": "Chi sporca o danneggia monumenti deve pagare multe più alte.",
+   "opposto": "Chi sporca o danneggia monumenti non deve pagare multe più alte.",
+   "varianti": [
+    "Bisogna punire di più chi imbratta o rovina opere d'arte e monumenti.",
+    "Le sanzioni per chi danneggia i beni culturali devono aumentare."
+   ],
+   "favorevoli": "Chi è a favore dice che i monumenti sono di tutti e vanno protetti.",
+   "contrari": "Chi è contro dice che le pene ci sono già e queste servono a zittire le proteste."
+  },
+  {
+   "id": "19-148-1",
+   "scarta": false,
+   "tema": "istituzioni",
+   "enunciato": "Le regioni devono poter chiedere allo Stato più poteri su materie come scuola e sanità.",
+   "opposto": "Le regioni non devono poter chiedere allo Stato più poteri su materie come scuola e sanità.",
+   "varianti": [
+    "Ogni regione deve poter ottenere più competenze dallo Stato, per esempio su scuola e sanità.",
+    "È giusto che una regione possa gestire da sola più materie che oggi decide lo Stato."
+   ],
+   "favorevoli": "Chi è a favore dice che le regioni conoscono meglio i bisogni del loro territorio.",
+   "contrari": "Chi è contro dice che così le regioni più ricche staccano ancora di più le altre."
+  },
+  {
+   "id": "vs19_234_001",
+   "scarta": true,
+   "motivo_scarto": "decreto con molte misure diverse, senza una principale"
+  },
+  {
+   "id": "vs19_237_019",
+   "scarta": false,
+   "tema": "economia",
+   "enunciato": "Lo Stato deve dare un premio ufficiale ai migliori cuochi italiani.",
+   "opposto": "Lo Stato non deve dare un premio ufficiale ai migliori cuochi italiani.",
+   "varianti": [
+    "Serve un riconoscimento pubblico per i grandi maestri della cucina italiana.",
+    "Bisogna creare un premio dello Stato per chi eccelle nella cucina italiana."
+   ],
+   "favorevoli": "Chi è a favore dice che la cucina italiana è un vanto da far conoscere.",
+   "contrari": "Chi è contro dice che lo Stato non deve occuparsi di premi per i cuochi."
+  },
+  {
+   "id": "vs19_244_054",
+   "scarta": false,
+   "tema": "istituzioni",
+   "enunciato": "Il Parlamento deve fare un'indagine su come è stata gestita la pandemia di Covid.",
+   "opposto": "Il Parlamento non deve fare un'indagine su come è stata gestita la pandemia di Covid.",
+   "varianti": [
+    "Serve una commissione del Parlamento che controlli le scelte fatte durante il Covid.",
+    "Deputati e senatori devono indagare sulla gestione dell'emergenza Covid."
+   ],
+   "favorevoli": "Chi è a favore dice che bisogna capire gli errori fatti per non ripeterli.",
+   "contrari": "Chi è contro dice che l'indagine serve solo ad attaccare chi governava allora."
+  },
+  {
+   "id": "19-159-1",
+   "scarta": false,
+   "tema": "diritti",
+   "enunciato": "L'Italia deve portare in centri in Albania una parte dei migranti soccorsi in mare.",
+   "opposto": "L'Italia non deve portare in centri in Albania una parte dei migranti soccorsi in mare.",
+   "varianti": [
+    "Alcuni migranti salvati in mare devono essere ospitati in centri italiani in Albania.",
+    "Bisogna usare centri in Albania per accogliere una parte dei migranti soccorsi."
+   ],
+   "favorevoli": "Chi è a favore dice che così si scoraggiano le partenze verso l'Italia.",
+   "contrari": "Chi è contro dice che così si spendono molti soldi e si limitano i diritti."
+  },
+  {
+   "id": "vs19_247_076",
+   "scarta": true,
+   "motivo_scarto": "proroga di termini"
+  }
+ ],
+ "token_in": 0,
+ "token_out": 0,
+ "creato_il": "2026-10-07T23:40:48.252241+00:00"
+}

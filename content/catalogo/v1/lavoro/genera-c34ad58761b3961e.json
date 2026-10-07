@@ -1,0 +1,199 @@
+{
+ "modello": "claude-opus-5-5",
+ "prompt_sha256": "2ecc6f6f74f089c013ba5702645b23ce54f0abe39b31dfbeae6b3a31539fdd35",
+ "risposta": [
+  {
+   "id": "19-390-6",
+   "scarta": true,
+   "motivo_scarto": "regole tecniche per organizzare le elezioni"
+  },
+  {
+   "id": "vs19_618_011",
+   "scarta": false,
+   "tema": "esteri",
+   "enunciato": "Le opere d'arte prestate da altri Paesi non devono poter essere sequestrate mentre sono in mostra in Italia.",
+   "opposto": "Le opere d'arte prestate da altri Paesi devono poter essere sequestrate anche mentre sono in mostra in Italia.",
+   "varianti": [
+    "Un quadro prestato dall'estero per una mostra in Italia deve essere protetto dai sequestri.",
+    "Mentre sono esposte in Italia, le opere arrivate in prestito dall'estero non si possono bloccare."
+   ],
+   "favorevoli": "Chi è a favore dice che così i musei stranieri prestano più volentieri le loro opere.",
+   "contrari": "Chi è contro dice che così chi ha diritto a un risarcimento non può farsi pagare."
+  },
+  {
+   "id": "vs19_620_054",
+   "scarta": true,
+   "motivo_scarto": "proroga di termini"
+  },
+  {
+   "id": "vs19_637_026",
+   "scarta": false,
+   "tema": "ambiente",
+   "enunciato": "Lo Stato deve usare soldi pubblici per abbassare le bollette di luce e gas.",
+   "opposto": "Lo Stato non deve usare soldi pubblici per abbassare le bollette di luce e gas.",
+   "varianti": [
+    "Le bollette di luce e gas devono costare meno grazie a un aiuto dello Stato.",
+    "È giusto che i soldi pubblici servano a ridurre il costo dell'energia per chi la usa."
+   ],
+   "favorevoli": "Chi è a favore dice che famiglie e imprese non reggono bollette così alte.",
+   "contrari": "Chi è contro dice che questi aiuti costano molto e non risolvono il problema."
+  },
+  {
+   "id": "vs19_641_045",
+   "scarta": true,
+   "motivo_scarto": "decreto con molte misure diverse, senza una principale"
+  },
+  {
+   "id": "vs19_648_122",
+   "scarta": false,
+   "tema": "istituzioni",
+   "enunciato": "Servono regole più severe per la sicurezza pubblica.",
+   "opposto": "Non servono regole più severe per la sicurezza pubblica.",
+   "varianti": [
+    "Per rendere le città più sicure bisogna inasprire le regole.",
+    "Lo Stato deve avere più strumenti per contrastare i reati per strada."
+   ],
+   "favorevoli": "Chi è a favore dice che i cittadini devono sentirsi più sicuri nelle loro città.",
+   "contrari": "Chi è contro dice che regole più dure limitano le libertà senza ridurre i reati."
+  },
+  {
+   "id": "vs19_655_001",
+   "scarta": true,
+   "motivo_scarto": "contenuto non chiaro dal titolo"
+  },
+  {
+   "id": "vs19_658_057",
+   "scarta": false,
+   "tema": "ambiente",
+   "enunciato": "Lo Stato deve tagliare le tasse sui carburanti quando il prezzo del petrolio sale molto.",
+   "opposto": "Lo Stato non deve tagliare le tasse sui carburanti quando il prezzo del petrolio sale molto.",
+   "varianti": [
+    "Se il petrolio costa troppo, lo Stato deve abbassare le tasse su benzina e gasolio.",
+    "Quando il carburante diventa caro, bisogna ridurre le tasse che ci sono sopra."
+   ],
+   "favorevoli": "Chi è a favore dice che così chi usa l'auto per lavorare spende meno.",
+   "contrari": "Chi è contro dice che così lo Stato perde soldi e si usa più petrolio."
+  },
+  {
+   "id": "vs19_664_015",
+   "scarta": true,
+   "motivo_scarto": "decreto con molte misure diverse, senza una principale"
+  },
+  {
+   "id": "19-423-2",
+   "scarta": false,
+   "tema": "diritti",
+   "enunciato": "Lo Stato deve aiutare con soldi gli stranieri irregolari che scelgono di tornare nel loro Paese.",
+   "opposto": "Lo Stato non deve aiutare con soldi gli stranieri irregolari che scelgono di tornare nel loro Paese.",
+   "varianti": [
+    "Chi è in Italia senza permesso e vuole tornare a casa deve ricevere un aiuto pubblico.",
+    "È giusto pagare il rientro agli stranieri irregolari che accettano di andarsene."
+   ],
+   "favorevoli": "Chi è a favore dice che costa meno e funziona meglio delle espulsioni forzate.",
+   "contrari": "Chi è contro dice che sono soldi pubblici spesi per chi non ha rispettato le regole."
+  },
+  {
+   "id": "19-424-16",
+   "scarta": false,
+   "tema": "welfare",
+   "enunciato": "La scuola deve chiedere il permesso ai genitori prima delle lezioni su sesso e affettività.",
+   "opposto": "La scuola non deve chiedere il permesso ai genitori prima delle lezioni su sesso e affettività.",
+   "varianti": [
+    "Per parlare di sessualità in classe serve prima il sì dei genitori.",
+    "I genitori devono poter decidere se il figlio partecipa alle lezioni sull'affettività."
+   ],
+   "favorevoli": "Chi è a favore dice che su questi temi l'ultima parola spetta alla famiglia.",
+   "contrari": "Chi è contro dice che così molti ragazzi resteranno senza informazioni utili."
+  },
+  {
+   "id": "19-425-1",
+   "scarta": true,
+   "motivo_scarto": "ratifica tecnica"
+  },
+  {
+   "id": "19-431-19",
+   "scarta": false,
+   "tema": "ambiente",
+   "enunciato": "La caccia deve essere vietata in Italia.",
+   "opposto": "La caccia deve restare permessa in Italia.",
+   "varianti": [
+    "In Italia non si deve più poter cacciare animali selvatici.",
+    "Bisogna proibire la caccia in tutto il Paese."
+   ],
+   "favorevoli": "Chi è a favore dice che uccidere animali per divertimento non è più accettabile.",
+   "contrari": "Chi è contro dice che la caccia serve a controllare il numero di alcuni animali."
+  },
+  {
+   "id": "19-432-1",
+   "scarta": false,
+   "tema": "ambiente",
+   "enunciato": "Il taglio delle tasse sui carburanti deve continuare finché dura la crisi del petrolio.",
+   "opposto": "Il taglio delle tasse sui carburanti deve finire anche se la crisi del petrolio continua.",
+   "varianti": [
+    "Finché il petrolio resta caro, le tasse su benzina e gasolio devono restare più basse.",
+    "Lo sconto sulle tasse dei carburanti va mantenuto per tutta la crisi del petrolio."
+   ],
+   "favorevoli": "Chi è a favore dice che i prezzi alla pompa sono ancora troppo alti per molti.",
+   "contrari": "Chi è contro dice che lo sconto costa troppo allo Stato e va fermato presto."
+  },
+  {
+   "id": "19-433-11",
+   "scarta": false,
+   "tema": "istituzioni",
+   "enunciato": "Nella pubblica amministrazione, carriere e premi devono dipendere di più dai risultati.",
+   "opposto": "Nella pubblica amministrazione, carriere e premi non devono dipendere di più dai risultati.",
+   "varianti": [
+    "Chi lavora negli uffici pubblici deve fare carriera in base a come lavora.",
+    "I dipendenti pubblici devono essere valutati e premiati secondo i risultati."
+   ],
+   "favorevoli": "Chi è a favore dice che premiare chi lavora bene migliora gli uffici pubblici.",
+   "contrari": "Chi è contro dice che misurare i risultati negli uffici pubblici è difficile e ingiusto."
+  },
+  {
+   "id": "19-440-19",
+   "scarta": true,
+   "motivo_scarto": "proroga di termini"
+  },
+  {
+   "id": "19-454-2",
+   "scarta": true,
+   "motivo_scarto": "petizione di un cittadino, non una legge con una misura chiara"
+  },
+  {
+   "id": "19-454-7",
+   "scarta": true,
+   "motivo_scarto": "bilancio o rendiconto dello Stato"
+  },
+  {
+   "id": "19-454-8",
+   "scarta": true,
+   "motivo_scarto": "bilancio o rendiconto dello Stato"
+  },
+  {
+   "id": "19-455-5",
+   "scarta": true,
+   "motivo_scarto": "ratifica di un accordo su molti temi diversi"
+  },
+  {
+   "id": "19-458-11",
+   "scarta": false,
+   "tema": "ambiente",
+   "enunciato": "L'Italia deve tornare a produrre energia con centrali nucleari.",
+   "opposto": "L'Italia non deve tornare a produrre energia con centrali nucleari.",
+   "varianti": [
+    "Bisogna costruire di nuovo centrali nucleari in Italia.",
+    "Il nucleare deve tornare tra i modi in cui l'Italia produce elettricità."
+   ],
+   "favorevoli": "Chi è a favore dice che il nucleare dà energia sicura e senza fumi inquinanti.",
+   "contrari": "Chi è contro dice che il nucleare costa troppo e lascia scorie pericolose."
+  },
+  {
+   "id": "19-460-1",
+   "scarta": true,
+   "motivo_scarto": "misura tecnica, senza una scelta chiara per il cittadino"
+  }
+ ],
+ "token_in": 0,
+ "token_out": 0,
+ "creato_il": "2026-10-07T23:40:49.380524+00:00"
+}

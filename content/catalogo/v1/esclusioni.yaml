@@ -1,0 +1,8 @@
+# Votazioni tolte a mano dal catalogo dopo la generazione, con il motivo (pubblico). Si usa solo quando i dati
+# della fonte portano a una domanda sbagliata; il problema di fondo va in una issue.
+esclusioni:
+  - votazione: { ramo: senato, idEsterno: "19-431-19" }
+    motivo: >
+      Il titolo nella fonte è quello della proposta popolare per vietare la caccia, ma dai numeri del voto
+      (approvata 80 a 56) sembra il testo unificato con la riforma della caccia della maggioranza: la domanda
+      generata ("La caccia deve essere vietata") rischia di avere la direzione opposta. Issue #74.

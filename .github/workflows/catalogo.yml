@@ -10,8 +10,10 @@ on:
       max_chiamate:
         description: "Tetto di chiamate a Gemini per questa esecuzione"
         default: "20"
-  schedule:
-    - cron: "13 6 * * *"
+  # Giro del mattino sospeso: il catalogo v1 lo inizializza Claude con il client a mano (#71, decisione
+  # dell'utente dell'8 ottobre). Si riattiva per gli aggiornamenti con Gemini, quando c'è la chiave (#68).
+  # schedule:
+  #   - cron: "13 6 * * *"
 
 concurrency: { group: catalogo, cancel-in-progress: false }
 

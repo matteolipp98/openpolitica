@@ -1,0 +1,222 @@
+{
+ "modello": "claude-opus-5-5",
+ "prompt_sha256": "f33cf0f74c034aee02206991f79fd9dca013d090f3202fbedd256e39f47c0271",
+ "risposta": [
+  {
+   "id": "vs19_342_082",
+   "scarta": true,
+   "motivo_scarto": "decreto con misure diverse senza una principale"
+  },
+  {
+   "id": "vs19_342_107",
+   "scarta": true,
+   "motivo_scarto": "proroga di termini"
+  },
+  {
+   "id": "vs19_349_113",
+   "scarta": false,
+   "tema": "istituzioni",
+   "enunciato": "Chi occupa la casa di un altro deve rischiare pene più dure, fino al carcere.",
+   "opposto": "Per chi occupa la casa di un altro non servono pene più dure di quelle di prima.",
+   "varianti": [
+    "Occupare l'abitazione di qualcun altro va punito più severamente, anche col carcere.",
+    "Le pene per chi entra e resta nella casa di un altro vanno aumentate."
+   ],
+   "favorevoli": "Chi è a favore dice che così si proteggono meglio i proprietari e chi vive in casa.",
+   "contrari": "Chi è contro dice che serve aiutare chi non ha casa, più che punire più forte."
+  },
+  {
+   "id": "vs19_354_001",
+   "scarta": false,
+   "tema": "welfare",
+   "enunciato": "Lo studente con cinque in condotta deve essere bocciato.",
+   "opposto": "Lo studente con cinque in condotta non deve essere bocciato solo per questo.",
+   "varianti": [
+    "Un voto insufficiente nel comportamento deve far ripetere l'anno.",
+    "Chi prende cinque in condotta deve rifare l'anno scolastico."
+   ],
+   "favorevoli": "Chi è a favore dice che così si insegna il rispetto per insegnanti e compagni.",
+   "contrari": "Chi è contro dice che bocciare non aiuta i ragazzi difficili a cambiare."
+  },
+  {
+   "id": "vs19_359_043",
+   "scarta": true,
+   "motivo_scarto": "decreto con misure diverse senza una principale"
+  },
+  {
+   "id": "19-229-26",
+   "scarta": false,
+   "tema": "istituzioni",
+   "enunciato": "Le intercettazioni devono avere un limite di tempo, tranne per i reati più gravi come la mafia.",
+   "opposto": "Le intercettazioni non devono avere un limite di tempo fisso per nessun reato.",
+   "varianti": [
+    "Ascoltare le telefonate di un indagato deve avere una durata massima, salvo per mafia e simili.",
+    "Le indagini con le intercettazioni vanno chiuse entro un tempo fissato, tranne nei casi più gravi."
+   ],
+   "favorevoli": "Chi è a favore dice che così si protegge la vita privata delle persone indagate.",
+   "contrari": "Chi è contro dice che così si rischia di fermare indagini importanti troppo presto."
+  },
+  {
+   "id": "19-231-14",
+   "scarta": false,
+   "tema": "istituzioni",
+   "enunciato": "Chi ruba approfittando di un disastro naturale deve avere una pena più pesante.",
+   "opposto": "Chi ruba approfittando di un disastro naturale deve avere la stessa pena degli altri furti.",
+   "varianti": [
+    "Rubare durante un'alluvione o un terremoto deve essere punito più severamente.",
+    "Il furto fatto sfruttando una calamità deve costare di più a chi lo commette."
+   ],
+   "favorevoli": "Chi è a favore dice che chi ruba a persone colpite da un disastro fa un danno più grave.",
+   "contrari": "Chi è contro dice che le pene per il furto bastano già e il giudice può tenerne conto."
+  },
+  {
+   "id": "19-232-24",
+   "scarta": false,
+   "tema": "diritti",
+   "enunciato": "Un italiano che ricorre all'utero in affitto all'estero deve essere punito come se l'avesse fatto in Italia.",
+   "opposto": "Un italiano che ricorre all'utero in affitto all'estero non deve essere punito in Italia.",
+   "varianti": [
+    "La maternità surrogata deve essere reato per gli italiani anche quando la fanno in un altro Paese.",
+    "Chi fa nascere un figlio da una madre surrogata all'estero deve rischiare un processo in Italia."
+   ],
+   "favorevoli": "Chi è a favore dice che il corpo delle donne e i bambini non si possono comprare.",
+   "contrari": "Chi è contro dice che così si puniscono famiglie che fanno una cosa legale altrove."
+  },
+  {
+   "id": "vs19_374_023",
+   "scarta": true,
+   "motivo_scarto": "adeguamenti tecnici alle regole europee"
+  },
+  {
+   "id": "19-243-309",
+   "scarta": false,
+   "tema": "ambiente",
+   "enunciato": "Chi usa il telefono mentre guida deve rischiare la sospensione della patente.",
+   "opposto": "Chi usa il telefono mentre guida deve rischiare solo una multa, senza perdere la patente.",
+   "varianti": [
+    "Usare il cellulare al volante deve poter far perdere la patente per un periodo.",
+    "La patente va sospesa a chi viene trovato a guidare col telefono in mano."
+   ],
+   "favorevoli": "Chi è a favore dice che il telefono alla guida causa molti incidenti gravi.",
+   "contrari": "Chi è contro dice che servono più controlli sulle strade, non solo pene più dure."
+  },
+  {
+   "id": "19-243-317",
+   "scarta": false,
+   "tema": "welfare",
+   "enunciato": "Le uscite in moto con bambini malati vanno riconosciute dallo Stato come forma di terapia.",
+   "opposto": "Le uscite in moto con bambini malati non vanno riconosciute dallo Stato come terapia.",
+   "varianti": [
+    "Lo Stato deve considerare la moto con i bambini malati un aiuto alla cura.",
+    "Portare in moto i bambini malati va riconosciuto come attività di cura."
+   ],
+   "favorevoli": "Chi è a favore dice che queste attività danno gioia e sollievo ai bambini malati.",
+   "contrari": "Chi è contro dice che non è provato che curi e non va chiamata terapia."
+  },
+  {
+   "id": "19-246-46",
+   "scarta": false,
+   "tema": "welfare",
+   "enunciato": "Il test d'ingresso a medicina va tolto: la selezione si fa dopo il primo semestre di studio.",
+   "opposto": "Il test d'ingresso a medicina va tenuto: la selezione si fa prima di iniziare a studiare.",
+   "varianti": [
+    "Per entrare a medicina non deve più servire un quiz, si sceglie dopo i primi mesi di corso.",
+    "Tutti devono poter iniziare medicina, e chi continua si decide dopo il primo semestre."
+   ],
+   "favorevoli": "Chi è a favore dice che è più giusto scegliere in base allo studio, non a un quiz.",
+   "contrari": "Chi è contro dice che le università non hanno posti per tutti gli studenti in più."
+  },
+  {
+   "id": "vs19_388_001",
+   "scarta": true,
+   "motivo_scarto": "decreto con misure diverse senza una principale"
+  },
+  {
+   "id": "vs19_393_001",
+   "scarta": true,
+   "motivo_scarto": "decreto con misure diverse senza una principale"
+  },
+  {
+   "id": "vs19_396_039",
+   "scarta": true,
+   "motivo_scarto": "decreto con misure diverse senza una principale"
+  },
+  {
+   "id": "19-252-102",
+   "scarta": true,
+   "motivo_scarto": "insieme di misure diverse sul lavoro"
+  },
+  {
+   "id": "19-253-67",
+   "scarta": true,
+   "motivo_scarto": "decreto con misure diverse senza una principale"
+  },
+  {
+   "id": "19-258-2",
+   "scarta": true,
+   "motivo_scarto": "legge di bilancio"
+  },
+  {
+   "id": "vs19_430_020",
+   "scarta": true,
+   "motivo_scarto": "decreto con misure diverse senza una principale"
+  },
+  {
+   "id": "19-275-1",
+   "scarta": true,
+   "motivo_scarto": "decreto con misure diverse senza una principale"
+  },
+  {
+   "id": "vs19_432_001",
+   "scarta": true,
+   "motivo_scarto": "proroga di termini"
+  },
+  {
+   "id": "vs19_439_041",
+   "scarta": true,
+   "motivo_scarto": "riforma tecnica delle regole finanziarie"
+  },
+  {
+   "id": "vs19_444_052",
+   "scarta": false,
+   "tema": "welfare",
+   "enunciato": "Il test d'ingresso a medicina va tolto: la selezione si fa dopo il primo semestre di studio.",
+   "opposto": "Il test d'ingresso a medicina va tenuto: la selezione si fa prima di iniziare a studiare.",
+   "varianti": [
+    "Per entrare a medicina non deve più servire un quiz, si sceglie dopo i primi mesi di corso.",
+    "Tutti devono poter iniziare medicina, e chi continua si decide dopo il primo semestre."
+   ],
+   "favorevoli": "Chi è a favore dice che è più giusto scegliere in base allo studio, non a un quiz.",
+   "contrari": "Chi è contro dice che le università non hanno posti per tutti gli studenti in più."
+  },
+  {
+   "id": "vs19_449_091",
+   "scarta": false,
+   "tema": "economia",
+   "enunciato": "Lo Stato deve mettere soldi pubblici per tenere aperta la grande acciaieria di Taranto.",
+   "opposto": "Lo Stato non deve mettere soldi pubblici per tenere aperta l'acciaieria di Taranto.",
+   "varianti": [
+    "L'acciaieria di Taranto va tenuta in funzione anche con soldi dello Stato.",
+    "Per salvare l'acciaieria di Taranto è giusto usare denaro pubblico."
+   ],
+   "favorevoli": "Chi è a favore dice che così si salvano migliaia di posti di lavoro e una fabbrica utile.",
+   "contrari": "Chi è contro dice che si spendono soldi di tutti per un impianto che inquina la città."
+  },
+  {
+   "id": "vs19_450_080",
+   "scarta": false,
+   "tema": "istituzioni",
+   "enunciato": "Le intercettazioni devono avere un limite di tempo, tranne per i reati più gravi come la mafia.",
+   "opposto": "Le intercettazioni non devono avere un limite di tempo fisso per nessun reato.",
+   "varianti": [
+    "Ascoltare le telefonate di un indagato deve avere una durata massima, salvo per mafia e simili.",
+    "Le indagini con le intercettazioni vanno chiuse entro un tempo fissato, tranne nei casi più gravi."
+   ],
+   "favorevoli": "Chi è a favore dice che così si protegge la vita privata delle persone indagate.",
+   "contrari": "Chi è contro dice che così si rischia di fermare indagini importanti troppo presto."
+  }
+ ],
+ "token_in": 0,
+ "token_out": 0,
+ "creato_il": "2026-10-07T23:40:48.660279+00:00"
+}

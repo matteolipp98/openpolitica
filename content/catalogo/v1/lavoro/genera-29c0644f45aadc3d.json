@@ -1,0 +1,206 @@
+{
+ "modello": "claude-opus-5-5",
+ "prompt_sha256": "92c0c75c6b1de1c421ed77238c43de4a8b16411303b479bb73fdcd860f947950",
+ "risposta": [
+  {
+   "id": "vs19_536_066",
+   "scarta": true,
+   "motivo_scarto": "decreto con molte misure diverse, senza una principale"
+  },
+  {
+   "id": "vs19_536_074",
+   "scarta": true,
+   "motivo_scarto": "bilancio o rendiconto dello Stato"
+  },
+  {
+   "id": "vs19_536_081",
+   "scarta": true,
+   "motivo_scarto": "bilancio o rendiconto dello Stato"
+  },
+  {
+   "id": "vs19_540_016",
+   "scarta": false,
+   "tema": "ambiente",
+   "enunciato": "Chi abbandona o brucia rifiuti illegalmente deve avere pene più dure.",
+   "opposto": "Chi abbandona o brucia rifiuti illegalmente non deve avere pene più dure.",
+   "varianti": [
+    "Bisogna punire di più chi scarica o dà fuoco ai rifiuti dove non si può.",
+    "Le pene per chi smaltisce i rifiuti in modo illegale devono aumentare."
+   ],
+   "favorevoli": "Chi è a favore dice che i rifiuti bruciati avvelenano l'aria e la salute di tutti.",
+   "contrari": "Chi è contro dice che le pene ci sono già e mancano soprattutto i controlli."
+  },
+  {
+   "id": "vs19_551_043",
+   "scarta": true,
+   "motivo_scarto": "contenuto non chiaro dal titolo"
+  },
+  {
+   "id": "vs19_554_073",
+   "scarta": false,
+   "tema": "welfare",
+   "enunciato": "All'esame di maturità chi si rifiuta di fare l'orale deve essere bocciato.",
+   "opposto": "All'esame di maturità chi si rifiuta di fare l'orale non deve essere bocciato.",
+   "varianti": [
+    "Lo studente che non si presenta all'orale della maturità non deve prendere il diploma.",
+    "Rifiutare la prova orale all'esame di maturità deve far perdere l'esame."
+   ],
+   "favorevoli": "Chi è a favore dice che l'esame è una prova completa e va fatto per intero.",
+   "contrari": "Chi è contro dice che bocciare per questo è una punizione troppo pesante."
+  },
+  {
+   "id": "vs19_555_138",
+   "scarta": true,
+   "motivo_scarto": "molte semplificazioni diverse, senza una principale"
+  },
+  {
+   "id": "19-361-2",
+   "scarta": false,
+   "tema": "istituzioni",
+   "enunciato": "Giudici e pubblici ministeri devono avere carriere separate.",
+   "opposto": "Giudici e pubblici ministeri devono continuare ad avere la stessa carriera.",
+   "varianti": [
+    "Chi giudica e chi accusa nei processi deve seguire due percorsi di lavoro distinti.",
+    "Un magistrato non deve più poter passare dal ruolo di accusa a quello di giudice."
+   ],
+   "favorevoli": "Chi è a favore dice che così il giudice è davvero lontano da chi accusa.",
+   "contrari": "Chi è contro dice che così chi accusa rischia di finire sotto il controllo del governo."
+  },
+  {
+   "id": "vs19_560_001",
+   "scarta": true,
+   "motivo_scarto": "modifiche tecniche allo statuto di una regione"
+  },
+  {
+   "id": "vs19_560_008",
+   "scarta": false,
+   "tema": "esteri",
+   "enunciato": "Le persone condannate in Italia devono poter scontare la pena nel loro Paese, se è la Libia.",
+   "opposto": "Le persone condannate in Italia non devono poter scontare la pena nel loro Paese, se è la Libia.",
+   "varianti": [
+    "Italia e Libia devono potersi scambiare i detenuti perché scontino la pena a casa loro.",
+    "Un libico condannato in Italia deve poter finire la pena in carcere in Libia."
+   ],
+   "favorevoli": "Chi è a favore dice che così le carceri italiane sono meno piene.",
+   "contrari": "Chi è contro dice che così non si sa se la pena viene scontata davvero."
+  },
+  {
+   "id": "vs19_560_023",
+   "scarta": false,
+   "tema": "ambiente",
+   "enunciato": "Lo Stato deve sostenere i grandi centri dove le merci passano dai camion ai treni.",
+   "opposto": "Lo Stato non deve sostenere i grandi centri dove le merci passano dai camion ai treni.",
+   "varianti": [
+    "Bisogna aiutare i poli dove le merci cambiano mezzo di trasporto, tra strada e ferrovia.",
+    "I centri di scambio delle merci tra camion e treni devono avere regole e sostegni nazionali."
+   ],
+   "favorevoli": "Chi è a favore dice che così più merci viaggiano in treno e meno su strada.",
+   "contrari": "Chi è contro dice che servono altre priorità e questi centri vanno già bene così."
+  },
+  {
+   "id": "vs19_568_078",
+   "scarta": false,
+   "tema": "diritti",
+   "enunciato": "Bisogna rendere più rapide le pratiche per far entrare in Italia lavoratori stranieri regolari.",
+   "opposto": "Non bisogna rendere più rapide le pratiche per far entrare in Italia lavoratori stranieri regolari.",
+   "varianti": [
+    "Le aziende devono poter assumere lavoratori stranieri con procedure più veloci.",
+    "L'ingresso legale di lavoratori dall'estero deve richiedere meno attese."
+   ],
+   "favorevoli": "Chi è a favore dice che molte aziende non trovano lavoratori in Italia.",
+   "contrari": "Chi è contro dice che prima bisogna dare lavoro a chi vive già in Italia."
+  },
+  {
+   "id": "vs19_572_211",
+   "scarta": true,
+   "motivo_scarto": "molte semplificazioni diverse, senza una principale"
+  },
+  {
+   "id": "19-366-2",
+   "scarta": true,
+   "motivo_scarto": "contenuto non chiaro dal titolo"
+  },
+  {
+   "id": "19-367-8",
+   "scarta": true,
+   "motivo_scarto": "contenuto non chiaro dal titolo"
+  },
+  {
+   "id": "vs19_581_088",
+   "scarta": true,
+   "motivo_scarto": "decreto con molte misure diverse, senza una principale"
+  },
+  {
+   "id": "vs19_581_089",
+   "scarta": true,
+   "motivo_scarto": "legge annuale con molte misure diverse"
+  },
+  {
+   "id": "vs19_587_020",
+   "scarta": false,
+   "tema": "economia",
+   "enunciato": "Servono più controlli nei luoghi di lavoro per evitare incidenti.",
+   "opposto": "Non servono più controlli nei luoghi di lavoro per evitare incidenti.",
+   "varianti": [
+    "Bisogna controllare di più aziende e cantieri per la sicurezza di chi lavora.",
+    "Lo Stato deve aumentare le ispezioni sulla sicurezza dei lavoratori."
+   ],
+   "favorevoli": "Chi è a favore dice che troppe persone si fanno male o muoiono lavorando.",
+   "contrari": "Chi è contro dice che più controlli pesano sulle aziende senza cambiare molto."
+  },
+  {
+   "id": "19-376-2",
+   "scarta": false,
+   "tema": "istituzioni",
+   "enunciato": "Chi lavora nel pubblico e fa perdere soldi allo Stato per errore deve rimborsare di meno.",
+   "opposto": "Chi lavora nel pubblico e fa perdere soldi allo Stato per errore non deve rimborsare di meno.",
+   "varianti": [
+    "I funzionari pubblici devono rischiare di pagare meno per i danni causati allo Stato.",
+    "Bisogna ridurre quanto un dipendente pubblico deve risarcire per un danno ai conti pubblici."
+   ],
+   "favorevoli": "Chi è a favore dice che così funzionari e sindaci non hanno paura di decidere.",
+   "contrari": "Chi è contro dice che così chi spreca soldi pubblici paga troppo poco."
+  },
+  {
+   "id": "vs19_590_001",
+   "scarta": true,
+   "motivo_scarto": "bilancio o rendiconto dello Stato"
+  },
+  {
+   "id": "19-380-4",
+   "scarta": true,
+   "motivo_scarto": "misura tecnica, senza una scelta chiara per il cittadino"
+  },
+  {
+   "id": "vs19_594_001",
+   "scarta": true,
+   "motivo_scarto": "misura tecnica, senza una scelta chiara per il cittadino"
+  },
+  {
+   "id": "vs19_597_096",
+   "scarta": false,
+   "tema": "economia",
+   "enunciato": "Lo Stato deve dare soldi per tenere aperta l'acciaieria di Taranto.",
+   "opposto": "Lo Stato non deve dare soldi per tenere aperta l'acciaieria di Taranto.",
+   "varianti": [
+    "Bisogna usare soldi pubblici per non far chiudere la grande acciaieria di Taranto.",
+    "L'acciaieria di Taranto deve continuare a lavorare grazie ai fondi pubblici."
+   ],
+   "favorevoli": "Chi è a favore dice che migliaia di posti di lavoro dipendono da quella fabbrica.",
+   "contrari": "Chi è contro dice che la fabbrica inquina e costa troppi soldi pubblici."
+  },
+  {
+   "id": "19-383-2",
+   "scarta": true,
+   "motivo_scarto": "modifiche tecniche allo statuto di una regione"
+  },
+  {
+   "id": "vs19_609_150",
+   "scarta": true,
+   "motivo_scarto": "legge annuale con molte misure diverse"
+  }
+ ],
+ "token_in": 0,
+ "token_out": 0,
+ "creato_il": "2026-10-07T23:40:49.070707+00:00"
+}

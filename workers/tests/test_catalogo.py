@@ -116,3 +116,26 @@ def test_tetto_di_chiamate_e_cache(tmp_path):
     assert len(chiamate) == 1
     with pytest.raises(QuotaEsaurita):
         genera.chiama(g, cache, "genera", "altro prompt", {}, None)
+
+
+def test_seleziona_non_ripete_la_stessa_domanda():
+    def e(tema, testo, minoranza):
+        return {"tema": tema, "testo": testo, "origine": {"data": "2024-01-01"},
+                "test": {"divisivita": {"dettagli": {"minoranza": minoranza}}}}  # fmt: skip
+
+    voci = [e("a", "Stessa domanda.", 0.3), e("a", "stessa  domanda.", 0.4), e("a", "Altra.", 0.2), e("b", "B.", 0.3)]
+    scelti, k = genera.seleziona(voci, ["a", "b"], 5)
+    assert k == 1
+    assert [(x["testo"], x["test"]["divisivita"]["dettagli"]["minoranza"]) for x in scelti] == [
+        ("stessa  domanda.", 0.4), ("B.", 0.3)]  # fmt: skip
+
+
+def test_esclusioni_con_motivo(tmp_path):
+    (tmp_path / "esclusioni.yaml").write_text(
+        'esclusioni:\n  - { votazione: { ramo: senato, idEsterno: "19-1-1" }, motivo: "titolo sbagliato" }\n'
+    )
+    assert genera.esclusioni(tmp_path) == {("senato", "19-1-1")}
+    (tmp_path / "esclusioni.yaml").write_text('esclusioni:\n  - { votazione: { ramo: senato, idEsterno: "1" } }\n')
+    with pytest.raises(ValueError):
+        genera.esclusioni(tmp_path)
+    assert genera.esclusioni(tmp_path / "nessuna") == set()

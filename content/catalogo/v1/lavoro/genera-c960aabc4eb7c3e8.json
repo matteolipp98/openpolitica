@@ -1,0 +1,246 @@
+{
+ "modello": "claude-opus-5-5",
+ "prompt_sha256": "7c46f42b52b3afdb9a0b7a4fed7708f20614df90f6181faac191afb1a6838e06",
+ "risposta": [
+  {
+   "id": "19-160-76",
+   "scarta": false,
+   "tema": "economia",
+   "enunciato": "Il superbonus per ristrutturare casa non deve essere prolungato.",
+   "opposto": "Il superbonus per ristrutturare casa deve essere prolungato.",
+   "varianti": [
+    "Il grande bonus per i lavori in casa deve finire, senza altri rinvii.",
+    "Non bisogna allungare i tempi del superbonus per le ristrutturazioni."
+   ],
+   "favorevoli": "Chi è a favore dice che il superbonus è costato troppo ai conti dello Stato.",
+   "contrari": "Chi è contro dice che molti lavori iniziati restano a metà senza più aiuto."
+  },
+  {
+   "id": "19-161-29",
+   "scarta": false,
+   "tema": "esteri",
+   "enunciato": "Le regole per vendere armi italiane all'estero devono essere più semplici.",
+   "opposto": "Le regole per vendere armi italiane all'estero non devono essere più semplici.",
+   "varianti": [
+    "Le aziende italiane devono poter esportare armi con meno controlli e meno attese.",
+    "Bisogna rendere più facile la vendita di armi italiane ad altri Paesi."
+   ],
+   "favorevoli": "Chi è a favore dice che così le aziende italiane della difesa restano competitive.",
+   "contrari": "Chi è contro dice che così si sa meno a chi vanno le armi fatte in Italia."
+  },
+  {
+   "id": "19-164-23",
+   "scarta": false,
+   "tema": "economia",
+   "enunciato": "Lo Stato deve dare aiuti speciali ai giovani che aprono un'azienda agricola.",
+   "opposto": "Lo Stato non deve dare aiuti speciali ai giovani che aprono un'azienda agricola.",
+   "varianti": [
+    "I giovani che vogliono fare gli agricoltori devono ricevere sostegni dallo Stato.",
+    "Chi è giovane e avvia un'impresa agricola deve avere agevolazioni pubbliche."
+   ],
+   "favorevoli": "Chi è a favore dice che servono giovani nei campi per non far morire l'agricoltura.",
+   "contrari": "Chi è contro dice che gli aiuti vanno dati a chi ne ha bisogno, non in base all'età."
+  },
+  {
+   "id": "19-167-42",
+   "scarta": true,
+   "motivo_scarto": "opere legate a un singolo evento, misura tecnica"
+  },
+  {
+   "id": "vs19_267_001",
+   "scarta": true,
+   "motivo_scarto": "regole tecniche per organizzare le elezioni"
+  },
+  {
+   "id": "vs19_270_055",
+   "scarta": true,
+   "motivo_scarto": "misura tecnica, senza una scelta chiara per il cittadino"
+  },
+  {
+   "id": "vs19_271_001",
+   "scarta": false,
+   "tema": "ambiente",
+   "enunciato": "Chi usa il telefono mentre guida deve avere multe più alte e la sospensione della patente.",
+   "opposto": "Chi usa il telefono mentre guida non deve avere multe più alte né la sospensione della patente.",
+   "varianti": [
+    "Bisogna punire di più chi guida col cellulare in mano, anche togliendo la patente.",
+    "Usare il telefono alla guida deve costare multe più alte e lo stop della patente."
+   ],
+   "favorevoli": "Chi è a favore dice che il telefono alla guida causa molti incidenti gravi.",
+   "contrari": "Chi è contro dice che servono più controlli, non solo punizioni più dure."
+  },
+  {
+   "id": "vs19_288_019",
+   "scarta": false,
+   "tema": "welfare",
+   "enunciato": "Le associazioni senza scopo di lucro devono poter usare qualunque locale per le loro attività.",
+   "opposto": "Le associazioni senza scopo di lucro non devono poter usare qualunque locale per le loro attività.",
+   "varianti": [
+    "Un'associazione sociale deve poter fare attività in ogni tipo di locale, senza vincoli edilizi.",
+    "Le associazioni del sociale devono poter avere sede in qualsiasi locale."
+   ],
+   "favorevoli": "Chi è a favore dice che le associazioni fanno un lavoro utile e vanno aiutate.",
+   "contrari": "Chi è contro dice che così si aggirano regole fatte per tutelare i quartieri."
+  },
+  {
+   "id": "vs19_298_001",
+   "scarta": false,
+   "tema": "economia",
+   "enunciato": "Chi ristruttura casa con un bonus non deve più poter cedere il credito alle banche.",
+   "opposto": "Chi ristruttura casa con un bonus deve poter continuare a cedere il credito alle banche.",
+   "varianti": [
+    "Bisogna eliminare lo sconto in fattura e la cessione del credito per i bonus edilizi.",
+    "I bonus per i lavori in casa non devono più poter essere venduti alle banche."
+   ],
+   "favorevoli": "Chi è a favore dice che questo sistema ha pesato troppo sui conti dello Stato.",
+   "contrari": "Chi è contro dice che senza cessione solo chi ha soldi può fare i lavori."
+  },
+  {
+   "id": "vs19_300_008",
+   "scarta": false,
+   "tema": "istituzioni",
+   "enunciato": "Servono regole più severe sui conflitti di interesse di chi ha incarichi pubblici.",
+   "opposto": "Non servono regole più severe sui conflitti di interesse di chi ha incarichi pubblici.",
+   "varianti": [
+    "Chi governa non deve poter decidere su cose in cui ha interessi personali.",
+    "Bisogna stringere le regole per chi ha un incarico pubblico e affari privati."
+   ],
+   "favorevoli": "Chi è a favore dice che chi governa deve pensare solo al bene di tutti.",
+   "contrari": "Chi è contro dice che le regole di oggi bastano e altre frenano chi vuole impegnarsi."
+  },
+  {
+   "id": "19-199-1",
+   "scarta": false,
+   "tema": "istituzioni",
+   "enunciato": "Il capo del governo deve essere eletto direttamente dai cittadini.",
+   "opposto": "Il capo del governo non deve essere eletto direttamente dai cittadini.",
+   "varianti": [
+    "Il Presidente del Consiglio deve essere scelto con il voto dei cittadini.",
+    "Bisogna votare direttamente chi guida il governo."
+   ],
+   "favorevoli": "Chi è a favore dice che così i governi durano di più e i cittadini decidono.",
+   "contrari": "Chi è contro dice che così si toglie potere al Parlamento e al Presidente della Repubblica."
+  },
+  {
+   "id": "vs19_309_246",
+   "scarta": false,
+   "tema": "istituzioni",
+   "enunciato": "Le regioni devono poter chiedere allo Stato più poteri su materie come scuola e sanità.",
+   "opposto": "Le regioni non devono poter chiedere allo Stato più poteri su materie come scuola e sanità.",
+   "varianti": [
+    "Ogni regione deve poter ottenere più competenze dallo Stato, per esempio su scuola e sanità.",
+    "È giusto che una regione possa gestire da sola più materie che oggi decide lo Stato."
+   ],
+   "favorevoli": "Chi è a favore dice che le regioni conoscono meglio i bisogni del loro territorio.",
+   "contrari": "Chi è contro dice che così le regioni più ricche staccano ancora di più le altre."
+  },
+  {
+   "id": "vs19_317_092",
+   "scarta": true,
+   "motivo_scarto": "misura tecnica, senza una scelta chiara per il cittadino"
+  },
+  {
+   "id": "vs19_322_001",
+   "scarta": false,
+   "tema": "istituzioni",
+   "enunciato": "Il reato di abuso d'ufficio deve essere cancellato.",
+   "opposto": "Il reato di abuso d'ufficio deve restare.",
+   "varianti": [
+    "I pubblici amministratori non devono più poter essere accusati di abuso d'ufficio.",
+    "Bisogna eliminare il reato di abuso d'ufficio dal codice penale."
+   ],
+   "favorevoli": "Chi è a favore dice che sindaci e funzionari hanno paura di firmare qualsiasi atto.",
+   "contrari": "Chi è contro dice che così chi abusa del suo ruolo pubblico resta senza punizione."
+  },
+  {
+   "id": "vs19_323_046",
+   "scarta": true,
+   "motivo_scarto": "decreto con molte misure diverse, senza una principale"
+  },
+  {
+   "id": "vs19_327_001",
+   "scarta": true,
+   "motivo_scarto": "decreto con molte misure diverse, senza una principale"
+  },
+  {
+   "id": "vs19_329_001",
+   "scarta": false,
+   "tema": "istituzioni",
+   "enunciato": "Chi ha fatto piccoli lavori non in regola in casa deve poterli sistemare pagando.",
+   "opposto": "Chi ha fatto piccoli lavori non in regola in casa non deve poterli sistemare pagando.",
+   "varianti": [
+    "Le piccole irregolarità edilizie delle case devono poter essere messe in regola.",
+    "Bisogna permettere di regolarizzare, a pagamento, le piccole difformità delle abitazioni."
+   ],
+   "favorevoli": "Chi è a favore dice che così tante case bloccate si possono vendere o comprare.",
+   "contrari": "Chi è contro dice che così si premia chi non ha rispettato le regole edilizie."
+  },
+  {
+   "id": "vs19_332_001",
+   "scarta": false,
+   "tema": "welfare",
+   "enunciato": "Gli esami e le visite negli ospedali pubblici devono potersi fare anche la sera e nel fine settimana.",
+   "opposto": "Gli esami e le visite negli ospedali pubblici non devono essere estesi alla sera e al fine settimana.",
+   "varianti": [
+    "Per ridurre le attese, la sanità pubblica deve fare visite anche di sera e nel weekend.",
+    "Bisogna allungare gli orari di visite ed esami negli ospedali pubblici."
+   ],
+   "favorevoli": "Chi è a favore dice che così si accorciano le lunghe attese per curarsi.",
+   "contrari": "Chi è contro dice che senza più medici e infermieri le attese restano uguali."
+  },
+  {
+   "id": "vs19_336_001",
+   "scarta": true,
+   "motivo_scarto": "decreto con molte misure diverse, senza una principale"
+  },
+  {
+   "id": "vs19_336_126",
+   "scarta": false,
+   "tema": "economia",
+   "enunciato": "Lo Stato deve accelerare i permessi per estrarre in Italia i minerali rari usati dall'industria.",
+   "opposto": "Lo Stato non deve accelerare i permessi per estrarre in Italia i minerali rari usati dall'industria.",
+   "varianti": [
+    "Bisogna rendere più veloce l'apertura di miniere di materiali rari in Italia.",
+    "Le autorizzazioni per cercare ed estrarre minerali preziosi per l'industria devono essere più rapide."
+   ],
+   "favorevoli": "Chi è a favore dice che così l'Italia dipende meno da altri Paesi per questi materiali.",
+   "contrari": "Chi è contro dice che così si rischia di fare danni all'ambiente con meno controlli."
+  },
+  {
+   "id": "19-213-159",
+   "scarta": true,
+   "motivo_scarto": "proroga di termini"
+  },
+  {
+   "id": "vs19_337_078",
+   "scarta": false,
+   "tema": "welfare",
+   "enunciato": "Le scuole tecniche e professionali devono poter durare quattro anni invece di cinque.",
+   "opposto": "Le scuole tecniche e professionali devono continuare a durare cinque anni.",
+   "varianti": [
+    "Gli istituti tecnici devono poter diplomare gli studenti in quattro anni.",
+    "Bisogna permettere percorsi di quattro anni negli istituti tecnici e professionali."
+   ],
+   "favorevoli": "Chi è a favore dice che così i ragazzi arrivano prima al lavoro.",
+   "contrari": "Chi è contro dice che così i ragazzi studiano meno e sono meno preparati."
+  },
+  {
+   "id": "vs19_340_143",
+   "scarta": true,
+   "motivo_scarto": "decreto con molte misure diverse, senza una principale"
+  },
+  {
+   "id": "19-216-5",
+   "scarta": true,
+   "motivo_scarto": "bilancio o rendiconto dello Stato"
+  },
+  {
+   "id": "19-216-6",
+   "scarta": true,
+   "motivo_scarto": "bilancio o rendiconto dello Stato"
+  }
+ ],
+ "token_in": 0,
+ "token_out": 0,
+ "creato_il": "2026-10-07T23:40:48.454367+00:00"
+}

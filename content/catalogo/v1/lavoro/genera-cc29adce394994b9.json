@@ -1,0 +1,254 @@
+{
+ "modello": "claude-opus-5-5",
+ "prompt_sha256": "effe645a3369864f43b376935263c24c06214413dc23a516ce3cf6990fb27fd4",
+ "risposta": [
+  {
+   "id": "19-18-41",
+   "scarta": true,
+   "motivo_scarto": "riorganizzazione tecnica dei ministeri"
+  },
+  {
+   "id": "vs19_025_028",
+   "scarta": true,
+   "motivo_scarto": "proroga di termini"
+  },
+  {
+   "id": "19-24-2",
+   "scarta": true,
+   "motivo_scarto": "legge di bilancio"
+  },
+  {
+   "id": "vs19_029_149",
+   "scarta": true,
+   "motivo_scarto": "decreto con misure diverse senza una principale"
+  },
+  {
+   "id": "vs19_034_001",
+   "scarta": false,
+   "tema": "economia",
+   "enunciato": "I professionisti che lavorano per grandi aziende o enti pubblici devono avere un compenso minimo garantito.",
+   "opposto": "I professionisti devono poter accordarsi liberamente sul compenso, anche con grandi aziende ed enti pubblici.",
+   "varianti": [
+    "Avvocati, ingegneri e altri professionisti devono ricevere una paga minima dai grandi clienti.",
+    "Le grandi imprese e lo Stato non possono pagare un professionista meno di una cifra minima."
+   ],
+   "favorevoli": "Chi è a favore dice che così i professionisti non devono accettare paghe troppo basse.",
+   "contrari": "Chi è contro dice che i compensi minimi fissati rendono i servizi più cari per tutti."
+  },
+  {
+   "id": "vs19_055_016",
+   "scarta": false,
+   "tema": "ambiente",
+   "enunciato": "I benzinai devono esporre il prezzo medio della zona accanto al proprio prezzo.",
+   "opposto": "I benzinai non devono essere obbligati a esporre il prezzo medio della zona.",
+   "varianti": [
+    "Al distributore deve comparire anche il prezzo medio del carburante nella regione.",
+    "Ogni benzinaio deve mostrare il prezzo medio della zona vicino al suo."
+   ],
+   "favorevoli": "Chi è a favore dice che così chi fa benzina può confrontare i prezzi più facilmente.",
+   "contrari": "Chi è contro dice che è un obbligo in più per i benzinai che non fa scendere i prezzi."
+  },
+  {
+   "id": "19-42-122",
+   "scarta": false,
+   "tema": "diritti",
+   "enunciato": "Le navi che salvano i migranti in mare devono andare subito nel porto indicato dal governo.",
+   "opposto": "Le navi che salvano i migranti in mare devono poter continuare i soccorsi prima di andare in porto.",
+   "varianti": [
+    "Dopo un salvataggio, le navi delle associazioni devono dirigersi subito al porto assegnato.",
+    "Chi soccorre migranti in mare non deve fare altri salvataggi prima di raggiungere il porto indicato."
+   ],
+   "favorevoli": "Chi è a favore dice che così lo Stato controlla meglio gli arrivi e i soccorsi in mare.",
+   "contrari": "Chi è contro dice che così si salvano meno persone e le navi passano più tempo in viaggio."
+  },
+  {
+   "id": "vs19_057_054",
+   "scarta": true,
+   "motivo_scarto": "proroga di termini"
+  },
+  {
+   "id": "vs19_061_021",
+   "scarta": false,
+   "tema": "economia",
+   "enunciato": "Lo Stato deve mettere soldi pubblici per tenere aperta la grande acciaieria di Taranto.",
+   "opposto": "Lo Stato non deve mettere soldi pubblici per tenere aperta l'acciaieria di Taranto.",
+   "varianti": [
+    "L'acciaieria di Taranto va tenuta in funzione anche con soldi dello Stato.",
+    "Per salvare l'acciaieria di Taranto è giusto usare denaro pubblico."
+   ],
+   "favorevoli": "Chi è a favore dice che così si salvano migliaia di posti di lavoro e una fabbrica utile.",
+   "contrari": "Chi è contro dice che si spendono soldi di tutti per un impianto che inquina la città."
+  },
+  {
+   "id": "vs19_082_029",
+   "scarta": false,
+   "tema": "economia",
+   "enunciato": "Non si deve più poter girare a una banca o a un'impresa lo sconto fiscale per i lavori in casa.",
+   "opposto": "Si deve poter continuare a girare a una banca o a un'impresa lo sconto fiscale per i lavori in casa.",
+   "varianti": [
+    "Lo sconto sulle tasse per ristrutturare casa non va più ceduto ad altri in cambio di soldi.",
+    "Chi fa lavori in casa con i bonus non deve più poter vendere il suo credito sulle tasse."
+   ],
+   "favorevoli": "Chi è a favore dice che questi bonus costavano troppo allo Stato e favorivano le truffe.",
+   "contrari": "Chi è contro dice che così solo chi ha già soldi può permettersi di fare i lavori."
+  },
+  {
+   "id": "vs19_091_050",
+   "scarta": true,
+   "motivo_scarto": "decreto con misure diverse senza una principale"
+  },
+  {
+   "id": "vs19_097_080",
+   "scarta": false,
+   "tema": "diritti",
+   "enunciato": "I migranti che non hanno diritto all'asilo devono avere meno modi per ottenere il permesso di restare in Italia.",
+   "opposto": "I migranti che non hanno diritto all'asilo devono poter ottenere il permesso di restare come prima.",
+   "varianti": [
+    "La protezione per motivi personali va data a meno migranti che non hanno diritto all'asilo.",
+    "Per chi non ha diritto all'asilo deve essere più difficile avere un permesso per restare."
+   ],
+   "favorevoli": "Chi è a favore dice che così si scoraggia chi arriva senza averne davvero diritto.",
+   "contrari": "Chi è contro dice che così più persone restano senza documenti e senza tutele."
+  },
+  {
+   "id": "vs19_105_045",
+   "scarta": false,
+   "tema": "ambiente",
+   "enunciato": "Lo Stato deve usare soldi pubblici per aiutare le famiglie a pagare le bollette di luce e gas.",
+   "opposto": "Lo Stato non deve usare soldi pubblici per aiutare le famiglie a pagare luce e gas.",
+   "varianti": [
+    "Le famiglie vanno aiutate dallo Stato a pagare le bollette di luce e gas.",
+    "Una parte delle bollette di luce e gas delle famiglie va pagata con soldi pubblici."
+   ],
+   "favorevoli": "Chi è a favore dice che le bollette alte pesano troppo sui bilanci delle famiglie.",
+   "contrari": "Chi è contro dice che questi aiuti costano tanto e non risolvono il problema."
+  },
+  {
+   "id": "19-71-141",
+   "scarta": false,
+   "tema": "ambiente",
+   "enunciato": "Va costruito un ponte sullo Stretto per collegare la Sicilia alla Calabria.",
+   "opposto": "Non va costruito un ponte sullo Stretto tra la Sicilia e la Calabria.",
+   "varianti": [
+    "Sicilia e Calabria devono essere unite da un ponte stabile.",
+    "Bisogna realizzare il ponte che collega la Sicilia al resto d'Italia."
+   ],
+   "favorevoli": "Chi è a favore dice che il ponte rende più veloci i viaggi e aiuta il lavoro al Sud.",
+   "contrari": "Chi è contro dice che costa troppo e che servono prima strade e treni migliori."
+  },
+  {
+   "id": "vs19_115_001",
+   "scarta": true,
+   "motivo_scarto": "decreto con misure diverse senza una principale"
+  },
+  {
+   "id": "vs19_117_019",
+   "scarta": false,
+   "tema": "ambiente",
+   "enunciato": "Serve un commissario con poteri speciali per affrontare la mancanza d'acqua.",
+   "opposto": "Per affrontare la mancanza d'acqua non serve un commissario con poteri speciali.",
+   "varianti": [
+    "Contro la siccità va nominata una persona con poteri straordinari per fare i lavori.",
+    "La scarsità d'acqua va gestita da un commissario che può decidere più in fretta."
+   ],
+   "favorevoli": "Chi è a favore dice che così le opere contro la siccità si fanno più in fretta.",
+   "contrari": "Chi è contro dice che così si saltano controlli e si toglie potere agli enti locali."
+  },
+  {
+   "id": "vs19_124_040",
+   "scarta": true,
+   "motivo_scarto": "decreto con misure diverse senza una principale"
+  },
+  {
+   "id": "vs19_129_065",
+   "scarta": false,
+   "tema": "welfare",
+   "enunciato": "Chi è povero ma può lavorare deve ricevere un aiuto più breve, legato a corsi di formazione.",
+   "opposto": "Chi è povero ma può lavorare deve ricevere lo stesso aiuto di chi non può lavorare.",
+   "varianti": [
+    "Il sostegno ai poveri in grado di lavorare deve durare meno ed essere legato alla formazione.",
+    "Per chi è povero e può lavorare l'aiuto deve essere limitato nel tempo e legato a corsi."
+   ],
+   "favorevoli": "Chi è a favore dice che così si spinge chi può lavorare a cercare un lavoro.",
+   "contrari": "Chi è contro dice che così molte persone povere restano senza un aiuto sicuro."
+  },
+  {
+   "id": "19-85-32",
+   "scarta": false,
+   "tema": "istituzioni",
+   "enunciato": "Chi sporca o rovina monumenti e opere d'arte deve pagare multe più alte.",
+   "opposto": "Per chi sporca o rovina monumenti e opere d'arte bastano le multe che c'erano prima.",
+   "varianti": [
+    "Le sanzioni per chi imbratta i monumenti vanno aumentate.",
+    "Danneggiare o sporcare beni artistici deve costare di più a chi lo fa."
+   ],
+   "favorevoli": "Chi è a favore dice che così si protegge meglio il patrimonio artistico del Paese.",
+   "contrari": "Chi è contro dice che le pene di prima bastavano e così si colpiscono le proteste."
+  },
+  {
+   "id": "vs19_147_042",
+   "scarta": false,
+   "tema": "diritti",
+   "enunciato": "Un italiano che ricorre all'utero in affitto all'estero deve essere punito come se l'avesse fatto in Italia.",
+   "opposto": "Un italiano che ricorre all'utero in affitto all'estero non deve essere punito in Italia.",
+   "varianti": [
+    "La maternità surrogata deve essere reato per gli italiani anche quando la fanno in un altro Paese.",
+    "Chi fa nascere un figlio da una madre surrogata all'estero deve rischiare un processo in Italia."
+   ],
+   "favorevoli": "Chi è a favore dice che il corpo delle donne e i bambini non si possono comprare.",
+   "contrari": "Chi è contro dice che così si puniscono famiglie che fanno una cosa legale altrove."
+  },
+  {
+   "id": "vs19_150_058",
+   "scarta": true,
+   "motivo_scarto": "decreto con misure diverse senza una principale"
+  },
+  {
+   "id": "19-95-326",
+   "scarta": false,
+   "tema": "economia",
+   "enunciato": "Le tasse sul reddito devono andare verso una sola percentuale, uguale per tutti.",
+   "opposto": "Le tasse sul reddito devono restare con percentuali che crescono per chi guadagna di più.",
+   "varianti": [
+    "Bisogna avvicinarsi a un'unica aliquota sul reddito, la stessa per ogni persona.",
+    "L'imposta sullo stipendio deve tendere a essere la stessa percentuale per tutti."
+   ],
+   "favorevoli": "Chi è a favore dice che tasse più semplici aiutano chi lavora e chi fa impresa.",
+   "contrari": "Chi è contro dice che chi guadagna di più deve pagare una parte più grande."
+  },
+  {
+   "id": "vs19_154_079",
+   "scarta": false,
+   "tema": "economia",
+   "enunciato": "Le tasse sul reddito devono andare verso una sola percentuale, uguale per tutti.",
+   "opposto": "Le tasse sul reddito devono restare con percentuali che crescono per chi guadagna di più.",
+   "varianti": [
+    "Bisogna avvicinarsi a un'unica aliquota sul reddito, la stessa per ogni persona.",
+    "L'imposta sullo stipendio deve tendere a essere la stessa percentuale per tutti."
+   ],
+   "favorevoli": "Chi è a favore dice che tasse più semplici aiutano chi lavora e chi fa impresa.",
+   "contrari": "Chi è contro dice che chi guadagna di più deve pagare una parte più grande."
+  },
+  {
+   "id": "vs19_161_001",
+   "scarta": false,
+   "tema": "economia",
+   "enunciato": "I lavoratori fermati dal caldo estremo devono ricevere comunque una parte dello stipendio.",
+   "opposto": "I lavoratori fermati dal caldo estremo non devono ricevere una parte dello stipendio dallo Stato.",
+   "varianti": [
+    "Chi non può lavorare per il caldo eccessivo deve essere pagato in parte lo stesso.",
+    "Se il lavoro si ferma per il troppo caldo, il lavoratore deve avere comunque un sostegno."
+   ],
+   "favorevoli": "Chi è a favore dice che così si protegge la salute di chi lavora all'aperto d'estate.",
+   "contrari": "Chi è contro dice che le aziende dovrebbero organizzarsi da sole senza soldi pubblici."
+  },
+  {
+   "id": "vs19_161_014",
+   "scarta": true,
+   "motivo_scarto": "legge di bilancio"
+  }
+ ],
+ "token_in": 0,
+ "token_out": 0,
+ "creato_il": "2026-10-07T23:40:48.018794+00:00"
+}

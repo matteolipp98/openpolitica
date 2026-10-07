@@ -1,0 +1,317 @@
+{
+ "modello": "claude-opus-5-5",
+ "prompt_sha256": "990e80baaf88484f4ea3c00aabb70c6681d0fbc22163a26a0492929f6812d36b",
+ "risposta": [
+  {
+   "atto": "A1",
+   "tema": "ambiente",
+   "frasi": [
+    {
+     "id": "A1F1",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A1F2",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A1F3",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A1F4",
+     "risposta": "contrario"
+    }
+   ]
+  },
+  {
+   "atto": "A2",
+   "tema": "welfare",
+   "frasi": [
+    {
+     "id": "A2F1",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A2F2",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A2F3",
+     "risposta": "contrario"
+    },
+    {
+     "id": "A2F4",
+     "risposta": "d_accordo"
+    }
+   ]
+  },
+  {
+   "atto": "A3",
+   "tema": "istituzioni",
+   "frasi": [
+    {
+     "id": "A3F1",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A3F2",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A3F3",
+     "risposta": "contrario"
+    },
+    {
+     "id": "A3F4",
+     "risposta": "d_accordo"
+    }
+   ]
+  },
+  {
+   "atto": "A4",
+   "tema": "economia",
+   "frasi": [
+    {
+     "id": "A4F1",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A4F2",
+     "risposta": "contrario"
+    },
+    {
+     "id": "A4F3",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A4F4",
+     "risposta": "d_accordo"
+    }
+   ]
+  },
+  {
+   "atto": "A5",
+   "tema": "economia",
+   "frasi": [
+    {
+     "id": "A5F1",
+     "risposta": "contrario"
+    },
+    {
+     "id": "A5F2",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A5F3",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A5F4",
+     "risposta": "d_accordo"
+    }
+   ]
+  },
+  {
+   "atto": "A6",
+   "tema": "diritti",
+   "frasi": [
+    {
+     "id": "A6F1",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A6F2",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A6F3",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A6F4",
+     "risposta": "contrario"
+    }
+   ]
+  },
+  {
+   "atto": "A7",
+   "tema": "economia",
+   "frasi": [
+    {
+     "id": "A7F1",
+     "risposta": "contrario"
+    },
+    {
+     "id": "A7F2",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A7F3",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A7F4",
+     "risposta": "d_accordo"
+    }
+   ]
+  },
+  {
+   "atto": "A8",
+   "tema": "esteri",
+   "frasi": [
+    {
+     "id": "A8F1",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A8F2",
+     "risposta": "contrario"
+    },
+    {
+     "id": "A8F3",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A8F4",
+     "risposta": "d_accordo"
+    }
+   ]
+  },
+  {
+   "atto": "A9",
+   "tema": "istituzioni",
+   "frasi": [
+    {
+     "id": "A9F1",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A9F2",
+     "risposta": "contrario"
+    },
+    {
+     "id": "A9F3",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A9F4",
+     "risposta": "d_accordo"
+    }
+   ]
+  },
+  {
+   "atto": "A10",
+   "tema": "istituzioni",
+   "frasi": [
+    {
+     "id": "A10F1",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A10F2",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A10F3",
+     "risposta": "contrario"
+    },
+    {
+     "id": "A10F4",
+     "risposta": "d_accordo"
+    }
+   ]
+  },
+  {
+   "atto": "A11",
+   "tema": "istituzioni",
+   "frasi": [
+    {
+     "id": "A11F1",
+     "risposta": "contrario"
+    },
+    {
+     "id": "A11F2",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A11F3",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A11F4",
+     "risposta": "d_accordo"
+    }
+   ]
+  },
+  {
+   "atto": "A12",
+   "tema": "economia",
+   "frasi": [
+    {
+     "id": "A12F1",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A12F2",
+     "risposta": "contrario"
+    },
+    {
+     "id": "A12F3",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A12F4",
+     "risposta": "d_accordo"
+    }
+   ]
+  },
+  {
+   "atto": "A13",
+   "tema": "welfare",
+   "frasi": [
+    {
+     "id": "A13F1",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A13F2",
+     "risposta": "contrario"
+    },
+    {
+     "id": "A13F3",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A13F4",
+     "risposta": "d_accordo"
+    }
+   ]
+  },
+  {
+   "atto": "A14",
+   "tema": "diritti",
+   "frasi": [
+    {
+     "id": "A14F1",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A14F2",
+     "risposta": "contrario"
+    },
+    {
+     "id": "A14F3",
+     "risposta": "d_accordo"
+    },
+    {
+     "id": "A14F4",
+     "risposta": "d_accordo"
+    }
+   ]
+  }
+ ],
+ "token_in": 0,
+ "token_out": 0,
+ "creato_il": "2026-10-07T23:42:19.883701+00:00"
+}

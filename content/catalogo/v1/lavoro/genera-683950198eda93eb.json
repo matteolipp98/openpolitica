@@ -1,0 +1,222 @@
+{
+ "modello": "claude-opus-5-5",
+ "prompt_sha256": "cf85e0c764cfb89b951f5e7bcb826db9919bb66c244aba94272261f6fd9f7b51",
+ "risposta": [
+  {
+   "id": "19-290-9",
+   "scarta": true,
+   "motivo_scarto": "contenuto non chiaro dal titolo"
+  },
+  {
+   "id": "vs19_464_047",
+   "scarta": false,
+   "tema": "istituzioni",
+   "enunciato": "Chi gestisce soldi pubblici e sbaglia per grave errore deve rimborsare solo una parte del danno.",
+   "opposto": "Chi gestisce soldi pubblici e sbaglia per grave errore deve rimborsare tutto il danno.",
+   "varianti": [
+    "Il funzionario che causa un danno alle casse pubbliche per colpa grave deve pagarne solo una parte.",
+    "Per gli errori gravi di chi amministra soldi pubblici, il rimborso dovuto va limitato."
+   ],
+   "favorevoli": "Chi è a favore dice che la paura di pagare tutto blocca chi deve prendere decisioni.",
+   "contrari": "Chi è contro dice che così si controllano meno gli sprechi e chi gestisce male."
+  },
+  {
+   "id": "19-295-120",
+   "scarta": true,
+   "motivo_scarto": "contenuto non chiaro dal titolo"
+  },
+  {
+   "id": "vs19_468_001",
+   "scarta": false,
+   "tema": "ambiente",
+   "enunciato": "Lo Stato deve usare soldi pubblici per aiutare le famiglie a pagare le bollette di luce e gas.",
+   "opposto": "Lo Stato non deve usare soldi pubblici per aiutare le famiglie a pagare luce e gas.",
+   "varianti": [
+    "Le famiglie vanno aiutate dallo Stato a pagare le bollette di luce e gas.",
+    "Una parte delle bollette di luce e gas delle famiglie va pagata con soldi pubblici."
+   ],
+   "favorevoli": "Chi è a favore dice che le bollette alte pesano troppo sui bilanci delle famiglie.",
+   "contrari": "Chi è contro dice che questi aiuti costano tanto e non risolvono il problema."
+  },
+  {
+   "id": "vs19_470_049",
+   "scarta": true,
+   "motivo_scarto": "decreto con misure diverse senza una principale"
+  },
+  {
+   "id": "vs19_479_029",
+   "scarta": true,
+   "motivo_scarto": "misura tecnica senza una scelta chiara"
+  },
+  {
+   "id": "vs19_481_057",
+   "scarta": false,
+   "tema": "diritti",
+   "enunciato": "I migranti da rimandare nel loro Paese possono essere trattenuti nei centri costruiti in Albania.",
+   "opposto": "I migranti da rimandare nel loro Paese non devono essere trattenuti nei centri in Albania.",
+   "varianti": [
+    "I centri in Albania vanno usati per tenere i migranti in attesa di rimpatrio.",
+    "Chi deve lasciare l'Italia può aspettare il rimpatrio in un centro in Albania."
+   ],
+   "favorevoli": "Chi è a favore dice che così si rendono più veloci i rimpatri di chi non ha diritto.",
+   "contrari": "Chi è contro dice che così si spendono tanti soldi per centri lontani e poco usati."
+  },
+  {
+   "id": "vs19_482_086",
+   "scarta": false,
+   "tema": "diritti",
+   "enunciato": "La cittadinanza italiana per origine va data solo a chi ha un genitore o un nonno nato in Italia.",
+   "opposto": "La cittadinanza italiana per origine va data a chi ha qualunque antenato italiano.",
+   "varianti": [
+    "Per avere la cittadinanza grazie agli antenati serve un genitore o un nonno nato in Italia.",
+    "Chi discende da italiani diventa cittadino solo se il legame è con genitori o nonni nati qui."
+   ],
+   "favorevoli": "Chi è a favore dice che la cittadinanza deve andare a chi ha un legame vero con l'Italia.",
+   "contrari": "Chi è contro dice che così si toglie un diritto a tanti discendenti di italiani nel mondo."
+  },
+  {
+   "id": "vs19_487_114",
+   "scarta": false,
+   "tema": "istituzioni",
+   "enunciato": "Chi occupa la casa di un altro deve rischiare pene più dure, fino al carcere.",
+   "opposto": "Per chi occupa la casa di un altro non servono pene più dure di quelle di prima.",
+   "varianti": [
+    "Occupare l'abitazione di qualcun altro va punito più severamente, anche col carcere.",
+    "Le pene per chi entra e resta nella casa di un altro vanno aumentate."
+   ],
+   "favorevoli": "Chi è a favore dice che così si proteggono meglio i proprietari e chi vive in casa.",
+   "contrari": "Chi è contro dice che serve aiutare chi non ha casa, più che punire più forte."
+  },
+  {
+   "id": "vs19_489_026",
+   "scarta": true,
+   "motivo_scarto": "decreto con misure diverse senza una principale"
+  },
+  {
+   "id": "19-314-4",
+   "scarta": false,
+   "tema": "economia",
+   "enunciato": "Le aziende private devono avere un permesso dello Stato per mandare satelliti nello spazio.",
+   "opposto": "Le aziende private non devono aver bisogno di un permesso dello Stato per andare nello spazio.",
+   "varianti": [
+    "Per lanciare satelliti un'impresa privata deve prima ottenere l'autorizzazione dello Stato.",
+    "Le attività delle imprese nello spazio vanno autorizzate e controllate dallo Stato."
+   ],
+   "favorevoli": "Chi è a favore dice che regole chiare danno sicurezza e attirano nuove imprese.",
+   "contrari": "Chi è contro dice che troppi permessi rallentano le imprese in un settore che corre."
+  },
+  {
+   "id": "vs19_503_125",
+   "scarta": true,
+   "motivo_scarto": "decreto con misure diverse senza una principale"
+  },
+  {
+   "id": "vs19_506_019",
+   "scarta": false,
+   "tema": "economia",
+   "enunciato": "Chi vive e lavora in montagna deve ricevere aiuti speciali dallo Stato.",
+   "opposto": "Chi vive e lavora in montagna non deve ricevere aiuti diversi da quelli degli altri.",
+   "varianti": [
+    "Lo Stato deve dare sostegni in più a chi abita e lavora nei paesi di montagna.",
+    "Le zone di montagna vanno aiutate con agevolazioni apposite per chi ci vive."
+   ],
+   "favorevoli": "Chi è a favore dice che così si evita che i paesi di montagna si svuotino.",
+   "contrari": "Chi è contro dice che anche altre zone in difficoltà meritano gli stessi aiuti."
+  },
+  {
+   "id": "vs19_508_060",
+   "scarta": true,
+   "motivo_scarto": "decreto con misure diverse senza una principale"
+  },
+  {
+   "id": "vs19_515_059",
+   "scarta": true,
+   "motivo_scarto": "decreto con misure diverse senza una principale"
+  },
+  {
+   "id": "vs19_519_048",
+   "scarta": true,
+   "motivo_scarto": "decreto con misure diverse senza una principale"
+  },
+  {
+   "id": "vs19_521_019",
+   "scarta": true,
+   "motivo_scarto": "decreto con misure diverse senza una principale"
+  },
+  {
+   "id": "19-338-5",
+   "scarta": true,
+   "motivo_scarto": "proroga di termini"
+  },
+  {
+   "id": "vs19_524_040",
+   "scarta": true,
+   "motivo_scarto": "decreto con misure diverse senza una principale"
+  },
+  {
+   "id": "vs19_524_041",
+   "scarta": true,
+   "motivo_scarto": "decreto con misure diverse senza una principale"
+  },
+  {
+   "id": "vs19_524_056",
+   "scarta": true,
+   "motivo_scarto": "proroga di termini"
+  },
+  {
+   "id": "19-342-1",
+   "scarta": false,
+   "tema": "ambiente",
+   "enunciato": "I permessi per costruire nelle zone protette per la bellezza del paesaggio vanno resi più semplici.",
+   "opposto": "I permessi per costruire nelle zone protette per il paesaggio devono restare come sono.",
+   "varianti": [
+    "Ottenere il via libera per lavori in aree di paesaggio tutelato deve essere più facile.",
+    "Le regole per costruire nelle zone protette per il paesaggio vanno semplificate."
+   ],
+   "favorevoli": "Chi è a favore dice che oggi le attese sono troppo lunghe per lavori anche piccoli.",
+   "contrari": "Chi è contro dice che regole più facili mettono a rischio il paesaggio italiano."
+  },
+  {
+   "id": "19-342-2",
+   "scarta": false,
+   "tema": "istituzioni",
+   "enunciato": "L'uso dell'intelligenza artificiale deve seguire regole fissate da una legge italiana.",
+   "opposto": "L'uso dell'intelligenza artificiale non deve avere regole italiane in più oltre a quelle europee.",
+   "varianti": [
+    "Serve una legge italiana che stabilisca come si può usare l'intelligenza artificiale.",
+    "L'Italia deve avere regole sue per l'uso dell'intelligenza artificiale."
+   ],
+   "favorevoli": "Chi è a favore dice che servono regole per proteggere le persone dai rischi della tecnologia.",
+   "contrari": "Chi è contro dice che le regole europee bastano e che altre regole frenano le imprese."
+  },
+  {
+   "id": "vs19_531_001",
+   "scarta": false,
+   "tema": "istituzioni",
+   "enunciato": "Giudici e pubblici ministeri devono avere carriere separate, senza poter passare da un ruolo all'altro.",
+   "opposto": "Giudici e pubblici ministeri devono restare nella stessa carriera, come oggi.",
+   "varianti": [
+    "Chi giudica e chi accusa nei processi deve fare due carriere diverse.",
+    "Un magistrato deve scegliere una volta per tutte se fare il giudice o l'accusa."
+   ],
+   "favorevoli": "Chi è a favore dice che il giudice deve essere lontano da chi accusa, per essere imparziale.",
+   "contrari": "Chi è contro dice che così l'accusa finisce più vicina al governo e meno indipendente."
+  },
+  {
+   "id": "19-344-9",
+   "scarta": false,
+   "tema": "economia",
+   "enunciato": "La paga minima deve seguire i contratti firmati da sindacati e aziende, non una cifra fissata per legge.",
+   "opposto": "La paga minima deve essere una cifra fissata per legge, uguale per tutti i lavori.",
+   "varianti": [
+    "Il salario più basso va stabilito dai contratti di categoria, non da una legge con una cifra unica.",
+    "Per decidere la paga minima contano i contratti tra sindacati e imprese, non un minimo per legge."
+   ],
+   "favorevoli": "Chi è a favore dice che i contratti conoscono meglio ogni lavoro e proteggono di più.",
+   "contrari": "Chi è contro dice che una cifra minima per legge protegge anche chi ha contratti deboli."
+  }
+ ],
+ "token_in": 0,
+ "token_out": 0,
+ "creato_il": "2026-10-07T23:40:48.865775+00:00"
+}
