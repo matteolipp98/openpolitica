@@ -46,8 +46,11 @@ jobs:
           echo "url=$url" >> "$GITHUB_OUTPUT"
           echo "Sito pubblicato: $url" | tee -a "$GITHUB_STEP_SUMMARY"
       - name: Controllo delle pagine
+        # L'indirizzo del singolo deploy è protetto da login Vercel (302); quello di produzione dev'essere pubblico.
         run: |
+          base=https://openpolitica.vercel.app
           for p in / /come-funziona /domande /partiti/lega /persone/elly-schlein; do
-            code=$(curl -s -o /dev/null -w '%{http_code}' "${{ steps.deploy.outputs.url }}$p")
-            echo "$p -> $code" | tee -a "$GITHUB_STEP_SUMMARY"
+            code=$(curl -s -o /dev/null -w '%{http_code}' "$base$p")
+            echo "$base$p -> $code" | tee -a "$GITHUB_STEP_SUMMARY"
           done
+          curl -s "$base/" | grep -o "<h1>[^<]*</h1>" | tee -a "$GITHUB_STEP_SUMMARY"
