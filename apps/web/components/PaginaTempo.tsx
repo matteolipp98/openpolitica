@@ -40,6 +40,9 @@ export function PaginaTempo({ metrica }: { metrica: MetricaTempo }) {
         <span>Punto mancante: in quei tre mesi abbiamo troppo pochi dati</span>
       </div>
 
+      {trimestri().length === 0 && (
+        <p className="vuota">Arriva quando avremo finito di caricare i voti del Parlamento.</p>
+      )}
       {schedeTempo(m).map((s) => (
         <section className="card tempo" key={s.id}>
           <p className="nome"><Link href={`/partiti/${s.id}`}>{s.nome}</Link></p>

@@ -21,6 +21,8 @@ jobs:
         run: pnpm content:check
       - run: pnpm typecheck
       - run: pnpm test
+      - name: Il pacchetto di esempio rispetta lo schema del sito
+        run: pnpm --filter @op/schema valida-pacchetto "$PWD/apps/web/dati/esempio"
 
   py:
     name: Worker Python e database

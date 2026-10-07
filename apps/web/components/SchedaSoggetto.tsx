@@ -40,7 +40,8 @@ export function SchedaSoggetto({ s }: { s: Soggetto }) {
   const pos = posizioni[s.id] ?? {};
   const prom = promesse[s.id] ?? [];
   const numeri = (accostamenti[s.id] ?? []).filter((a) => a.esito);
-  const governo = /governo/i.test(s.ruolo);
+  const delPartito = s.partito ? pacchetto().soggetti.find((x) => x.id === s.partito) : s;
+  const governo = /governo/i.test(delPartito?.ruolo ?? "");
   const chi = s.tipo === "partito" ? "loro" : "sue";
 
   const sommario = [
@@ -60,6 +61,9 @@ export function SchedaSoggetto({ s }: { s: Soggetto }) {
       <NotaEsempio />
 
       <h2>Come ha votato sulle cose che contano</h2>
+      {domande.length === 0 && (
+        <p className="vuota">Arriva presto. Stiamo scegliendo i voti in Parlamento su cui i partiti si sono divisi di più.</p>
+      )}
       {domande.map((d) => {
         const p = pos[d.id];
         const [et, cls] = etichetta(p);

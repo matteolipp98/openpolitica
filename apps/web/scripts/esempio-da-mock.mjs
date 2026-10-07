@@ -57,6 +57,7 @@ function soggettoDa(p, tipo) {
     tipo,
     nome: p.n,
     ruolo: p.r,
+    ...(tipo === "persona" && { partito: slug(p.r.split(" · ")[0]) }),
     numeri: { sbagliati: p.sbN, controllati: p.sbD },
     vaghi: { n: p.vagoN, d: p.vagoD },
     coerenza: { contrari: p.votoD - p.votoK, confrontabili: p.votoD },

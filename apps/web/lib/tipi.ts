@@ -18,6 +18,8 @@ export interface Soggetto {
   tipo: "partito" | "persona";
   nome: string;
   ruolo: string;
+  /** Per le persone: il partito (id), da cui si legge se è al governo. */
+  partito?: string;
   numeri?: { sbagliati: number; controllati: number };
   vaghi?: Conteggio;
   coerenza?: { contrari: number; confrontabili: number };
