@@ -36,8 +36,8 @@ jobs:
       DATABASE_URL: ${{ secrets.SESSION_POOLER }}
     defaults: { run: { working-directory: workers, shell: bash } }  # bash = pipefail: un errore fa fallire il job
     steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v6
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10
       - run: uv sync --frozen
       - name: Controllo della stringa di connessione
         run: |
@@ -62,9 +62,9 @@ jobs:
       DATABASE_URL: ${{ secrets.SESSION_POOLER }}
     defaults: { run: { working-directory: workers, shell: bash } }  # bash = pipefail: un errore fa fallire il job
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         if: github.event_name != 'workflow_dispatch' || inputs.importa == 'entrambi' || inputs.importa == matrix.ramo
-      - uses: astral-sh/setup-uv@v6
+      - uses: astral-sh/setup-uv@v10
         if: github.event_name != 'workflow_dispatch' || inputs.importa == 'entrambi' || inputs.importa == matrix.ramo
       - name: Import ${{ matrix.ramo }}
         if: github.event_name != 'workflow_dispatch' || inputs.importa == 'entrambi' || inputs.importa == matrix.ramo
@@ -84,10 +84,10 @@ jobs:
       DATABASE_URL: ${{ secrets.SESSION_POOLER }}
     defaults: { run: { working-directory: workers, shell: bash } }
     steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v6
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10
       - run: uv sync --frozen
       - name: Calcola "vota come il governo" e "il partito vota unito"
         run: uv run python -m op_workers.andamento.da_voti --uscita ../andamento/andamento.json | tee -a "$GITHUB_STEP_SUMMARY"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with: { name: andamento, path: andamento/andamento.json, retention-days: 30 }

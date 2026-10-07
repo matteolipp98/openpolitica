@@ -30,8 +30,8 @@ jobs:
       GEMINI_MODELLO: ${{ vars.GEMINI_MODELLO }}
     defaults: { run: { working-directory: workers, shell: bash } }
     steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v6
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10
       - run: uv sync --frozen
       - name: Modelli Gemini disponibili (non consuma la quota di generazione)
         run: |
@@ -45,8 +45,8 @@ jobs:
         run: |
           uv run python -m op_workers.catalogo.genera --versione v1 --max-chiamate "${{ inputs.max_chiamate || 20 }}" \
             | tee -a "$GITHUB_STEP_SUMMARY"
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with: { node-version-file: .nvmrc, cache: pnpm }
       - name: Controlla il catalogo prima di salvarlo
         working-directory: .

@@ -67,6 +67,6 @@ jobs:
       RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
       DB: ${{ secrets.SESSION_POOLER }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Collega il servizio Render al database
         run: python3 .github/scripts/render_env.py

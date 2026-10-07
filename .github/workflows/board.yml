@@ -15,7 +15,7 @@ jobs:
     timeout-minutes: 10
     permissions: { issues: read, contents: read }
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with: { sparse-checkout: .github/scripts }
       - name: Allinea la board
         shell: bash   # pipefail: se lo script fallisce, il job fallisce anche con il tee

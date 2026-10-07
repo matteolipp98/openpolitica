@@ -32,10 +32,10 @@ jobs:
       SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
     defaults: { run: { shell: bash } }
     steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v6
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with: { node-version-file: .nvmrc, cache: pnpm }
       - run: pnpm install --frozen-lockfile
       - name: Costruisci il pacchetto
@@ -50,7 +50,7 @@ jobs:
       - name: Pubblica
         working-directory: workers
         run: uv run python -m op_workers.rilascio.pubblica ../rilascio | tee -a "$GITHUB_STEP_SUMMARY"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with: { name: rilascio, path: rilascio/, retention-days: 30 }
       - name: Ricostruisci il sito
         env: { GH_TOKEN: "${{ github.token }}" }
