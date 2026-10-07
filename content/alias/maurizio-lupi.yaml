@@ -5,7 +5,7 @@ forme: ["Maurizio Lupi", "Maurizio Enzo Lupi"]
 forme_escluse:
   - { forma: "Lupi", motivo: "è anche una parola comune" }
 cariche:
-  - { carica: "Presidente del partito", partito: noi-moderati, valido_dal: null, da_verificare: true }  # il partito nasce l'11 agosto 2022; data della presidenza non trovata su fonti affidabili
+  - { carica: "Presidente del partito", partito: noi-moderati, valido_dal: 2023-05-21, fonte: "https://www.iltempo.it/politica/2023/05/22/news/noi-moderati-partito-nascita-maurizio-lupi-presidente-centro-congresso-roma-35858578/" }  # eletto al congresso fondativo di Roma, 20-21 maggio 2023
 ids_esterni:
   # dati.camera.it: deputato.rdf/d300447_19, verificato con la sonda del 2026-10-07
   - { fonte: camera, id: "300447", valido_dal: 2022-10-13 }
