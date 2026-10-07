@@ -6,7 +6,7 @@
    "vero": "I dati ISTAT dicono 412.000 posti.",
    "fonte": "ISTAT, dati sul lavoro, marzo 2024 – marzo 2026",
    "esito": "sbagliato",
-   "frase": "Numero sbagliato. Il numero vero è meno della metà."
+   "frase": "Dato sbagliato. Il dato vero è meno della metà."
   },
   {
    "detto": "L'Italia cresce più della media europea.",
@@ -14,7 +14,7 @@
    "vero": "La crescita italiana è stata inferiore alla media dell'area euro nello stesso periodo.",
    "fonte": "Eurostat, PIL trimestrale",
    "esito": "sbagliato",
-   "frase": "Sbagliato. L'Italia è cresciuta meno degli altri, non di più."
+   "frase": "Dato sbagliato. L'Italia è cresciuta meno degli altri, non di più."
   },
   {
    "detto": "Abbiamo abbassato le tasse a tutte le famiglie.",
@@ -22,13 +22,13 @@
    "vero": "Il taglio ha riguardato i redditi da lavoro fino a 35.000 euro, non tutte le famiglie.",
    "fonte": "Legge di bilancio 2026",
    "esito": null,
-   "frase": "Qui non c'è un numero da controllare: ti mostriamo cosa dice la legge."
+   "frase": "Qui non c'è un dato da controllare: ti mostriamo cosa dice la legge."
   }
  ],
  "civica-riformista": [
   {
    "detto": "Siamo il paese che spende meno in istruzione di tutta Europa.",
-   "dove": "Intervento in aula, febbraio 2026",
+   "dove": "Discorso in Parlamento, febbraio 2026",
    "vero": "Secondo Eurostat cinque paesi spendono meno di noi.",
    "fonte": "Eurostat, spesa pubblica",
    "esito": "sbagliato",

@@ -86,7 +86,7 @@ a{color:var(--mark)}
 
 <div id="grafici"></div>
 
-<p class="chiusura">Non diciamo se un cambiamento è un bene o un male. Votare compatti, o insieme al governo, può essere un pregio o un difetto: lo decidi tu.</p>
+<p class="chiusura">Non diciamo se un cambiamento è un bene o un male. Votare uniti, o insieme al governo, può essere un pregio o un difetto: lo decidi tu.</p>
 <footer>Fonti: voti di Camera e Senato e frasi raccolte dai canali pubblici dei partiti. <a href="#">Come contiamo</a></footer>
 </div>
 
@@ -114,22 +114,22 @@ const metriche=[
   spiega:"Quante volte, nelle votazioni finali, il partito ha votato come la maggioranza di governo.",
   frase:(n,d)=>`ha votato come il governo ${n} volte su ${d}`,
   notaGov:"È normale che voti quasi sempre così."},
- {id:"compatto",et:"Vota compatto",
+ {id:"compatto",et:"Il partito vota unito",
   spiega:"Quante volte almeno 9 parlamentari su 10 del partito hanno votato allo stesso modo.",
-  frase:(n,d)=>`ha votato compatto ${n} volte su ${d}`},
- {id:"numeri",et:"Numeri sbagliati",presto:true,
-  spiega:"Quanti dei numeri che ha detto erano sbagliati, confrontati con i dati ufficiali.",
-  frase:(n,d)=>`ha sbagliato ${n} numeri su ${d}`},
- {id:"precise",et:"Promesse con numero e data",presto:true,
-  spiega:"Quante promesse dicevano quanto e entro quando. Le altre non si possono controllare.",
-  frase:(n,d)=>`${n} promesse su ${d} avevano un numero e una data`},
- {id:"seguiti",et:"Annunci seguiti da un atto",presto:true,
-  spiega:"Quando ha annunciato una cosa con una scadenza, quante volte è arrivata una legge o una proposta in tempo.",
-  frase:(n,d)=>`a ${n} annunci su ${d} è seguito un atto`,
+  frase:(n,d)=>`ha votato unito ${n} volte su ${d}`},
+ {id:"numeri",et:"Dati sbagliati",presto:true,
+  spiega:"Quando ha detto un dato, per esempio quanti posti di lavoro ci sono, quante volte quello vero era diverso.",
+  frase:(n,d)=>`ha detto ${n} dati sbagliati su ${d}`},
+ {id:"precise",et:"Promesse precise",presto:true,
+  spiega:"Quante promesse dicevano quanto e entro quando, per esempio «20.000 insegnanti entro il 2027».",
+  frase:(n,d)=>`${n} promesse su ${d} erano precise`},
+ {id:"seguiti",et:"Annunci fatti in tempo",presto:true,
+  spiega:"Quando ha detto «lo faremo entro giugno», quante volte entro giugno c'era una legge o una proposta.",
+  frase:(n,d)=>`ha fatto in tempo ${n} annunci su ${d}`,
   notaOpp:"All'opposizione può solo presentare proposte: contano anche quelle."},
- {id:"contro",et:"Frasi contro gli avversari",presto:true,
-  spiega:"Quante frasi parlavano degli avversari invece che delle proprie proposte.",
-  frase:(n,d)=>`${n} frasi su ${d} erano contro gli avversari`}
+ {id:"contro",et:"Attacchi agli altri partiti",presto:true,
+  spiega:"Quante frasi servivano ad attaccare gli altri partiti invece che a dire cosa vuole fare.",
+  frase:(n,d)=>`${n} frasi su ${d} attaccavano gli altri partiti`}
 ];
 
 /* dati inventati ma stabili: generatore con seme */

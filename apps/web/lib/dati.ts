@@ -21,6 +21,7 @@ export function pacchetto(): Pacchetto {
     posizioni: leggi("posizioni.json"),
     accostamenti: leggi("accostamenti.json"),
     promesse: leggi("promesse.json"),
+    andamento: leggi("andamento.json"),
   };
   return cache;
 }

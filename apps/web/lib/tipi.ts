@@ -22,6 +22,8 @@ export interface Soggetto {
   vaghi?: Conteggio;
   coerenza?: { contrari: number; confrontabili: number };
   promesse?: { mantenute: number; totali: number };
+  /** Come sono fatte promesse e annunci (ADR 0039); assente finché Laya non è calibrato. */
+  indicatori?: { precise: Conteggio; soldi: Conteggio; inTempo: Conteggio; attacchi: Conteggio };
 }
 
 export interface Domanda {
@@ -51,6 +53,16 @@ export interface Accostamento {
 
 export interface Promessa { stato: "mantenuta" | "a_meta" | "non_mantenuta"; testo: string; motivo: string }
 
+export type MetricaTempo =
+  | "vota_con_governo" | "vota_compatto" | "numeri_sbagliati" | "promesse_precise" | "annunci_seguiti" | "frasi_contro";
+
+/** Serie per trimestre (ADR 0040). Un punto con d sotto soglia non si disegna. */
+export interface Andamento {
+  trimestri: string[]; // "2022-T4", ...
+  governo: Record<string, boolean[]>; // per partito, un valore per trimestre
+  serie: Record<string, Partial<Record<MetricaTempo, Conteggio[]>>>;
+}
+
 export interface Pacchetto {
   manifest: Manifest;
   domande: Domanda[];
@@ -58,4 +70,5 @@ export interface Pacchetto {
   posizioni: Record<string, Record<string, Posizione>>;
   accostamenti: Record<string, Accostamento[]>;
   promesse: Record<string, Promessa[]>;
+  andamento: Andamento;
 }

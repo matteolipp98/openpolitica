@@ -77,6 +77,23 @@ export const Letture = z.object({
       sotto: z.string().max(120),
     }),
   ),
+  // Andamento nel tempo (ADR 0040): testi delle serie e della frase anno contro anno
+  andamento: z.object({
+    confronto: z.object({ piu: z.string(), meno: z.string(), uguale: z.string(), pochi: z.string() }),
+    metriche: z
+      .array(
+        z.object({
+          id: z.enum(["vota_con_governo", "vota_compatto", "numeri_sbagliati", "promesse_precise", "annunci_seguiti", "frasi_contro"]),
+          nome: z.string().max(40),
+          spiega: z.string().max(160),
+          frase: z.string().max(80).refine((f) => f.includes("{n}") && f.includes("{d}"), "la frase deve contenere {n} e {d}"),
+          notaGoverno: z.string().max(100).optional(),
+          notaOpposizione: z.string().max(100).optional(),
+          presto: z.boolean().default(false),
+        }),
+      )
+      .min(1),
+  }),
 });
 
 // ---------- Governance (ADR 0021, 0028, 0037) ----------

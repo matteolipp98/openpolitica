@@ -16,9 +16,9 @@ export function Accostamento({ a }: { a: A }) {
       </div>
       {(a.esito || a.frase) && (
         <div className="esito">
-          {a.esito === "sbagliato" && <b>Numero sbagliato. </b>}
+          {a.esito === "sbagliato" && <b>Dato sbagliato. </b>}
           {a.esito === "quasi" && <b>Quasi giusto. </b>}
-          {a.frase.replace(/^Numero sbagliato\.\s*|^Sbagliato\.\s*/, "")}
+          {a.frase.replace(/^(Numero|Dato) sbagliato\.\s*|^Sbagliato\.\s*/, "")}
         </div>
       )}
     </div>

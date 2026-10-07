@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Elenco, type Scheda } from "@/components/Elenco";
 import { NotaEsempio } from "@/components/NotaEsempio";
 import { righe } from "@/lib/righe";
@@ -27,7 +28,7 @@ export default function Indice() {
   return (
     <main>
       <h1>Cosa hanno fatto davvero</h1>
-      <p className="lede">Controlliamo i numeri che dicono e li confrontiamo con come votano in Parlamento. Tutto qui.</p>
+      <p className="lede">Quando un politico dice un dato, per esempio quanti posti di lavoro ci sono, controlliamo se è vero. E guardiamo come vota in Parlamento.</p>
       <NotaEsempio />
       {inBreve.length > 0 && (
         <>
@@ -44,10 +45,11 @@ export default function Indice() {
             ))}
           </div>
           <p className="piccolo" style={{ margin: "10px 0 0" }}>
-            Mettiamo a confronto solo chi ha detto almeno {parametri().presentazione.denominatoreMinimo} numeri.
+            Confrontiamo solo chi ha detto almeno {parametri().presentazione.denominatoreMinimo} dati: con meno, il confronto non sarebbe giusto.
           </p>
         </>
       )}
+      <p className="piccolo" style={{ margin: "14px 0 0" }}><Link href="/nel-tempo">Com&apos;è cambiato nel tempo →</Link></p>
       <h2>Tutti</h2>
       <Elenco partiti={partiti().map(scheda)} persone={persone().map(scheda)} />
     </main>

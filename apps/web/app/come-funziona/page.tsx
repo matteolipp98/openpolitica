@@ -3,16 +3,18 @@ import type { Metadata } from "next";
 export const metadata: Metadata = { title: "Come funziona" };
 
 const PASSI = [
-  ["Raccogliamo quello che dicono", "Comunicati, interviste, post sui canali ufficiali, interventi in aula. Ogni giorno."],
-  ["Controlliamo i numeri", "Se dicono una cifra, andiamo a vedere quella vera sui siti ufficiali: ISTAT, Eurostat, Banca d'Italia, bilancio dello Stato."],
+  ["Raccogliamo quello che dicono", "Comunicati, interviste, post sui canali ufficiali, discorsi in Parlamento. Ogni giorno."],
+  ["Controlliamo i dati", "Se dicono un dato, per esempio quanti posti di lavoro ci sono, andiamo a vedere quello vero sui siti ufficiali: ISTAT, Eurostat, Banca d'Italia, bilancio dello Stato."],
   ["Guardiamo come votano", "Ogni voto in Parlamento è pubblico, nome per nome. Lo confrontiamo con quello che avevano dichiarato."],
-  ["Te lo raccontiamo semplice", "Con sotto sempre la data, l'atto e il link, così puoi controllare tu."],
+  ["Te lo raccontiamo semplice", "Con sotto sempre la data, la legge e il link, così puoi controllare tu."],
 ];
 
 const SI = [
-  "Controlliamo i numeri che dicono.",
-  "Mostriamo come hanno votato, con data e atto.",
+  "Controlliamo i dati che dicono.",
+  "Mostriamo come hanno votato, con la data e la legge.",
   "Segnaliamo quando dicono una cosa e poi votano il contrario.",
+  "Guardiamo come sono fatte le promesse: se dicono quanto, entro quando e dove prendere i soldi.",
+  "Ti facciamo vedere come cambiano i partiti nel tempo.",
   "Ti diciamo chi la pensa come te, se rispondi alle domande.",
 ];
 const NO = [
@@ -36,13 +38,21 @@ const FAQ: [string, string[]][] = [
     "Perché su quell'argomento non abbiamo trovato né un voto né una dichiarazione chiara.",
     "Potremmo tirare a indovinare. Preferiamo lasciare vuoto.",
   ]],
-  ["Chi decide che un numero è sbagliato?", [
-    "Una regola uguale per tutti. Se il numero è solo arrotondato, va bene. Se è troppo lontano da quello vero, è sbagliato.",
+  ["Chi decide che un dato è sbagliato?", [
+    "Una regola uguale per tutti. Se il dato è solo arrotondato, va bene. Se è troppo lontano da quello vero, è sbagliato.",
     "Prima controlliamo che la frase sia davvero sua. Se abbiamo un dubbio, non diciamo niente.",
+  ]],
+  ["Come fate a dire se una promessa è precisa?", [
+    "Guardiamo solo due cose: se dice quanto (\"20.000 insegnanti\") e se dice entro quando (\"entro il 2027\"). Se mancano, non si può controllare se l'hanno mantenuta.",
+    "Non diciamo se la promessa è buona o se si può fare. Diciamo solo com'è scritta.",
+  ]],
+  ["Cosa vuol dire \"è più di prima\"?", [
+    "Confrontiamo l'ultimo anno con quello prima. Lo scriviamo solo se la differenza è grande abbastanza da non essere un caso.",
+    "Se è piccola scriviamo \"più o meno come prima\". Non diciamo mai se è un bene o un male.",
   ]],
   ["Perché non dite \"ha mentito\"?", [
     "Perché non possiamo sapere se uno sbaglia apposta o si è confuso.",
-    "Ti diciamo solo che il numero è sbagliato e qual è quello vero. Il resto lo giudichi tu.",
+    "Ti diciamo solo che il dato è sbagliato e qual è quello vero. Il resto lo giudichi tu.",
   ]],
   ["Le mie risposte dove finiscono?", [
     "Restano sul tuo telefono o sul tuo computer. Non le vediamo e non le salviamo da nessuna parte.",
@@ -50,12 +60,13 @@ const FAQ: [string, string[]][] = [
   ]],
   ["Se trovo un errore?", [
     "Scrivici: c'è un modulo per segnalarlo, e vale per tutti, anche per i politici e il loro staff.",
-    "Se ci dici che abbiamo sbagliato noi, togliamo quel numero finché non l'abbiamo ricontrollato.",
+    "Se ci dici che abbiamo sbagliato noi, togliamo quel dato finché non l'abbiamo ricontrollato.",
     "Quando correggiamo qualcosa lo scriviamo in una pagina pubblica, con la data. Non cancelliamo di nascosto.",
   ]],
   ["Usate l'intelligenza artificiale?", [
     "Sì, per leggere tanti documenti e tirarne fuori le frasi dei politici: a mano non ce la faremmo.",
-    "Ma i numeri non li scrive mai: quelli arrivano dalle banche dati ufficiali. E il calcolo di chi la pensa come te è una formula fissa, sempre la stessa per tutti.",
+    "Per capire se una frase è una promessa, se ha una data o se attacca un altro partito usiamo un programma che legge la frase senza sapere chi l'ha detta. Se non è sicuro, la frase non la contiamo.",
+    "Ma i dati non li scrive mai: quelli arrivano dai siti ufficiali. E il calcolo di chi la pensa come te è una formula fissa, sempre la stessa per tutti.",
   ]],
 ];
 
@@ -80,7 +91,7 @@ export default function ComeFunziona() {
       ))}
 
       <h2>Un esempio</h2>
-      <p>Così controlliamo un numero, passo per passo. L&apos;esempio è inventato, serve solo a spiegare il metodo.</p>
+      <p>Così controlliamo un dato, passo per passo. L&apos;esempio è inventato, serve solo a spiegare il metodo.</p>
       <div className="conf">
         <div>
           <p className="et">Ha detto</p>
@@ -93,7 +104,7 @@ export default function ComeFunziona() {
           <cite>Esempio inventato</cite>
         </div>
         <div className="esito">
-          <b>Numero sbagliato.</b> Il numero vero è meno della metà. Le donne che lavorano sono comunque aumentate.
+          <b>Dato sbagliato.</b> Il dato vero è meno della metà. Le donne che lavorano sono comunque aumentate.
         </div>
       </div>
 

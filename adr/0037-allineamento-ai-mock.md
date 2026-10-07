@@ -20,9 +20,9 @@ Per i claim quantitativi l'esito si pubblica senza revisione umana, perché lo p
 
 | Esito interno | In pagina |
 |---|---|
-| supportato | "Il numero è giusto" |
-| impreciso | "Quasi giusto", con il numero vero |
-| contraddetto | "Numero sbagliato", con un confronto concreto ("il numero vero è meno della metà") |
+| supportato | "Il dato è giusto" |
+| impreciso | "Quasi giusto", con il dato vero |
+| contraddetto | "Dato sbagliato", con un confronto concreto ("il dato vero è meno della metà") |
 | non verificabile | "Non si può controllare", con il motivo |
 
 Un esito negativo si pubblica solo se valgono tutte queste condizioni:
@@ -34,19 +34,19 @@ Un esito negativo si pubblica solo se valgono tutte queste condizioni:
 
 "Fuorviante per contesto" resta soggetto a revisione umana e non si pubblica senza (ADR 0014, 0028).
 
-Il linguaggio resta descrittivo: si dice che il numero è sbagliato, mai che la persona ha mentito o ha voluto ingannare (ADR 0010).
+Il linguaggio resta descrittivo: si dice che il dato è sbagliato, mai che la persona ha mentito o ha voluto ingannare (ADR 0010).
 
 ### Claim fattuali non numerici
 Le affermazioni non numeriche verificabili su un testo normativo o un atto ufficiale (per esempio "abbiamo abbassato le tasse a tutte le famiglie" confrontata con la legge di bilancio) si pubblicano come accostamento "Ha detto / In realtà", con l'atto citato, solo quando due famiglie di modelli concordano sull'esito e la fonte è di livello A. Non entrano nel conteggio "numeri sbagliati".
 
 ### Letture comparative e frasi qualitative
-L'indice dei soggetti può aprire con letture del tipo "X è quello che sbaglia più numeri", a queste condizioni:
+L'indice dei soggetti può aprire con letture del tipo "X è quello che dice più dati sbagliati", a queste condizioni:
 
 - ogni lettura riguarda **una sola metrica** dell'ADR 0019, mai una combinazione;
 - il confronto è solo tra soggetti con denominatore pari almeno alla soglia minima, nella stessa finestra temporale e sulle stesse fonti;
 - se più soggetti sono a pari valore, si nominano tutti;
 - la frase porta sempre con sé numeratore e denominatore;
-- le regole che generano le letture e le frasi qualitative ("sbaglia spesso", "di solito è giusto", "così così") sono dati versionati e pubblici, con le soglie esplicite (ADR 0025); oggi: almeno 15% "spesso", al massimo 6% "di solito è giusto", sotto 30 controlli nessun giudizio ma "ha detto pochi numeri controllabili".
+- le regole che generano le letture e le frasi qualitative ("dice spesso dati sbagliati", "di solito è giusto", "a volte dice dati sbagliati") sono dati versionati e pubblici, con le soglie esplicite (ADR 0025); oggi: almeno 15% "spesso", al massimo 6% "di solito è giusto", sotto 30 controlli nessun giudizio ma "ha detto pochi dati da controllare".
 
 Resta vietato un indice sintetico di affidabilità (ADR 0009, 0019): le letture sono frasi distinte, una per metrica, e l'elenco dei soggetti resta in ordine alfabetico.
 

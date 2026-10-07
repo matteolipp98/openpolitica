@@ -87,7 +87,7 @@ footer{margin-top:30px;padding-top:16px;border-top:1px solid var(--rule);font-si
 <p class="ruolo">Al governo · 54 parlamentari</p>
 
 <div class="sommario">
-  <p>Sbaglia i numeri 11 volte su 96 che abbiamo controllato.</p>
+  <p>Ha detto un dato sbagliato 11 volte su 96 che abbiamo controllato.</p>
   <p>Ha votato al contrario di quello che diceva 8 volte su 58.</p>
   <p>Ha mantenuto 7 promesse su 20.</p>
 </div>
@@ -101,10 +101,10 @@ footer{margin-top:30px;padding-top:16px;border-top:1px solid var(--rule);font-si
 <div class="prom" id="promesse"></div>
 
 <h2>Come sono fatte le sue promesse</h2>
-<p class="ruolonota">Contiamo le promesse e gli annunci che ha fatto in aula, sui suoi canali e nelle interviste. Non diciamo se sono buone idee.</p>
+<p class="ruolonota">Contiamo le promesse e gli annunci che ha fatto in Parlamento, sui suoi canali e nelle interviste. Non diciamo se sono buone idee.</p>
 <div class="card" id="kpi"></div>
 
-<h2>Numeri che non tornano</h2>
+<h2>Dati sbagliati, con quello vero accanto</h2>
 <div id="numeri"></div>
 
 <h2>Com'è cambiato nel tempo</h2>
@@ -123,7 +123,7 @@ const temi=[
  {q:"Più tasse sui grandi patrimoni",pos:"contro",voti:[
    {t:"Ha votato contro l'imposta sui patrimoni oltre i 5 milioni",d:"Camera, 3 ottobre 2025"}]},
  {q:"Cittadinanza ai figli di stranieri nati in Italia",pos:"contro",voti:[
-   {t:"Ha votato contro il passaggio in aula della riforma",d:"Camera, 7 marzo 2026"}],
+   {t:"Ha votato contro la riforma",d:"Camera, 7 marzo 2026"}],
   nota:"Nel programma del 2022 scriveva di voler \u201criformare le regole sulla cittadinanza\u201d, senza dire in che direzione."},
  {q:"Nuove centrali nucleari",pos:"a favore",voti:[
    {t:"Ha votato a favore del piano che riapre al nucleare",d:"Camera, 22 gennaio 2026"}]},
@@ -157,7 +157,7 @@ const promesse=[
  {s:"m",t:"Ridurre i tempi di attesa per le visite mediche",n:"A metà: calati del 17%, la promessa era dimezzarli."},
  {s:"n",t:"Aumentare la spesa per la sanità pubblica",n:"Non fatto: ha votato contro l'aumento del fondo."},
  {s:"n",t:"Una legge sul conflitto d'interessi",n:"Non fatto: nessuna proposta presentata in quattro anni."},
- {s:"n",t:"Rivedere le regole sulla cittadinanza",n:"Non fatto: ha votato contro la riforma arrivata in aula."}
+ {s:"n",t:"Rivedere le regole sulla cittadinanza",n:"Non fatto: ha votato contro la riforma quando è arrivata in Parlamento."}
 ];
 const et={f:"Mantenuta",m:"A metà",n:"Non mantenuta"};
 document.getElementById("promesse").innerHTML=promesse.map(p=>`
@@ -167,13 +167,13 @@ document.getElementById("promesse").innerHTML=promesse.map(p=>`
 const numeri=[
  {said:"L'occupazione femminile è cresciuta di oltre un milione di posti.",dove:"Conferenza stampa, marzo 2026",
   vero:"I dati ISTAT dicono 412.000 posti.",fonte:"ISTAT, dati sul lavoro, marzo 2024 – marzo 2026",
-  esito:"<b>Numero sbagliato.</b> Il numero vero è meno della metà."},
+  esito:"<b>Dato sbagliato.</b> Il dato vero è meno della metà."},
  {said:"L'Italia cresce più della media europea.",dove:"Post sul canale ufficiale, luglio 2026",
   vero:"La crescita italiana è stata inferiore alla media dell'area euro nello stesso periodo.",fonte:"Eurostat, PIL trimestrale",
-  esito:"<b>Sbagliato.</b> L'Italia è cresciuta meno degli altri, non di più."},
+  esito:"<b>Dato sbagliato.</b> L'Italia è cresciuta meno degli altri, non di più."},
  {said:"Abbiamo abbassato le tasse a tutte le famiglie.",dove:"Intervista tv riportata da un'agenzia, gennaio 2026",
   vero:"Il taglio ha riguardato i redditi da lavoro fino a 35.000 euro, non tutte le famiglie.",fonte:"Legge di bilancio 2026",
-  esito:"Qui non c'è un numero da controllare: ti mostriamo cosa dice la legge."}
+  esito:"Qui non c'è un dato da controllare: ti mostriamo cosa dice la legge."}
 ];
 document.getElementById("numeri").innerHTML=`<div class="card">`+numeri.map(n=>`
  <div class="conf" style="border:0;border-top:1px solid var(--rule-soft)">
@@ -184,19 +184,19 @@ document.getElementById("numeri").innerHTML=`<div class="card">`+numeri.map(n=>`
 
 /* ADR 0039: quattro indicatori separati, ognuno con il suo conteggio; nessun punteggio che li mette insieme */
 const kpi=[
- {c:"41%",b:false,t:"Promesse con un numero e una data",s:"52 su 127. Le altre non dicono quanto o entro quando, quindi non si possono controllare."},
- {c:"18%",b:true,t:"Promesse che dicono dove trovare i soldi",s:"14 su 78 promesse che costano soldi pubblici"},
- {c:"23",b:false,t:"Annunci a cui è seguita una legge o una proposta in tempo",s:"Su 61 annunci con una scadenza già passata"},
- {c:"34%",b:true,t:"Frasi contro gli avversari",s:"Il resto parla delle sue proposte o di cosa ha fatto. 287 frasi su 845."}
+ {c:"41%",b:false,t:"Promesse precise",s:"Dicono quanto e entro quando, per esempio «20.000 insegnanti entro il 2027». 52 su 127."},
+ {c:"18%",b:true,t:"Promesse che dicono dove prendere i soldi",s:"14 su 78 promesse che costano soldi pubblici"},
+ {c:"38%",b:false,t:"Annunci fatti in tempo",s:"Aveva detto «entro giugno» ed entro giugno c'era una legge o una proposta. 23 su 61."},
+ {c:"34%",b:true,t:"Frasi per attaccare gli altri partiti",s:"Le altre parlano di cosa vuole fare o di cosa ha fatto. 287 frasi su 845."}
 ];
 document.getElementById("kpi").innerHTML=kpi.map(k=>`
  <div class="riga"><span class="cifra${k.b?" b":""}">${k.c}</span><div><p>${k.t}</p><p class="sotto">${k.s}</p></div></div>`).join("");
 
 /* ADR 0040: ultimo anno contro anno prima, con la regola fissa; niente "migliora" o "peggiora" */
 const tempo=[
- {t:"Vota compatto",s:"Nell'ultimo anno 231 volte su 248. L'anno prima 214 su 251. Più o meno come prima.",p:[.82,.86,.85,.9,.88,.91,.9,.93]},
- {t:"Promesse con un numero e una data",s:"Nell'ultimo anno 19 su 61. L'anno prima 33 su 66. È meno di prima.",p:[.55,.5,.52,.48,.36,.33,.3,.31]},
- {t:"Frasi contro gli avversari",s:"Nell'ultimo anno 172 su 430. L'anno prima 115 su 415. È più di prima.",p:[.25,.27,.28,.3,.36,.4,.41,.4]}
+ {t:"Il partito vota unito",s:"Nell'ultimo anno 231 volte su 248. L'anno prima 214 su 251. Più o meno come prima.",p:[.82,.86,.85,.9,.88,.91,.9,.93]},
+ {t:"Promesse precise",s:"Nell'ultimo anno 19 su 61. L'anno prima 33 su 66. È meno di prima.",p:[.55,.5,.52,.48,.36,.33,.3,.31]},
+ {t:"Frasi per attaccare gli altri partiti",s:"Nell'ultimo anno 172 su 430. L'anno prima 115 su 415. È più di prima.",p:[.25,.27,.28,.3,.36,.4,.41,.4]}
 ];
 const mini=v=>{const x=i=>4+i*88/(v.length-1),y=q=>32-q*30;
  return `<svg viewBox="0 0 96 34" aria-hidden="true"><polyline class="l" points="${v.map((q,i)=>x(i)+","+y(q)).join(" ")}"/></svg>`};

@@ -201,7 +201,7 @@ function calcola(){
     ${p.neutre.length?`<h3>Su queste non hanno scelto</h3>${p.neutre.map(k=>`<div class="pt"><b>Né sì né no</b><span>${domande[k].t}</span></div>`).join("")}`:""}
     ${p.pct===null?`<p class="vuoto">Non sappiamo come hanno votato sulle tue domande.</p>`:""}
     ${p.manca?`<p class="vuoto">Su ${p.manca} domande non abbiamo trovato nessun voto: non inventiamo la loro posizione.</p>`:""}
-    <p class="vuoto">Ogni "sì" o "no" viene da un voto in Parlamento. Puoi vedere data e atto.</p>
+    <p class="vuoto">Ogni "sì" o "no" viene da un voto in Parlamento. Puoi vedere quale legge e quando.</p>
    </div>
   </section>`).join("");
 

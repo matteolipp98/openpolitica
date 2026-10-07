@@ -17,10 +17,10 @@ Quattro indicatori nuovi, ciascuno una quota con numeratore e denominatore, calc
 
 | Indicatore | In pagina | Denominatore | Come si decide la singola frase |
 |---|---|---|---|
-| `promesse_precise` | "Promesse con un numero e una data" | promesse dette dal soggetto | Laya `noul`: "dice quanto" e "dice entro quando"; servono entrambi. Se nel testo non c'è nessuna cifra o data, la risposta è no senza chiedere al modello |
-| `promesse_coperte` | "Promesse che dicono dove trovare i soldi" | promesse che richiedono spesa pubblica (Laya `noul`) | Laya `noul`: "indica come pagarla" (tagli, tasse, fondi europei, debito) |
-| `annunci_seguiti` | "Annunci a cui è seguito un atto" | promesse e annunci con una scadenza già passata | Regola fissa: esiste un atto (legge, decreto, proposta depositata, voto) collegato e datato entro la scadenza. Il collegamento frase–atto richiede l'accordo di due famiglie (sotto) |
-| `frasi_contro` | "Frasi contro gli avversari" | tutte le frasi attribuite al soggetto | Laya `choice` sul contenuto principale: proposta propria, bilancio di ciò che ha fatto, critica a un avversario, commento su un fatto |
+| `promesse_precise` | "Promesse precise" (dicono quanto e entro quando) | promesse dette dal soggetto | Laya `noul`: "dice quanto" e "dice entro quando"; servono entrambi. Se nel testo non c'è nessuna cifra o data, la risposta è no senza chiedere al modello |
+| `promesse_coperte` | "Promesse che dicono dove prendere i soldi" | promesse che richiedono spesa pubblica (Laya `noul`) | Laya `noul`: "indica come pagarla" (tagli, tasse, fondi europei, debito) |
+| `annunci_seguiti` | "Annunci fatti in tempo" | promesse e annunci con una scadenza già passata | Regola fissa: esiste un atto (legge, decreto, proposta depositata, voto) collegato e datato entro la scadenza. Il collegamento frase–atto richiede l'accordo di due famiglie (sotto) |
+| `frasi_contro` | "Frasi per attaccare gli altri partiti" | tutte le frasi attribuite al soggetto | Laya `choice` sul contenuto principale: proposta propria, bilancio di ciò che ha fatto, critica a un avversario, commento su un fatto |
 
 Nessuno di questi giudica se una promessa è buona, giusta o realistica. Dicono com'è fatta la frase e cosa è successo dopo. Il realismo resta la scheda descrittiva dell'ADR 0020.
 
@@ -45,7 +45,7 @@ Non vale per l'estrazione dell'interrogazione strutturata di un numero (metrica,
 Vale solo dopo che il checkpoint di Laya usato ha superato il controllo dell'ADR 0033 sul golden set italiano per quel tipo di decisione. Prima, Laya lavora in laboratorio (0016) e i suoi risultati non si pubblicano.
 
 ### Cosa si vede
-Ogni indicatore è una riga a sé nella scheda del soggetto, con cifra, frase in linguaggio comune e conteggio sotto, come le altre righe (0036, 0037). Le frasi qualitative ("di solito precise", "quasi mai dicono dove trovare i soldi") e le letture comparative dell'indice ("X è quello che fa più promesse senza data") seguono le regole dell'ADR 0037: una metrica per lettura, soglie scritte in `content/letture.yaml`, pari merito nominati tutti. Si vede anche come cambiano nel tempo (ADR 0040).
+Ogni indicatore è una riga a sé nella scheda del soggetto, con cifra, frase in linguaggio comune e conteggio sotto, come le altre righe (0036, 0037). Le frasi qualitative ("di solito precise", "quasi mai dicono dove trovare i soldi") e le letture comparative dell'indice ("X è quello che fa più promesse non precise") seguono le regole dell'ADR 0037: una metrica per lettura, soglie scritte in `content/letture.yaml`, pari merito nominati tutti. Si vede anche come cambiano nel tempo (ADR 0040).
 
 ### Versioni
 Le domande tipizzate di ogni indicatore vivono in `content/domande-laya/` con versione (0035). Ogni dato pubblicato porta checkpoint di Laya, versione delle domande e versione della calibrazione. Cambiare una domanda ricalcola l'indicatore per tutti i soggetti e per tutto il periodo, mai solo da una data in poi.

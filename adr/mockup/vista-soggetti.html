@@ -73,7 +73,7 @@ a{color:var(--mark)}
 <div class="wrap">
 
 <h1>Cosa hanno fatto davvero</h1>
-<p class="lede">Controlliamo i numeri che dicono e li confrontiamo con come votano in Parlamento. Tutto qui.</p>
+<p class="lede">Quando un politico dice un dato, per esempio quanti posti di lavoro ci sono, controlliamo se è vero. E guardiamo come vota in Parlamento.</p>
 <p class="nota">Esempio per provare la pagina: nomi e numeri sono inventati.</p>
 
 <h2>In breve</h2>
@@ -97,7 +97,7 @@ const partiti=[
   ex:{said:"L'occupazione femminile è cresciuta di oltre un milione di posti.",dove:"Conferenza stampa, marzo 2026",
       vero:"I dati ISTAT dicono 412.000 posti.",fonte:"ISTAT, dati sul lavoro"}},
  {n:"Civica Riformista",r:"All'opposizione",sbN:4,sbD:41,vagoN:41,vagoD:111,votoK:30,votoD:33,prom:[3,14],
-  ex:{said:"Siamo il paese che spende meno in istruzione di tutta Europa.",dove:"Intervento in aula, febbraio 2026",
+  ex:{said:"Siamo il paese che spende meno in istruzione di tutta Europa.",dove:"Discorso in Parlamento, febbraio 2026",
       vero:"Secondo Eurostat cinque paesi spendono meno di noi.",fonte:"Eurostat, spesa pubblica"}},
  {n:"Fronte dei Territori",r:"Al governo",sbN:14,sbD:72,vagoN:78,vagoD:150,votoK:34,votoD:46,prom:[2,19],
   ex:{said:"La bolletta della luce è tornata ai livelli del 2019.",dove:"Post sul canale ufficiale, settembre 2026",
@@ -147,26 +147,26 @@ const promNo=partiti.reduce((s,p)=>s+(p.prom[1]-p.prom[0]),0), promTot=partiti.r
 document.getElementById("breve").innerHTML=`
 <div class="card">
   ${peggio?`<div class="riga"><span class="cifra">${peggio[0].sbN}</span><div class="testo">
-    <p>${nomi(peggio)} ${peggio.length>1?"sono quelli che sbagliano":"è quello che sbaglia"} più numeri.</p>
-    <p class="sotto">${peggio[0].sbN} numeri sbagliati su ${peggio[0].sbD} che abbiamo potuto controllare.</p></div></div>`:""}
+    <p>${nomi(peggio)} ${peggio.length>1?"sono quelli che dicono":"è quello che dice"} più dati sbagliati.</p>
+    <p class="sotto">${peggio[0].sbN} dati sbagliati su ${peggio[0].sbD} che abbiamo controllato.</p></div></div>`:""}
   ${vago?`<div class="riga"><span class="cifra b">${Math.round(vago[0].vagoN/vago[0].vagoD*100)}%</span><div class="testo">
-    <p>${nomi(vago)} ${vago.length>1?"sono i più vaghi: parlano":"è il più vago: parla"} senza dire niente di controllabile.</p>
-    <p class="sotto">${vago[0].vagoN} frasi su ${vago[0].vagoD} non si possono controllare.</p></div></div>`:""}
+    <p>${nomi(vago)} ${vago.length>1?"sono i più vaghi: parlano":"è il più vago: parla"} senza dire niente di preciso.</p>
+    <p class="sotto">${vago[0].vagoN} frasi su ${vago[0].vagoD} sono vaghe: niente dati, niente date, niente impegni.</p></div></div>`:""}
   ${giroK?`<div class="riga"><span class="cifra">${giroK[0].votoD-giroK[0].votoK}</span><div class="testo">
-    <p>${nomi(giroK)} ${giroK.length>1?"dicono una cosa e poi in aula votano":"dice una cosa e poi in aula vota"} il contrario.</p>
+    <p>${nomi(giroK)} ${giroK.length>1?"dicono una cosa e poi in Parlamento votano":"dice una cosa e poi in Parlamento vota"} il contrario.</p>
     <p class="sotto">È successo ${giroK[0].votoD-giroK[0].votoK} volte su ${giroK[0].votoD}.</p></div></div>`:""}
   <div class="riga"><span class="cifra b">${promNo}</span><div class="testo">
     <p>Promesse rimaste solo sulla carta.</p>
     <p class="sotto">Su ${promTot} promesse scritte nei programmi.</p></div></div>
 </div>
-<p class="piccolo" style="margin:10px 0 0">Mettiamo a confronto solo chi ha detto almeno ${MIN} numeri. <a href="#">Quante frasi raccogliamo per ogni partito</a></p>`;
+<p class="piccolo" style="margin:10px 0 0">Confrontiamo solo chi ha detto almeno ${MIN} dati: con meno, il confronto non sarebbe giusto. <a href="#">Quante frasi raccogliamo per ogni partito</a></p>`;
 
 function frase(p){
-  if(p.sbD<MIN) return "Ha detto pochi numeri controllabili, quindi su questo non possiamo dire molto.";
+  if(p.sbD<MIN) return "Ha detto pochi dati da controllare: per ora non possiamo giudicare.";
   const q=p.sbN/p.sbD;
-  if(q>=.15) return `Sbaglia spesso i numeri: ${p.sbN} volte su ${p.sbD}.`;
-  if(q<=.06) return `Quando dice un numero, di solito è giusto: sbagliato ${p.sbN} volte su ${p.sbD}.`;
-  return `Sui numeri va così così: sbagliati ${p.sbN} su ${p.sbD}.`;
+  if(q>=.15) return `Dice spesso dati sbagliati: ${p.sbN} volte su ${p.sbD}.`;
+  if(q<=.06) return `Quando dice un dato, di solito è giusto: sbagliato ${p.sbN} volte su ${p.sbD}.`;
+  return `A volte dice dati sbagliati: ${p.sbN} volte su ${p.sbD}.`;
 }
 let v="partiti";
 function render(){
@@ -181,17 +181,17 @@ function render(){
     </button>
     <div class="dett">
       <div class="riga"><span class="cifra">${p.sbD<MIN?p.sbN:Math.round(p.sbN/p.sbD*100)+"%"}</span><div class="testo">
-        <p>Numeri sbagliati</p><p class="sotto">${p.sbN} su ${p.sbD} controllati${p.sbD<MIN?" (troppo pochi per fare una percentuale)":""}</p></div></div>
+        <p>Ha detto un dato sbagliato</p><p class="sotto">${p.sbN} volte su ${p.sbD} dati controllati, per esempio su posti di lavoro, prezzi, tasse.${p.sbD<MIN?" Sono ancora pochi per fare un confronto.":""}</p></div></div>
       <div class="riga"><span class="cifra b">${p.vagoD<MIN?p.vagoN:Math.round(p.vagoN/p.vagoD*100)+"%"}</span><div class="testo">
-        <p>Frasi che non si possono controllare</p><p class="sotto">${p.vagoN} su ${p.vagoD}${p.vagoD<MIN?" (troppo poche per fare una percentuale)":""}: niente numeri, niente date, niente impegni precisi</p></div></div>
+        <p>Frasi vaghe</p><p class="sotto">${p.vagoN} su ${p.vagoD}: niente dati, niente date, niente impegni precisi.${p.vagoD<MIN?" Sono ancora poche per fare un confronto.":""}</p></div></div>
       <div class="riga"><span class="cifra">${p.votoD-p.votoK}</span><div class="testo">
-        <p>Volte in cui ha votato al contrario di quello che diceva</p><p class="sotto">Su ${p.votoD} occasioni in cui possiamo confrontare</p></div></div>
+        <p>Ha detto una cosa e ha votato il contrario</p><p class="sotto">Su ${p.votoD} volte in cui possiamo confrontare</p></div></div>
       <div class="riga"><span class="cifra">${p.prom[0]}</span><div class="testo">
         <p>Promesse mantenute</p><p class="sotto">Su ${p.prom[1]} promesse del programma</p></div></div>
       ${p.ex?`<div class="conf">
         <div class="a"><p class="et">Ha detto</p><p>${p.ex.said}</p><cite>${p.ex.dove}</cite></div>
         <div class="b2"><p class="et">In realtà</p><p>${p.ex.vero}</p><cite>${p.ex.fonte}</cite></div>
-        <div class="esito"><b>Numero sbagliato.</b></div>
+        <div class="esito"><b>Dato sbagliato.</b></div>
       </div>`:""}
       <p class="piccolo">Qui non diciamo se le sue idee sono buone: quello lo decidi tu.</p>
     </div>
