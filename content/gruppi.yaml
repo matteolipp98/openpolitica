@@ -17,13 +17,16 @@ gruppi:
   - { ramo: camera, legislatura: 19, nome_contiene: "AZIONE-POPOLARI EUROPEISTI RIFORMATORI-RENEW EUROPE", id_esterno: gr4135, sigla: AZ-PER-RE, partiti: [azione], periodo: { valido_dal: 2023-11-20 }, stato: verificato }
   - { ramo: camera, legislatura: 19, nome_contiene: "ITALIA VIVA-CASA RIFORMISTA", id_esterno: gr4211, sigla: IV-CR, partiti: [italia-viva], periodo: { valido_dal: 2023-11-20 }, stato: verificato }
   - { ramo: camera, legislatura: 19, nome_contiene: "MISTO", id_esterno: gr4111, sigla: MISTO, partiti: [], periodo: { valido_dal: 2022-10-18 }, stato: verificato }
-  # ---- Senato ----
-  - { ramo: senato, legislatura: 19, nome_contiene: "Fratelli d'Italia", id_esterno: null, sigla: null, partiti: [fratelli-d-italia], periodo: { valido_dal: 2022-10-13 }, stato: da_verificare }
-  - { ramo: senato, legislatura: 19, nome_contiene: "Partito Democratico", id_esterno: null, sigla: null, partiti: [partito-democratico], periodo: { valido_dal: 2022-10-13 }, stato: da_verificare }
-  - { ramo: senato, legislatura: 19, nome_contiene: "Lega", id_esterno: null, sigla: null, partiti: [lega], periodo: { valido_dal: 2022-10-13 }, stato: da_verificare }
-  - { ramo: senato, legislatura: 19, nome_contiene: "Movimento 5 Stelle", id_esterno: null, sigla: null, partiti: [movimento-5-stelle], periodo: { valido_dal: 2022-10-13 }, stato: da_verificare }
-  - { ramo: senato, legislatura: 19, nome_contiene: "Forza Italia", id_esterno: null, sigla: null, partiti: [forza-italia], periodo: { valido_dal: 2022-10-13 }, stato: da_verificare }
-  - { ramo: senato, legislatura: 19, nome_contiene: "Noi Moderati", id_esterno: null, sigla: null, partiti: [noi-moderati], periodo: { valido_dal: 2022-10-13 }, stato: da_verificare }
-  - { ramo: senato, legislatura: 19, nome_contiene: "Italia Viva", id_esterno: null, sigla: null, partiti: [azione, italia-viva], periodo: { valido_dal: 2022-10-13, da_verificare: true }, stato: da_verificare }
-  - { ramo: senato, legislatura: 19, nome_contiene: "Autonomie", id_esterno: null, sigla: null, partiti: [], periodo: { valido_dal: 2022-10-13 }, stato: da_verificare }
-  - { ramo: senato, legislatura: 19, nome_contiene: "Misto", id_esterno: null, sigla: null, partiti: [], periodo: { valido_dal: 2022-10-13 }, stato: da_verificare }
+  # ---- Senato: verificati con la sonda del 2026-10-07 (dati.senato.it, gruppo/<id> e osr:denominazione) ----
+  - { ramo: senato, legislatura: 19, nome_contiene: "Fratelli d'Italia", id_esterno: "85", sigla: FdI, partiti: [fratelli-d-italia], periodo: { valido_dal: 2022-10-13 }, stato: verificato }
+  - { ramo: senato, legislatura: 19, nome_contiene: "Partito Democratico - Italia Democratica e Progressista", id_esterno: "49", sigla: PD-IDP, partiti: [partito-democratico], periodo: { valido_dal: 2022-10-13 }, stato: verificato }
+  - { ramo: senato, legislatura: 19, nome_contiene: "Lega Salvini Premier - Partito Sardo d'Azione", id_esterno: "33", sigla: "LSP-PSd'Az", partiti: [lega], periodo: { valido_dal: 2022-10-13 }, stato: verificato }
+  - { ramo: senato, legislatura: 19, nome_contiene: "MoVimento 5 Stelle", id_esterno: "71", sigla: M5S, partiti: [movimento-5-stelle], periodo: { valido_dal: 2022-10-13 }, stato: verificato }
+  - { ramo: senato, legislatura: 19, nome_contiene: "Forza Italia", id_esterno: "56", sigla: FI-BP-PPE, partiti: [forza-italia], periodo: { valido_dal: 2022-10-13 }, stato: verificato }
+  # Gruppo misto di più sigle: Noi Moderati con UDC, Coraggio Italia, Italia al Centro, MAIE. Nome cambiato il 30.10.2024.
+  - { ramo: senato, legislatura: 19, nome_contiene: "Noi Moderati", id_esterno: "92", sigla: "Cd'I-NM (UDC-CI-NcI-IaC)-MAIE", partiti: [noi-moderati], periodo: { valido_dal: 2022-10-13 }, stato: verificato }
+  # gruppo/91: "Azione-ItaliaViva-RenewEurope" fino all'8.11.2023, poi solo Italia Viva (Calenda passa al Misto il 9.11.2023).
+  - { ramo: senato, legislatura: 19, nome_contiene: "Azione-ItaliaViva-RenewEurope", id_esterno: "91", sigla: Az-IV-RE, partiti: [azione, italia-viva], periodo: { valido_dal: 2022-10-13, valido_al: 2023-11-08 }, stato: verificato }
+  - { ramo: senato, legislatura: 19, nome_contiene: "Italia Viva", id_esterno: "91", sigla: IV-C-RE, partiti: [italia-viva], periodo: { valido_dal: 2023-11-09 }, stato: verificato }
+  - { ramo: senato, legislatura: 19, nome_contiene: "Per le Autonomie", id_esterno: "69", sigla: Aut, partiti: [], periodo: { valido_dal: 2022-10-13 }, stato: verificato }
+  - { ramo: senato, legislatura: 19, nome_contiene: "Misto", id_esterno: "9", sigla: Misto, partiti: [], periodo: { valido_dal: 2022-10-13 }, stato: verificato }

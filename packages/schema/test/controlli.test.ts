@@ -30,6 +30,7 @@ describe("controlli incrociati", () => {
   it("rifiuta un gruppo verificato senza identificativo", () => {
     const g = structuredClone(base["gruppi.yaml"]!);
     g.gruppi[0]!.stato = "verificato";
+    g.gruppi[0]!.id_esterno = null;
     expect(controllaRiferimenti({ ...base, "gruppi.yaml": g }).length).toBe(1);
   });
 });

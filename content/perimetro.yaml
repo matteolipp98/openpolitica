@@ -15,8 +15,8 @@ partiti:
   - { slug: forza-italia, motivo: "gruppo autonomo alla Camera e al Senato" }
   - { slug: alleanza-verdi-e-sinistra, motivo: "gruppo autonomo alla Camera" }
   - { slug: noi-moderati, motivo: "gruppo autonomo alla Camera" }
-  - { slug: azione, motivo: "gruppo autonomo alla Camera (AZ-PER-RE)" }
-  - { slug: italia-viva, motivo: "gruppo autonomo alla Camera dal 20.11.2023 (IV-CR)" }
+  - { slug: azione, motivo: "gruppo autonomo alla Camera (AZ-PER-RE); al Senato dal 9.11.2023 è nel gruppo misto" }
+  - { slug: italia-viva, motivo: "gruppo autonomo alla Camera (IV-CR, dal 20.11.2023) e al Senato (gruppo/91)" }
 persone:
   - { slug: giorgia-meloni, partito: fratelli-d-italia, motivo: "guida il governo e il partito" }
   - { slug: elly-schlein, partito: partito-democratico, motivo: "segretaria del partito" }

@@ -5,3 +5,6 @@ forme: ["Matteo Salvini", "Salvini"]
 cariche:
   - { carica: "Segretario federale", partito: lega, valido_dal: 2013-12-15 }
   - { carica: "Vicepresidente del Consiglio e ministro delle Infrastrutture e dei trasporti", valido_dal: 2022-10-22 }
+ids_esterni:
+  # dati.senato.it: senatore/25407, mandato XIX verificato con la sonda del 2026-10-07
+  - { fonte: senato, id: "25407", valido_dal: 2022-10-13 }

@@ -4,3 +4,6 @@ cognome: Renzi
 forme: ["Matteo Renzi", "Renzi"]
 cariche:
   - { carica: "Leader del partito", partito: italia-viva, valido_dal: 2019-09-18, da_verificare: true }
+ids_esterni:
+  # dati.senato.it: senatore/30742, mandato XIX verificato con la sonda del 2026-10-07
+  - { fonte: senato, id: "30742", valido_dal: 2022-10-13 }
