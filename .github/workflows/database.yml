@@ -28,7 +28,7 @@ jobs:
     timeout-minutes: 15
     env:
       DATABASE_URL: ${{ secrets.SESSION_POOLER }}
-    defaults: { run: { working-directory: workers } }
+    defaults: { run: { working-directory: workers, shell: bash } }  # bash = pipefail: un errore fa fallire il job
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
@@ -54,7 +54,7 @@ jobs:
         ramo: [camera, senato]
     env:
       DATABASE_URL: ${{ secrets.SESSION_POOLER }}
-    defaults: { run: { working-directory: workers } }
+    defaults: { run: { working-directory: workers, shell: bash } }  # bash = pipefail: un errore fa fallire il job
     steps:
       - uses: actions/checkout@v4
         if: github.event_name == 'push' || inputs.importa == 'entrambi' || inputs.importa == matrix.ramo

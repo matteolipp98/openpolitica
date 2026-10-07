@@ -18,6 +18,7 @@ from op_workers.connettori.base import (
     ParlamentareGrezzo,
     VotazioneGrezza,
     VotoGrezzo,
+    finestre_mensili,
 )
 
 ENDPOINT = "https://dati.camera.it/sparql"
@@ -117,7 +118,7 @@ def normalizza_voto(riga: dict[str, str]) -> VotoGrezzo:
     )
 
 
-def query_votazioni(leg: int, dal: date) -> str:
+def query_votazioni(leg: int, dal: date, al: date) -> str:
     return f"""
 SELECT DISTINCT ?v ?data ?tipo ?titolo ?descr ?finale ?fiducia ?segreta ?fav ?con ?ast ?approvato ?url
                 ?atto ?atto_titolo
@@ -128,7 +129,7 @@ WHERE {{
   OPTIONAL {{ ?v ocd:richiestaFiducia ?fiducia }} OPTIONAL {{ ?v ocd:votazioneSegreta ?segreta }}
   OPTIONAL {{ ?v ocd:approvato ?approvato }} OPTIONAL {{ ?v dc:relation ?url }}
   OPTIONAL {{ ?v ocd:rif_attoCamera ?atto . OPTIONAL {{ ?atto rdfs:label ?atto_titolo }} }}
-  FILTER(STR(?data) >= "{dal:%Y%m%d}")
+  FILTER(STR(?data) >= "{dal:%Y%m%d}" && STR(?data) <= "{al:%Y%m%d}")
 }} ORDER BY ?data ?v"""
 
 
@@ -176,8 +177,12 @@ class ConnettoreCamera:
         self.sparql = sparql or ClientSparql(ENDPOINT)
 
     def votazioni(self, legislatura: int, dal: date) -> Iterator[VotazioneGrezza]:
-        for r in _unici(self.sparql.pagine(query_votazioni(legislatura, dal)), "v"):
-            yield normalizza_votazione(r, legislatura)
+        visti: set[str] = set()
+        for inizio, fine in finestre_mensili(dal):
+            for r in _unici(self.sparql.pagine(query_votazioni(legislatura, inizio, fine), pagina=1000), "v"):
+                if r["v"] not in visti:
+                    visti.add(r["v"])
+                    yield normalizza_votazione(r, legislatura)
 
     def voti_del_giorno(self, legislatura: int, giorno: date) -> Iterator[VotoGrezzo]:
         for r in _unici(self.sparql.pagine(query_voti_del_giorno(legislatura, giorno)), "x"):

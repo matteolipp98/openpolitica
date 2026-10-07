@@ -43,6 +43,7 @@ Formato: Contesto, Decisione, Alternative considerate, Conseguenze. Tutti gli AD
 | [0035](0035-progettazione-domande-tipizzate.md) | Progettazione delle domande tipizzate |
 | [0036](0036-viste-e-regole-di-presentazione.md) | Viste del prodotto e regole di presentazione |
 | [0037](0037-allineamento-ai-mock.md) | Allineamento delle regole ai mock delle viste |
+| [0038](0038-gemini-fornitore-iniziale.md) | Gemini come unico fornitore di modelli iniziale |
 
 Documenti di accompagnamento: [architettura MVP e flussi logici](architettura-mvp.md) e i mock in `mockup/`, che sono la specifica visiva dell'ADR 0036.
 

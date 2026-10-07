@@ -2,7 +2,7 @@ import { readFileSync, readdirSync, existsSync } from "node:fs";
 import path from "node:path";
 import { parse } from "yaml";
 import { z } from "zod";
-import { Alias, SCHEMI } from "../src/content.js";
+import { Alias, Catalogo, SCHEMI } from "../src/content.js";
 
 export const CONTENT = path.resolve(import.meta.dirname, "../../../content");
 
@@ -30,6 +30,15 @@ export function caricaContenuti(): { contenuti: Partial<Contenuti>; errori: Erro
     if (r.success) (contenuti as Record<string, unknown>)[file] = r.data;
     else for (const m of formatta(r.error)) errori.push({ file, messaggio: m });
   }
+  // Cataloghi delle domande (content/catalogo/vN/enunciati.yaml), se già generati
+  const dirCat = path.join(CONTENT, "catalogo");
+  if (existsSync(dirCat))
+    for (const v of readdirSync(dirCat)) {
+      const file = `catalogo/${v}/enunciati.yaml`;
+      if (!existsSync(path.join(CONTENT, file))) continue;
+      const r = Catalogo.safeParse(leggi(file));
+      if (!r.success) for (const m of formatta(r.error)) errori.push({ file, messaggio: m });
+    }
   contenuti.alias = {};
   for (const f of readdirSync(path.join(CONTENT, "alias")).filter((f) => f.endsWith(".yaml"))) {
     const file = `alias/${f}`;

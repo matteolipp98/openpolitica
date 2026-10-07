@@ -18,6 +18,7 @@ from op_workers.connettori.base import (
     ParlamentareGrezzo,
     VotazioneGrezza,
     VotoGrezzo,
+    finestre_mensili,
 )
 
 ENDPOINT = "https://dati.senato.it/sparql"
@@ -104,7 +105,7 @@ def voti_da_archi(righe: list[dict[str, str]]) -> list[VotoGrezzo]:
     return [VotoGrezzo(v, s, e, None) for (v, s), (e, _) in sorted(scelto.items())]
 
 
-def query_votazioni(leg: int, dal: date) -> str:
+def query_votazioni(leg: int, dal: date, al: date) -> str:
     return f"""
 SELECT DISTINCT ?v ?data ?label ?fav ?con ?ast ?esito ?tipoVot ?titolo ?fase WHERE {{
   ?v a osr:Votazione ; osr:legislatura {leg} ; osr:seduta ?s ; osr:favorevoli ?fav ; osr:contrari ?con .
@@ -113,7 +114,7 @@ SELECT DISTINCT ?v ?data ?label ?fav ?con ?ast ?esito ?tipoVot ?titolo ?fase WHE
   OPTIONAL {{ ?v osr:tipoVotazione ?tipoVot }}
   OPTIONAL {{ ?v osr:oggetto ?o . ?o osr:relativoA ?ddl .
              OPTIONAL {{ ?ddl osr:titolo ?titolo }} OPTIONAL {{ ?ddl osr:fase ?fase }} }}
-  FILTER(STR(?data) >= "{dal.isoformat()}")
+  FILTER(STR(?data) >= "{dal.isoformat()}" && STR(?data) <= "{al.isoformat()}")
 }} ORDER BY ?data ?v"""
 
 
@@ -161,7 +162,12 @@ class ConnettoreSenato:
 
     def votazioni(self, legislatura: int, dal: date) -> Iterator[VotazioneGrezza]:
         visti: set[str] = set()
-        for r in self.sparql.pagine(query_votazioni(legislatura, dal)):
+        righe = [
+            r
+            for inizio, fine in finestre_mensili(dal)
+            for r in self.sparql.pagine(query_votazioni(legislatura, inizio, fine), pagina=1000)
+        ]
+        for r in righe:
             if r["v"] not in visti:
                 visti.add(r["v"])
                 yield normalizza_votazione(r, legislatura)

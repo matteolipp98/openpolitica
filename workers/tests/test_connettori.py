@@ -55,7 +55,8 @@ class TestCamera:
     def test_duplicati_del_dataset_scartati(self):
         finto = SparqlFinto([self.VOTAZIONE, dict(self.VOTAZIONE)])
         assert len(list(camera.ConnettoreCamera(finto).votazioni(19, date(2026, 1, 1)))) == 1
-        assert 'FILTER(STR(?data) >= "20260101")' in finto.query[0]
+        assert 'STR(?data) >= "20260101"' in finto.query[0]
+        assert 'STR(?data) <= "20260131"' in finto.query[0]
         assert "DISTINCT" in finto.query[0]
 
     @pytest.mark.parametrize(
@@ -153,7 +154,7 @@ class TestSenato:
     def test_query_senza_values_ne_bind(self):
         q = senato.query_archi_votazione(SEN + "votazione/19-167-42")
         assert "VALUES" not in q and "BIND" not in q
-        assert "VALUES" not in senato.query_votazioni(19, date(2022, 10, 13))
+        assert "VALUES" not in senato.query_votazioni(19, date(2022, 10, 13), date(2022, 10, 31))
 
     def test_voti_di_altre_legislature_esclusi(self):
         class Finto:
@@ -202,3 +203,14 @@ class TestClientSparql:
 
         righe = self._client(gestore).pagine("SELECT ?x WHERE {} ORDER BY ?x", pagina=2)
         assert [r["x"] for r in righe] == ["0", "1", "2", "3", "4"]
+
+
+def test_finestre_mensili():
+    from op_workers.connettori.base import finestre_mensili
+
+    assert finestre_mensili(date(2022, 10, 13), date(2023, 1, 5)) == [
+        (date(2022, 10, 13), date(2022, 10, 31)),
+        (date(2022, 11, 1), date(2022, 11, 30)),
+        (date(2022, 12, 1), date(2022, 12, 31)),
+        (date(2023, 1, 1), date(2023, 1, 5)),
+    ]
