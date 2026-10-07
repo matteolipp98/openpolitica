@@ -190,10 +190,14 @@ def query_senato(leg: int) -> dict[str, str]:
               ?s ocd:aderisce ?a . ?a osr:legislatura {leg} ; osr:gruppo ?g ; osr:inizio ?inizio .
               OPTIONAL {{ ?a osr:fine ?fine }} FILTER(?s IN ({filtro_leader})) }}""",
         "gruppo_esempio": "SELECT ?p ?o WHERE { <http://dati.senato.it/gruppo/49> ?p ?o }",
+        # Solo le denominazioni in vigore nella legislatura (iniziate dopo il suo avvio o ancora aperte)
         "gruppi_legislatura": f"""
-            SELECT DISTINCT ?g ?q ?o WHERE {{
+            SELECT DISTINCT ?g ?titolo ?breve ?inizio ?fine WHERE {{
               ?a a ocd:adesioneGruppo ; osr:legislatura {leg} ; osr:gruppo ?g .
-              ?g ?p ?d . ?d a osr:Denominazione . ?d ?q ?o }} LIMIT 600""",
+              ?g osr:denominazione ?d . ?d osr:titolo ?titolo ; osr:inizio ?inizio .
+              OPTIONAL {{ ?d osr:titoloBreve ?breve }} OPTIONAL {{ ?d osr:fine ?fine }}
+              FILTER(STR(?inizio) >= "2022-10-13" || !BOUND(?fine))
+            }} ORDER BY ?g ?inizio""",
         "astenuti_individuali": f"""
             SELECT (COUNT(*) AS ?n) WHERE {{ ?v osr:astenuto ?s . FILTER(STRSTARTS(STR(?v), "{pref}")) }}""",
         "duplicati_voto_esempio": f"""

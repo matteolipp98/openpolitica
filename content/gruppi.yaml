@@ -3,19 +3,20 @@
 # Gruppo misto: partiti vuoto, i voti si attribuiscono per persona tramite le appartenenze.
 versione: 1
 gruppi:
-  # ---- Camera ----
-  - { ramo: camera, legislatura: 19, nome_contiene: "Fratelli d'Italia", id_esterno: null, sigla: null, partiti: [fratelli-d-italia], periodo: { valido_dal: 2022-10-13 }, stato: da_verificare }
-  - { ramo: camera, legislatura: 19, nome_contiene: "Partito Democratico", id_esterno: null, sigla: null, partiti: [partito-democratico], periodo: { valido_dal: 2022-10-13 }, stato: da_verificare }
-  - { ramo: camera, legislatura: 19, nome_contiene: "Lega", id_esterno: null, sigla: null, partiti: [lega], periodo: { valido_dal: 2022-10-13 }, stato: da_verificare }
-  - { ramo: camera, legislatura: 19, nome_contiene: "Movimento 5 Stelle", id_esterno: null, sigla: null, partiti: [movimento-5-stelle], periodo: { valido_dal: 2022-10-13 }, stato: da_verificare }
-  - { ramo: camera, legislatura: 19, nome_contiene: "Forza Italia", id_esterno: null, sigla: null, partiti: [forza-italia], periodo: { valido_dal: 2022-10-13 }, stato: da_verificare }
-  - { ramo: camera, legislatura: 19, nome_contiene: "Alleanza Verdi e Sinistra", id_esterno: null, sigla: null, partiti: [alleanza-verdi-e-sinistra], periodo: { valido_dal: 2022-10-13 }, stato: da_verificare }
-  - { ramo: camera, legislatura: 19, nome_contiene: "Noi Moderati", id_esterno: null, sigla: null, partiti: [noi-moderati], periodo: { valido_dal: 2022-10-13 }, stato: da_verificare }
-  # Azione e Italia Viva: gruppo comune a inizio legislatura, poi separati; date dalla sonda
-  - { ramo: camera, legislatura: 19, nome_contiene: "Azione-Italia Viva", id_esterno: null, sigla: null, partiti: [azione, italia-viva], periodo: { valido_dal: 2022-10-13, da_verificare: true }, stato: da_verificare }
-  - { ramo: camera, legislatura: 19, nome_contiene: "Azione-Popolari", id_esterno: null, sigla: null, partiti: [azione], periodo: { valido_dal: null, da_verificare: true }, stato: da_verificare }
-  - { ramo: camera, legislatura: 19, nome_contiene: "Italia Viva-il Centro", id_esterno: null, sigla: null, partiti: [italia-viva], periodo: { valido_dal: null, da_verificare: true }, stato: da_verificare }
-  - { ramo: camera, legislatura: 19, nome_contiene: "Misto", id_esterno: null, sigla: null, partiti: [], periodo: { valido_dal: 2022-10-13 }, stato: da_verificare }
+  # ---- Camera: verificati con la sonda del 2026-10-07 (dati.camera.it, ocd:gruppoParlamentare) ----
+  - { ramo: camera, legislatura: 19, nome_contiene: "FRATELLI D'ITALIA", id_esterno: gr4133, sigla: FDI, partiti: [fratelli-d-italia], periodo: { valido_dal: 2022-10-18 }, stato: verificato }
+  - { ramo: camera, legislatura: 19, nome_contiene: "PARTITO DEMOCRATICO - ITALIA DEMOCRATICA E PROGRESSISTA", id_esterno: gr4136, sigla: PD-IDP, partiti: [partito-democratico], periodo: { valido_dal: 2022-10-18 }, stato: verificato }
+  - { ramo: camera, legislatura: 19, nome_contiene: "LEGA - SALVINI PREMIER", id_esterno: gr4132, sigla: LEGA, partiti: [lega], periodo: { valido_dal: 2022-10-18 }, stato: verificato }
+  - { ramo: camera, legislatura: 19, nome_contiene: "MOVIMENTO 5 STELLE", id_esterno: gr4131, sigla: M5S, partiti: [movimento-5-stelle], periodo: { valido_dal: 2022-10-18 }, stato: verificato }
+  - { ramo: camera, legislatura: 19, nome_contiene: "FORZA ITALIA - BERLUSCONI PRESIDENTE - PPE", id_esterno: gr4134, sigla: FI-PPE, partiti: [forza-italia], periodo: { valido_dal: 2022-10-18 }, stato: verificato }
+  - { ramo: camera, legislatura: 19, nome_contiene: "ALLEANZA VERDI E SINISTRA", id_esterno: gr4154, sigla: AVS, partiti: [alleanza-verdi-e-sinistra], periodo: { valido_dal: 2022-10-27 }, stato: verificato }
+  - { ramo: camera, legislatura: 19, nome_contiene: "NOI MODERATI (NOI CON L'ITALIA, CORAGGIO ITALIA, UDC E ITALIA AL CENTRO)-MAIE-CENTRO POPOLARE", id_esterno: gr4152, sigla: "NM(N-C-U-I)M-CP", partiti: [noi-moderati], periodo: { valido_dal: 2022-10-27 }, stato: verificato }
+  # Stesso gruppo gr4135: fino al 19.11.2023 "AZIONE - ITALIA VIVA - RENEW EUROPE", poi solo Azione.
+  # Nel periodo comune i voti si attribuiscono per persona (piano, decisione aperta 4).
+  - { ramo: camera, legislatura: 19, nome_contiene: "AZIONE - ITALIA VIVA - RENEW EUROPE", id_esterno: gr4135, sigla: A-IV-RE, partiti: [azione, italia-viva], periodo: { valido_dal: 2022-10-18, valido_al: 2023-11-19 }, stato: verificato }
+  - { ramo: camera, legislatura: 19, nome_contiene: "AZIONE-POPOLARI EUROPEISTI RIFORMATORI-RENEW EUROPE", id_esterno: gr4135, sigla: AZ-PER-RE, partiti: [azione], periodo: { valido_dal: 2023-11-20 }, stato: verificato }
+  - { ramo: camera, legislatura: 19, nome_contiene: "ITALIA VIVA-CASA RIFORMISTA", id_esterno: gr4211, sigla: IV-CR, partiti: [italia-viva], periodo: { valido_dal: 2023-11-20 }, stato: verificato }
+  - { ramo: camera, legislatura: 19, nome_contiene: "MISTO", id_esterno: gr4111, sigla: MISTO, partiti: [], periodo: { valido_dal: 2022-10-18 }, stato: verificato }
   # ---- Senato ----
   - { ramo: senato, legislatura: 19, nome_contiene: "Fratelli d'Italia", id_esterno: null, sigla: null, partiti: [fratelli-d-italia], periodo: { valido_dal: 2022-10-13 }, stato: da_verificare }
   - { ramo: senato, legislatura: 19, nome_contiene: "Partito Democratico", id_esterno: null, sigla: null, partiti: [partito-democratico], periodo: { valido_dal: 2022-10-13 }, stato: da_verificare }

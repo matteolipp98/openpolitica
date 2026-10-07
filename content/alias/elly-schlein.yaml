@@ -4,3 +4,6 @@ cognome: Schlein
 forme: ["Elly Schlein", "Elena Ethel Schlein", "Schlein"]
 cariche:
   - { carica: "Segretaria del partito", partito: partito-democratico, valido_dal: 2023-03-12 }
+ids_esterni:
+  # dati.camera.it: deputato.rdf/d308930_19, verificato con la sonda del 2026-10-07
+  - { fonte: camera, id: "308930", valido_dal: 2022-10-13 }

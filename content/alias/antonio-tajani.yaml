@@ -5,3 +5,6 @@ forme: ["Antonio Tajani", "Tajani"]
 cariche:
   - { carica: "Segretario del partito", partito: forza-italia, valido_dal: 2023-07-15 }
   - { carica: "Vicepresidente del Consiglio e ministro degli Esteri", valido_dal: 2022-10-22 }
+ids_esterni:
+  # dati.camera.it: deputato.rdf/d308838_19, verificato con la sonda del 2026-10-07
+  - { fonte: camera, id: "308838", valido_dal: 2022-10-13 }

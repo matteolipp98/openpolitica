@@ -6,3 +6,6 @@ forme_escluse:
   - { forma: "Bonelli", motivo: "cognome diffuso" }
 cariche:
   - { carica: "Co-portavoce di Europa Verde", partito: alleanza-verdi-e-sinistra, valido_dal: null, da_verificare: true }
+ids_esterni:
+  # dati.camera.it: deputato.rdf/d302080_19, verificato con la sonda del 2026-10-07
+  - { fonte: camera, id: "302080", valido_dal: 2022-10-13 }

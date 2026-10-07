@@ -7,3 +7,6 @@ forme_escluse:
 cariche:
   - { carica: "Presidente del Consiglio dei ministri", valido_dal: 2022-10-22 }
   - { carica: "Presidente del partito", partito: fratelli-d-italia, valido_dal: 2014-03-08 }
+ids_esterni:
+  # dati.camera.it: deputato.rdf/d302103_19, verificato con la sonda del 2026-10-07
+  - { fonte: camera, id: "302103", valido_dal: 2022-10-13 }
