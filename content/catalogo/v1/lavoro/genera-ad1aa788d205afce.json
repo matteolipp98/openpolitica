@@ -1,0 +1,238 @@
+{
+ "modello": "gemini-3.5-flash",
+ "prompt_sha256": "4a01269af4c9dcb7e95709291ddbe966ff05ea945a39f3613b70e4c72d01cd28",
+ "risposta": [
+  {
+   "id": "vs19_020_022",
+   "scarta": true,
+   "motivo_scarto": "Si tratta di una riorganizzazione tecnica e amministrativa delle competenze dei ministeri."
+  },
+  {
+   "id": "19-17-4",
+   "scarta": true,
+   "motivo_scarto": "Decreto omnibus che unisce temi diversi come benefici penitenziari, obblighi vaccinali e contrasto ai raduni illegali."
+  },
+  {
+   "id": "19-18-41",
+   "scarta": true,
+   "motivo_scarto": "Si tratta di una riorganizzazione tecnica e amministrativa delle competenze dei ministeri."
+  },
+  {
+   "id": "vs19_025_028",
+   "scarta": true,
+   "motivo_scarto": "Decreto eterogeneo che unisce missioni militari all'estero, sanità regionale e proroghe di termini legislativi."
+  },
+  {
+   "id": "vs19_027_118",
+   "scarta": true,
+   "motivo_scarto": "Si tratta della legge di bilancio dello Stato, che contiene un insieme vastissimo e diversificato di misure economiche e sociali."
+  },
+  {
+   "id": "19-24-2",
+   "scarta": true,
+   "motivo_scarto": "Si tratta della legge di bilancio dello Stato, che contiene un insieme vastissimo e diversificato di misure economiche e sociali."
+  },
+  {
+   "id": "vs19_029_149",
+   "scarta": true,
+   "motivo_scarto": "Decreto omnibus che unisce temi diversi come benefici penitenziari, obblighi vaccinali e contrasto ai raduni illegali."
+  },
+  {
+   "id": "vs19_034_001",
+   "scarta": false,
+   "tema": "economia",
+   "varianti": [
+    "I compensi dei professionisti che collaborano con grandi società dovrebbero avere una soglia minima stabilita dalla legge.",
+    "È giusto tutelare i lavoratori autonomi imponendo tariffe minime nei contratti con i grandi gruppi economici.",
+    "Bisogna garantire per legge un compenso minimo dignitoso ai professionisti che lavorano per grandi imprese e banche.",
+    "Non si deve fissare per legge un compenso minimo per i professionisti nei loro rapporti con le grandi aziende.",
+    "Questa misura tutela i lavoratori autonomi dallo strapotere contrattuale dei grandi committenti, garantendo una retribuzione dignitosa.",
+    "Fissare tariffe minime per legge limita la libera concorrenza e rischia di aumentare i costi dei servizi per i consumatori finali."
+   ]
+  },
+  {
+   "id": "19-38-138",
+   "scarta": true,
+   "motivo_scarto": "Si tratta del decreto milleproroghe, un provvedimento omnibus che contiene rinvii di scadenze in moltissimi settori diversi."
+  },
+  {
+   "id": "vs19_052_001",
+   "scarta": false,
+   "tema": "diritti",
+   "varianti": [
+    "Le imbarcazioni di soccorso privato devono fare rotta immediata verso il porto indicato dalle autorità dopo ogni salvataggio.",
+    "Bisogna imporre alle navi umanitarie di raggiungere direttamente il porto assegnato senza compiere altri soccorsi intermedi.",
+    "Le navi delle organizzazioni non governative devono dirigersi subito al porto assegnato dopo aver effettuato un salvataggio in mare.",
+    "Le navi di soccorso non dovrebbero avere l'obbligo di dirigersi subito in porto dopo il primo salvataggio di migranti.",
+    "Questa regola garantisce un sistema di soccorso ordinato e coordinato dallo Stato, evitando che le navi restino in mare troppo a lungo.",
+    "Impedire soccorsi multipli mette a rischio la vita di altre persone in mare e ostacola l'attività umanitaria delle organizzazioni."
+   ]
+  },
+  {
+   "id": "vs19_055_016",
+   "scarta": false,
+   "tema": "economia",
+   "varianti": [
+    "È giusto obbligare i gestori delle pompe di benzina a mostrare i prezzi medi della regione per favorire il confronto.",
+    "I punti di rifornimento di carburante dovrebbero indicare chiaramente la media dei prezzi regionali accanto ai propri.",
+    "I distributori di benzina devono esporre il prezzo medio regionale accanto al proprio prezzo di vendita.",
+    "I benzinai non dovrebbero essere obbligati a mostrare il prezzo medio regionale vicino a quello praticato.",
+    "Esporre il prezzo medio aiuta i consumatori a capire se il costo applicato è onesto, favorendo la trasparenza e la concorrenza.",
+    "Questo obbligo rappresenta un inutile carico burocratico per i gestori e rischia di uniformare i prezzi verso l'alto."
+   ]
+  },
+  {
+   "id": "19-41-81",
+   "scarta": false,
+   "tema": "economia",
+   "varianti": [
+    "È corretto che il governo intervenga con risorse pubbliche per salvaguardare la produzione delle industrie nazionali chiave.",
+    "Le grandi aziende di rilievo strategico nazionale in crisi devono essere sostenute finanziariamente dallo Stato.",
+    "Lo Stato deve poter finanziare e tenere aperte le grandi fabbriche in crisi considerate strategiche per l'economia nazionale.",
+    "Lo Stato non dovrebbe spendere soldi pubblici per tenere in attività grandi impianti industriali privati in difficoltà.",
+    "L'intervento pubblico protegge moltissimi posti di lavoro e garantisce la sopravvivenza di settori industriali vitali per il paese.",
+    "Finanziare con soldi pubblici aziende in perdita altera il mercato e rischia di rimandare la necessaria riconversione ecologica."
+   ]
+  },
+  {
+   "id": "19-42-122",
+   "scarta": false,
+   "tema": "diritti",
+   "varianti": [
+    "Le imbarcazioni di soccorso privato devono fare rotta immediata verso il porto indicato dalle autorità dopo ogni salvataggio.",
+    "Bisogna imporre alle navi umanitarie di raggiungere direttamente il porto assegnato senza compiere altri soccorsi intermedi.",
+    "Le navi delle organizzazioni non governative devono dirigersi subito al porto assegnato dopo aver effettuato un salvataggio in mare.",
+    "Le navi di soccorso non dovrebbero avere l'obbligo di dirigersi subito in porto dopo il primo salvataggio di migranti.",
+    "Questa regola garantisce un sistema di soccorso ordinato e coordinato dallo Stato, evitando che le navi restino in mare troppo a lungo.",
+    "Impedire soccorsi multipli mette a rischio la vita di altre persone in mare e ostacola l'attività umanitaria delle organizzazioni."
+   ]
+  },
+  {
+   "id": "vs19_057_054",
+   "scarta": true,
+   "motivo_scarto": "Si tratta del decreto milleproroghe, un provvedimento omnibus che contiene rinvii di scadenze in moltissimi settori diversi."
+  },
+  {
+   "id": "vs19_061_021",
+   "scarta": false,
+   "tema": "economia",
+   "varianti": [
+    "È corretto che il governo intervenga con risorse pubbliche per salvaguardare la produzione delle industrie nazionali chiave.",
+    "Le grandi aziende di rilievo strategico nazionale in crisi devono essere sostenute finanziariamente dallo Stato.",
+    "Lo Stato deve poter finanziare e tenere aperte le grandi fabbriche in crisi considerate strategiche per l'economia nazionale.",
+    "Lo Stato non dovrebbe spendere soldi pubblici per tenere in attività grandi impianti industriali privati in difficoltà.",
+    "L'intervento pubblico protegge moltissimi posti di lavoro e garantisce la sopravvivenza di settori industriali vitali per il paese.",
+    "Finanziare con soldi pubblici aziende in perdita altera il mercato e rischia di rimandare la necessaria riconversione ecologica."
+   ]
+  },
+  {
+   "id": "vs19_082_029",
+   "scarta": false,
+   "tema": "economia",
+   "varianti": [
+    "È giusto vietare la cessione del credito e lo sconto in fattura per le agevolazioni fiscali sulla casa.",
+    "Lo Stato dovrebbe interrompere il meccanismo di trasferimento dei crediti fiscali per i lavori edilizi.",
+    "Bisogna bloccare la possibilità di cedere a terzi i crediti d'imposta legati ai bonus per la ristrutturazione edilizia.",
+    "Si dovrebbe mantenere la possibilità di cedere i crediti d'imposta per i lavori di ristrutturazione delle case.",
+    "Questa misura è necessaria per salvaguardare i conti pubblici ed evitare la creazione di un debito incontrollato per lo Stato.",
+    "Bloccare la cessione dei crediti mette in difficoltà le imprese edili e impedisce alle famiglie meno abbienti di fare i lavori."
+   ]
+  },
+  {
+   "id": "19-56-228",
+   "scarta": true,
+   "motivo_scarto": "Decreto omnibus contenente una vasta gamma di semplificazioni amministrative e modifiche organizzative per l'attuazione del PNRR."
+  },
+  {
+   "id": "19-59-62",
+   "scarta": false,
+   "tema": "diritti",
+   "varianti": [
+    "È giusto cancellare il permesso di soggiorno per protezione speciale concesso a chi lavora o ha legami in Italia.",
+    "Occorre abolire la tutela umanitaria straordinaria per i richiedenti asilo che non fuggono direttamente da guerre.",
+    "Bisogna eliminare la protezione speciale per i migranti che non hanno diritto all'asilo ma sono integrati nel nostro paese.",
+    "Si dovrebbe mantenere la protezione speciale per i migranti che si sono inseriti positivamente nella società.",
+    "Questa scelta riduce gli ingressi irregolari e limita l'uso di permessi straordinari che creano false aspettative di accoglienza.",
+    "Rimuovere questa tutela spinge nella clandestinità persone già integrate che lavorano e vivono onestamente sul territorio."
+   ]
+  },
+  {
+   "id": "vs19_091_050",
+   "scarta": true,
+   "motivo_scarto": "Decreto omnibus contenente una vasta gamma di semplificazioni amministrative e modifiche organizzative per l'attuazione del PNRR."
+  },
+  {
+   "id": "vs19_097_080",
+   "scarta": false,
+   "tema": "diritti",
+   "varianti": [
+    "È giusto cancellare il permesso di soggiorno per protezione speciale concesso a chi lavora o ha legami in Italia.",
+    "Occorre abolire la tutela umanitaria straordinaria per i richiedenti asilo che non fuggono direttamente da guerre.",
+    "Bisogna eliminare la protezione speciale per i migranti che non hanno diritto all'asilo ma sono integrati nel nostro paese.",
+    "Si dovrebbe mantenere la protezione speciale per i migranti che si sono inseriti positivamente nella società.",
+    "Questa scelta riduce gli ingressi irregolari e limita l'uso di permessi straordinari che creano false aspettative di accoglienza.",
+    "Rimuovere questa tutela spinge nella clandestinità persone già integrate che lavorano e vivono onestamente sul territorio."
+   ]
+  },
+  {
+   "id": "vs19_103_052",
+   "scarta": false,
+   "tema": "ambiente",
+   "varianti": [
+    "Bisogna avviare la costruzione del ponte sullo Stretto per unire la Sicilia al resto del continente.",
+    "È giusto investire nella realizzazione di un collegamento stradale e ferroviario stabile tra Calabria e Sicilia.",
+    "È necessario realizzare un ponte sullo Stretto di Messina per collegare stabilmente la Sicilia alla Calabria.",
+    "Non si dovrebbe costruire un ponte per collegare via terra la Sicilia e la Calabria.",
+    "Quest'opera ridurrà i tempi di viaggio, favorirà il turismo e darà un forte impulso economico a tutto il Mezzogiorno.",
+    "Il progetto ha costi enormi, presenta gravi rischi ambientali e sismici, e i fondi andrebbero usati per le ferrovie locali."
+   ]
+  },
+  {
+   "id": "vs19_105_045",
+   "scarta": true,
+   "motivo_scarto": "Decreto omnibus che unisce aiuti per le bollette energetiche, riforme della sanità e adempimenti fiscali."
+  },
+  {
+   "id": "19-71-141",
+   "scarta": false,
+   "tema": "ambiente",
+   "varianti": [
+    "Bisogna avviare la costruzione del ponte sullo Stretto per unire la Sicilia al resto del continente.",
+    "È giusto investire nella realizzazione di un collegamento stradale e ferroviario stabile tra Calabria e Sicilia.",
+    "È necessario realizzare un ponte sullo Stretto di Messina per collegare stabilmente la Sicilia alla Calabria.",
+    "Non si dovrebbe costruire un ponte per collegare via terra la Sicilia e la Calabria.",
+    "Quest'opera ridurrà i tempi di viaggio, favorirà il turismo e darà un forte impulso economico a tutto il Mezzogiorno.",
+    "Il progetto ha costi enormi, presenta gravi rischi ambientali e sismici, e i fondi andrebbero usati per le ferrovie locali."
+   ]
+  },
+  {
+   "id": "19-74-154",
+   "scarta": false,
+   "tema": "ambiente",
+   "varianti": [
+    "È opportuno centralizzare la lotta alla siccità nominando un commissario unico per accelerare le opere idriche.",
+    "Occorre un commissario nazionale con poteri straordinari per gestire la crisis idrica e sbloccare i lavori urgenti.",
+    "Bisogna nominare un commissario straordinario nazionale con poteri speciali per affrontare l'emergenza della siccità.",
+    "Non si dovrebbe affidare la gestione della scarsità d'acqua a un commissario straordinario con poteri speciali.",
+    "Un commissario straordinario permette di superare i blocchi burocratici e realizzare rapidamente le infrastrutture necessarie.",
+    "La gestione straordinaria rischia di scavalcare le regioni e i territori, ignorando le specifiche esigenze ecologiche locali."
+   ]
+  },
+  {
+   "id": "vs19_115_001",
+   "scarta": false,
+   "tema": "istituzioni",
+   "varianti": [
+    "È giusto rendere più rapidi e snelli i concorsi per l'assunzione di nuovo personale negli uffici pubblici.",
+    "Occorre velocizzare le selezioni pubbliche per coprire rapidamente i posti vacanti nelle amministrazioni dello Stato.",
+    "Bisogna semplificare e velocizzare le procedure di assunzione per l'ingresso di nuovi dipendenti nella pubblica amministrazione.",
+    "Non si dovrebbero semplificare eccessivamente i concorsi pubblici per assumere personale negli uffici dello Stato.",
+    "Semplificare i concorsi permette di ringiovanire rapidamente gli uffici pubblici e colmare la grave carenza di personale.",
+    "Selezioni troppo rapide rischiano di ridurre la qualità della valutazione dei candidati e di favorire assunzioni meno qualificate."
+   ]
+  }
+ ],
+ "token_in": 3172,
+ "token_out": 3036,
+ "creato_il": "2026-10-07T22:34:25.561919+00:00"
+}

@@ -1,0 +1,28 @@
+{
+  "versione": "v1",
+  "aggiornato_il": "2026-10-07T22:35:22+00:00",
+  "modello": "gemini-3.5-flash",
+  "completo": false,
+  "candidate": 233,
+  "scartate_dai_dati": {
+    "poco divisiva (quasi tutti d'accordo)": 364,
+    "stessa legge già votata nell'altro ramo": 4
+  },
+  "scartate_dal_modello": 50,
+  "generate": 0,
+  "verificate": 0,
+  "test_superati": 0,
+  "test_falliti": {
+    "tema": 0,
+    "sensibilita": 0,
+    "polarita": 0
+  },
+  "per_tema": {
+    "economia": 0,
+    "welfare": 0,
+    "diritti": 0,
+    "ambiente": 0,
+    "istituzioni": 0,
+    "esteri": 0
+  }
+}
