@@ -43,8 +43,9 @@ FINESTRA = 20  # parole di fila su cui si misura se il testo è leggibile
 MINIMO_NOTE = 0.8  # quota minima di parole conosciute in ogni finestra: sotto, la pagina si rilegge con l'OCR
 PAROLE = Path(__file__).with_name("parole_it.txt.gz")
 # Versione dell'estrazione del testo: si aumenta quando cambia quello che si salva dallo stesso PDF.
-# 1 = pdfplumber, OCR solo sulle pagine senza testo; 2 = OCR anche sulle pagine illeggibili (#62).
-ESTRAZIONE = 2
+# 1 = pdfplumber, OCR solo sulle pagine senza testo; 2 = OCR anche sulle pagine illeggibili (#62);
+# 3 = senza i frammenti di rumore dell'OCR (#66).
+ESTRAZIONE = 3
 UA = "openpolitica/0.1 (+https://github.com/matteolipp98/openpolitica)"
 
 
@@ -181,14 +182,42 @@ def paragrafi(testo: str) -> list[str]:
     return [re.sub(r"\s+", " ", p).strip() for p in out if len(p.strip()) > 1]
 
 
+# Parole italiane di una o due lettere: all'inizio di un paragrafo letto con l'OCR sono testo vero.
+CORTE = frozenset("a e è i o il lo la le li un in di da su ne né ci vi si se ma no ed ad al ai tu io sì ue pa".split())
+SIMBOLO = re.compile(r"([A-ZÀ-Ý][^\W\d_]?)\s+(?=\S)")
+
+
+def pulisci_ocr(testo: str) -> str | None:
+    """Toglie il rumore da un paragrafo letto con l'OCR (#66). None se il paragrafo è solo rumore.
+
+    - Un simbolo grafico all'inizio (il quadratino di un titolo) l'OCR lo legge come una o due lettere
+      maiuscole: "EH secondo Costituzione", "MH Tutela della salute". Si toglie, se non è una parola corta.
+    - Resta rumore un paragrafo con meno di 3 lettere ("Nb", "12") o senza nessuna parola italiana di almeno
+      3 lettere nel dizionario ("YA ji", "Rs n) ei"): si scarta.
+    """
+    m = SIMBOLO.match(testo)
+    if m and m.group(1).lower() not in CORTE:
+        testo = testo[m.end() :]
+    if len(re.findall(r"[^\W\d_]", testo)) < 3:
+        return None
+    diz = _dizionario()
+    if not any(_normale(p) in diz for p in re.findall(r"[^\W\d_]{3,}", testo)):
+        return None
+    return testo
+
+
 def paragrafi_documento(lette: list[Pagina]) -> list[tuple[int, str, bool]]:
     """I paragrafi di tutto il documento: (pagina dove inizia, testo, letto con l'OCR).
 
     Un paragrafo che continua nella pagina dopo (finisce senza punto, il seguito inizia minuscolo) si riunisce.
+    Nelle pagine lette con l'OCR il rumore si toglie (pulisci_ocr).
     """
     out: list[tuple[int, str, bool]] = []
     for p in lette:
-        for i, t in enumerate(paragrafi(p.testo)):
+        testi = paragrafi(p.testo)
+        if p.ocr:
+            testi = [t for t in map(pulisci_ocr, testi) if t]
+        for i, t in enumerate(testi):
             if i == 0 and out and t[:1].islower() and not FINE_FRASE.search(out[-1][1]):
                 pagina, prima, ocr = out[-1]
                 out[-1] = (pagina, f"{prima} {t}", ocr or p.ocr)

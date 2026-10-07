@@ -9,6 +9,7 @@ from op_workers.programmi.scarica import (
     pagine,
     paragrafi,
     paragrafi_documento,
+    pulisci_ocr,
     url_programma,
 )
 
@@ -135,3 +136,30 @@ class TestPagine:
         monkeypatch.setattr(pdfplumber, "open", lambda _: Doc())
         lette = pagine(b"%PDF", ocr=lambda pdf, i: f"ocr {i}")
         assert lette == [Pagina(1, BUONO, False), Pagina(2, "ocr 1", True), Pagina(3, "ocr 2", True)]
+
+
+class TestRumoreOcr:
+    def test_toglie_il_simbolo_letto_come_lettere(self):
+        assert pulisci_ocr("EH secondo Costituzione") == "secondo Costituzione"
+        assert pulisci_ocr("MH Tutela della salute") == "Tutela della salute"
+        assert pulisci_ocr("Bi Per un fisco equo") == "Per un fisco equo"
+
+    def test_tiene_le_parole_corte_vere(self):
+        assert pulisci_ocr("Il salario minimo") == "Il salario minimo"
+        assert pulisci_ocr("È una priorità") == "È una priorità"
+        assert pulisci_ocr("E Per un fisco equo") == "E Per un fisco equo"
+
+    def test_scarta_i_frammenti(self):
+        for rumore in ("Nb", "12", "14.", "YA ji", "Rs n) ei", "Ì ."):
+            assert pulisci_ocr(rumore) is None, rumore
+
+    def test_tiene_i_titoli_corti(self):
+        assert pulisci_ocr("PER L'ITALIA") == "PER L'ITALIA"
+
+    def test_solo_nelle_pagine_lette_con_l_ocr(self):
+        lette = [Pagina(1, "Nb\n\nSalario minimo per tutti.", True), Pagina(2, "Nb\n\nTesto del PDF.", False)]
+        assert paragrafi_documento(lette) == [
+            (1, "Salario minimo per tutti.", True),
+            (2, "Nb", False),
+            (2, "Testo del PDF.", False),
+        ]
