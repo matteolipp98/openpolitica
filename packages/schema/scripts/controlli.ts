@@ -37,6 +37,15 @@ export function controllaRiferimenti(c: C): Errore[] {
       err("perimetro.yaml", "legislatura diversa da parametri.posizioni.legislaturaRiferimento");
   }
 
+  // ADR 0020: ogni partito seguito ha il suo programma per ogni elezione elencata
+  for (const el of c["programmi.yaml"]?.elezioni ?? []) {
+    const coperti = el.programmi.flatMap((p) => p.partiti);
+    dup(coperti, "programmi.yaml", `partito nel ${el.data}`);
+    for (const p of coperti) if (!partiti.has(p)) err("programmi.yaml", `${el.data}: partito sconosciuto ${p}`);
+    for (const p of per?.partiti ?? [])
+      if (!coperti.includes(p.slug)) err("programmi.yaml", `${el.data}: manca il programma di ${p.slug}`);
+  }
+
   // ADR 0027: una forma nominale non può appartenere a due persone
   const forme = new Map<string, string>();
   for (const a of Object.values(c.alias ?? {}))

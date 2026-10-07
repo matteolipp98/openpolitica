@@ -1,0 +1,18 @@
+# Programmi elettorali depositati al Ministero dell'Interno (ADR 0020, piano §4).
+# Per ogni elezione: l'elenco pubblico dei depositi e il numero del contrassegno di ogni partito seguito.
+# Il file del programma si ricava dall'elenco (documento di tipo 2, "Programma elettorale").
+versione: 1
+aggiornato_il: 2026-10-07
+elezioni:
+  - data: 2022-09-25
+    elenco: https://dait.interno.gov.it/documenti/trasparenza/POLITICHE_20220925/POLITICHE_20220925.json
+    # Il centrodestra (contrassegno 71) non ha depositato un programma comune: ognuno ha il suo.
+    programmi:
+      - { partiti: [fratelli-d-italia], contrassegno: 68 }
+      - { partiti: [partito-democratico], contrassegno: 75 }
+      - { partiti: [lega], contrassegno: 9 }
+      - { partiti: [movimento-5-stelle], contrassegno: 74 }
+      - { partiti: [forza-italia], contrassegno: 43 }
+      - { partiti: [alleanza-verdi-e-sinistra], contrassegno: 65 }
+      - { partiti: [noi-moderati], contrassegno: 48 }
+      - { partiti: [azione, italia-viva], contrassegno: 7 }  # lista unica nel 2022, un solo programma

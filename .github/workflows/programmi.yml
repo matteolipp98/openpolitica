@@ -1,0 +1,36 @@
+# Programmi elettorali (ADR 0020, piano §4): scarica i programmi di content/programmi.yaml dal portale
+# del Ministero dell'Interno e ne salva il testo diviso in paragrafi. Le scansioni si leggono con l'OCR.
+# Idempotente: un documento già letto (stessa impronta) non si rilegge.
+name: Programmi
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - content/programmi.yaml
+      - workers/op_workers/programmi/**
+      - supabase/migrations/*programmi*.sql
+      - .github/workflows/programmi.yml
+
+# Gruppo suo, non "database": un run in coda lì sostituirebbe l'import dei voti in attesa
+concurrency: { group: programmi, cancel-in-progress: false }
+
+jobs:
+  programmi:
+    runs-on: ubuntu-latest
+    environment: dev
+    timeout-minutes: 120
+    env:
+      DATABASE_URL: ${{ secrets.SESSION_POOLER }}
+    defaults: { run: { working-directory: workers, shell: bash } }  # bash = pipefail: un errore fa fallire il job
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: OCR in italiano
+        run: sudo apt-get update -q && sudo apt-get install -y -q tesseract-ocr tesseract-ocr-ita
+      - run: uv sync --frozen
+      - name: Migrazioni
+        run: uv run python -m op_workers.comuni.migrazioni | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Scarica e leggi i programmi
+        run: uv run python -m op_workers.programmi.scarica | tee -a "$GITHUB_STEP_SUMMARY"

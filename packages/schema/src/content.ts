@@ -146,6 +146,19 @@ export const Perimetro = z.object({
   persone: z.array(z.object({ slug, partito: slug, motivo: z.string() })),
 });
 
+// ---------- Programmi elettorali (ADR 0020, piano §4) ----------
+export const Programmi = z.object({
+  versione: z.number().int().positive(),
+  aggiornato_il: data,
+  elezioni: z.array(
+    z.object({
+      data,
+      elenco: url,
+      programmi: z.array(z.object({ partiti: z.array(slug).min(1), contrassegno: z.number().int().positive() })).min(1),
+    }),
+  ),
+});
+
 // ---------- Alias e identità (ADR 0027) ----------
 export const Alias = z.object({
   slug,
@@ -220,4 +233,5 @@ export const SCHEMI = {
   "partiti.yaml": Partiti,
   "gruppi.yaml": Gruppi,
   "perimetro.yaml": Perimetro,
+  "programmi.yaml": Programmi,
 } as const;

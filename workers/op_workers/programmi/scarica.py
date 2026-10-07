@@ -1,0 +1,220 @@
+"""Scarica i programmi elettorali di content/programmi.yaml e ne salva il testo diviso in paragrafi (ADR 0020).
+
+Per ogni programma: indirizzo ricavato dall'elenco pubblico del Ministero dell'Interno, impronta sha256,
+testo pagina per pagina. Le pagine senza testo (scansioni) si leggono con l'OCR (tesseract, italiano),
+e i loro paragrafi restano segnati. Idempotente: un documento con la stessa impronta non si rilegge.
+
+Uso: python -m op_workers.programmi.scarica  (con DATABASE_URL; tesseract serve solo per le scansioni)
+"""
+
+from __future__ import annotations
+
+import hashlib
+import io
+import os
+import re
+import shutil
+import subprocess  # noqa: S404 - solo tesseract, con argomenti fissi
+from dataclasses import dataclass
+from datetime import date
+from pathlib import Path
+from typing import Any
+from urllib.parse import quote, urljoin
+
+import httpx
+import psycopg
+import yaml
+
+CONTENT = Path(__file__).resolve().parents[3] / "content"
+FONTE = "interno-trasparenza"
+TIPO_PROGRAMMA = 2  # "Programma elettorale del partito o gruppo politico" nell'elenco del Ministero
+MINIMO_TESTO = 30  # sotto questi caratteri una pagina è una scansione: si legge con l'OCR
+UA = "openpolitica/0.1 (+https://github.com/matteolipp98/openpolitica)"
+
+
+class ProgrammaNonTrovato(RuntimeError):
+    pass
+
+
+@dataclass
+class Pagina:
+    numero: int
+    testo: str
+    ocr: bool
+
+
+def url_programma(elenco: dict[str, Any], url_elenco: str, contrassegno: int) -> str:
+    """L'indirizzo del programma, costruito come fa il portale (dima-contrassegni.js):
+    <cartella dell'elenco>/Documenti/<contrassegno><fascicolo>/<file>."""
+    trovati = [
+        (c, f)
+        for c in elenco["contrass"]
+        if c["n_ord"] == contrassegno
+        for f in c.get("e_file") or []
+        if f["tp_doc"] == TIPO_PROGRAMMA
+    ]
+    if len(trovati) != 1:
+        raise ProgrammaNonTrovato(f"contrassegno {contrassegno}: {len(trovati)} programmi nell'elenco, atteso 1")
+    c, f = trovati[0]
+    cartella = urljoin(url_elenco, "Documenti/")
+    return f"{cartella}{contrassegno}{c.get('l_fasc') or ''}/{quote(f['f_doc'])}"
+
+
+def testo_ocr(pdf: bytes, indice: int) -> str:
+    """Legge una pagina scansionata: immagine a 300 dpi e tesseract in italiano."""
+    import pypdfium2 as pdfium
+
+    tesseract = shutil.which("tesseract")
+    if not tesseract:
+        raise RuntimeError("serve tesseract (con la lingua italiana) per leggere le pagine scansionate")
+    immagine = pdfium.PdfDocument(pdf)[indice].render(scale=300 / 72).to_pil()
+    png = io.BytesIO()
+    immagine.save(png, format="PNG")
+    esito = subprocess.run(  # noqa: S603
+        [tesseract, "stdin", "stdout", "-l", "ita", "--psm", "3"],
+        input=png.getvalue(),
+        capture_output=True,
+        check=True,
+    )
+    return esito.stdout.decode("utf8")
+
+
+def pagine(pdf: bytes, ocr=testo_ocr) -> list[Pagina]:
+    import pdfplumber
+
+    with pdfplumber.open(io.BytesIO(pdf)) as doc:
+        testi = [p.extract_text() or "" for p in doc.pages]
+    out = []
+    for i, t in enumerate(testi):
+        if len(t.strip()) >= MINIMO_TESTO:
+            out.append(Pagina(i + 1, t, False))
+        else:
+            out.append(Pagina(i + 1, ocr(pdf, i), True))
+    return out
+
+
+PUNTO_ELENCO = re.compile(r"^\s*(?:[•●▪■◦\-–—*o]\s+|\d{1,2}[.)]\s+|[a-z][.)]\s+)")
+FINE_FRASE = re.compile(r"[.!?:;]\s*$")
+
+
+def paragrafi(testo: str) -> list[str]:
+    """Divide il testo di una pagina in paragrafi.
+
+    Nei PDF ogni riga va a capo: si uniscono le righe e si spezza dove c'è una riga vuota o un punto
+    di elenco, dove una riga corta finisce con la fine di una frase, e dopo un titolo (riga corta senza
+    punteggiatura seguita da una maiuscola). Le parole spezzate con il trattino a fine riga si ricompongono.
+    """
+    righe = [r.rstrip() for r in testo.splitlines()]
+    piene = [len(r) for r in righe if r.strip()]
+    larga = sorted(piene)[len(piene) * 3 // 4] if piene else 0  # larghezza tipica di una riga piena
+    out: list[str] = []
+    corrente = ""
+    chiudi = titolo = False
+    for r in righe:
+        if not r.strip():
+            chiudi = True
+            continue
+        inizio = r.strip()[:1]
+        if corrente and (chiudi or PUNTO_ELENCO.match(r) or (titolo and inizio.isupper())):
+            out.append(corrente)
+            corrente = ""
+        if not corrente:
+            corrente = r.strip()
+        elif corrente.endswith("-") and not corrente.endswith(" -") and inizio.islower():
+            corrente = corrente[:-1] + r.strip()
+        else:
+            corrente += " " + r.strip()
+        corta = len(r) < 0.85 * larga
+        chiudi = corta and bool(FINE_FRASE.search(r))
+        titolo = len(r) < 0.7 * larga and not re.search(r"[,.;:!?\-]\s*$", r)
+    if corrente:
+        out.append(corrente)
+    return [re.sub(r"\s+", " ", p).strip() for p in out if len(p.strip()) > 1]
+
+
+def paragrafi_documento(lette: list[Pagina]) -> list[tuple[int, str, bool]]:
+    """I paragrafi di tutto il documento: (pagina dove inizia, testo, letto con l'OCR).
+
+    Un paragrafo che continua nella pagina dopo (finisce senza punto, il seguito inizia minuscolo) si riunisce.
+    """
+    out: list[tuple[int, str, bool]] = []
+    for p in lette:
+        for i, t in enumerate(paragrafi(p.testo)):
+            if i == 0 and out and t[:1].islower() and not FINE_FRASE.search(out[-1][1]):
+                pagina, prima, ocr = out[-1]
+                out[-1] = (pagina, f"{prima} {t}", ocr or p.ocr)
+            else:
+                out.append((p.numero, t, p.ocr))
+    return out
+
+
+def salva_documento(conn: psycopg.Connection, *, url: str, data: date, sha256: str, lette: list[Pagina]) -> int:
+    """Salva il documento e i suoi paragrafi. Restituisce il numero di paragrafi."""
+    doc_id = conn.execute(
+        """insert into core.documento (fonte, livello, url, data, sha256, pagine, pagine_ocr)
+           values (%s, 'A', %s, %s, %s, %s, %s) returning id""",
+        (FONTE, url, data, sha256, len(lette), sum(p.ocr for p in lette)),
+    ).fetchone()[0]
+    par = paragrafi_documento(lette)
+    for n, (pagina, testo, ocr) in enumerate(par, start=1):
+        conn.execute(
+            "insert into core.documento_paragrafo (documento_id, n, pagina, testo, ocr) values (%s,%s,%s,%s,%s)",
+            (doc_id, n, pagina, testo, ocr),
+        )
+    return len(par)
+
+
+def collega(conn: psycopg.Connection, *, partiti: list[str], elezione: date, sha256: str) -> int:
+    """Collega il documento ai partiti come loro programma. Restituisce i collegamenti nuovi."""
+    nuovi = 0
+    for slug in partiti:
+        nuovi += conn.execute(
+            """insert into core.programma (partito_id, elezione, documento_id)
+               select p.id, %s, d.id from core.partito p, core.documento d where p.slug = %s and d.sha256 = %s
+               on conflict do nothing""",
+            (elezione, slug, sha256),
+        ).rowcount
+    return nuovi
+
+
+def esegui(conn: psycopg.Connection, http: httpx.Client, cartella: Path = CONTENT) -> list[str]:
+    conf = yaml.safe_load((cartella / "programmi.yaml").read_text(encoding="utf8"))
+    righe = []
+    for el in conf["elezioni"]:
+        elezione = el["data"] if isinstance(el["data"], date) else date.fromisoformat(el["data"])
+        r = http.get(el["elenco"])
+        r.raise_for_status()
+        elenco = r.json()
+        for prog in el["programmi"]:
+            url = url_programma(elenco, el["elenco"], prog["contrassegno"])
+            pdf = http.get(url)
+            pdf.raise_for_status()
+            if not pdf.content.startswith(b"%PDF"):
+                raise ProgrammaNonTrovato(f"{url}: non è un PDF")
+            sha = hashlib.sha256(pdf.content).hexdigest()
+            noto = conn.execute("select pagine, pagine_ocr from core.documento where sha256 = %s", (sha,)).fetchone()
+            lette = [] if noto else pagine(pdf.content)  # l'OCR è lento: un documento già letto non si rilegge
+            with conn.transaction():
+                par = 0 if noto else salva_documento(conn, url=url, data=elezione, sha256=sha, lette=lette)
+                collega(conn, partiti=prog["partiti"], elezione=elezione, sha256=sha)
+            pag, ocr = noto if noto else (len(lette), sum(p.ocr for p in lette))
+            stato = "già letto" if noto else "nuovo"
+            righe.append(f"| {', '.join(prog['partiti'])} | {elezione} | {pag} | {ocr} | {par} | {stato} |")
+    return righe
+
+
+def main() -> int:
+    url_db = os.environ["DATABASE_URL"]
+    with (
+        psycopg.connect(url_db) as conn,
+        httpx.Client(timeout=300, headers={"User-Agent": UA}, follow_redirects=True) as http,
+    ):
+        righe = esegui(conn, http)
+    print("| Partiti | Elezione | Pagine | Pagine con OCR | Paragrafi nuovi | Stato |")
+    print("|---|---|---|---|---|---|")
+    print("\n".join(righe))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
