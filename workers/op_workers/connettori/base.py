@@ -47,6 +47,16 @@ class VotoGrezzo:
 
 
 @dataclass(frozen=True)
+class ConteggioGrezzo:
+    """Quanti voti di un tipo ha dato un gruppo in una votazione, contati dal server della fonte."""
+
+    id_votazione_esterno: str
+    id_gruppo_esterno: str | None
+    espressione: Espressione
+    n: int
+
+
+@dataclass(frozen=True)
 class ParlamentareGrezzo:
     ramo: Ramo
     id_esterno: str
@@ -70,6 +80,15 @@ class ConnettoreVoti(Protocol):
     def voti_del_giorno(self, legislatura: int, giorno: date) -> Iterator[VotoGrezzo]: ...
     def parlamentari(self, legislatura: int) -> Iterator[ParlamentareGrezzo]: ...
     def adesioni(self, legislatura: int) -> Iterator[AdesioneGrezza]: ...
+
+
+class ConnettoreConteggi(ConnettoreVoti, Protocol):
+    """Fonte che sa contare da sola: si scaricano i conteggi per gruppo e solo i voti individuali che servono."""
+
+    def conteggi_del_giorno(self, legislatura: int, giorno: date) -> Iterator[ConteggioGrezzo]: ...
+    def voti_scelti_del_giorno(
+        self, legislatura: int, giorno: date, persone: set[str], gruppi: set[str]
+    ) -> Iterator[VotoGrezzo]: ...
 
 
 def finestre_mensili(dal: date, al: date | None = None) -> list[tuple[date, date]]:

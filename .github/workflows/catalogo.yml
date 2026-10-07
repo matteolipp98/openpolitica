@@ -1,6 +1,7 @@
 # Catalogo delle domande con Gemini (ADR 0030, 0038). Gira ogni mattina finché non è completo:
 # le risposte del modello sono in cache nel repository, quindi ogni giro riprende da dove si era fermato
-# e un catalogo completo non costa più chiamate. Il risultato arriva come pull request.
+# e un catalogo completo non costa più chiamate. Il risultato va direttamente in main (niente pull request:
+# i controlli dell'ADR 0030 sono automatici) e, se il catalogo è cambiato, parte un nuovo rilascio del sito.
 name: Catalogo
 
 on:
@@ -11,12 +12,6 @@ on:
         default: "20"
   schedule:
     - cron: "13 6 * * *"
-  push:
-    branches: ["claude/**"]
-    paths:
-      - workers/op_workers/catalogo/**
-      - content/prompt/catalogo/**
-      - .github/workflows/catalogo.yml
 
 concurrency: { group: catalogo, cancel-in-progress: false }
 
@@ -25,9 +20,10 @@ jobs:
     runs-on: ubuntu-latest
     environment: dev
     timeout-minutes: 60
+    if: github.ref == 'refs/heads/main'
     permissions:
       contents: write
-      pull-requests: write
+      actions: write   # per far partire il rilascio del sito
     env:
       DATABASE_URL: ${{ secrets.SESSION_POOLER }}
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -49,18 +45,25 @@ jobs:
         run: |
           uv run python -m op_workers.catalogo.genera --versione v1 --max-chiamate "${{ inputs.max_chiamate || 20 }}" \
             | tee -a "$GITHUB_STEP_SUMMARY"
-      - name: Pull request con cache, rapporto e catalogo
-        uses: peter-evans/create-pull-request@v7
-        with:
-          branch: catalogo/v1
-          base: ${{ github.ref_name }}
-          add-paths: content/catalogo/**
-          commit-message: |
-            Catalogo v1: aggiornamento dal job con Gemini
-
-            Cache delle risposte del modello, rapporto dei test e, se completo, le domande (ADR 0030, 0038).
-          title: "Catalogo delle domande v1 (provvisorio, ADR 0038)"
-          body: |
-            Aggiornato in automatico dal workflow **Catalogo**. Contiene la cache delle risposte di Gemini,
-            `rapporto-test.json` e, quando tutte le votazioni candidate sono state elaborate, `enunciati.yaml`.
-            Il catalogo è provvisorio: domande scritte e verificate da un solo sistema di intelligenza artificiale.
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version-file: .nvmrc, cache: pnpm }
+      - name: Controlla il catalogo prima di salvarlo
+        working-directory: .
+        run: pnpm install --frozen-lockfile && pnpm content:check
+      - name: Salva in main e aggiorna il sito
+        working-directory: .
+        env: { GH_TOKEN: "${{ github.token }}" }
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add content/catalogo
+          if git diff --cached --quiet; then echo "Niente di nuovo nel catalogo." | tee -a "$GITHUB_STEP_SUMMARY"; exit 0; fi
+          cambiato=$(git diff --cached --name-only | grep -c 'enunciati.yaml$' || true)
+          git commit -q -m "Catalogo v1: aggiornamento dal job con Gemini" -m "Cache delle risposte del modello, rapporto dei test e, se completo, le domande (ADR 0030, 0038)."
+          for i in 1 2 3; do git pull -q --rebase origin main && git push -q origin HEAD:main && break; sleep 5; done
+          echo "Catalogo salvato in main." | tee -a "$GITHUB_STEP_SUMMARY"
+          if [ "$cambiato" -gt 0 ]; then
+            gh workflow run rilascio.yml --ref main
+            echo "Domande nuove: parte il rilascio del sito." | tee -a "$GITHUB_STEP_SUMMARY"
+          fi

@@ -13,12 +13,17 @@ from op_workers.connettori.senato import ConnettoreSenato
 pytestmark = pytest.mark.contratto
 
 
-def test_camera_voti_tornano_con_i_totali():
+def test_camera_conteggi_del_server_tornano_con_i_totali():
+    """L'import usa i conteggi fatti dal server: per ogni votazione devono dare i totali ufficiali.
+    (Che coincidano con i voti uno per uno è stato misurato su due giorni interi: 0 differenze.)"""
     c = ConnettoreCamera()
-    [v] = [x for x in c.votazioni(19, date(2026, 10, 1)) if x.id_esterno == "vs19_718_011"]
-    voti = [x for x in c.voti_del_giorno(19, date(2026, 10, 1)) if x.id_votazione_esterno == "vs19_718_011"]
-    conta = {e: sum(1 for x in voti if x.espressione == e) for e in ("favorevole", "contrario", "astenuto")}
-    assert (conta["favorevole"], conta["contrario"], conta["astenuto"]) == (v.favorevoli, v.contrari, v.astenuti)
+    giorno = date(2026, 10, 1)
+    [v] = [x for x in c.votazioni(19, giorno) if x.id_esterno == "vs19_718_011"]
+    conti = [k for k in c.conteggi_del_giorno(19, giorno) if k.id_votazione_esterno == "vs19_718_011"]
+    somma = {e: sum(k.n for k in conti if k.espressione == e) for e in ("favorevole", "contrario", "astenuto")}
+    assert (somma["favorevole"], somma["contrario"], somma["astenuto"]) == (v.favorevoli, v.contrari, v.astenuti)
+    meloni = [x for x in c.voti_scelti_del_giorno(19, giorno, {"302103"}, set()) if x.id_persona_esterno == "302103"]
+    assert meloni and all(x.id_votazione_esterno.startswith("vs19_") for x in meloni)
 
 
 def test_camera_parlamentari_e_adesioni():

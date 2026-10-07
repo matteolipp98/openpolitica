@@ -1,7 +1,14 @@
+from collections import Counter
 from datetime import date
 
 from op_workers.anagrafica.sincronizza import sincronizza
-from op_workers.connettori.base import AdesioneGrezza, ParlamentareGrezzo, VotazioneGrezza, VotoGrezzo
+from op_workers.connettori.base import (
+    AdesioneGrezza,
+    ConteggioGrezzo,
+    ParlamentareGrezzo,
+    VotazioneGrezza,
+    VotoGrezzo,
+)
 from op_workers.connettori.importa_voti import conteggi, importa
 
 
@@ -141,3 +148,73 @@ def test_blocco_della_fonte_ferma_senza_errore_e_tiene_i_giorni_fatti(conn):
     assert r.interrotto and "2023-01-11" in r.interrotto
     assert r.votazioni_nuove == 1
     assert conn.execute("select count(*) from core.votazione").fetchone()[0] == 1
+
+
+class ConnettoreConteggiFinto(ConnettoreFinto):
+    """Come la Camera: conta sul server e restituisce uno per uno solo i voti chiesti."""
+
+    def conteggi_del_giorno(self, leg, giorno):
+        c = Counter((v.id_votazione_esterno, v.id_gruppo_esterno, v.espressione) for v in self._voti)
+        for (vid, g, e), n in c.items():
+            yield ConteggioGrezzo(vid, g, e, n)
+
+    def voti_scelti_del_giorno(self, leg, giorno, persone, gruppi):
+        self.chiesti = (set(persone), set(gruppi))
+        for v in self._voti:
+            if v.id_gruppo_esterno is None or v.id_persona_esterno in persone or v.id_gruppo_esterno in gruppi:
+                yield v
+
+    def voti_del_giorno(self, leg, giorno):
+        raise AssertionError("con i conteggi non si scaricano tutti i voti")
+
+
+def _stato(conn):
+    gruppi = sorted(
+        conn.execute(
+            """select coalesce(g.id_esterno, '-'), vg.favorevoli, vg.contrari, vg.astenuti, vg.altri
+               from core.votazione_gruppo vg left join core.gruppo_parlamentare g on g.id = vg.gruppo_id"""
+        ).fetchall()
+    )
+    voti = sorted(
+        conn.execute(
+            """select p.slug, v.espressione::text from core.voto v join core.persona p on p.id = v.persona_id"""
+        ).fetchall()
+    )
+    return gruppi, voti
+
+
+def test_con_i_conteggi_della_fonte_si_salva_lo_stesso(conn):
+    sincronizza(conn)
+    voti = _voti(
+        ("302103", "favorevole", "gr4133"),
+        ("999001", "favorevole", "gr4133"),
+        ("999002", "contrario", "gr4135"),
+        ("999003", "favorevole", "gr4135"),
+        ("999001", "astenuto", None),  # senza gruppo nel dato: si usa l'adesione (gr4133)
+        ("777777", "assente", "gr4111"),
+    )
+    v = _votazione(fav=3, con=1, ast=1)
+    c = ConnettoreConteggiFinto(voti, v)
+    r = importa(conn, c, 19)
+    assert r.incoerenti == []
+    assert "302103" in c.chiesti[0] and "gr4135" in c.chiesti[1]
+    atteso = _stato(conn)
+    assert ("gr4133", 2, 0, 1, 0) in atteso[0]
+    conn.rollback()
+
+    sincronizza(conn)
+    importa(conn, ConnettoreFinto(voti, v), 19)
+    assert _stato(conn) == atteso
+
+
+def test_server_sovraccarico_ferma_senza_errore(conn):
+    from op_workers.comuni.sparql import ErroreSparql
+
+    sincronizza(conn)
+
+    class Sovraccarico(ConnettoreFinto):
+        def voti_del_giorno(self, leg, giorno):
+            raise ErroreSparql("https://dati.camera.it/sparql: HTTP 504")
+
+    r = importa(conn, Sovraccarico([]), 19)
+    assert r.interrotto and "504" in r.interrotto

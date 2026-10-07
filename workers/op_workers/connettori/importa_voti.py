@@ -18,6 +18,7 @@ from __future__ import annotations
 import argparse
 import logging
 import os
+import re
 from collections import Counter, defaultdict
 from collections.abc import Iterable
 from dataclasses import dataclass, field
@@ -52,12 +53,6 @@ class Rapporto:
     interrotto: str | None = None  # la fonte ci ha bloccato: si riprende al prossimo giro
 
 
-def coerente(v: VotazioneGrezza, voti: Iterable[VotoGrezzo]) -> bool:
-    """I voti individuali devono tornare esattamente con i totali dichiarati (tolleranza zero)."""
-    c = Counter(x.espressione for x in voti)
-    return (c["favorevole"], c["contrario"], c["astenuto"]) == (v.favorevoli, v.contrari, v.astenuti)
-
-
 def conteggi(espressioni: Iterable[str]) -> tuple[int, int, int, int]:
     c = Counter(espressioni)
     fav, con, ast = c.pop("favorevole", 0), c.pop("contrario", 0), c.pop("astenuto", 0)
@@ -74,6 +69,8 @@ class Contesto:
         self.adesioni: dict[str, list[tuple[date, date | None, str]]] = defaultdict(list)
         self.partiti_gruppo: dict[str, list[tuple[date, date | None]]] = defaultdict(list)
         self.perimetro: set[str] = set()
+        self.perimetro_esterni: set[str] = set()
+        self.gruppi_misti_esterni: set[str] = set()
         self.ricarica()
 
     def ricarica(self) -> None:
@@ -105,6 +102,9 @@ class Contesto:
             r[0]
             for r in c.execute("select id::text from core.persona where slug not similar to '(camera|senato)-[0-9]+'")
         }
+        self.perimetro_esterni = {e for e, p in self.persone.items() if p in self.perimetro}
+        # Gruppi che in qualche periodo sono di più partiti: i loro voti servono uno per uno
+        self.gruppi_misti_esterni = {e for e, g in self.gruppi.items() if len(self.partiti_gruppo.get(g, [])) > 1}
 
     def gruppo(self, id_esterno: str) -> str:
         if id_esterno not in self.gruppi:
@@ -169,17 +169,55 @@ def importa_adesioni(ctx: Contesto, adesioni: Iterable, r: Rapporto) -> None:
     r.adesioni_nuove += len(righe)
 
 
+def _voti_del_giorno(
+    ctx: Contesto, c: ConnettoreVoti, giorno: date
+) -> tuple[dict[str, Counter], dict[str, list[VotoGrezzo]]]:
+    """Per ogni votazione: conteggi per (gruppo esterno, espressione) dei voti con gruppo noto, e i voti
+    da trattare uno per uno (senza gruppo, persone del perimetro, gruppi di più partiti).
+
+    Se la fonte sa contare (Camera) si scaricano i conteggi e solo i voti che servono: ~20 volte più veloce.
+    Altrimenti (Senato) si scaricano tutti i voti e si contano qui.
+    """
+    conti: dict[str, Counter] = defaultdict(Counter)
+    singoli: dict[str, list[VotoGrezzo]] = defaultdict(list)
+    if hasattr(c, "conteggi_del_giorno"):
+        for k in c.conteggi_del_giorno(ctx.leg, giorno):
+            if k.id_gruppo_esterno is not None:  # i voti senza gruppo arrivano uno per uno qui sotto
+                conti[k.id_votazione_esterno][(k.id_gruppo_esterno, k.espressione)] += k.n
+        for voto in c.voti_scelti_del_giorno(ctx.leg, giorno, ctx.perimetro_esterni, ctx.gruppi_misti_esterni):
+            singoli[voto.id_votazione_esterno].append(voto)
+        return conti, singoli
+    for voto in c.voti_del_giorno(ctx.leg, giorno):
+        if voto.id_gruppo_esterno is not None:
+            conti[voto.id_votazione_esterno][(voto.id_gruppo_esterno, voto.espressione)] += 1
+        singoli[voto.id_votazione_esterno].append(voto)
+    return conti, singoli
+
+
 def importa_giorno(
     ctx: Contesto, c: ConnettoreVoti, giorno: date, votazioni: list[VotazioneGrezza], r: Rapporto
 ) -> None:
-    per_votazione: dict[str, list[VotoGrezzo]] = defaultdict(list)
-    for voto in c.voti_del_giorno(ctx.leg, giorno):
-        per_votazione[voto.id_votazione_esterno].append(voto)
+    conti, singoli = _voti_del_giorno(ctx, c, giorno)
 
     righe_gruppo, righe_voto, righe_ignote = [], [], []
     for v in votazioni:
-        voti = per_votazione.get(v.id_esterno, [])
-        ok = coerente(v, voti)
+        per_gruppo: dict[str | None, Counter] = defaultdict(Counter)
+        for (gruppo_esterno, espr), n in conti.get(v.id_esterno, Counter()).items():
+            per_gruppo[ctx.gruppo(gruppo_esterno)][espr] += n
+        individuali = []
+        for voto in singoli.get(v.id_esterno, []):
+            persona = ctx.persone.get(voto.id_persona_esterno)
+            if voto.id_gruppo_esterno:
+                gruppo = ctx.gruppo(voto.id_gruppo_esterno)
+            else:  # senza gruppo nel dato: quello a cui aderiva quel giorno, e si conta qui
+                gruppo = ctx.gruppo_alla_data(persona, v.data) if persona else NESSUN_GRUPPO
+                per_gruppo[gruppo][voto.espressione] += 1
+            individuali.append((voto, persona, gruppo))
+
+        totali: Counter = Counter()
+        for cont in per_gruppo.values():
+            totali.update(cont)
+        ok = (totali["favorevole"], totali["contrario"], totali["astenuto"]) == (v.favorevoli, v.contrari, v.astenuti)
         if not ok:
             r.incoerenti.append(f"{v.ramo}:{v.id_esterno}")
         riga = ctx.conn.execute(
@@ -213,20 +251,13 @@ def importa_giorno(
         vid = riga[0]
         r.votazioni_nuove += 1
 
-        per_gruppo: dict[str | None, list[str]] = defaultdict(list)
-        for voto in voti:
-            persona = ctx.persone.get(voto.id_persona_esterno)
-            if voto.id_gruppo_esterno:
-                gruppo = ctx.gruppo(voto.id_gruppo_esterno)
-            else:
-                gruppo = ctx.gruppo_alla_data(persona, v.data) if persona else NESSUN_GRUPPO
-            per_gruppo[gruppo].append(voto.espressione)
+        for voto, persona, gruppo in individuali:
             if not persona:
                 righe_ignote.append((vid, v.ramo, voto.id_persona_esterno))
             elif ctx.salva_individuale(persona, gruppo, v.data):
                 righe_voto.append((vid, persona, voto.espressione, gruppo))
-        for gruppo, espr in per_gruppo.items():
-            righe_gruppo.append((vid, gruppo, *conteggi(espr)))
+        for gruppo, cont in per_gruppo.items():
+            righe_gruppo.append((vid, gruppo, *conteggi(cont.elements())))
 
     with ctx.conn.cursor() as cur:
         cur.executemany(
@@ -274,9 +305,10 @@ def importa(conn: psycopg.Connection, c: ConnettoreVoti, leg: int, dal: date | N
             with conn.transaction():
                 importa_giorno(ctx, c, giorno, per_giorno[giorno], r)
         except ErroreSparql as e:
-            if "HTTP 403" not in str(e) and "HTTP 429" not in str(e):
+            if not re.search(r"HTTP (403|429|5\d\d)", str(e)):
                 raise
-            # Blocco per troppe richieste: i giorni già fatti sono salvati, il prossimo giro riparte da qui
+            # Blocco per troppe richieste o server sovraccarico (anche dopo i tentativi): i giorni già fatti
+            # sono salvati, il prossimo giro riparte da qui
             r.interrotto = f"{c.ramo}: bloccato dalla fonte al {giorno} ({e})"
             log.warning(r.interrotto)
             break

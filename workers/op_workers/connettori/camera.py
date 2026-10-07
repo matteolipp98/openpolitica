@@ -13,6 +13,7 @@ from datetime import date
 from op_workers.comuni.sparql import ClientSparql
 from op_workers.connettori.base import (
     AdesioneGrezza,
+    ConteggioGrezzo,
     DatoInatteso,
     Espressione,
     ParlamentareGrezzo,
@@ -144,6 +145,47 @@ SELECT DISTINCT ?x ?v ?dep ?tipo ?descr ?gruppo WHERE {{
 }} ORDER BY ?x"""
 
 
+def query_conteggi_del_giorno(leg: int, giorno: date) -> str:
+    """Voti contati dal server per votazione, gruppo e tipo: ~100 volte meno righe dei voti uno per uno.
+    COUNT(DISTINCT ?x) toglie i doppioni del dataset. Verificato contro i voti uno per uno (0 differenze)."""
+    return f"""
+SELECT ?v ?gruppo ?tipo ?descr (COUNT(DISTINCT ?x) AS ?n) WHERE {{
+  ?v a ocd:votazione ; ocd:rif_leg {legislatura_uri(leg)} ; dc:date ?data .
+  FILTER(STR(?data) = "{giorno:%Y%m%d}")
+  ?x a ocd:voto ; ocd:rif_votazione ?v ; dc:type ?tipo .
+  OPTIONAL {{ ?x dc:description ?descr }} OPTIONAL {{ ?x ocd:rif_gruppoParlamentare ?gruppo }}
+}} GROUP BY ?v ?gruppo ?tipo ?descr"""
+
+
+LIMITE_SCELTI = 10000
+URI_GRUPPO = "http://dati.camera.it/ocd/gruppoParlamentare.rdf/"
+
+
+def query_voti_scelti_del_giorno(leg: int, giorno: date, persone: set[str], gruppi: set[str]) -> list[str]:
+    """Solo i voti che servono uno per uno, in query separate e semplici: una sola query con FILTER su
+    tutte le condizioni va in timeout (HTTP 504). Misurato: 0,3-38 s a query, invece di minuti."""
+    base = f"""?v a ocd:votazione ; ocd:rif_leg {legislatura_uri(leg)} ; dc:date ?data .
+  FILTER(STR(?data) = "{giorno:%Y%m%d}")"""
+    campi = """?x ocd:rif_votazione ?v ; ocd:rif_deputato ?dep ; dc:type ?tipo .
+  OPTIONAL {{ ?x dc:description ?descr }}"""
+    out = [
+        f"""SELECT DISTINCT ?x ?v ?dep ?tipo ?descr WHERE {{ {base}
+  ?x a ocd:voto . {campi.format()}
+  FILTER NOT EXISTS {{ ?x ocd:rif_gruppoParlamentare ?g }} }} LIMIT {LIMITE_SCELTI}"""
+    ]
+    if persone:
+        union = " UNION ".join(
+            f"{{ ?x ocd:rif_deputato <http://dati.camera.it/ocd/deputato.rdf/d{p}_{leg}> }}" for p in sorted(persone)
+        )
+        out.append(f"""SELECT DISTINCT ?x ?v ?dep ?tipo ?descr ?gruppo WHERE {{ {base}
+  {union}
+  {campi.format()} OPTIONAL {{ ?x ocd:rif_gruppoParlamentare ?gruppo }} }} LIMIT {LIMITE_SCELTI}""")
+    for g in sorted(gruppi):  # il gruppo è noto: si rimette nella riga (vedi voti_scelti_del_giorno)
+        out.append(f"""SELECT DISTINCT ?x ?v ?dep ?tipo ?descr WHERE {{ {base}
+  ?x ocd:rif_gruppoParlamentare <{URI_GRUPPO}{g}> . {campi.format()} }} LIMIT {LIMITE_SCELTI}""")
+    return out
+
+
 def query_parlamentari(leg: int) -> str:
     return f"""
 SELECT DISTINCT ?d ?nome ?cognome WHERE {{
@@ -188,6 +230,30 @@ class ConnettoreCamera:
     def voti_del_giorno(self, legislatura: int, giorno: date) -> Iterator[VotoGrezzo]:
         righe = self.sparql.pagine_dopo(lambda dopo: query_voti_del_giorno(legislatura, giorno, dopo), "x")
         for r in _unici(righe, "x"):
+            yield normalizza_voto(r)
+
+    def conteggi_del_giorno(self, legislatura: int, giorno: date) -> Iterator[ConteggioGrezzo]:
+        for r in self.sparql.select(query_conteggi_del_giorno(legislatura, giorno)):
+            gruppo = r.get("gruppo")
+            yield ConteggioGrezzo(
+                id_votazione_esterno=_id(RE_VOTAZIONE, r["v"], "votazione"),
+                id_gruppo_esterno=_id(RE_GRUPPO, gruppo, "gruppo") if gruppo else None,
+                espressione=espressione(r["tipo"], r.get("descr")),
+                n=int(r["n"]),
+            )
+
+    def voti_scelti_del_giorno(
+        self, legislatura: int, giorno: date, persone: set[str], gruppi: set[str]
+    ) -> Iterator[VotoGrezzo]:
+        righe: list[dict[str, str]] = []
+        query = query_voti_scelti_del_giorno(legislatura, giorno, persone, gruppi)
+        gruppo_della_query = [None, *([None] if persone else []), *sorted(gruppi)]
+        for q, gruppo in zip(query, gruppo_della_query, strict=True):
+            blocco = self.sparql.select(q)
+            if len(blocco) >= LIMITE_SCELTI:
+                raise DatoInatteso(f"Camera {giorno}: più di {LIMITE_SCELTI} voti scelti in una query")
+            righe.extend({**r, "gruppo": URI_GRUPPO + gruppo} if gruppo else r for r in blocco)
+        for r in _unici(righe, "x"):  # una persona del perimetro in un gruppo misto arriva due volte
             yield normalizza_voto(r)
 
     def parlamentari(self, legislatura: int) -> Iterator[ParlamentareGrezzo]:

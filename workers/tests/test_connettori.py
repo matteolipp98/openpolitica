@@ -244,3 +244,39 @@ def test_403_si_riprova(monkeypatch):
     risposte = iter([httpx.Response(403), httpx.Response(200, json={"results": {"bindings": []}})])
     c = ClientSparql("https://esempio.it/sparql", httpx.Client(transport=httpx.MockTransport(lambda r: next(risposte))))
     assert c.select("SELECT ?x WHERE {}") == []
+
+
+def test_camera_voti_scelti_in_query_separate_e_gruppo_rimesso():
+    from datetime import date
+
+    from op_workers.connettori.camera import ConnettoreCamera
+
+    class Finto:
+        def __init__(self):
+            self.query = []
+
+        def select(self, q):
+            self.query.append(q)
+            v = "http://dati.camera.it/ocd/votazione.rdf/vs19_1_1"
+            if "NOT EXISTS" in q:
+                return [{"x": "a", "v": v, "dep": "http://dati.camera.it/ocd/deputato.rdf/d1_19", "tipo": "Favorevole"}]
+            if "UNION" in q or "rif_deputato <" in q:
+                return [
+                    {
+                        "x": "b",
+                        "v": v,
+                        "dep": "http://dati.camera.it/ocd/deputato.rdf/d302103_19",
+                        "tipo": "Contrario",
+                        "gruppo": "http://dati.camera.it/ocd/gruppoParlamentare.rdf/gr4133",
+                    }
+                ]
+            return [{"x": "c", "v": v, "dep": "http://dati.camera.it/ocd/deputato.rdf/d2_19", "tipo": "Favorevole"}]
+
+    f = Finto()
+    voti = list(ConnettoreCamera(f).voti_scelti_del_giorno(19, date(2023, 3, 21), {"302103"}, {"gr4135"}))
+    assert len(f.query) == 3
+    assert [(v.id_persona_esterno, v.id_gruppo_esterno) for v in voti] == [
+        ("1", None),
+        ("302103", "gr4133"),
+        ("2", "gr4135"),
+    ]

@@ -61,7 +61,7 @@ Resta una differenza di contenuto, non di regole: le schede "Prima di rispondere
 
 ### 1.3 Ambiguità degli ADR risolte in questo piano
 
-**LLM nella fase 0.** ADR 0024 dice "nessun LLM" nella fase 0, ADR 0030 genera il catalogo con un modello. Le due cose si conciliano: il modello gira **offline**, in un job che produce un file di dati committato tramite pull request. A runtime la fase 0 non chiama alcun modello.
+**LLM nella fase 0.** ADR 0024 dice "nessun LLM" nella fase 0, ADR 0030 genera il catalogo con un modello. Le due cose si conciliano: il modello gira **offline**, in un job che produce un file di dati salvato direttamente in `main` dopo i controlli automatici. A runtime la fase 0 non chiama alcun modello.
 
 **Su cosa agiscono i test di sensibilità e polarità (0030).** Le posizioni dei partiti derivano dai voti, quindi non cambiano con la formulazione dell'enunciato. Quello che può cambiare è la **direzione** che lega il voto all'enunciato ("chi ha votato sì è d'accordo con questa frase?"). I test verificano quindi che la direzione resti stabile sulle riformulazioni e si inverta sulla forma opposta, giudicata da modelli di due famiglie diverse. Se la direzione è instabile, l'enunciato è scartato.
 
@@ -779,7 +779,7 @@ Il job `op posizioni calcola --catalogo v1` calcola le posizioni per ogni partit
 
 ADR 0030, eseguito offline dal job `op catalogo genera --versione v1`. È l'unico punto della fase 0 che usa modelli, con alias pinnati (§9.1), e ogni chiamata è registrata in `core.run_modello` (tabella creata già ora, schema in §8).
 
-**Dove gira.** Come workflow GitHub Actions avviato a mano (`catalogo.yml`, `workflow_dispatch`), che alla fine apre una pull request con `content/catalogo/vN/`. Le chiavi stanno nei secret del repository e il job usa LiteLLM come libreria con la stessa configurazione del gateway (`services/litellm/config.yaml`), quindi gli alias restano identici. Così la fase 0 non richiede il gateway su Render, che arriva con la fase 2. Secret richiesti:
+**Dove gira.** Come workflow GitHub Actions (`catalogo.yml`, ogni mattina e a mano) che, dopo `content:check`, salva `content/catalogo/vN/` direttamente in `main` e fa partire il rilascio del sito. Niente pull request: per scelta del progetto i controlli dell'ADR 0030 sono automatici. Le chiavi stanno nei secret del repository e il job usa LiteLLM come libreria con la stessa configurazione del gateway (`services/litellm/config.yaml`), quindi gli alias restano identici. Così la fase 0 non richiede il gateway su Render, che arriva con la fase 2. Secret richiesti:
 
 | Secret | Uso |
 |---|---|
@@ -1740,7 +1740,7 @@ Ogni PR è piccola, rilasciabile e con i propri test. Dimensioni indicative: S <
 | 5 | Connettori Camera e Senato con test di contratto; backfill XIX | 4 | L |
 | 6 | Posizioni dai voti (`pos-voti-1`) | 5 | M |
 | 7 | Gateway LiteLLM su Render + `run_modello` + wrapper `chiama_strutturato` | 2 | M |
-| 8 | Job catalogo ADR 0030 (selezione, tema, generazione, direzione, test) → PR con `catalogo/v1` | 6, 7 | L |
+| 8 | Job catalogo ADR 0030 (selezione, tema, generazione, direzione, test) → `catalogo/v1` salvato in `main` | 6, 7 | L |
 | 9 | `@op/affinita` con casi congelati e test di proprietà | 3 | M |
 | 10 | Bundle di rilascio: build, validazione, Storage, manifest, letture, deploy hook — **fatto (workflow Rilascio): letture e frasi qualitative restano nel sito finché non ci sono dati veri** | 6, 8 | M |
 | 11 | Web: token, componenti condivisi, lint `no-raw-percent`, layout, tema | 1 | M |
