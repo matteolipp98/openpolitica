@@ -141,6 +141,58 @@ export const Alias = z.object({
     .default([]),
 });
 
+// ---------- Catalogo delle domande (ADR 0022, 0030, 0038) ----------
+const EsitoTest = z.object({ superato: z.boolean(), dettagli: z.record(z.unknown()).default({}) });
+
+export const Enunciato = z.object({
+  id: z.string().regex(/^e-[a-z0-9-]+$/),
+  versione: z.number().int().positive(),
+  testo: z.string().min(10).max(160),
+  tema: slug,
+  livelloGoverno: z.enum(["nazionale", "regionale", "ue"]),
+  stato: z.enum(["attivo", "ritirato"]),
+  /** Scheda "Prima di rispondere" (ADR 0013): fatto dal voto d'origine e argomenti simmetrici, senza numeri. */
+  contesto: z.object({
+    fatto: z.string().max(200),
+    favorevoli: z.string().max(160),
+    contrari: z.string().max(160),
+  }),
+  origine: z.object({
+    votazione: z.object({ ramo: z.enum(["camera", "senato"]), legislatura: z.number().int(), idEsterno: z.string() }),
+    atto: z.string().nullable(),
+    data: data,
+    direzione: z.union([z.literal(1), z.literal(-1)]),
+    generazione: z.object({ modello: z.string(), promptVersione: z.string(), inputSha256: z.string() }),
+  }),
+  test: z.object({
+    divisivita: EsitoTest,
+    discriminazione: EsitoTest,
+    tema: EsitoTest,
+    sensibilita: EsitoTest,
+    polarita: EsitoTest,
+  }),
+});
+
+export const Catalogo = z
+  .object({
+    versione: z.string().regex(/^v\d+$/),
+    stato: z.enum(["provvisorio", "definitivo"]),
+    nota: z.string(),
+    generato_il: z.string(),
+    enunciatiPerTema: z.number().int().positive(),
+    enunciati: z.array(Enunciato),
+  })
+  .superRefine((c, ctx) => {
+    // ADR 0022: lo stesso numero di domande attive per ogni tema
+    const perTema = new Map<string, number>();
+    for (const e of c.enunciati.filter((x) => x.stato === "attivo")) perTema.set(e.tema, (perTema.get(e.tema) ?? 0) + 1);
+    for (const [tema, n] of perTema)
+      if (n !== c.enunciatiPerTema)
+        ctx.addIssue({ code: "custom", message: `tema ${tema}: ${n} domande, attese ${c.enunciatiPerTema}` });
+    const ids = c.enunciati.map((e) => `${e.id}@${e.versione}`);
+    if (new Set(ids).size !== ids.length) ctx.addIssue({ code: "custom", message: "id ripetuti nel catalogo" });
+  });
+
 export const SCHEMI = {
   "temi.yaml": Temi,
   "scala.yaml": Scala,

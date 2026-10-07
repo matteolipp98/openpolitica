@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Iterator
 from dataclasses import dataclass
-from datetime import date
+from datetime import date, timedelta
 from typing import Literal, Protocol
 
 Ramo = Literal["camera", "senato"]
@@ -70,3 +70,19 @@ class ConnettoreVoti(Protocol):
     def voti_del_giorno(self, legislatura: int, giorno: date) -> Iterator[VotoGrezzo]: ...
     def parlamentari(self, legislatura: int) -> Iterator[ParlamentareGrezzo]: ...
     def adesioni(self, legislatura: int) -> Iterator[AdesioneGrezza]: ...
+
+
+def finestre_mensili(dal: date, al: date | None = None) -> list[tuple[date, date]]:
+    """Intervalli di un mese da `dal` a `al` (oggi se assente), estremi inclusi.
+
+    Le query su un'intera legislatura vanno in errore (HTTP 500) sui server di Camera e Senato:
+    si chiede un mese alla volta.
+    """
+    al = al or date.today()
+    out = []
+    inizio = dal
+    while inizio <= al:
+        prossimo = date(inizio.year + inizio.month // 12, inizio.month % 12 + 1, 1)
+        out.append((inizio, min(prossimo - timedelta(days=1), al)))
+        inizio = prossimo
+    return out

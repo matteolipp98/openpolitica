@@ -63,6 +63,10 @@ class Gestore(BaseHTTPRequestHandler):
         else:
             self._json(404, {"errore": "non trovato"})
 
+    def do_HEAD(self) -> None:  # noqa: N802 - Render controlla il servizio anche con HEAD
+        self.send_response(200 if self.path in ("/", "/salute") else 404)
+        self.end_headers()
+
     def log_message(self, fmt: str, *args: object) -> None:
         log.info("%s %s", self.address_string(), fmt % args)
 

@@ -1,6 +1,6 @@
 # ADR 0017 — Stack: Vercel, Render, Supabase e LiteLLM
 
-**Stato:** Proposto
+**Stato:** Proposto, modificato da ADR 0038 (Gemini chiamato direttamente dal job di catalogo)
 **Sostituisce:** ADR 0011
 
 ## Contesto

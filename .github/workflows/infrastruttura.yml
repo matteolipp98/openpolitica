@@ -4,10 +4,10 @@ name: Infrastruttura
 on:
   workflow_dispatch:
   push:
-    branches: ["claude/**"]
+    branches: [main, "claude/**"]
     paths:
       - .github/workflows/infrastruttura.yml
-      - .github/scripts/render_job.py
+      - .github/scripts/render_env.py
 
 jobs:
   controllo-secret:
@@ -24,7 +24,7 @@ jobs:
           riga NEXT_PUBLIC_SUPABASE_URL "${{ secrets.NEXT_PUBLIC_SUPABASE_URL != '' }}"
           riga NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY "${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY != '' }}"
           riga SUPABASE_SECRET_KEY "${{ secrets.SUPABASE_SECRET_KEY != '' }}"
-          riga SUPABASE_DB_URL "${{ secrets.SUPABASE_DB_URL != '' }}"
+          riga SESSION_POOLER "${{ secrets.SESSION_POOLER != '' }}"
           riga VERCEL_TOKEN "${{ secrets.VERCEL_TOKEN != '' }}"
           riga RENDER_API_KEY "${{ secrets.RENDER_API_KEY != '' }}"
           riga GEMINI_API_KEY "${{ secrets.GEMINI_API_KEY != '' }}"
@@ -36,7 +36,7 @@ jobs:
     env:
       URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
       CHIAVE: ${{ secrets.SUPABASE_SECRET_KEY }}
-      DB: ${{ secrets.SUPABASE_DB_URL }}
+      DB: ${{ secrets.SESSION_POOLER }}
     steps:
       - name: Connessione con la chiave segreta
         run: |
@@ -55,9 +55,9 @@ jobs:
       - name: Accesso diretto al database (serve per le migrazioni)
         run: |
           if [ -z "$DB" ]; then
-            echo "Manca SUPABASE_DB_URL: senza non si possono creare le tabelle né importare i voti." | tee -a "$GITHUB_STEP_SUMMARY"
+            echo "Manca SESSION_POOLER: senza non si possono creare le tabelle né importare i voti." | tee -a "$GITHUB_STEP_SUMMARY"
           else
-            echo "SUPABASE_DB_URL presente." | tee -a "$GITHUB_STEP_SUMMARY"
+            echo "SESSION_POOLER presente." | tee -a "$GITHUB_STEP_SUMMARY"
           fi
 
   render:
@@ -65,8 +65,8 @@ jobs:
     environment: dev   # i secret sono nell'environment dev
     env:
       RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-      DB: ${{ secrets.SUPABASE_DB_URL }}
+      DB: ${{ secrets.SESSION_POOLER }}
     steps:
       - uses: actions/checkout@v4
-      - name: Crea o trova il job di import dei voti
-        run: python3 .github/scripts/render_job.py
+      - name: Collega il servizio Render al database
+        run: python3 .github/scripts/render_env.py

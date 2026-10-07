@@ -1,0 +1,68 @@
+# Database su Supabase: applica le migrazioni, sincronizza l'anagrafica da content/ e importa i voti.
+# L'import è idempotente e riparte dall'ultimo giorno importato: rilanciarlo non duplica nulla.
+name: Database
+
+on:
+  workflow_dispatch:
+    inputs:
+      importa:
+        description: "Importa i voti"
+        type: choice
+        options: [entrambi, camera, senato, nessuno]
+        default: entrambi
+  push:
+    branches: [main, "claude/**"]
+    paths:
+      - supabase/migrations/**
+      - content/**
+      - workers/op_workers/connettori/**
+      - workers/op_workers/comuni/**
+      - workers/op_workers/anagrafica/**
+      - .github/workflows/database.yml
+
+concurrency: { group: database, cancel-in-progress: false }
+
+jobs:
+  migra:
+    runs-on: ubuntu-latest
+    environment: dev
+    timeout-minutes: 15
+    env:
+      DATABASE_URL: ${{ secrets.SESSION_POOLER }}
+    defaults: { run: { working-directory: workers, shell: bash } }  # bash = pipefail: un errore fa fallire il job
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --frozen
+      - name: Controllo della stringa di connessione
+        run: |
+          test -n "$DATABASE_URL" || { echo "Manca il secret SESSION_POOLER nell'environment dev"; exit 1; }
+          case "$DATABASE_URL" in *YOUR-PASSWORD*) echo "Nella stringa c'è ancora [YOUR-PASSWORD]: va sostituita con la password"; exit 1;; esac
+      - name: Migrazioni
+        run: uv run python -m op_workers.comuni.migrazioni | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Anagrafica da content/
+        run: uv run python -m op_workers.anagrafica.sincronizza | tee -a "$GITHUB_STEP_SUMMARY"
+
+  importa:
+    needs: migra
+    if: github.event_name == 'push' || inputs.importa != 'nessuno'
+    runs-on: ubuntu-latest
+    environment: dev
+    timeout-minutes: 340
+    strategy:
+      fail-fast: false
+      matrix:
+        ramo: [camera, senato]
+    env:
+      DATABASE_URL: ${{ secrets.SESSION_POOLER }}
+    defaults: { run: { working-directory: workers, shell: bash } }  # bash = pipefail: un errore fa fallire il job
+    steps:
+      - uses: actions/checkout@v4
+        if: github.event_name == 'push' || inputs.importa == 'entrambi' || inputs.importa == matrix.ramo
+      - uses: astral-sh/setup-uv@v6
+        if: github.event_name == 'push' || inputs.importa == 'entrambi' || inputs.importa == matrix.ramo
+      - name: Import ${{ matrix.ramo }}
+        if: github.event_name == 'push' || inputs.importa == 'entrambi' || inputs.importa == matrix.ramo
+        run: |
+          uv sync --frozen
+          uv run python -m op_workers.connettori.importa_voti ${{ matrix.ramo }} | tail -5 | tee -a "$GITHUB_STEP_SUMMARY"

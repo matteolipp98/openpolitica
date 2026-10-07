@@ -1,0 +1,283 @@
+{
+  "type": "object",
+  "properties": {
+    "versione": {
+      "type": "string",
+      "pattern": "^v\\d+$"
+    },
+    "stato": {
+      "type": "string",
+      "enum": [
+        "provvisorio",
+        "definitivo"
+      ]
+    },
+    "nota": {
+      "type": "string"
+    },
+    "generato_il": {
+      "type": "string"
+    },
+    "enunciatiPerTema": {
+      "type": "integer",
+      "exclusiveMinimum": 0
+    },
+    "enunciati": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^e-[a-z0-9-]+$"
+          },
+          "versione": {
+            "type": "integer",
+            "exclusiveMinimum": 0
+          },
+          "testo": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 160
+          },
+          "tema": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "livelloGoverno": {
+            "type": "string",
+            "enum": [
+              "nazionale",
+              "regionale",
+              "ue"
+            ]
+          },
+          "stato": {
+            "type": "string",
+            "enum": [
+              "attivo",
+              "ritirato"
+            ]
+          },
+          "contesto": {
+            "type": "object",
+            "properties": {
+              "fatto": {
+                "type": "string",
+                "maxLength": 200
+              },
+              "favorevoli": {
+                "type": "string",
+                "maxLength": 160
+              },
+              "contrari": {
+                "type": "string",
+                "maxLength": 160
+              }
+            },
+            "required": [
+              "fatto",
+              "favorevoli",
+              "contrari"
+            ],
+            "additionalProperties": false
+          },
+          "origine": {
+            "type": "object",
+            "properties": {
+              "votazione": {
+                "type": "object",
+                "properties": {
+                  "ramo": {
+                    "type": "string",
+                    "enum": [
+                      "camera",
+                      "senato"
+                    ]
+                  },
+                  "legislatura": {
+                    "type": "integer"
+                  },
+                  "idEsterno": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "ramo",
+                  "legislatura",
+                  "idEsterno"
+                ],
+                "additionalProperties": false
+              },
+              "atto": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "data": {
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+              },
+              "direzione": {
+                "type": "number",
+                "enum": [
+                  1,
+                  -1
+                ]
+              },
+              "generazione": {
+                "type": "object",
+                "properties": {
+                  "modello": {
+                    "type": "string"
+                  },
+                  "promptVersione": {
+                    "type": "string"
+                  },
+                  "inputSha256": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "modello",
+                  "promptVersione",
+                  "inputSha256"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "votazione",
+              "atto",
+              "data",
+              "direzione",
+              "generazione"
+            ],
+            "additionalProperties": false
+          },
+          "test": {
+            "type": "object",
+            "properties": {
+              "divisivita": {
+                "type": "object",
+                "properties": {
+                  "superato": {
+                    "type": "boolean"
+                  },
+                  "dettagli": {
+                    "type": "object",
+                    "additionalProperties": {},
+                    "default": {}
+                  }
+                },
+                "required": [
+                  "superato"
+                ],
+                "additionalProperties": false
+              },
+              "discriminazione": {
+                "type": "object",
+                "properties": {
+                  "superato": {
+                    "type": "boolean"
+                  },
+                  "dettagli": {
+                    "type": "object",
+                    "additionalProperties": {},
+                    "default": {}
+                  }
+                },
+                "required": [
+                  "superato"
+                ],
+                "additionalProperties": false
+              },
+              "tema": {
+                "type": "object",
+                "properties": {
+                  "superato": {
+                    "type": "boolean"
+                  },
+                  "dettagli": {
+                    "type": "object",
+                    "additionalProperties": {},
+                    "default": {}
+                  }
+                },
+                "required": [
+                  "superato"
+                ],
+                "additionalProperties": false
+              },
+              "sensibilita": {
+                "type": "object",
+                "properties": {
+                  "superato": {
+                    "type": "boolean"
+                  },
+                  "dettagli": {
+                    "type": "object",
+                    "additionalProperties": {},
+                    "default": {}
+                  }
+                },
+                "required": [
+                  "superato"
+                ],
+                "additionalProperties": false
+              },
+              "polarita": {
+                "type": "object",
+                "properties": {
+                  "superato": {
+                    "type": "boolean"
+                  },
+                  "dettagli": {
+                    "type": "object",
+                    "additionalProperties": {},
+                    "default": {}
+                  }
+                },
+                "required": [
+                  "superato"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "divisivita",
+              "discriminazione",
+              "tema",
+              "sensibilita",
+              "polarita"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "versione",
+          "testo",
+          "tema",
+          "livelloGoverno",
+          "stato",
+          "contesto",
+          "origine",
+          "test"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "versione",
+    "stato",
+    "nota",
+    "generato_il",
+    "enunciatiPerTema",
+    "enunciati"
+  ],
+  "additionalProperties": false,
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

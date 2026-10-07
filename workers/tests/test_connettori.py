@@ -23,6 +23,9 @@ class SparqlFinto:
         self.query.append(query)
         return list(self.righe)
 
+    def pagine_dopo(self, query, chiave, pagina=5000):
+        return self.pagine(query(""), pagina)
+
 
 class TestCamera:
     VOTAZIONE = {
@@ -55,7 +58,8 @@ class TestCamera:
     def test_duplicati_del_dataset_scartati(self):
         finto = SparqlFinto([self.VOTAZIONE, dict(self.VOTAZIONE)])
         assert len(list(camera.ConnettoreCamera(finto).votazioni(19, date(2026, 1, 1)))) == 1
-        assert 'FILTER(STR(?data) >= "20260101")' in finto.query[0]
+        assert 'STR(?data) >= "20260101"' in finto.query[0]
+        assert 'STR(?data) <= "20260131"' in finto.query[0]
         assert "DISTINCT" in finto.query[0]
 
     @pytest.mark.parametrize(
@@ -153,7 +157,7 @@ class TestSenato:
     def test_query_senza_values_ne_bind(self):
         q = senato.query_archi_votazione(SEN + "votazione/19-167-42")
         assert "VALUES" not in q and "BIND" not in q
-        assert "VALUES" not in senato.query_votazioni(19, date(2022, 10, 13))
+        assert "VALUES" not in senato.query_votazioni(19, date(2022, 10, 13), date(2022, 10, 31))
 
     def test_voti_di_altre_legislature_esclusi(self):
         class Finto:
@@ -202,3 +206,41 @@ class TestClientSparql:
 
         righe = self._client(gestore).pagine("SELECT ?x WHERE {} ORDER BY ?x", pagina=2)
         assert [r["x"] for r in righe] == ["0", "1", "2", "3", "4"]
+
+
+def test_finestre_mensili():
+    from op_workers.connettori.base import finestre_mensili
+
+    assert finestre_mensili(date(2022, 10, 13), date(2023, 1, 5)) == [
+        (date(2022, 10, 13), date(2022, 10, 31)),
+        (date(2022, 11, 1), date(2022, 11, 30)),
+        (date(2022, 12, 1), date(2022, 12, 31)),
+        (date(2023, 1, 1), date(2023, 1, 5)),
+    ]
+
+
+def test_paginazione_dopo_l_ultimo_visto():
+    viste = []
+
+    def gestore(req):
+        q = req.url.params["query"]
+        assert "OFFSET" not in q
+        dopo = q.split('STR(?x) > "')[1].split('"')[0]
+        viste.append(dopo)
+        tutte = [f"x{i:02d}" for i in range(5)]
+        blocco = [x for x in tutte if x > dopo][:2]
+        return httpx.Response(200, json={"results": {"bindings": [{"x": {"value": x}} for x in blocco]}})
+
+    c = ClientSparql("https://esempio.it/sparql", httpx.Client(transport=httpx.MockTransport(gestore)), attesa=0)
+    righe = c.pagine_dopo(lambda d: f'SELECT ?x WHERE {{ FILTER(STR(?x) > "{d}") }} ORDER BY ?x', "x", pagina=2)
+    assert [r["x"] for r in righe] == ["x00", "x01", "x02", "x03", "x04"]
+    assert viste == ["", "x01", "x03"]
+
+
+def test_403_si_riprova(monkeypatch):
+    import op_workers.comuni.sparql as s
+
+    monkeypatch.setattr(s.time, "sleep", lambda _: None)
+    risposte = iter([httpx.Response(403), httpx.Response(200, json={"results": {"bindings": []}})])
+    c = ClientSparql("https://esempio.it/sparql", httpx.Client(transport=httpx.MockTransport(lambda r: next(risposte))))
+    assert c.select("SELECT ?x WHERE {}") == []

@@ -1,6 +1,6 @@
 # ADR 0030 — Generazione automatica del catalogo e controlli sostitutivi della revisione umana
 
-**Stato:** Proposto, modificato da ADR 0037 (la sezione "Nessun giudizio pubblicato senza revisore" è superata)
+**Stato:** Proposto, modificato da ADR 0037 (la sezione "Nessun giudizio pubblicato senza revisore" è superata); ADR 0038 (con una sola famiglia di modelli il catalogo è provvisorio)
 **Modifica:** ADR 0022, 0028
 
 ## Contesto

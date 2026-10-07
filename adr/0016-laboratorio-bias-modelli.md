@@ -1,6 +1,6 @@
 # ADR 0016 — Laboratorio di misurazione del bias tra modelli e famiglie
 
-**Stato:** Proposto
+**Stato:** Proposto, modificato da ADR 0038 (Gemini come unico fornitore iniziale)
 **Estende:** ADR 0006
 
 ## Contesto
