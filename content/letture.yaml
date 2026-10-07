@@ -9,14 +9,17 @@ letture:
   - metrica: numeri_sbagliati
     verso: max
     testo: "{soggetti} è quello che sbaglia più numeri."
+    testoPiu: "{soggetti} sono quelli che sbagliano più numeri."
     sotto: "{n} numeri sbagliati su {d} che abbiamo potuto controllare."
   - metrica: non_controllabili
     verso: max
     testo: "{soggetti} è il più vago: parla senza dire niente di controllabile."
+    testoPiu: "{soggetti} sono i più vaghi: parlano senza dire niente di controllabile."
     sotto: "{n} frasi su {d} non si possono controllare."
   - metrica: voti_contrari
     verso: max
     testo: "{soggetti} dice una cosa e poi in aula vota il contrario."
+    testoPiu: "{soggetti} dicono una cosa e poi in aula votano il contrario."
     sotto: "È successo {n} volte su {d}."
   - metrica: promesse_non_mantenute
     aggregata: true

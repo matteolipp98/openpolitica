@@ -1,0 +1,649 @@
+{
+ "alleanza-progresso": {
+  "d1": {
+   "valore": -2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato contro la proposta di salario minimo a 9 euro",
+     "quando": "Camera, 11 maggio 2023"
+    },
+    {
+     "testo": "Ha votato contro l'emendamento che lo introduceva nel bilancio",
+     "quando": "Senato, 18 dicembre 2024"
+    }
+   ]
+  },
+  "d2": {
+   "valore": -1,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato contro l'imposta sui patrimoni oltre i 5 milioni",
+     "quando": "Camera, 3 ottobre 2025"
+    }
+   ]
+  },
+  "d3": {
+   "valore": 2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato a favore della proroga degli invii",
+     "quando": "Camera, 9 febbraio 2026"
+    }
+   ]
+  },
+  "d4": {
+   "valore": -2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato contro il passaggio in aula della riforma",
+     "quando": "Camera, 7 marzo 2026"
+    }
+   ],
+   "nota": "Nel programma del 2022 scriveva di voler “riformare le regole sulla cittadinanza”, senza dire in che direzione."
+  },
+  "d5": {
+   "valore": 2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato a favore del piano che riapre al nucleare",
+     "quando": "Camera, 22 gennaio 2026"
+    }
+   ]
+  },
+  "d6": {
+   "valore": -1,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato contro l'aumento del fondo sanitario",
+     "quando": "Senato, 28 novembre 2025"
+    }
+   ],
+   "nota": "In campagna elettorale aveva promesso di aumentare la spesa sanitaria. È il caso in cui parole e voto si contraddicono di più."
+  },
+  "d7": {
+   "valore": -2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato contro l'uscita a 62 anni",
+     "quando": "Camera, 15 dicembre 2025"
+    }
+   ]
+  },
+  "d8": {
+   "valore": 1,
+   "stato": "documentata",
+   "evidenze": []
+  }
+ },
+ "civica-riformista": {
+  "d1": {
+   "valore": 1,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato a favore",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d2": {
+   "valore": 1,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato a favore",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d3": {
+   "valore": 1,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato a favore",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d4": {
+   "valore": 2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato a favore",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d5": {
+   "valore": 0,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Il partito si è diviso nel voto",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d6": {
+   "valore": 1,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato a favore",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d7": {
+   "valore": -1,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato contro",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d8": {
+   "valore": -2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato contro",
+     "quando": "Voto di esempio"
+    }
+   ]
+  }
+ },
+ "fronte-dei-territori": {
+  "d1": {
+   "valore": -2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato contro",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d2": {
+   "valore": -2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato contro",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d3": {
+   "valore": 1,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato a favore",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d4": {
+   "valore": -2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato contro",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d5": {
+   "valore": 2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato a favore",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d6": {
+   "valore": -2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato contro",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d7": {
+   "valore": 2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato a favore",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d8": {
+   "valore": 2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato a favore",
+     "quando": "Voto di esempio"
+    }
+   ]
+  }
+ },
+ "movimento-solidale": {
+  "d1": {
+   "valore": 2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato a favore",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d2": {
+   "valore": 2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato a favore",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d3": {
+   "valore": -2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato contro",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d4": {
+   "valore": 2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato a favore",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d5": {
+   "valore": -2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato contro",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d6": {
+   "valore": 2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato a favore",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d7": {
+   "valore": 2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato a favore",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d8": {
+   "valore": -1,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato contro",
+     "quando": "Voto di esempio"
+    }
+   ]
+  }
+ },
+ "partito-lavoro-e-comunita": {
+  "d1": {
+   "valore": 2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato a favore",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d2": {
+   "valore": 2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato a favore",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d3": {
+   "valore": -1,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato contro",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d4": {
+   "valore": 1,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato a favore",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d5": {
+   "valore": -1,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato contro",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d6": {
+   "valore": 2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato a favore",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d7": {
+   "valore": 1,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato a favore",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d8": {
+   "valore": null,
+   "stato": "non_documentata",
+   "evidenze": []
+  }
+ },
+ "unione-liberale": {
+  "d1": {
+   "valore": -2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato contro",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d2": {
+   "valore": -2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato contro",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d3": {
+   "valore": 2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato a favore",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d4": {
+   "valore": 1,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato a favore",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d5": {
+   "valore": 2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato a favore",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d6": {
+   "valore": -2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato contro",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d7": {
+   "valore": -2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato contro",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d8": {
+   "valore": -1,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato contro",
+     "quando": "Voto di esempio"
+    }
+   ]
+  }
+ },
+ "verdi-e-territori": {
+  "d1": {
+   "valore": 2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato a favore",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d2": {
+   "valore": 2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato a favore",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d3": {
+   "valore": -1,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato contro",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d4": {
+   "valore": 2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato a favore",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d5": {
+   "valore": -2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato contro",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d6": {
+   "valore": 2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato a favore",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d7": {
+   "valore": 1,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato a favore",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d8": {
+   "valore": -2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato contro",
+     "quando": "Voto di esempio"
+    }
+   ]
+  }
+ },
+ "patto-per-le-regioni": {
+  "d1": {
+   "valore": -1,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato contro",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d2": {
+   "valore": -2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato contro",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d3": {
+   "valore": null,
+   "stato": "non_documentata",
+   "evidenze": []
+  },
+  "d4": {
+   "valore": -1,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato contro",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d5": {
+   "valore": 1,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato a favore",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d6": {
+   "valore": -1,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato contro",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d7": {
+   "valore": 1,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato a favore",
+     "quando": "Voto di esempio"
+    }
+   ]
+  },
+  "d8": {
+   "valore": 2,
+   "stato": "documentata",
+   "evidenze": [
+    {
+     "testo": "Ha votato a favore",
+     "quando": "Voto di esempio"
+    }
+   ]
+  }
+ }
+}

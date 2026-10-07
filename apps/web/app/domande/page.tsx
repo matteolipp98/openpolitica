@@ -1,24 +1,33 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { NotaEsempio } from "@/components/NotaEsempio";
+import { Questionario } from "@/components/Questionario";
+import { pacchetto, parametri, partiti } from "@/lib/dati";
 
 export const metadata: Metadata = { title: "Chi la pensa come te" };
 
 export default function Domande() {
+  const { domande, posizioni, manifest } = pacchetto();
+  const soggetti = partiti().map((p) => ({
+    id: p.id,
+    nome: p.nome,
+    ruolo: p.ruolo,
+    tipo: "partito" as const,
+    posizioni: Object.fromEntries(
+      Object.entries(posizioni[p.id] ?? {}).map(([k, v]) => [k, { valore: v.valore, stato: v.stato, confidenza: v.valore === null ? null : ("piena" as const) }]),
+    ),
+  }));
   return (
     <main>
       <h1>Chi la pensa come te</h1>
-      <p className="lede">
-        Ti faremo alcune domande. Poi ti diremo chi ha votato come la pensi tu, e su cosa invece non siete d&apos;accordo.
-      </p>
-      <div className="box">
-        <p>
-          <b>Le domande non sono ancora pronte.</b>
-        </p>
-        <p>Non le scriviamo noi: le ricaviamo dai voti che in Parlamento hanno davvero diviso i partiti.</p>
-        <p>Prima dobbiamo caricare tutti quei voti. Poi controlliamo che ogni domanda sia scritta in modo giusto per tutti.</p>
-      </div>
+      <NotaEsempio />
+      {manifest.catalogo.stato === "provvisorio" && !manifest.esempio && (
+        <p className="nota">Le domande sono state scritte e controllate da un sistema di intelligenza artificiale. Le stiamo ancora verificando.</p>
+      )}
+      <Questionario domande={domande} soggetti={soggetti} parametri={parametri().affinita} catalogo={manifest.catalogo.versione} />
       <p className="chiusura">
-        Le tue risposte resteranno sul tuo telefono o sul tuo computer. <Link href="/come-funziona">Come funziona</Link>
+        Le posizioni dei partiti vengono dai voti in Parlamento. Le tue risposte restano sul tuo telefono o sul tuo computer.{" "}
+        <Link href="/come-funziona">Come funziona</Link>
       </p>
     </main>
   );

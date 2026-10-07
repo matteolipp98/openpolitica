@@ -1,0 +1,39 @@
+{
+ "alleanza-progresso": [
+  {
+   "stato": "mantenuta",
+   "testo": "Assumere 20.000 insegnanti di sostegno",
+   "motivo": "Fatto: assunzioni partite nel 2024."
+  },
+  {
+   "stato": "mantenuta",
+   "testo": "Aumentare gli asili nido nei comuni piccoli",
+   "motivo": "Fatto: fondi stanziati e primi 180 nidi aperti."
+  },
+  {
+   "stato": "a_meta",
+   "testo": "Tagliare le tasse sul lavoro",
+   "motivo": "A metà: il taglio è arrivato ma solo per un anno."
+  },
+  {
+   "stato": "a_meta",
+   "testo": "Ridurre i tempi di attesa per le visite mediche",
+   "motivo": "A metà: calati del 17%, la promessa era dimezzarli."
+  },
+  {
+   "stato": "non_mantenuta",
+   "testo": "Aumentare la spesa per la sanità pubblica",
+   "motivo": "Non fatto: ha votato contro l'aumento del fondo."
+  },
+  {
+   "stato": "non_mantenuta",
+   "testo": "Una legge sul conflitto d'interessi",
+   "motivo": "Non fatto: nessuna proposta presentata in quattro anni."
+  },
+  {
+   "stato": "non_mantenuta",
+   "testo": "Rivedere le regole sulla cittadinanza",
+   "motivo": "Non fatto: ha votato contro la riforma arrivata in aula."
+  }
+ ]
+}

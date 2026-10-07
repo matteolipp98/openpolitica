@@ -1,0 +1,82 @@
+[
+ {
+  "id": "d1",
+  "testo": "Lo Stato deve fissare per legge un salario minimo.",
+  "tema": "economia",
+  "contesto": {
+   "fatto": "Oggi in Italia non esiste. In Parlamento se ne è votato nel 2023: la proposta è stata respinta.",
+   "favorevoli": "",
+   "contrari": ""
+  }
+ },
+ {
+  "id": "d2",
+  "testo": "Bisogna tassare di più chi ha grandi patrimoni per abbassare le tasse sul lavoro.",
+  "tema": "economia",
+  "contesto": {
+   "fatto": "Chi è a favore dice che riduce le disuguaglianze. Chi è contro teme la fuga di capitali.",
+   "favorevoli": "",
+   "contrari": ""
+  }
+ },
+ {
+  "id": "d3",
+  "testo": "L'Italia deve continuare a inviare armi ai paesi sotto attacco.",
+  "tema": "esteri",
+  "contesto": {
+   "fatto": "Dal 2022 il Parlamento ha votato più volte su questo, con maggioranze diverse ogni volta.",
+   "favorevoli": "",
+   "contrari": ""
+  }
+ },
+ {
+  "id": "d4",
+  "testo": "Chi nasce in Italia da genitori stranieri deve diventare cittadino italiano subito.",
+  "tema": "diritti",
+  "contesto": {
+   "fatto": "Oggi deve aspettare i 18 anni e fare domanda. Riguarda circa 900.000 ragazzi.",
+   "favorevoli": "",
+   "contrari": ""
+  }
+ },
+ {
+  "id": "d5",
+  "testo": "Bisogna costruire nuove centrali nucleari in Italia.",
+  "tema": "ambiente",
+  "contesto": {
+   "fatto": "Due referendum le hanno bocciate, nel 1987 e nel 2011. Oggi la legge le vieta.",
+   "favorevoli": "",
+   "contrari": ""
+  }
+ },
+ {
+  "id": "d6",
+  "testo": "La sanità privata convenzionata va ridotta a favore di quella pubblica.",
+  "tema": "welfare",
+  "contesto": {
+   "fatto": "Circa un euro su cinque della spesa sanitaria pubblica va a strutture private convenzionate.",
+   "favorevoli": "",
+   "contrari": ""
+  }
+ },
+ {
+  "id": "d7",
+  "testo": "Serve più flessibilità per andare in pensione prima, anche se costa allo Stato.",
+  "tema": "economia",
+  "contesto": {
+   "fatto": "Ogni anno di anticipo per tutti costa qualche miliardo l'anno secondo le stime ufficiali.",
+   "favorevoli": "",
+   "contrari": ""
+  }
+ },
+ {
+  "id": "d8",
+  "testo": "L'Italia deve avere più autonomia dalle decisioni dell'Unione Europea.",
+  "tema": "esteri",
+  "contesto": {
+   "fatto": "Riguarda materie come bilancio, migranti e ambiente, dove oggi decidono anche le istituzioni europee.",
+   "favorevoli": "",
+   "contrari": ""
+  }
+ }
+]

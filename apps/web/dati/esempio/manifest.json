@@ -1,0 +1,16 @@
+{
+ "versione": "esempio",
+ "esempio": true,
+ "generato_il": "2026-10-07",
+ "catalogo": {
+  "versione": "esempio",
+  "stato": "provvisorio"
+ },
+ "sezioni": {
+  "posizioni": true,
+  "numeri": true,
+  "coerenza": true,
+  "promesse": true,
+  "letture": true
+ }
+}
