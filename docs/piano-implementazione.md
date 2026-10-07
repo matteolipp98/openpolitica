@@ -1,6 +1,6 @@
 # Piano di implementazione
 
-Piano tecnico derivato dagli ADR 0001–0037 (esclusi 0011 e 0018, sostituiti), da `adr/architettura-mvp.md` e dai mock in `adr/mockup/`, che sono la versione più recente del prodotto. Segue l'ordine delle fasi dell'ADR 0024 e la modalità iniziale senza revisori degli ADR 0030 e 0037.
+Piano tecnico derivato dagli ADR 0001–0037 (esclusi 0011 e 0018, sostituiti), da `adr/architettura-mvp.md` e dai mock in `adr/mockup/`. Segue l'ordine delle fasi dell'ADR 0024 e la modalità iniziale senza revisori degli ADR 0030 e 0037.
 
 La fase 0 è descritta al livello del codice: è quella da costruire subito, e le sue fondamenta (schema dati, formato dei contenuti, algoritmo di affinità, bundle di rilascio) non devono cambiare nelle fasi successive. Le fasi 1–5 sono descritte al livello di moduli, tabelle e interfacce, con il codice solo dove un vincolo degli ADR va fissato fin dall'inizio.
 
@@ -40,7 +40,7 @@ Indice
 
 ### 1.2 Mock e ADR: come sono stati allineati
 
-I mock sono la versione più recente del prodotto. Dove divergevano dagli ADR, gli ADR sono stati aggiornati con l'**ADR 0037**, che modifica 0007, 0008, 0009, 0010, 0013, 0019, 0020, 0028, 0030 e 0036. Il piano segue i mock con le condizioni fissate da quell'ADR:
+Dove i mock divergevano dagli ADR, gli ADR sono stati aggiornati con l'**ADR 0037**, che modifica 0007, 0008, 0009, 0010, 0013, 0019, 0020, 0028, 0030 e 0036. Il piano segue i mock con le condizioni fissate da quell'ADR:
 
 | Mock | Cosa mostra | Regola dopo l'ADR 0037 | Effetto sul piano |
 |---|---|---|---|

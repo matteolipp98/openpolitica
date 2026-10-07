@@ -11,7 +11,8 @@
     "content:schema": "tsx scripts/gen-json-schema.ts",
     "typecheck": "tsc -p tsconfig.json",
     "test": "vitest run",
-    "valida-pacchetto": "tsx scripts/valida-pacchetto.ts"
+    "valida-pacchetto": "tsx scripts/valida-pacchetto.ts",
+    "linguaggio": "tsx scripts/linguaggio.ts"
   },
   "dependencies": {
     "yaml": "^2.9.1",

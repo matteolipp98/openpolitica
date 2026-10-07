@@ -1,0 +1,18 @@
+# Parole fisse dell'ADR 0036: nei testi che legge chi visita il sito queste parole non si usano.
+# Il controllo (pnpm linguaggio) guarda solo le frasi visibili, non i nomi nel codice.
+versione: 1
+vietate:
+  - { parola: "numero sbagliato", usa: "dato sbagliato" }
+  - { parola: "numeri sbagliati", usa: "dati sbagliati" }
+  - { parola: "non controllabil", usa: "frasi vaghe" }
+  - { parola: "non verificabil", usa: "frasi vaghe / non si può controllare" }
+  - { parola: "soglia", usa: "con meno di 30 il confronto non sarebbe giusto" }
+  - { parola: "denominatore", usa: "su quante volte" }
+  - { parola: "metrica", usa: "il nome della cosa che misuriamo" }
+  - { parola: "trimestre", usa: "tre mesi" }
+  - { parola: "coesione", usa: "il partito vota unito" }
+  - { parola: "vota compatto", usa: "il partito vota unito" }
+  - { parola: "claim", usa: "frase / dato" }
+  - { parola: "incoerenz", usa: "ha detto una cosa e ha votato il contrario" }
+  - { parola: "in aula", usa: "in Parlamento" }
+  - { parola: "atto", usa: "legge / proposta" }

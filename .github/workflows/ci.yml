@@ -23,6 +23,8 @@ jobs:
       - run: pnpm test
       - name: Il pacchetto di esempio rispetta lo schema del sito
         run: pnpm --filter @op/schema valida-pacchetto "$PWD/apps/web/dati/esempio"
+      - name: Linguaggio comune nei testi del sito e nei mock (ADR 0036)
+        run: pnpm --filter @op/schema linguaggio
       - name: Test di equilibrio sul pacchetto di esempio (piano §3.11)
         run: pnpm --filter @op/affinita equilibrio "$PWD/apps/web/dati/esempio"
 
