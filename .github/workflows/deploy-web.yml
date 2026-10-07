@@ -30,8 +30,8 @@ jobs:
         with: { node-version-file: .nvmrc, cache: pnpm }
       - run: pnpm install --frozen-lockfile
       - run: pnpm content:check
-      # Dati del sito (piano §3.9): l'ultimo pacchetto pubblicato dal workflow Rilascio. Si usa solo se ha
-      # già le domande e le posizioni; altrimenti il sito resta sui dati di esempio, e lo dice in ogni pagina.
+      # Dati del sito (piano §3.9): l'ultimo pacchetto pubblicato dal workflow Rilascio. Senza pacchetto il sito
+      # usa i dati di esempio e lo dice in ogni pagina; con un pacchetto parziale dice fin dove arrivano i voti.
       - name: Dati del sito
         env:
           SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
@@ -55,12 +55,7 @@ jobs:
                   sys.exit(f"Impronta sbagliata per {f}: il pacchetto non si usa")
           PY
           pnpm --filter @op/schema valida-pacchetto "$PWD/apps/web/.data"
-          if python3 -c "import json,sys;sys.exit(0 if json.load(open('apps/web/.data/manifest.json'))['sezioni']['posizioni'] else 1)"; then
-            echo "Il sito usa i dati veri: pacchetto $v." | tee -a "$GITHUB_STEP_SUMMARY"
-          else
-            rm -r apps/web/.data
-            echo "Il pacchetto $v non ha ancora le domande: il sito resta sui dati di esempio." | tee -a "$GITHUB_STEP_SUMMARY"
-          fi
+          echo "Il sito usa i dati veri: pacchetto $v. Le parti che mancano lo dicono in pagina." | tee -a "$GITHUB_STEP_SUMMARY"
       - name: Collega o crea il progetto Vercel
         working-directory: apps/web
         run: npx --yes vercel@latest link --yes --project openpolitica --token "$VERCEL_TOKEN"

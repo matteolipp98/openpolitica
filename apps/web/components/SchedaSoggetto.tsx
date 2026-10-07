@@ -1,9 +1,8 @@
 import Link from "next/link";
 import { Accostamento } from "./Accostamento";
 import { NotaEsempio } from "./NotaEsempio";
-import { pacchetto, parametri } from "@/lib/dati";
+import { pacchetto } from "@/lib/dati";
 import { quota } from "@/lib/letture";
-import { metricheTempo, schedaTempo, type PuntoTempo } from "@/lib/andamento";
 import type { Posizione, Soggetto } from "@/lib/tipi";
 
 const ETICHETTA: Record<string, [string, string]> = {
@@ -16,21 +15,6 @@ const ETICHETTA: Record<string, [string, string]> = {
 function etichetta(p?: Posizione): [string, string] {
   if (!p || p.valore === null) return ETICHETTA.vuoto!;
   return p.valore > 0 ? ETICHETTA.si! : p.valore < 0 ? ETICHETTA.no! : ETICHETTA.zero!;
-}
-
-/** Linea piccola per la scheda: segmenti solo tra tre mesi consecutivi con abbastanza dati (ADR 0040). */
-function Mini({ punti, minimo }: { punti: PuntoTempo[]; minimo: number }) {
-  const x = (i: number) => 4 + (i * 88) / Math.max(1, punti.length - 1), y = (q: number) => 32 - q * 30;
-  return (
-    <svg viewBox="0 0 96 34" aria-hidden="true">
-      {punti.map((p, i) => {
-        const a = punti[i - 1];
-        return i > 0 && a && a.d >= minimo && p.d >= minimo ? (
-          <line key={i} x1={x(i - 1)} y1={y(a.n / a.d)} x2={x(i)} y2={y(p.n / p.d)} />
-        ) : null;
-      })}
-    </svg>
-  );
 }
 
 const STATO = { mantenuta: "Mantenuta", a_meta: "A metà", non_mantenuta: "Non mantenuta" } as const;
@@ -144,10 +128,8 @@ export function SchedaSoggetto({ s }: { s: Soggetto }) {
       {numeri.length > 0 ? (
         numeri.map((a) => <Accostamento a={a} key={a.detto} />)
       ) : (
-        <p className="vuota">Non abbiamo ancora trovato dati sbagliati in quello che dice. Se ne troveremo, li vedrai qui con il dato vero accanto.</p>
+        <p className="vuota">Non controlliamo ancora i dati che dice. Quando lo faremo, qui vedrai quelli sbagliati con il dato vero accanto.</p>
       )}
-
-      {s.tipo === "partito" && <Tempo s={s} />}
 
       <p className="chiusura">
         Qui non diciamo se le {chi} idee sono buone o cattive. Diciamo cosa {s.tipo === "partito" ? "hanno detto e cosa hanno fatto" : "ha detto e cosa ha fatto"}. Il resto lo decidi tu.
@@ -156,26 +138,3 @@ export function SchedaSoggetto({ s }: { s: Soggetto }) {
   );
 }
 
-/** "Com'è cambiato nel tempo" nella scheda del partito (ADR 0040). */
-function Tempo({ s }: { s: Soggetto }) {
-  const minimo = parametri().presentazione.denominatoreMinimo;
-  const righe = metricheTempo()
-    .filter((m) => ["vota_compatto", "promesse_precise", "frasi_contro"].includes(m.id))
-    .map((m) => ({ m, t: schedaTempo(s, m) }))
-    .filter((x) => x.t);
-  if (righe.length === 0) return null;
-  return (
-    <>
-      <h2>Com&apos;è cambiato nel tempo</h2>
-      <div className="card">
-        {righe.map(({ m, t }) => (
-          <div className="trend" key={m.id}>
-            <Mini punti={t!.punti} minimo={minimo} />
-            <div><p>{m.nome}</p><p className="sotto">{t!.frase} {t!.prima} {t!.verdetto}</p></div>
-          </div>
-        ))}
-      </div>
-      <Link className="link" href="/nel-tempo">Vedi tutto e confronta con gli altri partiti →</Link>
-    </>
-  );
-}
