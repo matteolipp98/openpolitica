@@ -60,7 +60,11 @@ def orientamento_gruppo(espressioni: Iterable[str], p: Parametri) -> Orientament
     il partito è a favore o contro, altrimenti è diviso (0). Sotto i membri minimi: nessuna evidenza.
     """
     lista = list(espressioni)
-    fav, con, ast = lista.count("favorevole"), lista.count("contrario"), lista.count("astenuto")
+    return orientamento_da_conteggi(lista.count("favorevole"), lista.count("contrario"), lista.count("astenuto"), p)
+
+
+def orientamento_da_conteggi(fav: int, con: int, ast: int, p: Parametri) -> Orientamento | None:
+    """Stessa regola di orientamento_gruppo, a partire dai conteggi (core.votazione_gruppo)."""
     votanti = fav + con + ast
     if votanti < p.membri_minimi:
         return None

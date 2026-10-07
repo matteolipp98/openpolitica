@@ -1,0 +1,66 @@
+# Catalogo delle domande con Gemini (ADR 0030, 0038). Gira ogni mattina finché non è completo:
+# le risposte del modello sono in cache nel repository, quindi ogni giro riprende da dove si era fermato
+# e un catalogo completo non costa più chiamate. Il risultato arriva come pull request.
+name: Catalogo
+
+on:
+  workflow_dispatch:
+    inputs:
+      max_chiamate:
+        description: "Tetto di chiamate a Gemini per questa esecuzione"
+        default: "20"
+  schedule:
+    - cron: "13 6 * * *"
+  push:
+    branches: ["claude/**"]
+    paths:
+      - workers/op_workers/catalogo/**
+      - content/prompt/catalogo/**
+      - .github/workflows/catalogo.yml
+
+concurrency: { group: catalogo, cancel-in-progress: false }
+
+jobs:
+  genera:
+    runs-on: ubuntu-latest
+    environment: dev
+    timeout-minutes: 60
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      DATABASE_URL: ${{ secrets.SESSION_POOLER }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      GEMINI_MODELLO: ${{ vars.GEMINI_MODELLO }}
+    defaults: { run: { working-directory: workers, shell: bash } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --frozen
+      - name: Modelli Gemini disponibili (non consuma la quota di generazione)
+        run: |
+          uv run python -c "
+          from op_workers.catalogo.gemini import Gemini
+          g = Gemini()
+          print('Modello in uso:', g.modello)
+          print('Disponibili:', ', '.join(m for m in g.modelli() if 'gemini' in m))
+          " | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Genera o riprendi il catalogo
+        run: |
+          uv run python -m op_workers.catalogo.genera --versione v1 --max-chiamate "${{ inputs.max_chiamate || 20 }}" \
+            | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Pull request con cache, rapporto e catalogo
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: catalogo/v1
+          base: ${{ github.ref_name }}
+          add-paths: content/catalogo/**
+          commit-message: |
+            Catalogo v1: aggiornamento dal job con Gemini
+
+            Cache delle risposte del modello, rapporto dei test e, se completo, le domande (ADR 0030, 0038).
+          title: "Catalogo delle domande v1 (provvisorio, ADR 0038)"
+          body: |
+            Aggiornato in automatico dal workflow **Catalogo**. Contiene la cache delle risposte di Gemini,
+            `rapporto-test.json` e, quando tutte le votazioni candidate sono state elaborate, `enunciati.yaml`.
+            Il catalogo è provvisorio: domande scritte e verificate da un solo sistema di intelligenza artificiale.
