@@ -18,8 +18,9 @@ concurrency: { group: deploy-web, cancel-in-progress: true }
 jobs:
   vercel:
     runs-on: ubuntu-latest
+    environment: dev   # i secret sono nell'environment dev
     env:
-      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN || vars.VERCEL_TOKEN }}
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       NEXT_TELEMETRY_DISABLED: "1"
     steps:
       - uses: actions/checkout@v4
