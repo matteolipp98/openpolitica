@@ -24,6 +24,7 @@ from op_workers.connettori.base import (
 ENDPOINT = "https://dati.senato.it/sparql"
 OSR = "http://dati.senato.it/osr/"
 SENATO_VOTAZIONE = "http://dati.senato.it/votazione/"
+BLOCCO = 20  # votazioni per richiesta: oltre, le righe superano una pagina
 
 RE_VOTAZIONE = re.compile(r"/votazione/(\d+-\d+-\d+)$")
 RE_SENATORE = re.compile(r"/senatore/(\d+)$")
@@ -126,16 +127,18 @@ SELECT DISTINCT ?v WHERE {{
 }} ORDER BY ?v"""
 
 
-def query_archi_votazione(uri: str) -> str:
-    """I voti di una sola votazione: la query su un giorno intero è troppo pesante (HTTP 502).
+def query_archi_votazioni(uris: list[str]) -> str:
+    """I voti di un blocco di votazioni: la query su un giorno intero è troppo pesante (HTTP 502).
 
-    Il server rifiuta anche BIND (HTTP 400): la votazione va scritta direttamente come soggetto.
+    Il server rifiuta VALUES e BIND (HTTP 400): le votazioni si filtrano con FILTER(?v IN (...)).
+    Un blocco di 20 costa quanto una votazione sola (misura in #54: 1,6 s, voti identici).
     """
     archi = ", ".join(f"osr:{a}" for a in ARCHI)
+    lista = ", ".join(f"<{u}>" for u in uris)
     return f"""
-SELECT DISTINCT ?p ?sen WHERE {{
-  <{uri}> ?p ?sen . FILTER(?p IN ({archi}))
-}} ORDER BY ?sen ?p"""
+SELECT DISTINCT ?v ?p ?sen WHERE {{
+  ?v ?p ?sen . FILTER(?v IN ({lista})) FILTER(?p IN ({archi}))
+}} ORDER BY ?v ?sen ?p"""
 
 
 def query_parlamentari(leg: int) -> str:
@@ -175,17 +178,15 @@ class ConnettoreSenato:
 
     def voti_del_giorno(self, legislatura: int, giorno: date) -> Iterator[VotoGrezzo]:
         prefisso = f"{SENATO_VOTAZIONE}{legislatura}-"
-        for r in self.sparql.pagine(query_votazioni_del_giorno(giorno)):
-            if r["v"].startswith(prefisso):
-                archi = [{**x, "v": r["v"]} for x in self.sparql.pagine(query_archi_votazione(r["v"]))]
-                yield from voti_da_archi(archi)
+        uris = [r["v"] for r in self.sparql.pagine(query_votazioni_del_giorno(giorno)) if r["v"].startswith(prefisso)]
+        for i in range(0, len(uris), BLOCCO):
+            yield from voti_da_archi(self.sparql.pagine(query_archi_votazioni(uris[i : i + BLOCCO])))
 
     def voti_delle_votazioni(self, legislatura: int, giorno: date, ids: list[str]) -> Iterator[VotoGrezzo]:
         """Solo le votazioni indicate: l'import le chiede a blocchi e salta quelle già salvate."""
-        for vid in ids:
-            uri = f"{SENATO_VOTAZIONE}{vid}"
-            archi = [{**x, "v": uri} for x in self.sparql.pagine(query_archi_votazione(uri))]
-            yield from voti_da_archi(archi)
+        uris = [f"{SENATO_VOTAZIONE}{vid}" for vid in ids]
+        for i in range(0, len(uris), BLOCCO):
+            yield from voti_da_archi(self.sparql.pagine(query_archi_votazioni(uris[i : i + BLOCCO])))
 
     def parlamentari(self, legislatura: int) -> Iterator[ParlamentareGrezzo]:
         visti: set[str] = set()

@@ -1,5 +1,6 @@
 """Test dei connettori su righe con la forma reale vista nella sonda del 2026-10-07."""
 
+import re
 from datetime import date
 
 import httpx
@@ -155,19 +156,39 @@ class TestSenato:
             senato.voti_da_archi(righe)
 
     def test_query_senza_values_ne_bind(self):
-        q = senato.query_archi_votazione(SEN + "votazione/19-167-42")
+        q = senato.query_archi_votazioni([SEN + "votazione/19-167-42", SEN + "votazione/19-167-43"])
         assert "VALUES" not in q and "BIND" not in q
         assert "VALUES" not in senato.query_votazioni(19, date(2022, 10, 13), date(2022, 10, 31))
 
     def test_voti_di_altre_legislature_esclusi(self):
         class Finto:
             def pagine(self, query, pagina=5000):
-                if "?p ?sen" in query and "osr:dataSeduta" not in query:
-                    return [{"p": senato.OSR + "favorevole", "sen": SEN + "senatore/1"}]
+                if "?v ?p ?sen" in query:
+                    return [
+                        {"v": v, "p": senato.OSR + "favorevole", "sen": SEN + "senatore/1"}
+                        for v in re.findall(r"<(http://dati.senato.it/votazione/[^>]+)>", query)
+                    ]
                 return [{"v": SEN + "votazione/18-1-1"}, {"v": SEN + "votazione/19-1-1"}]
 
         voti = list(senato.ConnettoreSenato(Finto()).voti_del_giorno(19, date(2022, 10, 20)))
         assert [v.id_votazione_esterno for v in voti] == ["19-1-1"]
+
+    def test_votazioni_a_blocchi(self):
+        """Una richiesta ogni BLOCCO votazioni, non una per votazione (#54)."""
+        richieste: list[str] = []
+
+        class Finto:
+            def pagine(self, query, pagina=5000):
+                richieste.append(query)
+                return [
+                    {"v": v, "p": senato.OSR + "contrario", "sen": SEN + "senatore/7"}
+                    for v in re.findall(r"<(http://dati.senato.it/votazione/[^>]+)>", query)
+                ]
+
+        ids = [f"19-1-{i}" for i in range(senato.BLOCCO + 5)]
+        voti = list(senato.ConnettoreSenato(Finto()).voti_delle_votazioni(19, date(2023, 4, 19), ids))
+        assert len(richieste) == 2
+        assert sorted(v.id_votazione_esterno for v in voti) == sorted(ids)
 
 
 class TestClientSparql:
