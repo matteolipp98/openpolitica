@@ -60,7 +60,7 @@ Documenti di accompagnamento: [architettura MVP e flussi logici](architettura-mv
 
 ## Come leggerli
 
-Attivi: tutti tranne 0011 (sostituito da 0017) e 0018 (sostituito da 0031). In modalità iniziale senza revisori umani valgono le modifiche dell'ADR 0030 su 0022 e 0028, a loro volta aggiornate dall'ADR 0037: dove i mock divergevano dagli ADR, allora sono stati gli ADR ad adeguarsi.
+Attivi: tutti tranne 0011 (sostituito da 0017) e 0018 (sostituito da 0031). In modalità iniziale senza revisori umani valgono le modifiche dell'ADR 0030 su 0022 e 0028, a loro volta aggiornate dall'ADR 0037: dove i mock divergevano dagli ADR, sono stati gli ADR ad adeguarsi.
 
 Percorso di lettura consigliato: 0001 per il perché, 0024 per l'ordine di sviluppo, 0008 e 0022 per il cuore del calcolo, 0017 e 0032 per lo stack, 0033 prima di toccare qualsiasi soglia.
 
