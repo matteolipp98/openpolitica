@@ -18,3 +18,15 @@ def test_salute_senza_database(monkeypatch):
         assert "versione" in corpo
     finally:
         srv.shutdown()
+
+
+def test_head_risponde(monkeypatch):
+    monkeypatch.delenv("DATABASE_URL", raising=False)
+    srv = ThreadingHTTPServer(("127.0.0.1", 0), servizio.Gestore)
+    threading.Thread(target=srv.serve_forever, daemon=True).start()
+    try:
+        req = urllib.request.Request(f"http://127.0.0.1:{srv.server_port}/", method="HEAD")
+        with urllib.request.urlopen(req, timeout=5) as r:
+            assert r.status == 200
+    finally:
+        srv.shutdown()
