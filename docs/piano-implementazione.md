@@ -1278,9 +1278,23 @@ create table core.programma (
   documento_id uuid not null references core.documento(id)
 );
 
+create table core.promessa_lotto (           -- lotto di paragrafi già mandato al modello: non si richiede
+  id uuid primary key default gen_random_uuid(),
+  documento_id uuid not null references core.documento(id),
+  paragrafo_da int not null, paragrafo_a int not null,
+  modello_id text not null references core.modello(id),
+  prompt_versione text not null,
+  input_sha256 text not null,
+  run_modello_id uuid not null references core.run_modello(id),
+  estratte int not null, scartate int not null,
+  unique (documento_id, modello_id, prompt_versione, input_sha256)
+);
+
 create table core.promessa (
   id uuid primary key default gen_random_uuid(),
-  programma_id uuid not null references core.programma(id),
+  documento_id uuid not null references core.documento(id),  -- un documento comune a più partiti si legge una volta
+  lotto_id uuid not null references core.promessa_lotto(id),
+  paragrafo_da int not null, paragrafo_a int not null,       -- paragrafi in cui si trova la citazione
   citazione text not null,                   -- letterale, verificata nel testo
   misura text not null,
   beneficiari text,
@@ -1289,10 +1303,10 @@ create table core.promessa (
   livello_competenza text check (livello_competenza in ('nazionale','regionale','ue','costituzionale')),
   costo_dichiarato text,
   copertura_indicata text,
-  test jsonb not null,                       -- i cinque test descrittivi
   stato_revisione text not null default 'non_rivista',
   registrato_il timestamptz not null default now()
 );
+-- i cinque test descrittivi arrivano con #38, in colonne o tabelle loro
 
 create table core.promessa_enunciato (promessa_id uuid, enunciato_id text, direzione smallint);
 create table core.promessa_ricorrenza (promessa_id uuid, promessa_precedente_id uuid, similarita real);
@@ -1301,7 +1315,7 @@ create table core.promessa_ricorrenza (promessa_id uuid, promessa_precedente_id 
 **Moduli.**
 
 - `connettori/programmi.py`: download dei programmi depositati dal portale del Ministero dell'Interno (2018, 2022); per quelli non più online, snapshot via CDX API della Wayback Machine. Estrazione testo da PDF con `pdfplumber`; i PDF scansionati passano per OCR solo se necessario, con flag nel documento.
-- `pipeline/promesse.py`: un LLM estrae oggetti `Promessa` con schema JSON; controllo deterministico che `citazione` compaia nel testo (normalizzazione di spazi e trattini); scarto se non compare.
+- `workers/op_workers/programmi/promesse.py` (prompt in `content/prompt/promesse/`, workflow `Promesse`): Gemini estrae oggetti `Promessa` con schema JSON, a lotti di paragrafi; controllo deterministico che `citazione` compaia nel testo del lotto (normalizzazione di spazi, trattini, apostrofi e virgolette); scarto contato se non compare. Un lotto già lavorato con lo stesso modello e la stessa versione del prompt non si richiede.
 - Test 1 (quantificazione): regole deterministiche su `misura` e `orizzonte` (presenza di numeri e scadenze), più un controllo LLM solo come segnalazione, mai come esito.
 - Test 2 (ordine di grandezza): solo se esiste una stima ufficiale collegata a mano (UPB, relazione tecnica); aritmetica sugli aggregati della fase 3. Prima della fase 3 la scheda dice "costo non stimato da fonti ufficiali".
 - Test 3 (copertura): campo `copertura_indicata` non vuoto, e collegamento a una valutazione se esiste.

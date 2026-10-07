@@ -1,0 +1,44 @@
+# Promesse dai programmi elettorali (ADR 0020, 0038; issue #37): Gemini legge i paragrafi a lotti e
+# restituisce le promesse; si tengono solo quelle con la citazione trovata nel testo.
+# Solo a mano: ogni giro usa al massimo max_chiamate chiamate e riprende dai lotti non ancora fatti
+# (un lotto già fatto con lo stesso modello e la stessa versione del prompt non si richiede).
+name: Promesse
+
+on:
+  workflow_dispatch:
+    inputs:
+      partito:
+        description: "Slug di un partito (vuoto = tutti i programmi)"
+        default: ""
+      max_chiamate:
+        description: "Tetto di chiamate a Gemini per questa esecuzione"
+        default: "10"
+      modello:
+        description: "Modello Gemini, con versione"
+        default: "gemini-3.5-flash"
+
+# Gruppo suo: non deve sostituire i run in coda di altri job
+concurrency: { group: promesse, cancel-in-progress: false }
+
+jobs:
+  promesse:
+    runs-on: ubuntu-latest
+    environment: dev
+    timeout-minutes: 60
+    if: github.ref == 'refs/heads/main'  # le migrazioni si applicano solo da main
+    env:
+      DATABASE_URL: ${{ secrets.SESSION_POOLER }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      GEMINI_MODELLO: ${{ inputs.modello }}
+    defaults: { run: { working-directory: workers, shell: bash } }  # bash = pipefail: un errore fa fallire il job
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.2.0
+      - run: uv sync --frozen
+      - name: Migrazioni
+        run: uv run python -m op_workers.comuni.migrazioni | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Estrai le promesse
+        env: { PARTITO: "${{ inputs.partito }}", MAX: "${{ inputs.max_chiamate }}" }
+        run: |
+          uv run python -m op_workers.programmi.promesse ${PARTITO:+--partito "$PARTITO"} --max-chiamate "$MAX" \
+            | tee -a "$GITHUB_STEP_SUMMARY"
