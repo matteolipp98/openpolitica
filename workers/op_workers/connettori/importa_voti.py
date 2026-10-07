@@ -32,6 +32,7 @@ from op_workers.connettori.base import ConnettoreVoti, ParlamentareGrezzo, Votaz
 log = logging.getLogger(__name__)
 
 INIZIO_LEGISLATURA = {19: date(2022, 10, 13)}
+BLOCCO_VOTAZIONI = 20  # votazioni salvate insieme quando la fonte va interrogata una votazione per volta
 NESSUN_GRUPPO = None
 
 
@@ -170,7 +171,7 @@ def importa_adesioni(ctx: Contesto, adesioni: Iterable, r: Rapporto) -> None:
 
 
 def _voti_del_giorno(
-    ctx: Contesto, c: ConnettoreVoti, giorno: date
+    ctx: Contesto, c: ConnettoreVoti, giorno: date, ids: list[str] | None = None
 ) -> tuple[dict[str, Counter], dict[str, list[VotoGrezzo]]]:
     """Per ogni votazione: conteggi per (gruppo esterno, espressione) dei voti con gruppo noto, e i voti
     da trattare uno per uno (senza gruppo, persone del perimetro, gruppi di più partiti).
@@ -187,7 +188,12 @@ def _voti_del_giorno(
         for voto in c.voti_scelti_del_giorno(ctx.leg, giorno, ctx.perimetro_esterni, ctx.gruppi_misti_esterni):
             singoli[voto.id_votazione_esterno].append(voto)
         return conti, singoli
-    for voto in c.voti_del_giorno(ctx.leg, giorno):
+    voti = (
+        c.voti_delle_votazioni(ctx.leg, giorno, ids)  # type: ignore[attr-defined]
+        if ids is not None and hasattr(c, "voti_delle_votazioni")
+        else c.voti_del_giorno(ctx.leg, giorno)
+    )
+    for voto in voti:
         if voto.id_gruppo_esterno is not None:
             conti[voto.id_votazione_esterno][(voto.id_gruppo_esterno, voto.espressione)] += 1
         singoli[voto.id_votazione_esterno].append(voto)
@@ -197,7 +203,7 @@ def _voti_del_giorno(
 def importa_giorno(
     ctx: Contesto, c: ConnettoreVoti, giorno: date, votazioni: list[VotazioneGrezza], r: Rapporto
 ) -> None:
-    conti, singoli = _voti_del_giorno(ctx, c, giorno)
+    conti, singoli = _voti_del_giorno(ctx, c, giorno, [v.id_esterno for v in votazioni])
 
     righe_gruppo, righe_voto, righe_ignote = [], [], []
     for v in votazioni:
@@ -287,7 +293,8 @@ def ultima_data(conn: psycopg.Connection, ramo: str, leg: int) -> date | None:
 
 
 def importa(conn: psycopg.Connection, c: ConnettoreVoti, leg: int, dal: date | None = None) -> Rapporto:
-    """Import completo; ogni giorno è una transazione a sé, così un'interruzione non lascia giorni a metà."""
+    """Import completo e ripetibile: le votazioni già importate si saltano. Per la Camera ogni giorno è una
+    transazione; per il Senato ogni blocco di BLOCCO_VOTAZIONI votazioni."""
     r = Rapporto()
     with conn.transaction():
         ctx = Contesto(conn, c.ramo, leg)
@@ -301,14 +308,26 @@ def importa(conn: psycopg.Connection, c: ConnettoreVoti, leg: int, dal: date | N
         per_giorno[v.data].append(v)
     giorni = sorted(per_giorno)
     for i, giorno in enumerate(giorni, 1):
+        esistenti = {
+            x[0]
+            for x in conn.execute(
+                "select id_esterno from core.votazione where ramo = %s and legislatura = %s and data = %s",
+                (c.ramo, leg, giorno),
+            )
+        }
+        nuove = [v for v in per_giorno[giorno] if v.id_esterno not in esistenti]
+        # Dove i voti si chiedono una votazione per volta (Senato) si salva a blocchi: se la fonte ci blocca
+        # a metà di un giorno con centinaia di votazioni, i blocchi fatti restano e il giro dopo riparte da lì.
+        passo = BLOCCO_VOTAZIONI if hasattr(c, "voti_delle_votazioni") else max(1, len(nuove))
         try:
-            with conn.transaction():
-                importa_giorno(ctx, c, giorno, per_giorno[giorno], r)
+            for k in range(0, len(nuove), passo):
+                with conn.transaction():
+                    importa_giorno(ctx, c, giorno, nuove[k : k + passo], r)
         except ErroreSparql as e:
             if not re.search(r"HTTP (403|429|5\d\d)", str(e)):
                 raise
-            # Blocco per troppe richieste o server sovraccarico (anche dopo i tentativi): i giorni già fatti
-            # sono salvati, il prossimo giro riparte da qui
+            # Blocco per troppe richieste o server sovraccarico (anche dopo i tentativi): ciò che è già
+            # stato salvato resta, il prossimo giro riparte da qui
             r.interrotto = f"{c.ramo}: bloccato dalla fonte al {giorno} ({e})"
             log.warning(r.interrotto)
             break

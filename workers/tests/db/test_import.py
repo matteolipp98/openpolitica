@@ -218,3 +218,38 @@ def test_server_sovraccarico_ferma_senza_errore(conn):
 
     r = importa(conn, Sovraccarico([]), 19)
     assert r.interrotto and "504" in r.interrotto
+
+
+def test_giorno_lungo_a_blocchi_riprende_dove_si_era_fermato(conn):
+    """Senato: un giorno con 45 votazioni si salva a blocchi; un blocco dalla fonte non fa perdere i precedenti."""
+    from op_workers.comuni.sparql import ErroreSparql
+    from op_workers.connettori.importa_voti import BLOCCO_VOTAZIONI
+
+    sincronizza(conn)
+    giorno = date(2023, 4, 19)
+    votazioni = [_votazione(f"vs19_9_{i}", giorno, fav=1, con=0) for i in range(45)]
+
+    class SenatoFinto(ConnettoreFinto):
+        def __init__(self, blocca_dopo):
+            super().__init__([])
+            self.blocca_dopo, self.chieste = blocca_dopo, []
+
+        def votazioni(self, leg, dal):
+            yield from votazioni
+
+        def voti_delle_votazioni(self, leg, g, ids):
+            for vid in ids:
+                if self.blocca_dopo is not None and len(self.chieste) >= self.blocca_dopo:
+                    raise ErroreSparql("https://dati.senato.it/sparql: HTTP 403")
+                self.chieste.append(vid)
+                yield VotoGrezzo(vid, "302103", "favorevole", "gr4133")
+
+    primo = SenatoFinto(blocca_dopo=BLOCCO_VOTAZIONI + 5)
+    r1 = importa(conn, primo, 19)
+    assert r1.interrotto and r1.votazioni_nuove == BLOCCO_VOTAZIONI  # il primo blocco è salvato
+
+    secondo = SenatoFinto(blocca_dopo=None)
+    r2 = importa(conn, secondo, 19)
+    assert r2.interrotto is None and r2.votazioni_nuove == 45 - BLOCCO_VOTAZIONI
+    assert len(secondo.chieste) == 45 - BLOCCO_VOTAZIONI  # non richiede quelle già salvate
+    assert conn.execute("select count(*) from core.votazione").fetchone()[0] == 45

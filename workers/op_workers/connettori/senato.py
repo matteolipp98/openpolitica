@@ -180,6 +180,13 @@ class ConnettoreSenato:
                 archi = [{**x, "v": r["v"]} for x in self.sparql.pagine(query_archi_votazione(r["v"]))]
                 yield from voti_da_archi(archi)
 
+    def voti_delle_votazioni(self, legislatura: int, giorno: date, ids: list[str]) -> Iterator[VotoGrezzo]:
+        """Solo le votazioni indicate: l'import le chiede a blocchi e salta quelle già salvate."""
+        for vid in ids:
+            uri = f"{SENATO_VOTAZIONE}{vid}"
+            archi = [{**x, "v": uri} for x in self.sparql.pagine(query_archi_votazione(uri))]
+            yield from voti_da_archi(archi)
+
     def parlamentari(self, legislatura: int) -> Iterator[ParlamentareGrezzo]:
         visti: set[str] = set()
         for r in self.sparql.pagine(query_parlamentari(legislatura)):
