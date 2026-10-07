@@ -1,5 +1,6 @@
 """Controllo quotidiano della pipeline (#31): apre o aggiorna un'issue quando qualcosa si è fermato, la chiude
 quando tutto riparte. Nessun avviso per un import semplicemente indietro: solo se non avanza.
+Tiene anche un'issue con le segnalazioni dal sito ancora da leggere (#57), senza i contatti di chi scrive.
 
 Variabili: DATABASE_URL, GITHUB_TOKEN (issues: write, actions: read), GITHUB_REPOSITORY.
 """
@@ -35,6 +36,18 @@ def problemi_import(ultime: dict[str, tuple[datetime, datetime]], adesso: dateti
     return out
 
 
+def testo_segnalazioni(per_pagina: list[tuple[str, int]]) -> str | None:
+    """Corpo dell'issue delle segnalazioni aperte; None se non ce ne sono. Mai i contatti: sono dati personali."""
+    totale = sum(n for _, n in per_pagina)
+    if not totale:
+        return None
+    righe = "\n".join(f"- `{url}`: {n}" for url, n in per_pagina)
+    return (
+        f"Ci sono **{totale}** segnalazioni dal sito ancora da leggere (stato `aperta` in `core.segnalazione`).\n\n"
+        f"Per pagina:\n{righe}\n\nTesti e contatti si leggono nel database, non qui."
+    )
+
+
 def problemi_workflow(ultimi: dict[str, dict | None]) -> list[str]:
     """ultimi: {nome workflow: ultimo run concluso (dal JSON dell'API) o None}."""
     out = []
@@ -65,6 +78,10 @@ def main() -> int:
         righe = c.execute(
             "select ramo, max(data), max(registrato_il) from core.votazione where legislatura = 19 group by ramo"
         ).fetchall()
+        segnalazioni = c.execute(
+            """select oggetto_url, count(*) from core.segnalazione where stato = 'aperta'
+               group by oggetto_url order by count(*) desc, oggetto_url"""
+        ).fetchall()
     ultime = {r: (datetime.combine(d, datetime.min.time(), UTC), reg) for r, d, reg in righe}
 
     ultimi = {}
@@ -90,7 +107,25 @@ def main() -> int:
             _gh("POST", f"/repos/{repo}/issues/{i['number']}/comments", token, {"body": "Tutto ripartito." + firma})
             _gh("PATCH", f"/repos/{repo}/issues/{i['number']}", token, {"state": "closed", "state_reason": "completed"})
         print("Tutto in ordine.")
+    aggiorna_segnalazioni(repo, token, segnalazioni, firma)
     return 0
+
+
+def aggiorna_segnalazioni(repo: str, token: str, segnalazioni: list[tuple[str, int]], firma: str) -> None:
+    corpo = testo_segnalazioni(segnalazioni)
+    aperte = _gh("GET", f"/repos/{repo}/issues?labels=segnalazioni&state=open", token)
+    if corpo:
+        if aperte:
+            _gh("PATCH", f"/repos/{repo}/issues/{aperte[0]['number']}", token, {"body": corpo + firma})  # type: ignore[index]
+        else:
+            _gh("POST", f"/repos/{repo}/issues", token, {
+                "title": "📬 Segnalazioni da leggere", "body": corpo + firma,
+                "labels": ["segnalazioni", "trasversale", "da-fare"]})  # fmt: skip
+        print(f"Segnalazioni da leggere: {sum(n for _, n in segnalazioni)}")
+    else:
+        for i in aperte:  # type: ignore[union-attr]
+            _gh("PATCH", f"/repos/{repo}/issues/{i['number']}", token, {"state": "closed", "state_reason": "completed"})
+        print("Nessuna segnalazione da leggere.")
 
 
 if __name__ == "__main__":
