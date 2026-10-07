@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = { title: "Come funziona" };
@@ -125,6 +126,8 @@ export default function ComeFunziona() {
           <div className="a">{a.map((p) => <p key={p}>{p}</p>)}</div>
         </details>
       ))}
+
+      <p>Tutti i dettagli, i dati e le correzioni sono nella pagina <Link href="/metodo">Il metodo</Link>.</p>
 
       <h2>Quello che ancora non facciamo</h2>
       <div className="box">

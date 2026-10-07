@@ -42,6 +42,6 @@ test("rispondendo al questionario nessuna richiesta esce dal sito né porta le r
 
 test("nessuna pagina chiede risorse ad altri siti", async ({ page }) => {
   const richieste = registra(page);
-  for (const p of ["/", "/come-funziona", "/partiti/alleanza-progresso", "/persone/anna-pedretti"]) await page.goto(p);
+  for (const p of ["/", "/come-funziona", "/metodo", "/partiti/alleanza-progresso", "/persone/anna-pedretti"]) await page.goto(p);
   expect(richieste.filter((r) => !r.url().startsWith(BASE)).map((r) => r.url())).toEqual([]);
 });

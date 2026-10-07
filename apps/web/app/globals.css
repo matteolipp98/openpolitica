@@ -145,3 +145,14 @@ details.r h3{font-size:15px;margin:14px 0 8px;font-weight:600}
 .avviso{background:var(--nota-bg);border-left:3px solid var(--brass);padding:14px 15px;margin:18px 0 14px;font-size:15.5px;color:var(--nota-ink)}
 .rifai{appearance:none;border:1px solid var(--rule);background:var(--surface);color:var(--ink);font:inherit;padding:12px 18px;cursor:pointer;margin:18px 10px 0 0}
 
+
+/* Il metodo (mock vista-metodo) */
+.fonti{background:var(--surface);border:1px solid var(--rule)}
+.fonte{display:flex;gap:14px;padding:13px 16px;border-top:1px solid var(--rule-soft);align-items:baseline}
+.fonte:first-child{border-top:0}
+.fonte .nome{flex:1}
+.fonte .nome span{display:block;color:var(--muted);font-size:14px}
+.fonte .fin{font-size:15px;text-align:right;min-width:9em}
+.fonte .fin.no{color:var(--muted)}
+.esito-prova{font-weight:600;color:var(--mark)}
+.box .vuoto{color:var(--muted)}

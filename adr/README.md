@@ -56,6 +56,7 @@ Documenti di accompagnamento: [architettura MVP e flussi logici](architettura-mv
 | Scheda di un soggetto | `mockup/vista-partito.html` | 0036, 0037, 0039, 0014, 0020, 0023, 0019, 0001 |
 | Andamento nel tempo (in pausa, tolto dal sito) | `mockup/vista-andamento.html` | 0040, 0039, 0019, 0009, 0001 |
 | Come funziona | `mockup/vista-comefunziona.html` | 0036, 0037, 0039, 0040, 0012, 0030, 0007, 0031 |
+| Il metodo (domande, dati, correzioni) | `mockup/vista-metodo.html` | 0012, 0022, 0023, 0025, 0030, 0036, 0038 |
 
 ## Come leggerli
 

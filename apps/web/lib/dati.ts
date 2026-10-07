@@ -39,5 +39,6 @@ export function contenuto<T = unknown>(file: string): T {
 export interface Parametri {
   presentazione: { denominatoreMinimo: number };
   affinita: { pesoImportante: number; margineParita: number; sogliaNessunoTiRappresenta: number };
+  equilibrio: { scartoAffinitaMedia: number; scartoQuotaPrimi: number; riconoscimentoArea: number };
 }
 export const parametri = () => contenuto<Parametri>("parametri.yaml");

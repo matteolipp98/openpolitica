@@ -24,7 +24,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </nav>
           {children}
           <footer>
-            Progetto indipendente. Il codice e il metodo sono pubblici. I dati vengono dai voti di Camera e Senato.
+            Progetto indipendente. Il codice e il <Link href="/metodo">metodo</Link> sono pubblici. I dati vengono dai voti di Camera e Senato.
           </footer>
         </div>
       </body>

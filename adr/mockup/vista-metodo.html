@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<!-- Il metodo nel dettaglio: come scegliamo le domande, da dove vengono i dati, correzioni. Attua ADR 0012 (trasparenza e correzioni), 0022 e 0030 (catalogo), 0038 (catalogo provvisorio), 0023 (copertura dichiarata), 0025 (dati scaricabili), piano §3.11 (prova di imparzialità), 0036. Dati inventati. -->
+<html lang="it" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Il metodo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#E9ECF0;--surface:#FFFFFF;--ink:#141B23;--muted:#5C6773;--rule:#C9D1DA;--rule-soft:#E2E7EC;
+ --mark:#1F4E79;--brass:#8A6A33;--focus:#1F4E79;box-sizing:border-box;
+ padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;
+ font-size:17px;line-height:1.6;font-variant-numeric:tabular-nums}
+.wrap{max-width:660px;margin:0 auto;padding:26px 18px 80px}
+h1{font-family:"IBM Plex Serif",Georgia,serif;font-size:clamp(27px,5.6vw,36px);line-height:1.15;margin:0 0 12px;max-width:16ch}
+.lede{margin:0 0 26px;color:var(--muted);max-width:42ch}
+
+h2{font-family:"IBM Plex Serif",serif;font-size:21px;margin:36px 0 10px}
+p{max-width:44ch}
+.box{background:var(--surface);border:1px solid var(--rule);padding:18px;margin-top:14px}
+.box p{margin:0 0 12px}.box p:last-child{margin:0}
+
+.passi{counter-reset:p}
+.passo{display:flex;gap:16px;background:var(--surface);border:1px solid var(--rule);padding:16px 18px;margin-bottom:10px}
+.passo .num{font-family:"IBM Plex Serif",serif;font-size:26px;font-weight:600;color:var(--mark);line-height:1.1;min-width:28px}
+.passo h3{margin:0 0 4px;font-size:17px;font-weight:600}
+.passo p{margin:0;color:var(--muted);font-size:15.5px}
+
+.conf{border:1px solid var(--rule);margin-top:14px;background:var(--surface)}
+.conf div{padding:14px 16px}
+.conf div+div{border-top:1px solid var(--rule-soft);background:#F7F9FB}
+.conf .et{font-size:14px;color:var(--muted);margin:0 0 4px}
+.conf p{margin:0;font-size:16px}
+.conf cite{font-style:normal;display:block;margin-top:6px;font-size:13px;color:var(--muted)}
+.esito{padding:13px 16px;border-top:1px solid var(--rule-soft);font-size:15.5px;background:var(--surface)}
+.esito b{color:var(--brass)}
+
+.si-no{background:var(--surface);border:1px solid var(--rule)}
+.sn{display:flex;gap:12px;padding:13px 16px;border-top:1px solid var(--rule-soft);align-items:flex-start}
+.sn:first-child{border-top:0}
+.sn .seg{min-width:26px;font-weight:600;font-size:18px;line-height:1.5}
+.sn.ok .seg{color:var(--mark)}.sn.no .seg{color:var(--brass)}
+.sn p{margin:0;flex:1;font-size:16px}
+
+.faq{background:var(--surface);border:1px solid var(--rule);margin-bottom:10px}
+.faq button{width:100%;appearance:none;border:0;background:none;font:inherit;text-align:left;
+ padding:15px 16px;cursor:pointer;display:flex;justify-content:space-between;gap:14px;align-items:center}
+.faq button:hover{background:#F6F8FA}
+.faq .q{font-weight:500}
+.faq .sg{color:var(--mark);font-size:15px}
+.faq .a{display:none;padding:0 16px 16px;color:var(--muted);font-size:16px}
+.faq[data-open="true"] .a{display:block}
+.faq .a p{margin:0 0 10px}.faq .a p:last-child{margin:0}
+footer{margin-top:38px;padding-top:18px;border-top:1px solid var(--rule);font-size:14px;color:var(--muted);max-width:44ch}
+a{color:var(--mark)}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#11161C;--surface:#171E26;--ink:#E7ECF1;
+ --muted:#9AA6B2;--rule:#2C3742;--rule-soft:#232C35;--mark:#7FB0E0;--brass:#C9A25E;--focus:#7FB0E0}
+ :root:not([data-theme="light"]) .conf div+div{background:#1B232B}
+ :root:not([data-theme="light"]) .faq button:hover{background:#1C242D}}
+:root[data-theme="dark"]{--paper:#11161C;--surface:#171E26;--ink:#E7ECF1;--muted:#9AA6B2;--rule:#2C3742;
+ --rule-soft:#232C35;--mark:#7FB0E0;--brass:#C9A25E;--focus:#7FB0E0}
+.fonti{background:var(--surface);border:1px solid var(--rule)}
+.fonte{display:flex;gap:14px;padding:13px 16px;border-top:1px solid var(--rule-soft);align-items:baseline}
+.fonte:first-child{border-top:0}
+.fonte .nome{flex:1}
+.fonte .nome span{display:block;color:var(--muted);font-size:14px}
+.fonte .fin{font-size:15px;text-align:right;min-width:9em}
+.fonte .fin.no{color:var(--muted)}
+.esito-prova{font-weight:600;color:var(--mark)}
+.vuoto{color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Il metodo, nel dettaglio</h1>
+<p class="lede">Qui spieghiamo come lavoriamo, con più dettagli. Se ti basta l'idea generale, leggi <a href="vista-comefunziona.html">Come funziona</a>.</p>
+
+<h2 id="domande">Come scegliamo le domande</h2>
+<div class="passi">
+  <div class="passo"><span class="num">1</span><div>
+    <h3>Partiamo dai voti veri</h3>
+    <p>Prendiamo le votazioni finali in Parlamento in cui i partiti si sono divisi davvero: almeno uno su quattro ha votato dall'altra parte.</p></div></div>
+  <div class="passo"><span class="num">2</span><div>
+    <h3>Un programma scrive la domanda</h3>
+    <p>Un sistema di intelligenza artificiale trasforma la legge votata in una frase semplice, a cui si risponde sì o no.</p></div></div>
+  <div class="passo"><span class="num">3</span><div>
+    <h3>Un secondo controllo, alla cieca</h3>
+    <p>Una seconda richiesta, separata, rilegge la domanda senza sapere com'è nata. Se le due non vanno d'accordo, la domanda si butta.</p></div></div>
+  <div class="passo"><span class="num">4</span><div>
+    <h3>Lo stesso numero per ogni tema</h3>
+    <p>Così nessun argomento pesa più degli altri. Oggi sono 30 domande, 5 per ognuno dei 6 temi.</p></div></div>
+</div>
+
+<div class="box">
+  <p><b>La prova dell'imparzialità.</b> Abbiamo fatto rispondere al questionario 20.000 persone simulate, a caso. Se le domande fossero sbilanciate, un partito uscirebbe primo molto più spesso degli altri.</p>
+  <p class="esito-prova">Prova superata: nessuno schieramento esce favorito.</p>
+  <p>Rifacciamo la prova ogni volta che cambiano le domande. Se non la superano, non le pubblichiamo.</p>
+</div>
+
+<div class="box">
+  <p><b>Il nostro limite.</b> Per ora le domande le scrive e le controlla un solo sistema di intelligenza artificiale. Per questo le chiamiamo <i>provvisorie</i>: quando avremo un secondo sistema, le ricontrolleremo tutte.</p>
+</div>
+
+<h2 id="dati">Da dove vengono i dati</h2>
+<div class="fonti">
+  <div class="fonte"><div class="nome">Voti della Camera<span>dati.camera.it, pubblici</span></div><div class="fin">fino al 22 marzo 2023</div></div>
+  <div class="fonte"><div class="nome">Voti del Senato<span>dati.senato.it, pubblici</span></div><div class="fin">fino al 5 aprile 2023</div></div>
+  <div class="fonte"><div class="nome">Programmi elettorali<span>Ministero dell'Interno</span></div><div class="fin no">arriva presto</div></div>
+  <div class="fonte"><div class="nome">Cosa dicono i politici<span>discorsi in Parlamento, siti dei partiti, notizie</span></div><div class="fin no">arriva presto</div></div>
+  <div class="fonte"><div class="nome">Dati ufficiali per controllare i numeri<span>ISTAT, Eurostat, Banca d'Italia</span></div><div class="fin no">arriva presto</div></div>
+</div>
+<p>Stiamo ancora caricando i voti: ogni giorno arrivano quelli che mancano.</p>
+<p>Tutto quello che pubblichiamo si può scaricare e controllare. Versione di oggi: <a href="#">2026.10.07-1611</a>.</p>
+
+<h2 id="correzioni">Correzioni</h2>
+<p>Quando sbagliamo lo scriviamo qui, con la data e cosa abbiamo cambiato. Non cancelliamo niente di nascosto.</p>
+<div class="box"><p class="vuoto">Finora nessuna correzione.</p></div>
+
+<footer>Questo è un progetto indipendente. Il codice e il metodo sono pubblici: chiunque può controllarli.</footer>
+</div>
+</body>
+</html>
