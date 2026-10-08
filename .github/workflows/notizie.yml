@@ -1,0 +1,45 @@
+# Notizie, annunci e messaggi dei politici (ADR 0002, 0003; issue #41): legge le fonti di content/fonti.yaml
+# e salva i documenti nuovi in core.documento_grezzo. Ogni ora, al posto del cron su Render previsto dall'ADR 0002:
+# gli altri job girano già su GitHub Actions. A ogni passaggio cancella i testi dei giornali più vecchi di 7 giorni.
+# Idempotente: un indirizzo già salvato non si rilegge.
+name: Notizie
+
+on:
+  workflow_dispatch:
+    inputs:
+      solo:
+        description: "Id delle fonti da leggere, separati da spazi (vuoto = tutte)"
+        type: string
+        default: ""
+  schedule:
+    - cron: "17 * * * *"   # ogni ora
+  push:
+    branches: [main]
+    paths:
+      - content/fonti.yaml
+      - workers/op_workers/notizie/**
+      - supabase/migrations/*documenti_grezzi*.sql
+      - .github/workflows/notizie.yml
+
+# Gruppo suo: un passaggio lento non si accavalla al successivo, e non blocca gli import dei voti
+concurrency: { group: notizie, cancel-in-progress: false }
+
+jobs:
+  raccogli:
+    runs-on: ubuntu-latest
+    environment: dev
+    timeout-minutes: 40
+    env:
+      DATABASE_URL: ${{ secrets.SESSION_POOLER }}
+      SOLO: ${{ inputs.solo }}
+    defaults: { run: { working-directory: workers, shell: bash } }  # bash = pipefail: un errore fa fallire il job
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.2.0
+      - run: uv sync --frozen
+      - name: Migrazioni
+        run: uv run python -m op_workers.comuni.migrazioni | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Raccogli dalle fonti
+        run: |
+          if [ -n "$SOLO" ]; then read -ra fonti <<< "$SOLO"; set -- --solo "${fonti[@]}"; fi
+          uv run python -m op_workers.notizie.raccogli "$@" | tee -a "$GITHUB_STEP_SUMMARY"

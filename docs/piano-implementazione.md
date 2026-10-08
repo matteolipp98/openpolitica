@@ -1387,6 +1387,13 @@ Conservazione (0003): per il livello C il testo vive solo in `testo_temporaneo` 
 
 Filtro di perimetro senza LLM: dizionario degli alias con Aho-Corasick (`pyahocorasick`) e confini di parola. Solo i documenti che nominano un soggetto monitorato entrano in coda. Laya `noul` può affiancare questo filtro solo dopo la calibrazione.
 
+**Com'è fatto oggi (#41).** Il codice è in `workers/op_workers/notizie/` e gira ogni ora con il workflow `notizie.yml` di GitHub Actions, non con un cron su Render: gli altri job sono già lì. Rispetto a quanto scritto sopra:
+- Telegram si legge dall'anteprima pubblica `t.me/s/<canale>`, che non chiede credenziali. Telethon resta l'opzione se l'anteprima non basta più.
+- Il testo dei giornali sta nella colonna `testo` di `core.documento_grezzo`, con `testo_scade_il` a 7 giorni. A ogni passaggio i testi scaduti si cancellano e resta la data della cancellazione. Se l'editore si oppone al text and data mining, il testo non si salva.
+- I doppioni si scartano per indirizzo e per impronta esatta del testo. MinHash e clustering restano da fare.
+- Il filtro sui nomi usa espressioni regolari con i confini di parola: con dieci persone basta. Per tenere un articolo basta anche il cognome; i `soggetti` salvati usano solo le forme di `content/alias/`.
+- Il controllo di salute per fonte è la tabella `core.raccolta`: una riga per fonte e per passaggio, con trovati, nuovi, scartati ed errore.
+
 ### 5.2 Orchestrazione su pgmq
 
 Code (ADR 0017): `da_estrarre`, `da_attribuire`, `da_classificare`, `da_posizionare`, `ispezione`, più una coda di scarto per ciascuna. Ogni stadio è un worker idempotente:

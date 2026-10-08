@@ -41,7 +41,7 @@ from op_workers.notizie.rete import NonPermesso, Rete, dominio
 from op_workers.notizie.testo import Perimetro, impronta, pulisci, sospetto
 
 CONTENT = Path(__file__).resolve().parents[3] / "content"
-MAX_NUOVI = 30  # documenti nuovi per fonte e per passaggio: il primo passaggio non deve durare ore
+MAX_NUOVI = 30  # pagine lette per fonte e per passaggio: il primo passaggio non deve durare ore
 GIORNI_C = 7  # ADR 0003: il testo dei giornali si cancella dopo una settimana
 
 
@@ -174,16 +174,22 @@ def raccogli_fonte(
     c.trovati = len(elementi)
     visti = gia_visti(conn, [e.url for e in elementi])
     nuovi = [e for e in elementi if e.url not in visti]
-    for el in nuovi[:MAX_NUOVI]:
+    letti = 0
+    for el in nuovi:
         # Giornali: primo filtro su titolo e sommario del feed, per non scaricare articoli che non ci riguardano
         if fonte.filtra and fonte.canale == "rss" and not perimetro.nomina(el.titolo, el.sommario):
             c.fuori += 1
             continue
+        if letti >= MAX_NUOVI:
+            break
+        letti += 1
         if el.testo is not None:
             testo, tdm = el.testo, False
         else:
             testo, tdm = leggi_pagina(rete, el, c)
-            if testo is None and not tdm:
+            if tdm and fonte.livello == "C":
+                testo = None  # l'editore si oppone al text and data mining: si guarda solo il titolo
+            elif testo is None:
                 testo = pulisci(el.sommario) or None
         soggetti = perimetro.trova(el.titolo, testo)
         if fonte.filtra and not perimetro.nomina(el.titolo, testo):

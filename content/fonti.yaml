@@ -47,7 +47,8 @@ fonti:
       canale: rss, url: "https://europaverde.it/feed/", verificato_il: 2026-10-08 }
   - { id: noi-moderati, nome: "Noi Moderati", tipo: partito, partito: noi-moderati, livello: A, canale: sito,
       url: "https://www.noimoderati.it/news-e-media", link: "^https://www\\.noimoderati\\.it/news-e-media/\\d+$",
-      verificato_il: 2026-10-08 }
+      attiva: false, verificato_il: 2026-10-08,
+      nota: "le pagine mostrano il testo solo con JavaScript: per ora si legge solo il titolo, quindi è spenta" }
   - { id: azione, nome: "Azione", tipo: partito, partito: azione, livello: A, canale: sito,
       url: "https://www.azione.it/sitemap_index.xml", sitemap: "/post-sitemap",
       link: "^https://www\\.azione\\.it/[a-z0-9-]+/$",
