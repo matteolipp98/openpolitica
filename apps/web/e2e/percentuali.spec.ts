@@ -56,7 +56,8 @@ test("nessuna percentuale nuda nei risultati del questionario", async ({ page })
 });
 
 test("il controllo ferma una percentuale scritta da sola", async ({ page }) => {
-  await page.goto("/");
+  // Si aspetta che React abbia finito di attaccarsi alla pagina: prima, il paragrafo aggiunto verrebbe tolto
+  await page.goto("/", { waitUntil: "networkidle" });
   await page.evaluate(() => {
     const p = document.createElement("p");
     p.textContent = "Il più vicino arriva solo al 40%.";
