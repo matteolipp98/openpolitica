@@ -75,6 +75,8 @@ I voti individuali non risultano duplicati (86 archi `osr:favorevole` per 86 fav
 
 Alla Camera invece l'etichetta del gruppo riporta il nome **attuale** con la data di costituzione: per esempio "ITALIA VIVA-CASA RIFORMISTA (20.11.2023" non significa che si chiamasse così nel 2023. Per il nome alla data di un voto va usata la storia in `ocd:denominazione`.
 
+**Attenzione: nei voti il gruppo può avere un identificativo diverso.** Quando un gruppo della Camera cambia nome o si divide, i voti successivi (`ocd:rif_gruppoParlamentare` del voto) portano un identificativo nuovo che nel dataset non ha nessuna descrizione: si riconosce solo dalla sigla nell'etichetta del voto, per esempio "COSTA ENRICO (APERRE) ha votato favorevole". Nella XIX: gr4212 (Azione dal 20.11.2023, mentre le adesioni restano su gr4135), gr4153 e gr4234 (Noi Moderati, le adesioni sono su gr4152), gr4291 (Italia Viva - Casa Riformista dal 16.6.2026). Sono in `content/gruppi.yaml` (issue #79). Per trovarne di nuovi: gruppi in `core.votazione_gruppo` senza righe in `core.gruppo_partito`.
+
 ## Componenti politiche del gruppo misto
 
 Servono per dare un partito a chi sta nel misto (issue #78; regola e corrispondenze in `content/componenti-misto.yaml`).

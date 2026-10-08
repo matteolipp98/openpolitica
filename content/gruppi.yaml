@@ -16,6 +16,14 @@ gruppi:
   - { ramo: camera, legislatura: 19, nome_contiene: "AZIONE - ITALIA VIVA - RENEW EUROPE", id_esterno: gr4135, sigla: A-IV-RE, partiti: [azione, italia-viva], periodo: { valido_dal: 2022-10-18, valido_al: 2023-11-19 }, stato: verificato }
   - { ramo: camera, legislatura: 19, nome_contiene: "AZIONE-POPOLARI EUROPEISTI RIFORMATORI-RENEW EUROPE", id_esterno: gr4135, sigla: AZ-PER-RE, partiti: [azione], periodo: { valido_dal: 2023-11-20 }, stato: verificato }
   - { ramo: camera, legislatura: 19, nome_contiene: "ITALIA VIVA-CASA RIFORMISTA", id_esterno: gr4211, sigla: IV-CR, partiti: [italia-viva], periodo: { valido_dal: 2023-11-20 }, stato: verificato }
+  # Nei voti la Camera usa a volte un identificativo diverso da quello delle adesioni: quando un gruppo cambia
+  # nome, i voti successivi portano un gruppo nuovo, senza nome nel dataset. Verificati l'8.10.2026 (issue #79)
+  # dalle etichette dei voti ("COSTA ENRICO (APERRE) ha votato favorevole"). Senza queste righe i voti di quei
+  # gruppi non vanno a nessun partito.
+  - { ramo: camera, legislatura: 19, nome_contiene: "AZIONE-POPOLARI EUROPEISTI RIFORMATORI-RENEW EUROPE (voti)", id_esterno: gr4212, sigla: APERRE, partiti: [azione], periodo: { valido_dal: 2023-11-20 }, stato: verificato }
+  - { ramo: camera, legislatura: 19, nome_contiene: "NOI MODERATI-MAIE (voti)", id_esterno: gr4153, sigla: NM-M, partiti: [noi-moderati], periodo: { valido_dal: 2022-10-27 }, stato: verificato }
+  - { ramo: camera, legislatura: 19, nome_contiene: "NOI MODERATI-MAIE-CENTRO POPOLARE (voti)", id_esterno: gr4234, sigla: NM-M-C, partiti: [noi-moderati], periodo: { valido_dal: 2024-10-30 }, stato: verificato }
+  - { ramo: camera, legislatura: 19, nome_contiene: "ITALIA VIVA-CASA RIFORMISTA (voti)", id_esterno: gr4291, sigla: IV-CR, partiti: [italia-viva], periodo: { valido_dal: 2026-06-16 }, stato: verificato }
   - { ramo: camera, legislatura: 19, nome_contiene: "MISTO", id_esterno: gr4111, sigla: MISTO, partiti: [], periodo: { valido_dal: 2022-10-18 }, stato: verificato }
   # ---- Senato: verificati con la sonda del 2026-10-07 (dati.senato.it, gruppo/<id> e osr:denominazione) ----
   - { ramo: senato, legislatura: 19, nome_contiene: "Fratelli d'Italia", id_esterno: "85", sigla: FdI, partiti: [fratelli-d-italia], periodo: { valido_dal: 2022-10-13 }, stato: verificato }
