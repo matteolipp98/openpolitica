@@ -1,0 +1,33 @@
+{
+ "data": "2026-10-06",
+ "rami": {
+  "camera": {
+   "totale": 400,
+   "partiti": {
+    "alleanza-progresso": 110,
+    "civica-riformista": 21,
+    "fronte-dei-territori": 66,
+    "movimento-solidale": 48,
+    "partito-lavoro-e-comunita": 68,
+    "patto-per-le-regioni": 53,
+    "unione-liberale": 12,
+    "verdi-e-territori": 14
+   },
+   "altri": 8
+  },
+  "senato": {
+   "totale": 200,
+   "partiti": {
+    "alleanza-progresso": 51,
+    "civica-riformista": 9,
+    "fronte-dei-territori": 29,
+    "movimento-solidale": 28,
+    "partito-lavoro-e-comunita": 39,
+    "patto-per-le-regioni": 25,
+    "unione-liberale": 6,
+    "verdi-e-territori": 7
+   },
+   "altri": 6
+  }
+ }
+}

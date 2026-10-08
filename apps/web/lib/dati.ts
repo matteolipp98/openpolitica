@@ -23,6 +23,7 @@ export function pacchetto(): Pacchetto {
     promesse: leggi("promesse.json"),
     andamento: leggi("andamento.json"),
     correzioni: existsSync(path.join(dir, "correzioni.json")) ? leggi("correzioni.json") : [],
+    parlamento: existsSync(path.join(dir, "parlamento.json")) ? leggi("parlamento.json") : null,
   };
   return cache;
 }

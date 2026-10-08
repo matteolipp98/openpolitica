@@ -48,6 +48,7 @@ export default function Metodo() {
   const conti = temi.map((t) => domande.filter((d) => d.tema === t.id).length);
   const uguali = domande.length > 0 && conti.every((c) => c === conti[0]);
   const p = prova();
+  const programmi = partiti().map((x) => x.programma?.elezione.slice(0, 4)).find(Boolean);
   const base = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "");
   const scarica = !manifest.esempio && base ? `${base}/storage/v1/object/public/rilasci/${manifest.versione}/manifest.json` : null;
 
@@ -87,6 +88,22 @@ export default function Metodo() {
         </div>
       )}
 
+      <h2 id="prima-pagina">I numeri della prima pagina</h2>
+      <p>Sono regole fisse, uguali per tutti i partiti. Le scriviamo qui per intero.</p>
+      {[
+        ["Quanti seggi ha ogni partito", "Contiamo i parlamentari in carica il giorno in cui aggiorniamo il sito, con il gruppo in cui stanno quel giorno. Un gruppo che corrisponde a un solo partito porta i seggi a quel partito. Chi sta in un gruppo con più partiti, o nel gruppo misto, va al suo partito solo se sappiamo a quale partito è iscritto. Tutti gli altri finiscono in «gruppo misto e altri», insieme a chi è in un partito che non seguiamo."],
+        ["Di cosa parla il programma", "Leggiamo il programma che ogni partito ha depositato al Ministero dell'Interno e contiamo le promesse, cioè gli impegni concreti. Ogni promessa riceve uno dei sei temi del questionario, oppure «Altro». Contiamo le promesse, non le pagine: più promesse non vuol dire promesse migliori."],
+        ["Quando due partiti hanno lo stesso programma", "Lo diciamo quando hanno depositato lo stesso file, oppure quando più della metà del testo del programma più corto si ritrova uguale nell'altro. Il confronto si fa a gruppi di sei parole di fila. Nel 2022 è successo per il centrodestra e per Azione e Italia Viva."],
+        ["Promesse che dicono quanto e entro quando", "Una promessa conta se ha tutte e due le cose. Entro quando: la scadenza scritta nel programma contiene un numero, per esempio «entro il 2027», «in tre anni» o «entro la legislatura»; «al più presto» non basta. Quanto: nella promessa c'è una cifra che non è un anno, per esempio «20.000 insegnanti» o «10 miliardi». Le altre promesse non sono per forza sbagliate: sono solo più difficili da controllare."],
+        ["Leggi votate come il governo", "Guardiamo i voti finali in Parlamento, non quelli segreti. Per ogni voto confrontiamo la scelta della maggioranza del partito con la scelta della maggioranza dei partiti al governo quel giorno. Se c'è un pareggio, quel voto non lo contiamo."],
+        ["I tre voti di ogni scheda", "Sono le domande del questionario votate più di recente, una per tema, così ci sono tre temi diversi. Sono le stesse per tutti i partiti."],
+      ].map(([t, d], i) => (
+        <div className="passo" key={t}>
+          <span className="num">{i + 1}</span>
+          <div><h3>{t}</h3><p>{d}</p></div>
+        </div>
+      ))}
+
       <h2 id="dati">Da dove vengono i dati</h2>
       <div className="fonti">
         {FONTI.map(([nome, dove, ramo]) => {
@@ -94,7 +111,9 @@ export default function Metodo() {
           return (
             <div className="fonte" key={nome}>
               <div className="nome">{nome}<span>{dove}</span></div>
-              <div className={`fin${fino ? "" : " no"}`}>{fino ? `fino al ${inParole(fino)}` : ramo && manifest.esempio ? "—" : "arriva presto"}</div>
+              <div className={`fin${fino || (nome === "Programmi elettorali" && programmi) ? "" : " no"}`}>
+                {fino ? `fino al ${inParole(fino)}` : nome === "Programmi elettorali" && programmi ? `elezioni del ${programmi}` : ramo && manifest.esempio ? "—" : "arriva presto"}
+              </div>
             </div>
           );
         })}

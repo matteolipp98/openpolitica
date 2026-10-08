@@ -18,13 +18,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <body>
         <div className="wrap">
           <nav className="menu" aria-label="Sezioni">
-            <Link href="/">Partiti e persone</Link>
+            <Link href="/">Partiti</Link>
             <Link href="/domande">Chi la pensa come te</Link>
             <Link href="/come-funziona">Come funziona</Link>
           </nav>
           {children}
           <footer>
-            Progetto indipendente. Il codice e il <Link href="/metodo">metodo</Link> sono pubblici. I dati vengono dai voti di Camera e Senato.
+            Progetto indipendente. Il codice e il <Link href="/metodo">metodo</Link> sono pubblici. I dati vengono dai voti di Camera e Senato e dai programmi elettorali depositati al Ministero dell&apos;Interno.
           </footer>
         </div>
       </body>

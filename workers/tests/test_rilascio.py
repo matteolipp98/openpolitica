@@ -3,7 +3,7 @@ from datetime import date
 
 import httpx
 
-from op_workers.rilascio.crea import domande, quando, scrivi, soggetti
+from op_workers.rilascio.crea import domande, guide, precisa, quando, quota_testo_comune, scrivi, soggetti
 from op_workers.rilascio.pubblica import _client, pubblica
 
 PARTITI = {
@@ -29,6 +29,13 @@ def test_soggetti_con_ruolo_di_oggi():
     ]
     assert s[2]["nome"] == "Mario Rossi"
     assert s[2]["partito"] == "bb"
+    assert s[0]["guida"] == [] and s[1]["guida"] == [{"nome": "Mario Rossi", "slug": "mario-rossi"}]
+
+
+def test_guide_con_piu_persone():
+    perimetro = {"persone": [{"slug": "a", "partito": "x"}, {"slug": "b", "partito": "x"}]}
+    alias = {"a": {"slug": "a", "nome": "Anna", "cognome": "Bi"}, "b": {"slug": "b", "nome": "Carlo", "cognome": "Di"}}
+    assert guide(perimetro, alias) == {"x": [{"nome": "Anna Bi", "slug": "a"}, {"nome": "Carlo Di", "slug": "b"}]}
 
 
 def test_domande_solo_attive_e_senza_catalogo():
@@ -38,6 +45,35 @@ def test_domande_solo_attive_e_senza_catalogo():
          "stato": "attivo"},
         {"id": "e-2", "testo": "Due", "tema": "t", "contesto": {}, "stato": "ritirato"}]}  # fmt: skip
     assert [d["id"] for d in domande(cat)] == ["e-1"]
+
+
+def test_domande_con_giorno_e_ramo_del_voto():
+    cat = {"enunciati": [
+        {"id": "e-1", "testo": "Uno", "tema": "t", "contesto": {}, "stato": "attivo",
+         "origine": {"votazione": {"ramo": "senato"}, "data": "2025-04-16"}}]}  # fmt: skip
+    [d] = domande(cat)
+    assert (d["data"], d["ramo"]) == ("2025-04-16", "senato")
+
+
+def test_promesse_precise():
+    # quanto e entro quando: tutte e due
+    assert precisa("entro il 2027", "Assumere 20.000 insegnanti", "")
+    assert precisa("in tre anni", "Costruire 60 GW di impianti", "")
+    assert precisa("entro la legislatura", "Portare gli aiuti allo 0,7%", "")
+    # la scadenza non dice un tempo preciso
+    assert not precisa("al più presto", "Installare 100 mila colonnine", "")
+    assert not precisa(None, "Installare 100 mila colonnine", "")
+    # l'unico numero è l'anno: dice entro quando, non quanto
+    assert not precisa("entro il 2025", "Togliere entro il 2025 gli aiuti", "entro il 2025")
+    # il numero può essere nella citazione
+    assert precisa("entro il 2030", "Più colonnine", "almeno 100.000 colonnine entro il 2030")
+
+
+def test_testo_comune():
+    base = "il governo si impegna a ridurre le tasse sul lavoro per tutte le famiglie italiane entro cinque anni"
+    assert quota_testo_comune(base, "Copertina diversa. " + base) > 0.9
+    assert quota_testo_comune(base, "un programma che parla di tutt'altro e non ha niente in comune con il primo") == 0
+    assert quota_testo_comune("", base) == 0
 
 
 def test_quando():

@@ -1,64 +1,64 @@
+// La home presenta i partiti (mock adr/mockup/vista-soggetti.html, ADR 0036, issue #76).
 import Link from "next/link";
-import { Elenco, type Scheda } from "@/components/Elenco";
 import { NotaEsempio } from "@/components/NotaEsempio";
-import { righe } from "@/lib/righe";
-import { pacchetto, partiti, persone, parametri } from "@/lib/dati";
-import { fraseNumeri, letture } from "@/lib/letture";
-import type { Soggetto } from "@/lib/tipi";
+import { Parlamento } from "@/components/Parlamento";
+import { SchedaPartito } from "@/components/SchedaPartito";
+import { contenuto, pacchetto, partiti } from "@/lib/dati";
+import { colori, domandeHome, votiFinoAl } from "@/lib/home";
+import type { TemaPromessa } from "@/lib/tipi";
 
-function scheda(s: Soggetto): Scheda {
-  return {
-    slug: s.slug, tipo: s.tipo, nome: s.nome, ruolo: s.ruolo,
-    frase: fraseNumeri(s) ?? fraseVoti(s) ?? "Per ora non abbiamo ancora dati da mostrare.",
-    righe: righe(s),
-    esempio: pacchetto().accostamenti[s.id]?.[0],
-  };
-}
+interface Temi { temi: { id: TemaPromessa; nome: string }[] }
 
-/** Senza dati controllati, per i partiti si dice almeno come votano: stessa metrica per tutti (ADR 0040). */
-function fraseVoti(s: Soggetto): string | null {
-  const serie = pacchetto().andamento.serie[s.id]?.vota_compatto;
-  if (!serie) return null;
-  const n = serie.reduce((a, p) => a + p.n, 0), d = serie.reduce((a, p) => a + p.d, 0);
-  return d ? `Nei voti finali in Parlamento, il partito ha votato unito ${n} volte su ${d}.` : null;
-}
+export default function Home() {
+  const { domande, posizioni, parlamento, manifest } = pacchetto();
+  const lista = partiti(); // in ordine alfabetico (ADR 0009)
+  const colore = colori(lista);
+  const nomi = Object.fromEntries(lista.map((p) => [p.id, p.nome]));
+  // I temi sempre nello stesso ordine: quelli del questionario, poi "Altro"
+  const temi = [...contenuto<Temi>("temi.yaml").temi.map((t) => ({ id: t.id, nome: t.nome })), { id: "altro" as const, nome: "Altro" }];
+  const tre = manifest.sezioni.posizioni ? domandeHome(domande) : [];
+  const votiFino = votiFinoAl();
 
-/** Mette in grassetto i nomi dentro una frase generata. */
-function conNomi(testo: string, nomi: string[]) {
-  if (!nomi.length) return testo;
-  const parti = testo.split(new RegExp(`(${nomi.map((n) => n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})`));
-  return parti.map((p, i) => (nomi.includes(p) ? <b key={i}>{p}</b> : p));
-}
-
-export default function Indice() {
-  const { sezioni } = pacchetto().manifest;
-  const inBreve = sezioni.letture ? letture(partiti()) : [];
   return (
-    <main>
+    <main className="home">
       <h1>Cosa hanno fatto davvero</h1>
-      <p className="lede">Quando un politico dice un dato, per esempio quanti posti di lavoro ci sono, controlliamo se è vero. E guardiamo come vota in Parlamento.</p>
+      <p className="lede">Chi c&apos;è in Parlamento, cosa ha promesso, come ha votato. Gli stessi fatti per tutti i partiti: il giudizio è tuo.</p>
       <NotaEsempio />
-      {inBreve.length > 0 && (
+
+      {domande.length > 0 && (
+        <section className="card invito">
+          <h2>Chi la pensa come te?</h2>
+          <p>Rispondi a {domande.length} domande su leggi votate davvero. Ti diciamo quali partiti hanno votato come la pensi tu. Ci vogliono pochi minuti, e le risposte restano sul tuo telefono.</p>
+          <Link className="bottone" href="/domande">Inizia le domande</Link>
+        </section>
+      )}
+
+      {parlamento && (
         <>
-          <h2>In breve</h2>
-          <div className="card letture">
-            {inBreve.map((l) => (
-              <div className="riga" key={l.testo}>
-                <span className={`cifra${l.cifra.endsWith("%") || !l.nomi.length ? " b" : ""}`}>{l.cifra}</span>
-                <div className="testo">
-                  <p>{conNomi(l.testo, l.nomi)}</p>
-                  <p className="sotto">{l.sotto}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-          <p className="piccolo" style={{ margin: "10px 0 0" }}>
-            Confrontiamo solo chi ha detto almeno {parametri().presentazione.denominatoreMinimo} dati: con meno, il confronto non sarebbe giusto.
-          </p>
+          <h2 id="titolo-aula">Il Parlamento oggi</h2>
+          <p className="sottotitolo">Quanti seggi ha ogni partito, e chi sostiene il governo.</p>
+          <Parlamento dati={parlamento} partiti={lista} colore={colore} />
         </>
       )}
-      <h2>Tutti</h2>
-      <Elenco partiti={partiti().map(scheda)} persone={persone().map(scheda)} />
+
+      <h2>I partiti</h2>
+      <p className="sottotitolo">In ordine alfabetico. Per ogni partito: di cosa parla il suo programma, come ha votato, due numeri.</p>
+      <div className="schede">
+        {lista.map((p) => (
+          <SchedaPartito key={p.id} p={p} colore={colore[p.id]!} temi={temi} nomi={nomi} domande={tre}
+            posizioni={posizioni[p.id] ?? {}} votiFino={votiFino} />
+        ))}
+      </div>
+      {tre.length > 0 && (
+        <>
+          <p className="regola"><b>Quali voti mostriamo.</b> Le stesse {tre.length} domande per tutti i partiti: le domande del questionario votate più di recente, una per tema. Le altre sono nella scheda di ogni partito.</p>
+          <details className="cosa">
+            <summary>Cosa vogliono dire «Sì» e «No»</summary>
+            <p>«Sì» vuol dire che il partito ha votato per quello che dice la frase. «No» vuol dire che ha votato contro. «Né sì né no» vuol dire che si è astenuto, oppure che i suoi parlamentari non hanno votato quasi tutti allo stesso modo.</p>
+          </details>
+        </>
+      )}
+      <p className="regola">Qui non diciamo se le idee di un partito sono buone: quello lo decidi tu. <Link href="/metodo#prima-pagina">Come contiamo</Link></p>
     </main>
   );
 }

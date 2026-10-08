@@ -28,6 +28,31 @@ export interface Soggetto {
   promesse?: { mantenute: number; totali: number };
   /** Come sono fatte promesse e annunci (ADR 0039); assente finché Laya non è calibrato. */
   indicatori?: { precise: Conteggio; soldi: Conteggio; inTempo: Conteggio; attacchi: Conteggio };
+  /** Per i partiti: chi lo guida (con lo slug se la persona ha una scheda). */
+  guida?: { nome: string; slug?: string }[];
+  /** Per i partiti: l'ultimo programma elettorale. */
+  programma?: Programma;
+}
+
+export type TemaPromessa = "economia" | "welfare" | "diritti" | "ambiente" | "istituzioni" | "esteri" | "altro";
+
+export interface Programma {
+  elezione: string;
+  promesse: number;
+  /** Promesse che dicono quanto e entro quando. */
+  precise: Conteggio;
+  /** Promesse per tema; assente finché i temi non sono assegnati. */
+  temi?: Partial<Record<TemaPromessa, number>>;
+  /** Partiti con lo stesso programma: stesso file, oppure testo in gran parte uguale. */
+  comune?: { stesso_documento: string[]; testo_uguale: string[] };
+}
+
+export type Ramo = "camera" | "senato";
+
+/** Il Parlamento alla data del pacchetto. */
+export interface Parlamento {
+  data: string;
+  rami: Partial<Record<Ramo, { totale: number; partiti: Record<string, number>; altri: number }>>;
 }
 
 export interface Domanda {
@@ -35,6 +60,9 @@ export interface Domanda {
   testo: string;
   tema: string;
   contesto: { fatto: string; favorevoli: string; contrari: string };
+  /** Giorno e ramo del voto da cui viene la domanda. */
+  data?: string;
+  ramo?: Ramo;
 }
 
 export interface Evidenza { testo: string; quando: string; url?: string }
@@ -78,4 +106,5 @@ export interface Pacchetto {
   promesse: Record<string, Promessa[]>;
   andamento: Andamento;
   correzioni: Correzione[];
+  parlamento: Parlamento | null;
 }

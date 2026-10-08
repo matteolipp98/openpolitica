@@ -7,7 +7,9 @@
    "fatto": "Oggi in Italia non esiste. In Parlamento se ne è votato nel 2023: la proposta è stata respinta.",
    "favorevoli": "",
    "contrari": ""
-  }
+  },
+  "data": "2023-03-15",
+  "ramo": "camera"
  },
  {
   "id": "d2",
@@ -17,7 +19,9 @@
    "fatto": "Chi è a favore dice che riduce le disuguaglianze. Chi è contro teme la fuga di capitali.",
    "favorevoli": "",
    "contrari": ""
-  }
+  },
+  "data": "2025-11-20",
+  "ramo": "senato"
  },
  {
   "id": "d3",
@@ -27,7 +31,9 @@
    "fatto": "Dal 2022 il Parlamento ha votato più volte su questo, con maggioranze diverse ogni volta.",
    "favorevoli": "",
    "contrari": ""
-  }
+  },
+  "data": "2024-02-10",
+  "ramo": "camera"
  },
  {
   "id": "d4",
@@ -37,7 +43,9 @@
    "fatto": "Oggi deve aspettare i 18 anni e fare domanda. Riguarda circa 900.000 ragazzi.",
    "favorevoli": "",
    "contrari": ""
-  }
+  },
+  "data": "2026-05-14",
+  "ramo": "senato"
  },
  {
   "id": "d5",
@@ -47,7 +55,9 @@
    "fatto": "Due referendum le hanno bocciate, nel 1987 e nel 2011. Oggi la legge le vieta.",
    "favorevoli": "",
    "contrari": ""
-  }
+  },
+  "data": "2025-07-02",
+  "ramo": "camera"
  },
  {
   "id": "d6",
@@ -57,7 +67,9 @@
    "fatto": "Circa un euro su cinque della spesa sanitaria pubblica va a strutture private convenzionate.",
    "favorevoli": "",
    "contrari": ""
-  }
+  },
+  "data": "2026-09-24",
+  "ramo": "camera"
  },
  {
   "id": "d7",
@@ -67,7 +79,9 @@
    "fatto": "Ogni anno di anticipo per tutti costa qualche miliardo l'anno secondo le stime ufficiali.",
    "favorevoli": "",
    "contrari": ""
-  }
+  },
+  "data": "2026-07-15",
+  "ramo": "senato"
  },
  {
   "id": "d8",
@@ -77,6 +91,8 @@
    "fatto": "Riguarda materie come bilancio, migranti e ambiente, dove oggi decidono anche le istituzioni europee.",
    "favorevoli": "",
    "contrari": ""
-  }
+  },
+  "data": "2023-10-05",
+  "ramo": "senato"
  }
 ]

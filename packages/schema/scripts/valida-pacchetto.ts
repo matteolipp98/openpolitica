@@ -4,7 +4,7 @@ import path from "node:path";
 import { FILE_PACCHETTO, Pacchetto } from "../src/pacchetto.js";
 
 const cartella = path.resolve(process.argv[2] ?? "");
-const FACOLTATIVI = new Set(["correzioni.json"]);
+const FACOLTATIVI = new Set(["correzioni.json", "parlamento.json"]);
 const dati = Object.fromEntries(
   FILE_PACCHETTO.filter((f) => !FACOLTATIVI.has(f) || existsSync(path.join(cartella, f))).map((f) => [
     f,

@@ -15,6 +15,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import sys
 from collections import defaultdict
 from datetime import UTC, date, datetime
@@ -67,6 +68,7 @@ def quando(ramo: str, d: date) -> str:
 def soggetti(partiti: dict, perimetro: dict, alias: dict[str, dict], oggi: date) -> list[dict]:
     """Partiti e persone del perimetro, con il ruolo di oggi in parole semplici (ADR 0036)."""
     per_slug = {p["slug"]: p for p in partiti["partiti"]}
+    chi_guida = guide(perimetro, alias)
     out = []
     for voce in perimetro["partiti"]:
         p = per_slug[voce["slug"]]
@@ -74,6 +76,7 @@ def soggetti(partiti: dict, perimetro: dict, alias: dict[str, dict], oggi: date)
         out.append({
             "id": p["slug"], "slug": p["slug"], "tipo": "partito", "nome": p["nome"],
             "ruolo": {"governo": "Al governo", "opposizione": "All'opposizione"}.get(ruolo, "Fuori dal Parlamento"),
+            "guida": chi_guida.get(p["slug"], []),
         })  # fmt: skip
     for voce in perimetro["persone"]:
         a = alias[voce["slug"]]
@@ -90,13 +93,164 @@ def soggetti(partiti: dict, perimetro: dict, alias: dict[str, dict], oggi: date)
 
 
 def domande(catalogo: dict | None) -> list[dict]:
+    """Domande attive, con il ramo e il giorno del voto da cui vengono (la home mostra le più recenti)."""
     if not catalogo:
         return []
-    return [
-        {"id": e["id"], "testo": e["testo"], "tema": e["tema"], "contesto": e["contesto"]}
-        for e in catalogo["enunciati"]
-        if e["stato"] == "attivo"
-    ]
+    out = []
+    for e in catalogo["enunciati"]:
+        if e["stato"] != "attivo":
+            continue
+        d = {"id": e["id"], "testo": e["testo"], "tema": e["tema"], "contesto": e["contesto"]}
+        origine = e.get("origine") or {}
+        if origine.get("data"):
+            d["data"] = str(origine["data"])
+        if (origine.get("votazione") or {}).get("ramo"):
+            d["ramo"] = origine["votazione"]["ramo"]
+        out.append(d)
+    return out
+
+
+# ---------- chi guida ogni partito (content/perimetro.yaml e content/alias/) ----------
+
+
+def guide(perimetro: dict, alias: dict[str, dict]) -> dict[str, list[dict]]:
+    """{partito: [{nome, slug}]}: le persone che seguiamo perché guidano il partito, nell'ordine del perimetro."""
+    out: dict[str, list[dict]] = defaultdict(list)
+    for voce in perimetro["persone"]:
+        a = alias[voce["slug"]]
+        out[voce["partito"]].append({"nome": f"{a['nome']} {a['cognome']}", "slug": a["slug"]})
+    return dict(out)
+
+
+# ---------- il Parlamento oggi: seggi per partito ----------
+
+# Chi siede oggi in ogni ramo: l'ultima adesione a un gruppo ancora valida alla data. Il partito si attribuisce
+# con la stessa regola dei voti (core.partito_alla_data): il gruppo se corrisponde a un solo partito, altrimenti
+# l'appartenenza di partito della persona. Chi resta senza partito, o è in un partito che non seguiamo, va negli altri.
+QUERY_SEGGI = """
+with membri as (
+  select distinct on (a.persona_id, g.ramo) a.persona_id, a.gruppo_id, g.ramo
+  from core.appartenenza a join core.gruppo_parlamentare g on g.id = a.gruppo_id
+  where a.tipo = 'gruppo' and g.legislatura = %(leg)s
+    and a.valido_dal <= %(oggi)s and (a.valido_al is null or a.valido_al >= %(oggi)s)
+  order by a.persona_id, g.ramo, a.valido_dal desc
+)
+select m.ramo, p.slug, count(*)
+from membri m left join core.partito p on p.id = core.partito_alla_data(m.persona_id, m.gruppo_id, %(oggi)s)
+group by 1, 2
+"""
+
+
+def parlamento(conn, partiti_ids: list[str], legislatura: int, oggi: date) -> dict:
+    """{data, rami: {ramo: {totale, partiti: {slug: seggi}, altri}}}, alla data del pacchetto."""
+    with conn.cursor() as cur:
+        cur.execute(QUERY_SEGGI, {"leg": legislatura, "oggi": oggi})
+        righe = cur.fetchall()
+    rami: dict[str, dict] = {}
+    for ramo, slug, n in righe:
+        r = rami.setdefault(ramo, {"totale": 0, "partiti": dict.fromkeys(partiti_ids, 0), "altri": 0})
+        r["totale"] += n
+        if slug in r["partiti"]:
+            r["partiti"][slug] += n
+        else:
+            r["altri"] += n
+    return {"data": oggi.isoformat(), "rami": dict(sorted(rami.items()))}
+
+
+# ---------- programmi: promesse per tema, promesse precise, programma comune ----------
+
+ANNO = re.compile(r"\b(19|20)\d\d\b")
+QUANDO = re.compile(r"\d|legislatura|\b(due|tre|quattro|cinque|sei|sette|otto|nove|dieci|cento)\b", re.IGNORECASE)
+
+
+def precisa(orizzonte: str | None, misura: str, citazione: str) -> bool:
+    """Una promessa "dice quanto e entro quando" (regola fissa, spiegata nella pagina del metodo):
+    - entro quando: la scadenza letta nel programma c'è e contiene un numero ("entro il 2027", "in tre anni",
+      "entro la legislatura"); "al più presto" o "da subito" non bastano;
+    - quanto: nella misura o nella citazione c'è una cifra che non è un anno ("20.000 insegnanti", "10 miliardi").
+    """
+    if not orizzonte or not QUANDO.search(orizzonte):
+        return False
+    return any(re.search(r"\d", ANNO.sub(" ", t or "")) for t in (misura, citazione))
+
+
+SEQUENZA = 6  # parole di fila confrontate tra due programmi
+QUOTA_COMUNE = 0.5  # oltre questa quota di testo uguale, due programmi sono lo stesso programma
+
+
+def _sequenze(testo: str) -> set[tuple[str, ...]]:
+    parole = re.findall(r"\w+", testo.lower())
+    return {tuple(parole[i : i + SEQUENZA]) for i in range(len(parole) - SEQUENZA + 1)}
+
+
+def quota_testo_comune(a: str, b: str) -> float:
+    """Quota del testo più corto che si ritrova uguale nell'altro, a gruppi di 6 parole di fila.
+    Serve a riconoscere lo stesso programma depositato da più partiti in file diversi (il centrodestra nel 2022)."""
+    sa, sb = _sequenze(a), _sequenze(b)
+    if not sa or not sb:
+        return 0.0
+    return len(sa & sb) / min(len(sa), len(sb))
+
+
+QUERY_PROGRAMMI = """
+select distinct pa.slug, pr.elezione, d.id::text, d.sha256
+from core.programma pr
+join core.partito pa on pa.id = pr.partito_id
+join core.documento dp on dp.id = pr.documento_id
+join core.documento_attuale d on d.sha256 = dp.sha256
+where pr.elezione = (select max(elezione) from core.programma)
+"""
+QUERY_TESTI = """
+select documento_id::text, string_agg(testo, ' ' order by n)
+from core.documento_paragrafo where documento_id = any(%s::uuid[]) group by 1
+"""
+QUERY_PROMESSE = """
+select p.documento_id::text, p.orizzonte, p.misura, p.citazione, t.tema
+from core.promessa_attuale p left join core.promessa_tema_attuale t on t.promessa_id = p.id
+where p.documento_id = any(%s::uuid[])
+"""
+
+
+def programmi(conn, partiti_ids: list[str]) -> dict[str, dict]:
+    """{partito: {elezione, promesse, precise: {n, d}, temi, comune?}} dall'ultimo programma depositato.
+
+    I temi vengono da core.promessa_tema_attuale (issue #75); una promessa ancora senza tema non entra nelle barre."""
+    with conn.cursor() as cur:
+        cur.execute(QUERY_PROGRAMMI)
+        prog = [r for r in cur.fetchall() if r[0] in partiti_ids]
+        if not prog:
+            return {}
+        documenti = sorted({r[2] for r in prog})
+        cur.execute(QUERY_PROMESSE, (documenti,))
+        promesse = cur.fetchall()
+        cur.execute(QUERY_TESTI, (documenti,))
+        testi = dict(cur.fetchall())
+
+    per_doc: dict[str, dict] = {}
+    for doc in documenti:
+        righe = [r for r in promesse if r[0] == doc]
+        temi: dict[str, int] = defaultdict(int)
+        for r in righe:
+            if r[4]:
+                temi[r[4]] += 1
+        per_doc[doc] = {
+            "promesse": len(righe),
+            "precise": {"n": sum(precisa(r[1], r[2], r[3]) for r in righe), "d": len(righe)},
+            "temi": dict(sorted(temi.items())),
+        }
+
+    out = {}
+    for slug, elezione, doc, sha in prog:
+        stesso = sorted(s for s, _, _, h in prog if h == sha and s != slug)
+        simile = sorted(
+            s for s, _, d2, h in prog
+            if h != sha and s != slug and quota_testo_comune(testi.get(doc, ""), testi.get(d2, "")) > QUOTA_COMUNE
+        )  # fmt: skip
+        voce = {"elezione": elezione.isoformat(), **per_doc[doc]}
+        if stesso or simile:
+            voce["comune"] = {"stesso_documento": stesso, "testo_uguale": simile}
+        out[slug] = voce
+    return out
 
 
 # ---------- posizioni dai voti ----------
@@ -221,6 +375,11 @@ def costruisci(conn, oggi: date | None = None, ora: datetime | None = None) -> d
 
     andamento = andamento_da_database(conn, p.legislatura_riferimento, p.membri_minimi)
     partiti_ids = {s["id"] for s in sogg if s["tipo"] == "partito"}
+    elenco_partiti = [s["id"] for s in sogg if s["tipo"] == "partito"]
+    prog = programmi(conn, elenco_partiti)
+    for s in sogg:
+        if s["id"] in prog:
+            s["programma"] = prog[s["id"]]
     andamento["serie"] = {k: v for k, v in andamento["serie"].items() if k in partiti_ids}
     andamento["governo"] = {k: v for k, v in andamento["governo"].items() if k in partiti_ids}
 
@@ -248,6 +407,7 @@ def costruisci(conn, oggi: date | None = None, ora: datetime | None = None) -> d
         "promesse.json": {},
         "andamento.json": andamento,
         "correzioni.json": correzioni(conn),
+        "parlamento.json": parlamento(conn, elenco_partiti, p.legislatura_riferimento, oggi),
     }
 
 

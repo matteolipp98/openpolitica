@@ -38,6 +38,35 @@
     "n": 287,
     "d": 845
    }
+  },
+  "guida": [
+   {
+    "nome": "Laura Conti"
+   }
+  ],
+  "programma": {
+   "elezione": "2022-09-25",
+   "promesse": 173,
+   "precise": {
+    "n": 41,
+    "d": 173
+   },
+   "temi": {
+    "economia": 62,
+    "welfare": 38,
+    "diritti": 22,
+    "ambiente": 19,
+    "istituzioni": 24,
+    "esteri": 6,
+    "altro": 2
+   },
+   "comune": {
+    "stesso_documento": [
+     "fronte-dei-territori",
+     "patto-per-le-regioni"
+    ],
+    "testo_uguale": []
+   }
   }
  },
  {
@@ -61,6 +90,29 @@
   "promesse": {
    "mantenute": 3,
    "totali": 14
+  },
+  "guida": [
+   {
+    "nome": "Marco Benedetti",
+    "slug": "marco-benedetti"
+   }
+  ],
+  "programma": {
+   "elezione": "2022-09-25",
+   "promesse": 508,
+   "precise": {
+    "n": 203,
+    "d": 508
+   },
+   "temi": {
+    "economia": 96,
+    "welfare": 88,
+    "diritti": 41,
+    "ambiente": 97,
+    "istituzioni": 121,
+    "esteri": 58,
+    "altro": 7
+   }
   }
  },
  {
@@ -84,6 +136,36 @@
   "promesse": {
    "mantenute": 2,
    "totali": 19
+  },
+  "guida": [
+   {
+    "nome": "Davide Sartori",
+    "slug": "davide-sartori"
+   }
+  ],
+  "programma": {
+   "elezione": "2022-09-25",
+   "promesse": 173,
+   "precise": {
+    "n": 41,
+    "d": 173
+   },
+   "temi": {
+    "economia": 62,
+    "welfare": 38,
+    "diritti": 22,
+    "ambiente": 19,
+    "istituzioni": 24,
+    "esteri": 6,
+    "altro": 2
+   },
+   "comune": {
+    "stesso_documento": [
+     "alleanza-progresso",
+     "patto-per-le-regioni"
+    ],
+    "testo_uguale": []
+   }
   }
  },
  {
@@ -107,29 +189,29 @@
   "promesse": {
    "mantenute": 5,
    "totali": 19
-  }
- },
- {
-  "id": "patto-per-le-regioni",
-  "slug": "patto-per-le-regioni",
-  "tipo": "partito",
-  "nome": "Patto per le Regioni",
-  "ruolo": "Al governo",
-  "numeri": {
-   "sbagliati": 2,
-   "controllati": 19
   },
-  "vaghi": {
-   "n": 26,
-   "d": 45
-  },
-  "coerenza": {
-   "contrari": 3,
-   "confrontabili": 15
-  },
-  "promesse": {
-   "mantenute": 1,
-   "totali": 9
+  "guida": [
+   {
+    "nome": "Giulia Ferraro",
+    "slug": "giulia-ferraro"
+   }
+  ],
+  "programma": {
+   "elezione": "2022-09-25",
+   "promesse": 152,
+   "precise": {
+    "n": 57,
+    "d": 152
+   },
+   "temi": {
+    "economia": 38,
+    "welfare": 41,
+    "diritti": 12,
+    "ambiente": 26,
+    "istituzioni": 22,
+    "esteri": 9,
+    "altro": 4
+   }
   }
  },
  {
@@ -153,6 +235,82 @@
   "promesse": {
    "mantenute": 4,
    "totali": 18
+  },
+  "guida": [
+   {
+    "nome": "Paola Ventura",
+    "slug": "paola-ventura"
+   }
+  ],
+  "programma": {
+   "elezione": "2022-09-25",
+   "promesse": 292,
+   "precise": {
+    "n": 88,
+    "d": 292
+   },
+   "temi": {
+    "economia": 71,
+    "welfare": 77,
+    "diritti": 38,
+    "ambiente": 42,
+    "istituzioni": 39,
+    "esteri": 19,
+    "altro": 6
+   }
+  }
+ },
+ {
+  "id": "patto-per-le-regioni",
+  "slug": "patto-per-le-regioni",
+  "tipo": "partito",
+  "nome": "Patto per le Regioni",
+  "ruolo": "Al governo",
+  "numeri": {
+   "sbagliati": 2,
+   "controllati": 19
+  },
+  "vaghi": {
+   "n": 26,
+   "d": 45
+  },
+  "coerenza": {
+   "contrari": 3,
+   "confrontabili": 15
+  },
+  "promesse": {
+   "mantenute": 1,
+   "totali": 9
+  },
+  "guida": [
+   {
+    "nome": "Stefano Riva",
+    "slug": "stefano-riva"
+   }
+  ],
+  "programma": {
+   "elezione": "2022-09-25",
+   "promesse": 173,
+   "precise": {
+    "n": 41,
+    "d": 173
+   },
+   "temi": {
+    "economia": 62,
+    "welfare": 38,
+    "diritti": 22,
+    "ambiente": 19,
+    "istituzioni": 24,
+    "esteri": 6,
+    "altro": 2
+   },
+   "comune": {
+    "stesso_documento": [
+     "alleanza-progresso",
+     "fronte-dei-territori"
+    ],
+    "testo_uguale": []
+   }
   }
  },
  {
@@ -160,7 +318,7 @@
   "slug": "unione-liberale",
   "tipo": "partito",
   "nome": "Unione Liberale",
-  "ruolo": "Da solo",
+  "ruolo": "All'opposizione",
   "numeri": {
    "sbagliati": 1,
    "controllati": 14
@@ -176,6 +334,29 @@
   "promesse": {
    "mantenute": 2,
    "totali": 8
+  },
+  "guida": [
+   {
+    "nome": "Nicola Greco",
+    "slug": "nicola-greco"
+   }
+  ],
+  "programma": {
+   "elezione": "2022-09-25",
+   "promesse": 108,
+   "precise": {
+    "n": 37,
+    "d": 108
+   },
+   "temi": {
+    "economia": 33,
+    "welfare": 17,
+    "diritti": 8,
+    "ambiente": 15,
+    "istituzioni": 21,
+    "esteri": 12,
+    "altro": 2
+   }
   }
  },
  {
@@ -199,6 +380,33 @@
   "promesse": {
    "mantenute": 1,
    "totali": 8
+  },
+  "guida": [
+   {
+    "nome": "Chiara Lombardi",
+    "slug": "chiara-lombardi"
+   },
+   {
+    "nome": "Luca Ortolani",
+    "slug": "luca-ortolani"
+   }
+  ],
+  "programma": {
+   "elezione": "2022-09-25",
+   "promesse": 483,
+   "precise": {
+    "n": 131,
+    "d": 483
+   },
+   "temi": {
+    "economia": 93,
+    "welfare": 104,
+    "diritti": 77,
+    "ambiente": 118,
+    "istituzioni": 52,
+    "esteri": 31,
+    "altro": 8
+   }
   }
  },
  {
@@ -302,8 +510,8 @@
   "slug": "chiara-lombardi",
   "tipo": "persona",
   "nome": "Chiara Lombardi",
-  "ruolo": "Partito Lavoro e Comunità",
-  "partito": "partito-lavoro-e-comunita",
+  "ruolo": "Verdi e Territori",
+  "partito": "verdi-e-territori",
   "numeri": {
    "sbagliati": 4,
    "controllati": 26
@@ -326,8 +534,8 @@
   "slug": "stefano-riva",
   "tipo": "persona",
   "nome": "Stefano Riva",
-  "ruolo": "Unione Liberale",
-  "partito": "unione-liberale",
+  "ruolo": "Patto per le Regioni",
+  "partito": "patto-per-le-regioni",
   "numeri": {
    "sbagliati": 1,
    "controllati": 11
@@ -374,8 +582,8 @@
   "slug": "luca-ortolani",
   "tipo": "persona",
   "nome": "Luca Ortolani",
-  "ruolo": "Patto per le Regioni",
-  "partito": "patto-per-le-regioni",
+  "ruolo": "Verdi e Territori",
+  "partito": "verdi-e-territori",
   "numeri": {
    "sbagliati": 2,
    "controllati": 13
@@ -398,8 +606,8 @@
   "slug": "paola-ventura",
   "tipo": "persona",
   "nome": "Paola Ventura",
-  "ruolo": "Alleanza Progresso",
-  "partito": "alleanza-progresso",
+  "ruolo": "Partito Lavoro e Comunità",
+  "partito": "partito-lavoro-e-comunita",
   "numeri": {
    "sbagliati": 3,
    "controllati": 29
@@ -422,8 +630,8 @@
   "slug": "nicola-greco",
   "tipo": "persona",
   "nome": "Nicola Greco",
-  "ruolo": "Movimento Solidale",
-  "partito": "movimento-solidale",
+  "ruolo": "Unione Liberale",
+  "partito": "unione-liberale",
   "numeri": {
    "sbagliati": 2,
    "controllati": 20
