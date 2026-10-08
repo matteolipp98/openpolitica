@@ -18,6 +18,7 @@ on:
       - supabase/migrations/**
       - content/partiti.yaml
       - content/gruppi.yaml
+      - content/componenti-misto.yaml
       - content/perimetro.yaml
       - content/alias/**
       - workers/op_workers/connettori/**
@@ -47,6 +48,10 @@ jobs:
         run: uv run python -m op_workers.comuni.migrazioni | tee -a "$GITHUB_STEP_SUMMARY"
       - name: Anagrafica da content/
         run: uv run python -m op_workers.anagrafica.sincronizza | tee -a "$GITHUB_STEP_SUMMARY"
+      # Partito di chi sta nel gruppo misto, dalle componenti politiche (issue #78). Le persone nuove le crea
+      # l'import dei voti: quelle che mancano ancora si aggiungono al giro dopo.
+      - name: Componenti del gruppo misto
+        run: uv run python -m op_workers.anagrafica.componenti_misto | tee -a "$GITHUB_STEP_SUMMARY"
 
   importa:
     needs: migra

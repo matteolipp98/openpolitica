@@ -73,6 +73,13 @@ I voti individuali non risultano duplicati (86 archi `osr:favorevole` per 86 fav
 
 Alla Camera invece l'etichetta del gruppo riporta il nome **attuale** con la data di costituzione: per esempio "ITALIA VIVA-CASA RIFORMISTA (20.11.2023" non significa che si chiamasse così nel 2023. Per il nome alla data di un voto va usata la storia in `ocd:denominazione`.
 
+## Componenti politiche del gruppo misto
+
+Servono per dare un partito a chi sta nel misto (issue #78; regola e corrispondenze in `content/componenti-misto.yaml`).
+
+- **Camera**: classe `ocd:componenteGruppoMisto` (`componenteGruppoMisto.rdf/cgm<id>`), con `ocd:rif_leg`, `dcterms:alternative` (sigla), `ocd:startDate`/`ocd:endDate` e `ocd:siComponeDi` → nodo con `ocd:rif_deputato`, `ocd:startDate`, `ocd:endDate`. Nella XIX sono 5: minoranze linguistiche (cgm4137), AVS (cgm4138, solo 19-27.10.2022), +Europa (cgm4139), Noi Moderati-MAIE (cgm4148, solo 19-27.10.2022), Futuro Nazionale Vannacci (cgm4271, dal 27.5.2026). Il nodo `ocd:componente` sulle adesioni al misto è vuoto: non serve.
+- **Senato**: dati.senato.it **non** pubblica le componenti (le adesioni hanno solo `osr:gruppo`, `osr:carica`, `osr:inizio`, `osr:fine`; nessuna classe dedicata). La componente è scritta nella scheda del senatore su senato.it ("Misto (Alleanza Verdi e Sinistra)"), che però risponde 403/202 vuoto alle letture automatiche: le adesioni sono scritte a mano nel file, con la scheda come fonte.
+
 ## Leader del perimetro
 
 | Persona | Ramo | Identificativo | Gruppo nella XIX |

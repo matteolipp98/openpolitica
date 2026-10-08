@@ -1,0 +1,45 @@
+# Componenti politiche del gruppo misto -> partiti (ADR 0027, issue #78).
+#
+# Chi siede nel gruppo misto (o in un gruppo di più partiti) si attribuisce al partito per persona:
+# qui c'è la regola che lo dice. Il partito di un parlamentare del misto è quello della sua componente
+# politica, solo per il periodo in cui ne fa parte. Chi non è in nessuna componente, o è in una
+# componente che non corrisponde a un partito che seguiamo, resta negli "altri". Mai una stima.
+#
+# Uso: python -m op_workers.anagrafica.componenti_misto  (con DATABASE_URL; nel workflow Database)
+versione: 1
+
+# Camera: le componenti e chi ne fa parte, con le date, vengono da dati.camera.it
+# (classe ocd:componenteGruppoMisto, archi ocd:siComponeDi). Qui solo componente -> partito.
+# Verificate con la sonda dell'8 ottobre 2026. Una componente nuova che non è in questo elenco
+# viene segnalata dall'import e non si attribuisce finché non la si aggiunge qui.
+camera:
+  legislatura: 19
+  componenti:
+    - { id_esterno: cgm4137, sigla: MISTO-MIN.LING., nome: "Minoranze linguistiche", partito: null }
+    # AVS e Noi Moderati sono componenti del misto solo dal 19 al 27.10.2022, prima di avere un gruppo loro
+    - { id_esterno: cgm4138, sigla: MISTO-AVS, nome: "Alleanza Verdi e Sinistra", partito: alleanza-verdi-e-sinistra }
+    - { id_esterno: cgm4139, sigla: MISTO-+EU-SUEU, nome: "+Europa - Stati Uniti d'Europa", partito: piu-europa }
+    - { id_esterno: cgm4148, sigla: "M-NM(N-C-U-I)-M", nome: "Noi Moderati - MAIE", partito: noi-moderati }
+    - { id_esterno: cgm4271, sigla: MISTO-FNV-F, nome: "Futuro Nazionale Vannacci - Free", partito: null }
+
+# Senato: dati.senato.it non pubblica le componenti del misto (verificato l'8 ottobre 2026: le adesioni
+# ai gruppi hanno solo gruppo, carica e date). Le componenti sono scritte nella scheda di ogni senatore
+# su senato.it, alla voce del gruppo: per esempio "Misto (Alleanza Verdi e Sinistra)". Le date sono
+# quelle dell'adesione al gruppo misto su dati.senato.it (gruppo/9).
+# senato.it blocca le letture automatiche: le schede sono state lette a mano, una per senatore.
+senato:
+  legislatura: 19
+  adesioni:
+    # Alleanza Verdi e Sinistra: i quattro senatori eletti con AVS
+    - { senatore: "22918", nome: "Peppe De Cristofaro", partito: alleanza-verdi-e-sinistra, valido_dal: 2022-10-18 }
+    - { senatore: "36390", nome: "Ilaria Cucchi", partito: alleanza-verdi-e-sinistra, valido_dal: 2022-10-18 }
+    - { senatore: "36437", nome: "Tino Magni", partito: alleanza-verdi-e-sinistra, valido_dal: 2022-10-18 }
+    # Dal 19.2.2025 Floridia passa al gruppo Per le Autonomie: da lì la scheda non indica più la componente
+    - { senatore: "36399", nome: "Aurora Floridia", partito: alleanza-verdi-e-sinistra, valido_dal: 2022-10-18, valido_al: 2025-02-18 }
+    # Azione: dal 9.11.2023, quando il gruppo Azione-Italia Viva si divide, nella componente Azione del misto
+    - { senatore: "30110", nome: "Carlo Calenda", partito: azione, valido_dal: 2023-11-09 }
+    - { senatore: "36436", nome: "Marco Lombardo", partito: azione, valido_dal: 2023-11-09 }
+    - { senatore: "22966", nome: "Mariastella Gelmini", partito: azione, valido_dal: 2023-11-09, valido_al: 2024-10-29 }
+    # Giusy Versace (33027), nel misto dal 9.11.2023 al 26.11.2024: componente da verificare sulla scheda,
+    # perché ha lasciato Azione nel settembre 2024. Finché non è verificata resta negli "altri".
+    # Mario Monti, Renzo Piano, Liliana Segre: senatori a vita, in nessuna componente.
