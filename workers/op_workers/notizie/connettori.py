@@ -66,6 +66,12 @@ def _testo_html(frammento: str) -> str:
         return pulisci(frammento)
 
 
+def _sommario(e) -> str | None:
+    """Il testo più lungo che il feed dà: il contenuto intero (content:encoded) se c'è, altrimenti il sommario."""
+    testi = [_testo_html(c.get("value", "")) for c in e.get("content", [])] + [_testo_html(e.get("summary", ""))]
+    return max(testi, key=len) or None
+
+
 def da_rss(contenuto: bytes) -> list[Elemento]:
     feed = feedparser.parse(contenuto)
     if feed.bozo and not feed.entries:
@@ -80,7 +86,7 @@ def da_rss(contenuto: bytes) -> list[Elemento]:
                 url=normalizza_url(e.link),
                 titolo=pulisci(e.get("title")) or None,
                 pubblicato_il=_data(quando),
-                sommario=_testo_html(e.get("summary", "")) or None,
+                sommario=_sommario(e),
             )
         )
     return out
@@ -175,10 +181,27 @@ NASCOSTI = (
 )
 
 
+CHARSET = re.compile(rb"""<meta[^>]+charset=["']?([A-Za-z0-9_-]+)""", re.IGNORECASE)
+
+
+def decodifica(contenuto: bytes) -> str:
+    """Il testo della pagina: la codifica dichiarata nella pagina, altrimenti UTF-8, altrimenti Windows-1252."""
+    if m := CHARSET.search(contenuto[:4000]):
+        try:
+            return contenuto.decode(m.group(1).decode("ascii"), "replace")
+        except LookupError:
+            pass
+    try:
+        return contenuto.decode("utf8")
+    except UnicodeDecodeError:
+        return contenuto.decode("cp1252", "replace")
+
+
 def estrai_pagina(contenuto: bytes, url: str) -> tuple[str | None, str | None, datetime | None]:
     """Titolo, testo principale e data di una pagina. Il testo nascosto si toglie prima (ADR 0026)."""
+    html = re.sub(r"^\s*<\?xml[^>]*\?>", "", decodifica(contenuto))
     try:
-        albero = lxml.html.fromstring(contenuto)
+        albero = lxml.html.fromstring(html)
     except (lxml.etree.ParserError, ValueError):
         return None, None, None
     for el in albero.xpath(NASCOSTI):

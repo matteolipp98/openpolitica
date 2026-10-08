@@ -10,6 +10,7 @@ Dati versionati che decidono come funziona il sito (ADR 0025). Ogni modifica pas
 | `letture.yaml` | Le frasi "In breve" e le frasi per soggetto | 0037 |
 | `governance.yaml` | Revisione umana attiva o no, modalità campagna | 0021, 0028, 0037 |
 | `perimetro.yaml` | Chi seguiamo e perché | 0002 |
+| `fonti.yaml` | Da dove leggiamo notizie, annunci e messaggi: livello, orientamento dei giornali, indirizzi verificati | 0002, 0003, 0006 |
 | `partiti.yaml` | Partiti, ruolo (governo/opposizione), coalizioni | 0021, 0027 |
 | `gruppi.yaml` | Gruppi parlamentari e partito corrispondente | 0027 |
 | `alias/<slug>.yaml` | Nomi con cui una persona compare nei testi, cariche, identificativi esterni | 0027 |
