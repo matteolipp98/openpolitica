@@ -7,6 +7,27 @@ App pubblica che aiuta i cittadini a valutare i politici italiani: fatti uguali 
 - **Il lettore è l'italiano medio, senza nessuna competenza politica o statistica.** Ogni testo visibile (mock, viste, FAQ, messaggi) deve capirsi al primo colpo: frasi corte, una cosa per frase, parole di tutti i giorni, confronti concreti ("meno della metà") invece di percentuali e termini tecnici. Il dettaglio tecnico va nella pagina di metodo. Regole complete nell'ADR 0036, "Linguaggio comune".
 - Tutto in italiano: ADR, piano, commenti nei mock, messaggi di commit.
 
+## Esperienza del sito: come dovevannoinostrisoldi.com
+
+L'esperienza del sito deve somigliare a quella di [dovevannoinostrisoldi.com](https://www.dovevannoinostrisoldi.com/) (decisione dell'utente, 8 ottobre 2026). Vale per ogni mock, vista e componente nuovi. Si riprende la struttura e il modo di presentare i dati, non i contenuti. Quando si progetta una pagina si apre il sito e si guarda come risolve un caso simile.
+
+Cosa si riprende:
+- **Un blocco, un dato.** Ogni blocco è una scheda bianca con bordo sottile su fondo chiaro. In alto c'è un'etichetta piccola in maiuscolo con un "?" che apre la spiegazione. Sotto c'è un numero grande, con una frase che dice cosa conta, dove e in che periodo. Poi qualche riga con i dettagli: nome a sinistra, valore a destra.
+- **Fonte e data su ogni blocco.** In fondo alla scheda c'è sempre la riga "Fonte: … · aggiornato al …", con il link alla fonte ufficiale. Sotto, una voce che si apre ("Dati esatti e fonte") con la tabella dei valori esatti.
+- **Barre orizzontali con il valore accanto.** Il nome sopra la barra, il numero sotto il nome, il valore a destra. Si ordinano per valore, salvo dove i nostri ADR chiedono l'ordine alfabetico (partiti e persone, ADR 0009).
+- **Note che evitano gli equivoci**, subito sotto il dato, in una frase: "Settembre è a metà: il numero può cambiare", "Non dimostra che abbia mentito: va controllato". Il dato non ancora completo si mostra in grigio.
+- **Scelte con bottoni affiancati** (anno, Camera/Senato, tema), non con menu a tendina, quando le scelte sono poche.
+- **Home come indice:** titolo e una frase che dice cosa c'è nel sito, una ricerca ben visibile, schede delle sezioni con titolo, una riga di descrizione e "Apri ›". Poi i blocchi con i dati principali.
+- **Cosa facciamo e cosa non facciamo**, detto in chiaro su ogni sezione nuova o non ancora pronta. Se una sezione non è pronta si dice quando arriva e cosa si può vedere intanto.
+- Un solo colore di richiamo per link e bottoni, menu laterale con icone, tema chiaro e scuro, pagine che funzionano bene sul telefono.
+
+Cosa non si riprende, perché valgono le nostre regole:
+- **Percentuali da sole e numeri tecnici.** Il sito ne usa molti. Da noi valgono il linguaggio comune (ADR 0036) e il conteggio accanto a ogni numero (ADR 0019): "11 volte su 96", non "11,5%".
+- **Colori dei partiti e classifiche.** Colori neutri in ordine alfabetico e nessun punteggio unico (ADR 0009).
+- **Giudizi.** Mostriamo cosa hanno detto e cosa hanno fatto, non se è giusto (ADR 0001).
+
+Se un'idea del sito va contro un ADR, vince l'ADR, oppure si propone di cambiare l'ADR.
+
 ## Board e flusso di lavoro (scrum)
 
 Il lavoro si segue sulle issue di GitHub di `matteolipp98/openpolitica`, mostrate come board nel GitHub Project del repository. **Ogni sviluppo parte da un'issue e la board va tenuta aggiornata a ogni passo.**
