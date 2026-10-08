@@ -1,5 +1,9 @@
 <!DOCTYPE html>
-<!-- Indice dei soggetti. Attua ADR 0036, 0019 (conteggio sempre accanto alla percentuale, soglia minima), 0009 (nessun punteggio unico, ordine alfabetico), 0037 (esiti e letture comparative con regole fisse), 0001 (fatti separati dai valori), 0040 (collegamento all'andamento nel tempo). Dati inventati. -->
+<!-- Home: presenta i partiti (issue #76). Attua ADR 0036 (linguaggio comune), 0019 (ogni numero con il suo conteggio),
+     0009 (nessun punteggio unico, ordine alfabetico, colori neutri), 0001 (fatti separati dai valori).
+     Spunto per layout e chiarezza dei dati: dovevannoinostrisoldi.com (un numero grande con una frase sotto, barre
+     orizzontali con il valore accanto, fonte e data su ogni blocco, "?" per le spiegazioni, emiciclo dei seggi).
+     Dati inventati. -->
 <html lang="it" data-theme="light">
 <head>
 <meta charset="utf-8">
@@ -11,199 +15,240 @@
 <style>
 :root{
   --paper:#E9ECF0;--surface:#FFFFFF;--ink:#141B23;--muted:#5C6773;
-  --rule:#C9D1DA;--rule-soft:#E2E7EC;--mark:#1F4E79;--brass:#8A6A33;--focus:#1F4E79;
+  --rule:#C9D1DA;--rule-soft:#E2E7EC;--mark:#1F4E79;--brass:#8A6A33;--focus:#1F4E79;--track:#E6EBF0;
+  /* colori dei partiti: neutri, assegnati in ordine alfabetico, mai quelli dei simboli (ADR 0009) */
+  --p1:#2F6B8A;--p2:#8A6A33;--p3:#5E7A3A;--p4:#7A4E7E;--p5:#A0523F;--p6:#3F7F74;--p7:#5B5F97;--p8:#6B7480;
   box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
 }
 *,*::before,*::after{box-sizing:inherit}
 body{margin:0;background:var(--paper);color:var(--ink);
   font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:17px;line-height:1.55;font-variant-numeric:tabular-nums}
-.wrap{max-width:720px;margin:0 auto;padding:28px 18px 80px}
-h1{font-family:"IBM Plex Serif",Georgia,serif;font-size:clamp(28px,6vw,38px);line-height:1.15;margin:0 0 12px;max-width:16ch}
-.lede{margin:0;color:var(--muted);max-width:40ch}
-.nota{margin:18px 0 0;padding:10px 13px;background:#FBF7EE;border-left:3px solid var(--brass);font-size:14px;color:#574521}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 16px 80px}
+h1{font-family:"IBM Plex Serif",Georgia,serif;font-size:clamp(28px,6vw,40px);line-height:1.15;margin:0 0 12px;max-width:18ch}
+.lede{margin:0;color:var(--muted);max-width:46ch;font-size:18px}
+.nota{margin:18px 0 0;padding:10px 13px;background:#FBF7EE;border-left:3px solid var(--brass);font-size:14px;color:#574521;max-width:60ch}
+h2{font-family:"IBM Plex Serif",serif;font-size:23px;margin:44px 0 6px}
+.sottotitolo{margin:0 0 16px;color:var(--muted);max-width:60ch}
+.et{font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:0 0 8px}
+.card{background:var(--surface);border:1px solid var(--rule)}
+.fonte{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);margin-top:14px}
+.fonte::before{content:"";width:7px;height:7px;border-radius:50%;background:#3F7F54;flex:none}
+details.cosa{margin-top:10px;font-size:14.5px;color:var(--muted)}
+details.cosa summary{cursor:pointer;color:var(--mark);list-style:none;display:inline-flex;align-items:center;gap:6px}
+details.cosa summary::-webkit-details-marker{display:none}
+details.cosa summary::before{content:"?";display:inline-grid;place-items:center;width:18px;height:18px;border:1px solid currentColor;border-radius:50%;font-size:12px;flex:none}
+details.cosa p{margin:8px 0 0;max-width:62ch}
+a{color:var(--mark)}
 
-h2{font-family:"IBM Plex Serif",serif;font-size:21px;margin:40px 0 14px}
-.tabs{display:flex;border:1px solid var(--rule);background:var(--surface);margin-bottom:16px}
-.tabs button{flex:1;appearance:none;border:0;background:none;font:inherit;padding:11px 10px;cursor:pointer;color:var(--muted)}
+/* invito al questionario */
+.invito{margin-top:26px;padding:22px 20px;display:grid;gap:14px;border-left:4px solid var(--mark)}
+.invito h2{margin:0;font-size:24px}
+.invito p{margin:0;color:var(--muted);max-width:52ch}
+.bottone{display:inline-block;justify-self:start;background:var(--mark);color:#fff;text-decoration:none;font-weight:600;padding:12px 20px}
+
+/* Parlamento oggi */
+.aula{padding:20px}
+.tabs{display:inline-flex;border:1px solid var(--rule);margin-bottom:16px}
+.tabs button{appearance:none;border:0;background:var(--surface);font:inherit;font-size:15px;padding:8px 18px;cursor:pointer;color:var(--muted)}
 .tabs button[aria-pressed="true"]{background:var(--ink);color:#fff}
 .tabs button+button{border-left:1px solid var(--rule)}
+.aula-griglia{display:grid;gap:24px}
+@media (min-width:860px){.aula-griglia{grid-template-columns:1.25fr 1fr;align-items:start}}
+.grande{font-family:"IBM Plex Serif",serif;font-size:44px;font-weight:600;line-height:1}
+.grande small{font-family:"IBM Plex Sans",sans-serif;font-size:17px;font-weight:400;color:var(--muted);margin-left:6px}
+.frase-grande{margin:8px 0 14px;font-size:18px;max-width:34ch}
+.divisa{display:flex;height:14px;margin:6px 0 4px}
+.divisa span{display:block;height:100%}
+.divisa-et{display:flex;justify-content:space-between;font-size:14px;color:var(--muted)}
+svg.emiciclo{width:100%;height:auto;display:block}
+.emi-et{display:flex;justify-content:space-between;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:-4px}
+.legenda{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:2px}
+.legenda li{display:grid;grid-template-columns:14px 1fr auto;gap:10px;align-items:center;padding:6px 0;border-top:1px solid var(--rule-soft);font-size:15.5px}
+.legenda .q{width:14px;height:14px;border-radius:3px}
+.legenda .n{font-weight:600}
+.legenda .gruppo{font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding-top:12px;border-top:0;display:block}
 
-.card{background:var(--surface);border:1px solid var(--rule);margin-bottom:12px}
-.top{display:block;width:100%;text-align:left;appearance:none;border:0;background:none;font:inherit;
-  padding:18px 18px 16px;cursor:pointer}
-.top:hover{background:#F6F8FA}
-.nome{font-size:19px;font-weight:600}
-.ruolo{color:var(--muted);font-size:14px;margin-top:1px}
-.frase{margin:12px 0 0;font-size:17px;max-width:42ch}
-.apri{display:inline-block;margin-top:12px;color:var(--mark);font-size:15px}
-
-.riga{display:flex;gap:14px;align-items:baseline;padding:14px 18px;border-top:1px solid var(--rule-soft)}
-.cifra{font-family:"IBM Plex Serif",serif;font-size:30px;font-weight:600;line-height:1;min-width:92px}
-.cifra.b{color:var(--brass)}
-.testo{flex:1}
-.testo p{margin:0}
-.testo .sotto{color:var(--muted);font-size:14px;margin-top:3px}
-.dett{display:none;padding:0 0 10px}
-.card[data-open="true"] .dett{display:block}
-
-.conf{margin:14px 18px 4px;border:1px solid var(--rule-soft)}
-.conf .a,.conf .b2{padding:13px 15px}
-.conf .b2{border-top:1px solid var(--rule-soft);background:#F7F9FB}
-.conf .et{font-size:14px;color:var(--muted);margin:0 0 4px}
-.conf .esito{padding:12px 15px;border-top:1px solid var(--rule-soft);font-size:15.5px}
-.conf .esito b{color:var(--brass)}
-.conf p{margin:0;font-size:16px}
-.conf cite{font-style:normal;display:block;margin-top:6px;font-size:13px;color:var(--muted)}
-.piccolo{margin:14px 18px 18px;font-size:14px;color:var(--muted);max-width:44ch}
-footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--rule);font-size:14px;color:var(--muted);max-width:44ch}
-a{color:var(--mark)}
+/* schede dei partiti */
+.schede{display:grid;gap:14px}
+@media (min-width:860px){.schede{grid-template-columns:1fr 1fr}}
+.scheda{display:flex;flex-direction:column}
+.testa{padding:18px 18px 14px;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:center}
+.testa .q{width:16px;height:16px;border-radius:4px;grid-row:span 2}
+.nome{font-size:20px;font-weight:600;line-height:1.25}
+.chi{color:var(--muted);font-size:14.5px}
+.ruolo{grid-column:2;justify-self:start;margin-top:6px;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:600;padding:3px 8px;border:1px solid var(--rule);color:var(--muted)}
+.blocco{padding:14px 18px;border-top:1px solid var(--rule-soft)}
+.temi{list-style:none;margin:0;padding:0;display:grid;gap:7px}
+.temi li{display:grid;grid-template-columns:minmax(0,10.5em) 1fr 2.6em;gap:10px;align-items:center;font-size:14.5px}
+.barra{height:10px;background:var(--track)}
+.barra i{display:block;height:100%}
+.temi .v{text-align:right;font-weight:600}
+.condiviso{margin:10px 0 0;font-size:14px;color:#574521;background:#FBF7EE;padding:8px 10px}
+.voti{list-style:none;margin:0;padding:0}
+.voti li{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:baseline;padding:7px 0;border-top:1px solid var(--rule-soft);font-size:15px}
+.voti li:first-child{border-top:0;padding-top:0}
+.v-si,.v-no,.v-ast{font-size:13px;font-weight:600;padding:2px 9px;border:1px solid;white-space:nowrap}
+.v-si{color:#2F5E3F;border-color:#9DBEA7;background:#EEF6F0}
+.v-no{color:#8A3A2E;border-color:#D6A79F;background:#FBF0EE}
+.v-ast{color:var(--muted);border-color:var(--rule)}
+.numeri{display:grid;gap:12px}
+.numero{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:baseline}
+.numero .c{font-family:"IBM Plex Serif",serif;font-size:28px;font-weight:600;line-height:1;white-space:nowrap}
+.numero .c small{font-family:"IBM Plex Sans",sans-serif;font-size:15px;font-weight:400;color:var(--muted)}
+.numero p{margin:0;font-size:15px}
+.numero .s{display:block;color:var(--muted);font-size:13.5px}
+.piede{margin-top:auto;padding:12px 18px;border-top:1px solid var(--rule-soft);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.piede a{font-weight:600;text-decoration:none}
+.piede .fonte{margin:0}
+.regola{margin:12px 0 0;font-size:14px;color:var(--muted);max-width:70ch}
+footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--rule);font-size:14px;color:var(--muted);max-width:60ch}
 :focus-visible{outline:2px solid var(--focus);outline-offset:2px}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --paper:#11161C;--surface:#171E26;--ink:#E7ECF1;--muted:#9AA6B2;--rule:#2C3742;--rule-soft:#232C35;
-  --mark:#7FB0E0;--brass:#C9A25E;--focus:#7FB0E0}
-  :root:not([data-theme="light"]) .nota{background:#1E1B13;color:#D8C79D}
-  :root:not([data-theme="light"]) .top:hover{background:#1C242D}
-  :root:not([data-theme="light"]) .conf .b2{background:#1B232B}}
+  --mark:#7FB0E0;--brass:#C9A25E;--focus:#7FB0E0;--track:#232C35}
+  :root:not([data-theme="light"]) .nota,:root:not([data-theme="light"]) .condiviso{background:#1E1B13;color:#D8C79D}}
 :root[data-theme="dark"]{--paper:#11161C;--surface:#171E26;--ink:#E7ECF1;--muted:#9AA6B2;
-  --rule:#2C3742;--rule-soft:#232C35;--mark:#7FB0E0;--brass:#C9A25E;--focus:#7FB0E0}
+  --rule:#2C3742;--rule-soft:#232C35;--mark:#7FB0E0;--brass:#C9A25E;--focus:#7FB0E0;--track:#232C35}
 </style>
 </head>
 <body>
 <div class="wrap">
-
 <h1>Cosa hanno fatto davvero</h1>
-<p class="lede">Quando un politico dice un dato, per esempio quanti posti di lavoro ci sono, controlliamo se è vero. E guardiamo come vota in Parlamento.</p>
+<p class="lede">Chi c'è in Parlamento, cosa ha promesso, come ha votato. Gli stessi fatti per tutti i partiti: il giudizio è tuo.</p>
 <p class="nota">Esempio per provare la pagina: nomi e numeri sono inventati.</p>
 
-<h2>In breve</h2>
-<div id="breve"></div>
+<section class="card invito">
+  <h2>Chi la pensa come te?</h2>
+  <p>Rispondi a 24 domande su leggi votate davvero. Ti diciamo quali partiti hanno votato come la pensi tu. Ci vogliono circa 5 minuti, e le risposte restano sul tuo telefono.</p>
+  <a class="bottone" href="vista-questionario.html">Inizia le domande</a>
+</section>
 
-<h2>Tutti</h2>
-<div class="tabs" role="group" aria-label="Partiti o persone">
-  <button type="button" data-v="partiti" aria-pressed="true">Partiti</button>
-  <button type="button" data-v="politici" aria-pressed="false">Persone</button>
-</div>
-<div id="lista"></div>
+<h2>Il Parlamento oggi</h2>
+<p class="sottotitolo">Quanti seggi ha ogni partito, e chi sostiene il governo.</p>
+<section class="card aula">
+  <div class="tabs" role="group" aria-label="Ramo del Parlamento">
+    <button type="button" data-ramo="camera" aria-pressed="true">Camera</button>
+    <button type="button" data-ramo="senato" aria-pressed="false">Senato</button>
+  </div>
+  <div class="aula-griglia">
+    <div>
+      <svg class="emiciclo" id="emiciclo" viewBox="0 0 400 206" role="img" aria-label="Seggi per partito"></svg>
+      <div class="emi-et"><span>All'opposizione</span><span>Al governo</span></div>
+    </div>
+    <div>
+      <div class="grande" id="gov-n"></div>
+      <p class="frase-grande" id="gov-frase"></p>
+      <div class="divisa" id="divisa"></div>
+      <div class="divisa-et"><span id="opp-et"></span><span id="gov-et"></span></div>
+      <ul class="legenda" id="legenda"></ul>
+    </div>
+  </div>
+  <details class="cosa"><summary>Come leggere il disegno</summary>
+    <p>Ogni pallino è un parlamentare. I pallini sono messi in due gruppi, opposizione e governo, e dentro ogni gruppo in ordine alfabetico. Non è la disposizione reale dell'aula. Chi è nel gruppo misto non fa parte di nessun partito che seguiamo.</p></details>
+  <div class="fonte" id="fonte-aula"></div>
+</section>
 
-<footer>I dati vengono dai voti di Camera e Senato, dai programmi elettorali e dalle statistiche ufficiali ISTAT ed Eurostat.</footer>
+<h2>I partiti</h2>
+<p class="sottotitolo">In ordine alfabetico. Per ogni partito: di cosa parla il suo programma, come ha votato, due numeri.</p>
+<div class="schede" id="schede"></div>
+<p class="regola"><b>Quali voti mostriamo.</b> Le stesse tre domande per tutti i partiti: le tre domande del questionario votate più di recente, su tre temi diversi. Le altre sono nella scheda di ogni partito.</p>
+
+<footer>I dati vengono dai voti di Camera e Senato e dai programmi elettorali depositati al Ministero dell'Interno. Qui non diciamo se le idee di un partito sono buone: quello lo decidi tu. <a href="vista-metodo.html">Come lavoriamo</a></footer>
 </div>
 
 <script>
+/* ---------- dati inventati ---------- */
+const TEMI=["Lavoro, tasse e pensioni","Sanità, scuola e famiglie","Diritti e immigrazione",
+  "Energia e ambiente","Giustizia e Stato","Europa, esteri e difesa","Altro"];
+const ACCORDO=[62,38,22,19,24,6,2]; /* programma comune della coalizione di governo */
 const partiti=[
- {n:"Alleanza Progresso",r:"Al governo",sbN:11,sbD:96,vagoN:96,vagoD:234,votoK:50,votoD:58,prom:[7,20],
-  ex:{said:"L'occupazione femminile è cresciuta di oltre un milione di posti.",dove:"Conferenza stampa, marzo 2026",
-      vero:"I dati ISTAT dicono 412.000 posti.",fonte:"ISTAT, dati sul lavoro"}},
- {n:"Civica Riformista",r:"All'opposizione",sbN:4,sbD:41,vagoN:41,vagoD:111,votoK:30,votoD:33,prom:[3,14],
-  ex:{said:"Siamo il paese che spende meno in istruzione di tutta Europa.",dove:"Discorso in Parlamento, febbraio 2026",
-      vero:"Secondo Eurostat cinque paesi spendono meno di noi.",fonte:"Eurostat, spesa pubblica"}},
- {n:"Fronte dei Territori",r:"Al governo",sbN:14,sbD:72,vagoN:78,vagoD:150,votoK:34,votoD:46,prom:[2,19],
-  ex:{said:"La bolletta della luce è tornata ai livelli del 2019.",dove:"Post sul canale ufficiale, settembre 2026",
-      vero:"Costa ancora il 28% in più rispetto al 2019.",fonte:"ISTAT, prezzi al consumo"}},
- {n:"Movimento Solidale",r:"All'opposizione",sbN:9,sbD:88,vagoN:69,vagoD:157,votoK:42,votoD:51,prom:[5,19],
-  ex:{said:"Il fondo per gli anziani non autosufficienti è stato tagliato di un terzo.",dove:"Comunicato, novembre 2025",
-      vero:"Il taglio è stato dell'11%.",fonte:"Bilancio dello Stato 2026"}},
- {n:"Patto per le Regioni",r:"Al governo",sbN:2,sbD:19,vagoN:26,vagoD:45,votoK:12,votoD:15,prom:[1,9],ex:null},
- {n:"Partito Lavoro e Comunità",r:"All'opposizione",sbN:7,sbD:63,vagoN:40,vagoD:103,votoK:39,votoD:44,prom:[4,18],ex:null},
- {n:"Unione Liberale",r:"Da solo",sbN:1,sbD:14,vagoN:13,vagoD:27,votoK:9,votoD:11,prom:[2,8],ex:null},
- {n:"Verdi e Territori",r:"All'opposizione",sbN:0,sbD:9,vagoN:8,vagoD:17,votoK:7,votoD:8,prom:[1,8],ex:null}
+ {n:"Alleanza Progresso",guida:"Laura Conti",gov:true,seggi:{camera:118,senato:63},prog:ACCORDO,comune:true,
+  precise:[41,173],conGov:[392,395],voti:["si","si","no"]},
+ {n:"Civica Riformista",guida:"Marco Benedetti",gov:false,seggi:{camera:21,senato:9},prog:[96,88,41,97,121,58,7],
+  precise:[203,508],conGov:[171,395],voti:["si","ast","si"]},
+ {n:"Fronte dei Territori",guida:"Davide Sartori",gov:true,seggi:{camera:66,senato:29},prog:ACCORDO,comune:true,
+  precise:[41,173],conGov:[388,395],voti:["si","si","no"]},
+ {n:"Movimento Solidale",guida:"Giulia Ferraro",gov:false,seggi:{camera:48,senato:28},prog:[38,41,12,26,22,9,4],
+  precise:[57,152],conGov:[96,395],voti:["no","no","si"]},
+ {n:"Partito Lavoro e Comunità",guida:"Paola Ventura",gov:false,seggi:{camera:68,senato:39},prog:[71,77,38,42,39,19,6],
+  precise:[88,292],conGov:[63,395],voti:["no","no","si"]},
+ {n:"Patto per le Regioni",guida:"Stefano Riva",gov:true,seggi:{camera:53,senato:25},prog:ACCORDO,comune:true,
+  precise:[41,173],conGov:[390,395],voti:["si","si","no"]},
+ {n:"Unione Liberale",guida:"Nicola Greco",gov:false,seggi:{camera:12,senato:6},prog:[33,17,8,15,21,12,2],
+  precise:[37,108],conGov:[204,395],voti:["si","ast","no"]},
+ {n:"Verdi e Territori",guida:"Chiara Lombardi e Luca Ortolani",gov:false,seggi:{camera:14,senato:7},prog:[93,104,77,118,52,31,8],
+  precise:[131,483],conGov:[41,395],voti:["no","no","si"]},
 ];
-const politici=[
- {n:"Elena Marchi",r:"Alleanza Progresso · ministra",sbN:5,sbD:38,vagoN:29,vagoD:67,votoK:23,votoD:26,prom:[3,8],
-  ex:{said:"Abbiamo dimezzato i tempi di attesa per una visita.",dove:"Intervista radio, giugno 2026",
-      vero:"Il ministero segnala una riduzione del 17%.",fonte:"Ministero della Salute"}},
- {n:"Davide Sartori",r:"Fronte dei Territori · capogruppo",sbN:7,sbD:34,vagoN:42,vagoD:76,votoK:15,votoD:21,prom:[1,9],
-  ex:{said:"Oggi un giovane su due non trova lavoro.",dove:"Comizio, luglio 2026",
-      vero:"Senza lavoro è circa un giovane su cinque.",fonte:"ISTAT, dati sul lavoro"}},
- {n:"Giulia Ferraro",r:"Movimento Solidale",sbN:3,sbD:31,vagoN:21,vagoD:52,votoK:20,votoD:24,prom:[2,8],ex:null},
- {n:"Marco Benedetti",r:"Civica Riformista",sbN:2,sbD:22,vagoN:12,vagoD:34,votoK:17,votoD:18,prom:[2,6],ex:null},
- {n:"Chiara Lombardi",r:"Partito Lavoro e Comunità",sbN:4,sbD:26,vagoN:19,vagoD:45,votoK:16,votoD:19,prom:[1,8],ex:null},
- {n:"Stefano Riva",r:"Unione Liberale",sbN:1,sbD:11,vagoN:11,vagoD:22,votoK:7,votoD:9,prom:[1,4],ex:null},
- {n:"Anna Pedretti",r:"Verdi e Territori",sbN:0,sbD:7,vagoN:6,vagoD:13,votoK:5,votoD:6,prom:[0,4],ex:null},
- {n:"Luca Ortolani",r:"Patto per le Regioni",sbN:2,sbD:13,vagoN:20,vagoD:33,votoK:7,votoD:10,prom:[1,5],ex:null},
- {n:"Paola Ventura",r:"Alleanza Progresso",sbN:3,sbD:29,vagoN:18,vagoD:47,votoK:19,votoD:22,prom:[2,7],ex:null},
- {n:"Nicola Greco",r:"Movimento Solidale",sbN:2,sbD:20,vagoN:16,vagoD:36,votoK:13,votoD:16,prom:[1,7],ex:null}
-];
+const DOMANDE=["Il capo del governo deve essere eletto direttamente dai cittadini.",
+  "L'Italia deve portare in centri all'estero una parte dei migranti soccorsi in mare.",
+  "Lo Stato deve aiutare le famiglie a pagare le bollette di luce e gas."];
+const TOTALE={camera:400,senato:200};
+const AGGIORNATO="6 ottobre 2026";
 
-const MIN=30;
-/* ordine neutro: sempre alfabetico (ADR 0009, 0036) */
-const alfa=(a,b)=>a.n.localeCompare(b.n,"it");
-partiti.sort(alfa);politici.sort(alfa);
-/* in breve (ADR 0037): una metrica per lettura, solo soggetti sopra soglia, a pari merito si nominano tutti */
-function estremi(lista,num,den){
-  const ok=lista.filter(p=>den(p)>=MIN);
-  if(ok.length<2) return null;
-  const q=p=>num(p)/den(p), top=Math.max(...ok.map(q));
-  return ok.filter(p=>q(p)===top);
+/* ordine neutro: sempre alfabetico; colori assegnati in quell'ordine (ADR 0009) */
+partiti.sort((a,b)=>a.n.localeCompare(b.n,"it")).forEach((p,i)=>p.col=`var(--p${i+1})`);
+const fmt=n=>n.toLocaleString("it-IT");
+const VOTO={si:["v-si","Sì"],no:["v-no","No"],ast:["v-ast","Astenuto"]};
+
+/* in parole: confronti concreti invece delle percentuali (ADR 0036) */
+function quota(n,d){const q=n/d;
+  if(q>0.95)return"quasi tutti";if(q>0.66)return"più di due su tre";if(q>0.5)return"più della metà";
+  if(q>0.33)return"più di un terzo";if(q>0.25)return"più di un quarto";return"meno di un quarto";}
+
+/* ---------- emiciclo ---------- */
+function posti(totale){ /* posizioni dei pallini su righe concentriche, ordinati da sinistra a destra */
+  const righe=Math.max(4,Math.round(Math.sqrt(totale/1.6))), R=190, r0=72;
+  const raggi=[...Array(righe)].map((_,i)=>r0+(R-r0)*i/(righe-1));
+  const lungh=raggi.reduce((a,r)=>a+r,0); let resto=totale; const pts=[];
+  raggi.forEach((r,i)=>{const n=i===righe-1?resto:Math.round(totale*r/lungh);resto-=n;
+    for(let k=0;k<n;k++){const a=Math.PI*(1-(k+0.5)/n);pts.push({a,x:200+r*Math.cos(a),y:198-r*Math.sin(a)});}});
+  return pts.sort((p,q)=>q.a-p.a);
 }
-const nomi=l=>l.map(p=>`<b>${p.n}</b>`).join(" e ");
-const peggio=estremi(partiti,p=>p.sbN,p=>p.sbD);
-const vago=estremi(partiti,p=>p.vagoN,p=>p.vagoD);
-const giroK=estremi(partiti,p=>p.votoD-p.votoK,p=>p.votoD);
-const promNo=partiti.reduce((s,p)=>s+(p.prom[1]-p.prom[0]),0), promTot=partiti.reduce((s,p)=>s+p.prom[1],0);
-
-document.getElementById("breve").innerHTML=`
-<div class="card">
-  ${peggio?`<div class="riga"><span class="cifra">${peggio[0].sbN}</span><div class="testo">
-    <p>${nomi(peggio)} ${peggio.length>1?"sono quelli che dicono":"è quello che dice"} più dati sbagliati.</p>
-    <p class="sotto">${peggio[0].sbN} dati sbagliati su ${peggio[0].sbD} che abbiamo controllato.</p></div></div>`:""}
-  ${vago?`<div class="riga"><span class="cifra b">${Math.round(vago[0].vagoN/vago[0].vagoD*100)}%</span><div class="testo">
-    <p>${nomi(vago)} ${vago.length>1?"sono i più vaghi: parlano":"è il più vago: parla"} senza dire niente di preciso.</p>
-    <p class="sotto">${vago[0].vagoN} frasi su ${vago[0].vagoD} sono vaghe: niente dati, niente date, niente impegni.</p></div></div>`:""}
-  ${giroK?`<div class="riga"><span class="cifra">${giroK[0].votoD-giroK[0].votoK}</span><div class="testo">
-    <p>${nomi(giroK)} ${giroK.length>1?"dicono una cosa e poi in Parlamento votano":"dice una cosa e poi in Parlamento vota"} il contrario.</p>
-    <p class="sotto">È successo ${giroK[0].votoD-giroK[0].votoK} volte su ${giroK[0].votoD}.</p></div></div>`:""}
-  <div class="riga"><span class="cifra b">${promNo}</span><div class="testo">
-    <p>Promesse rimaste solo sulla carta.</p>
-    <p class="sotto">Su ${promTot} promesse scritte nei programmi.</p></div></div>
-</div>
-<p class="piccolo" style="margin:10px 0 0">Confrontiamo solo chi ha detto almeno ${MIN} dati: con meno, il confronto non sarebbe giusto. <a href="#">Quante frasi raccogliamo per ogni partito</a></p>`;
-
-function frase(p){
-  if(p.sbD<MIN) return "Ha detto pochi dati da controllare: per ora non possiamo giudicare.";
-  const q=p.sbN/p.sbD;
-  if(q>=.15) return `Dice spesso dati sbagliati: ${p.sbN} volte su ${p.sbD}.`;
-  if(q<=.06) return `Quando dice un dato, di solito è giusto: sbagliato ${p.sbN} volte su ${p.sbD}.`;
-  return `A volte dice dati sbagliati: ${p.sbN} volte su ${p.sbD}.`;
-}
-let v="partiti";
-function render(){
-  const d=(v==="partiti"?partiti:politici);
-  document.getElementById("lista").innerHTML=d.map(p=>`
-  <section class="card" data-open="false">
-    <button class="top" type="button" aria-expanded="false">
-      <span class="nome">${p.n}</span>
-      <div class="ruolo">${p.r}</div>
-      <p class="frase">${frase(p)}</p>
-      <span class="apri">Vedi i dettagli ▾</span>
-    </button>
-    <div class="dett">
-      <div class="riga"><span class="cifra">${p.sbD<MIN?p.sbN:Math.round(p.sbN/p.sbD*100)+"%"}</span><div class="testo">
-        <p>Ha detto un dato sbagliato</p><p class="sotto">${p.sbN} volte su ${p.sbD} dati controllati, per esempio su posti di lavoro, prezzi, tasse.${p.sbD<MIN?" Sono ancora pochi per fare un confronto.":""}</p></div></div>
-      <div class="riga"><span class="cifra b">${p.vagoD<MIN?p.vagoN:Math.round(p.vagoN/p.vagoD*100)+"%"}</span><div class="testo">
-        <p>Frasi vaghe</p><p class="sotto">${p.vagoN} su ${p.vagoD}: niente dati, niente date, niente impegni precisi.${p.vagoD<MIN?" Sono ancora poche per fare un confronto.":""}</p></div></div>
-      <div class="riga"><span class="cifra">${p.votoD-p.votoK}</span><div class="testo">
-        <p>Ha detto una cosa e ha votato il contrario</p><p class="sotto">Su ${p.votoD} volte in cui possiamo confrontare</p></div></div>
-      <div class="riga"><span class="cifra">${p.prom[0]}</span><div class="testo">
-        <p>Promesse mantenute</p><p class="sotto">Su ${p.prom[1]} promesse del programma</p></div></div>
-      ${p.ex?`<div class="conf">
-        <div class="a"><p class="et">Ha detto</p><p>${p.ex.said}</p><cite>${p.ex.dove}</cite></div>
-        <div class="b2"><p class="et">In realtà</p><p>${p.ex.vero}</p><cite>${p.ex.fonte}</cite></div>
-        <div class="esito"><b>Dato sbagliato.</b></div>
-      </div>`:""}
-      <p class="piccolo">Qui non diciamo se le sue idee sono buone: quello lo decidi tu.</p>
-    </div>
-  </section>`).join("");
-
-  document.querySelectorAll(".top").forEach(b=>b.addEventListener("click",()=>{
-    const c=b.closest(".card"),o=c.dataset.open!=="true";
-    c.dataset.open=o;b.setAttribute("aria-expanded",o);
-    b.querySelector(".apri").textContent=o?"Chiudi ▴":"Vedi i dettagli ▾";}));
+function disegnaAula(ramo){
+  const tot=TOTALE[ramo], opp=partiti.filter(p=>!p.gov), gov=partiti.filter(p=>p.gov);
+  const nGov=gov.reduce((a,p)=>a+p.seggi[ramo],0), misto=tot-nGov-opp.reduce((a,p)=>a+p.seggi[ramo],0);
+  const blocchi=[...opp.map(p=>[p.col,p.seggi[ramo]]),["var(--rule)",misto],...gov.map(p=>[p.col,p.seggi[ramo]])];
+  const colori=blocchi.flatMap(([c,n])=>Array(n).fill(c));
+  const r=ramo==="camera"?4.6:6.4, chi=ramo==="camera"?"deputati":"senatori";
+  document.getElementById("emiciclo").innerHTML=posti(tot).map((p,i)=>`<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${r}" fill="${colori[i]}"/>`).join("");
+  document.getElementById("gov-n").innerHTML=`${fmt(nGov)}<small>su ${fmt(tot)} ${chi}</small>`;
+  document.getElementById("gov-frase").textContent=`sostengono il governo: sono ${quota(nGov,tot)}.`;
+  document.getElementById("divisa").innerHTML=blocchi.map(([c,n])=>`<span style="width:${100*n/tot}%;background:${c}"></span>`).join("");
+  document.getElementById("opp-et").textContent=`Opposizione e misto: ${fmt(tot-nGov)}`;
+  document.getElementById("gov-et").textContent=`Governo: ${fmt(nGov)}`;
+  const riga=p=>`<li><span class="q" style="background:${p.col}"></span><span>${p.n}</span><span class="n">${fmt(p.seggi[ramo])}</span></li>`;
+  document.getElementById("legenda").innerHTML=`<li class="gruppo">Al governo</li>${gov.map(riga).join("")}`+
+    `<li class="gruppo">All'opposizione</li>${opp.map(riga).join("")}`+
+    (misto?`<li><span class="q" style="background:var(--rule)"></span><span>Gruppo misto</span><span class="n">${fmt(misto)}</span></li>`:"");
+  document.getElementById("fonte-aula").textContent=`Fonte: ${ramo==="camera"?"Camera dei deputati":"Senato della Repubblica"} · aggiornato al ${AGGIORNATO}`;
 }
 document.querySelectorAll(".tabs button").forEach(b=>b.addEventListener("click",()=>{
-  document.querySelectorAll(".tabs button").forEach(x=>x.setAttribute("aria-pressed",x===b));
-  v=b.dataset.v;render();}));
-render();
+  document.querySelectorAll(".tabs button").forEach(x=>x.setAttribute("aria-pressed",x===b));disegnaAula(b.dataset.ramo);}));
+disegnaAula("camera");
+
+/* ---------- schede ---------- */
+document.getElementById("schede").innerHTML=partiti.map(p=>{
+  const tot=p.prog.reduce((a,b)=>a+b,0), max=Math.max(...p.prog);
+  const temi=TEMI.map((et,i)=>`<li><span>${et}</span><span class="barra"><i style="width:${100*p.prog[i]/max}%;background:${p.col}"></i></span><span class="v">${p.prog[i]}</span></li>`).join("");
+  const altri=partiti.filter(x=>x.comune&&x!==p).map(x=>x.n);
+  const comune=p.comune?`<p class="condiviso">È lo stesso programma di ${altri.join(" e ")}: nel 2022 hanno presentato un programma comune.</p>`:"";
+  const voti=DOMANDE.map((d,i)=>{const [c,t]=VOTO[p.voti[i]];return`<li><span>${d}</span><span class="${c}">${t}</span></li>`}).join("");
+  const [pn,pd]=p.precise,[gn,gd]=p.conGov;
+  return `<article class="card scheda">
+    <div class="testa"><span class="q" style="background:${p.col}"></span><span class="nome">${p.n}</span>
+      <span class="chi">Lo guida: ${p.guida}</span><span class="ruolo">${p.gov?"Al governo":"All'opposizione"}</span></div>
+    <div class="blocco"><p class="et">Di cosa parla il suo programma del 2022</p>
+      <ul class="temi">${temi}</ul>${comune}
+      <details class="cosa"><summary>${fmt(tot)} promesse in tutto</summary><p>Abbiamo letto tutto il programma che il partito ha depositato prima delle elezioni del 2022 e contato ogni impegno concreto, per esempio una legge, una spesa o un servizio nuovo. Ogni barra dice quante promesse parlano di quel tema. Più promesse non vuol dire promesse migliori.</p></details></div>
+    <div class="blocco"><p class="et">Come ha votato</p><ul class="voti">${voti}</ul></div>
+    <div class="blocco numeri">
+      <div class="numero"><span class="c">${fmt(pn)} <small>su ${fmt(pd)}</small></span>
+        <p>promesse dicono quanto e entro quando<span class="s">Per esempio «20.000 insegnanti entro il 2027». Le altre sono più vaghe.</span></p></div>
+      <div class="numero"><span class="c">${fmt(gn)} <small>su ${fmt(gd)}</small></span>
+        <p>leggi votate come il governo<span class="s">${p.gov?"È al governo: è normale che voti quasi sempre così.":`Sono ${quota(gn,gd)} delle leggi votate finora.`}</span></p></div>
+    </div>
+    <div class="piede"><span class="fonte">Programma 2022 · voti fino al ${AGGIORNATO}</span><a href="vista-partito.html">Apri la scheda ›</a></div>
+  </article>`;}).join("");
 </script>
 </body>
 </html>
