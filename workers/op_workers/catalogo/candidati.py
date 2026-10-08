@@ -22,16 +22,17 @@ with gruppo_partito_alla_data as (
   where v.legislatura = %(leg)s
   group by v.id, vg.gruppo_id
 )
-select v.id::text, v.ramo, v.id_esterno, v.data, v.atto_ref, v.atto_titolo, v.descrizione, v.approvata,
+select v.id::text, v.ramo, v.id_esterno, v.data, a.atto_ref, a.atto_titolo, v.descrizione, v.approvata,
        v.favorevoli, v.contrari, v.astenuti, p.slug,
        sum(vg.favorevoli)::int, sum(vg.contrari)::int, sum(vg.astenuti)::int
 from core.votazione v
+join core.votazione_atto_corrente a on a.votazione_id = v.id   -- atto corretto, se c'è una correzione (#74)
 join gruppo_partito_alla_data g on g.votazione_id = v.id and g.partiti = 1   -- gruppi di un solo partito
 join core.votazione_gruppo vg on vg.votazione_id = v.id and vg.gruppo_id = g.gruppo_id
 join core.partito p on p.id = g.partito_id::uuid
 where v.legislatura = %(leg)s and v.finale and v.coerente and not v.fiducia and not v.segreta
-  and v.atto_titolo is not null
-group by v.id, p.slug
+  and a.atto_titolo is not null
+group by v.id, a.atto_ref, a.atto_titolo, p.slug
 order by v.data, v.id
 """
 

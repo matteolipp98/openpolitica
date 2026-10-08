@@ -343,6 +343,7 @@ def correggi_atti(conn: psycopg.Connection, c, leg: int, r: Rapporto) -> None:
     """Riallinea atto e titolo delle votazioni finali già salvate con la scelta attuale del connettore (#74).
 
     L'import salta le votazioni già presenti: senza questo passo un titolo sbagliato resterebbe per sempre.
+    core.votazione è append-only: la correzione è una riga nuova in core.votazione_atto.
     """
     try:
         atti = c.atti_votazioni_finali(leg)
@@ -351,14 +352,27 @@ def correggi_atti(conn: psycopg.Connection, c, leg: int, r: Rapporto) -> None:
             raise
         log.warning("%s: atti delle votazioni finali non letti, si riprova al prossimo giro (%s)", c.ramo, e)
         return
-    with conn.transaction(), conn.cursor() as cur:
-        cur.executemany(
-            """update core.votazione set atto_ref = %s, atto_titolo = %s
-               where ramo = %s and legislatura = %s and id_esterno = %s
-                 and (atto_ref, atto_titolo) is distinct from (%s, %s)""",
-            [(ref, tit, c.ramo, leg, ide, ref, tit) for ide, (ref, tit) in sorted(atti.items())],
-        )
-        r.atti_corretti += max(cur.rowcount, 0)
+    with conn.transaction():
+        attuali = {
+            ide: (ref, tit)
+            for ide, ref, tit in conn.execute(
+                """select id_esterno, atto_ref, atto_titolo from core.votazione_atto_corrente
+                   where ramo = %s and legislatura = %s""",
+                (c.ramo, leg),
+            )
+        }
+        nuove = [
+            (ref, tit, c.ramo, leg, ide)
+            for ide, (ref, tit) in sorted(atti.items())
+            if ide in attuali and attuali[ide] != (ref, tit)
+        ]
+        with conn.cursor() as cur:
+            cur.executemany(
+                """insert into core.votazione_atto (votazione_id, atto_ref, atto_titolo)
+                   select id, %s, %s from core.votazione where ramo = %s and legislatura = %s and id_esterno = %s""",
+                nuove,
+            )
+        r.atti_corretti += len(nuove)
 
 
 def main(argv: list[str] | None = None) -> int:

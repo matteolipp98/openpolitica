@@ -41,3 +41,20 @@ def test_stessa_legge_nei_due_rami_una_sola_domanda(conn):
     _votazione(conn, "19-1-1", 100, 70, [("85", 60, 0), ("49", 0, 35)], giorno=date(2024, 3, 1), ramo="senato")
     cands, _ = candidate(conn, 19, PERIMETRO, P, 0.25)
     assert [c.id_esterno for c in cands] == ["19-1-1"]  # tiene la più recente
+
+
+def test_vale_l_atto_corretto_e_un_testo_unificato_senza_titolo_non_e_candidato(conn):
+    """#74: le correzioni in core.votazione_atto prevalgono sulla riga originale; l'ultima vince."""
+    sincronizza(conn)
+    gruppi = [("85", 60, 0), ("49", 0, 35)]
+    _votazione(conn, "19-1-1", 100, 70, gruppi, titolo="Stop caccia!", ramo="senato")
+    _votazione(conn, "19-1-2", 100, 70, gruppi, titolo="Accesso a medicina", ramo="senato", giorno=date(2024, 2, 2))
+    for ide, ref, tit in [("19-1-1", "S.1", "Vecchia correzione"), ("19-1-1", "S.1552", "Legge sulla caccia"),
+                          ("19-1-2", "S.915, S.1002", None)]:  # fmt: skip
+        conn.execute(
+            """insert into core.votazione_atto (votazione_id, atto_ref, atto_titolo, registrato_il)
+               select id, %s, %s, clock_timestamp() from core.votazione where id_esterno = %s""",
+            (ref, tit, ide),
+        )
+    cands, _ = candidate(conn, 19, PERIMETRO, P, 0.25)
+    assert [(c.id_esterno, c.atto_ref, c.atto_titolo) for c in cands] == [("19-1-1", "S.1552", "Legge sulla caccia")]

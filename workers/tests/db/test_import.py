@@ -269,6 +269,10 @@ def test_atti_delle_votazioni_finali_gia_salvate_vengono_corretti(conn):
     assert importa(conn, c, 19).atti_corretti == 0
     c.atti = {"vs19_1_1": ("C.2", "Testo approvato"), "vs19_9_9": ("C.9", "Votazione non salvata")}
     assert importa(conn, c, 19).atti_corretti == 1
-    riga = conn.execute("select atto_ref, atto_titolo from core.votazione where id_esterno = 'vs19_1_1'").fetchone()
+    riga = conn.execute(
+        "select atto_ref, atto_titolo from core.votazione_atto_corrente where id_esterno = 'vs19_1_1'"
+    ).fetchone()
     assert riga == ("C.2", "Testo approvato")
+    originale = conn.execute("select atto_ref from core.votazione where id_esterno = 'vs19_1_1'").fetchone()
+    assert originale == ("C.1",)  # append-only: la riga originale resta
     assert importa(conn, c, 19).atti_corretti == 0
