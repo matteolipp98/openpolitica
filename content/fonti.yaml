@@ -1,0 +1,117 @@
+# Paniere delle fonti di notizie, annunci e dichiarazioni (ADR 0002, 0003, 0006). È pubblico: chiunque
+# può vedere da dove leggiamo e chiedere di cambiare qualcosa.
+#
+# Livelli (ADR 0002):
+#   A = fonte ufficiale (governo, partiti): il testo si conserva.
+#   B = canale ufficiale di un politico (per esempio Telegram): il testo si conserva.
+#   C = giornali e agenzie: servono solo a scoprire che una dichiarazione c'è stata. Il testo dell'articolo
+#       si tiene al massimo 7 giorni e poi si cancella (ADR 0003). Se l'editore si oppone al text and data
+#       mining (tdm-reservation), il testo non si tiene affatto.
+#
+# Canali: rss (feed), sito (pagina dell'elenco delle notizie o sitemap, con `link` = espressione regolare
+# sugli indirizzi da leggere; per un indice di sitemap, `sitemap` = parte dell'indirizzo delle sitemap da aprire), telegram (anteprima pubblica t.me/s/<canale>, solo testo), gdelt (ricerca per
+# nome dei politici del perimetro in tutte le testate italiane, configurata qui sotto).
+#
+# Dai giornali (livello C) teniamo solo gli articoli che nominano almeno una persona del perimetro
+# (content/perimetro.yaml, forme dei nomi in content/alias/). Dai partiti e dai politici teniamo tutto.
+#
+# Ogni feed e ogni canale è stato scaricato davvero il giorno di `verificato_il`.
+versione: 1
+aggiornato_il: 2026-10-08
+orientamento: >
+  Il paniere dei giornali è bilanciato: lo stesso numero di testate per ogni orientamento (sinistra,
+  centrosinistra, centro, centrodestra, destra), più le agenzie di stampa. L'orientamento è quello con cui
+  ogni testata è descritta comunemente, non un giudizio nostro. Il controllo dei contenuti verifica che i
+  numeri restino uguali; quanti articoli arrivano da ogni orientamento si misura a ogni raccolta (ADR 0006).
+gdelt:
+  attiva: true
+  livello: C
+  filtro: "sourcecountry:italy sourcelang:italian"
+  finestra_ore: 3  # la raccolta gira ogni ora: le finestre si sovrappongono, i doppioni si scartano
+fonti:
+  # ---------- Istituzioni (livello A) ----------
+  - { id: governo, nome: "Governo italiano", tipo: istituzione, livello: A, canale: rss,
+      url: "https://www.governo.it/it/rss.xml", verificato_il: 2026-10-08 }
+
+  # ---------- Partiti del perimetro (livello A) ----------
+  - { id: fratelli-d-italia, nome: "Fratelli d'Italia", tipo: partito, partito: fratelli-d-italia, livello: A,
+      canale: rss, url: "https://www.fratelli-italia.it/feed/", verificato_il: 2026-10-08 }
+  - { id: lega, nome: "Lega", tipo: partito, partito: lega, livello: A, canale: rss,
+      url: "https://legaonline.it/feed/", verificato_il: 2026-10-08 }
+  - { id: movimento-5-stelle, nome: "Movimento 5 Stelle", tipo: partito, partito: movimento-5-stelle, livello: A,
+      canale: rss, url: "https://www.movimento5stelle.eu/feed/", verificato_il: 2026-10-08 }
+  - { id: forza-italia, nome: "Forza Italia", tipo: partito, partito: forza-italia, livello: A, canale: rss,
+      url: "https://forzaitalia.it/feed/", verificato_il: 2026-10-08,
+      nota: "il feed funziona, ma l'ultima notizia è di marzo 2026" }
+  - { id: europa-verde, nome: "Europa Verde", tipo: partito, partito: alleanza-verdi-e-sinistra, livello: A,
+      canale: rss, url: "https://europaverde.it/feed/", verificato_il: 2026-10-08 }
+  - { id: noi-moderati, nome: "Noi Moderati", tipo: partito, partito: noi-moderati, livello: A, canale: sito,
+      url: "https://www.noimoderati.it/news-e-media", link: "^https://www\\.noimoderati\\.it/news-e-media/\\d+$",
+      verificato_il: 2026-10-08 }
+  - { id: azione, nome: "Azione", tipo: partito, partito: azione, livello: A, canale: sito,
+      url: "https://www.azione.it/sitemap_index.xml", sitemap: "/post-sitemap",
+      link: "^https://www\\.azione\\.it/[a-z0-9-]+/$",
+      verificato_il: 2026-10-08 }
+  - { id: italia-viva, nome: "Italia Viva (Enews)", tipo: partito, partito: italia-viva, livello: A, canale: sito,
+      url: "https://www.italiaviva.it/enews", link: "^https://www\\.italiaviva\\.it/enews_\\d+",
+      verificato_il: 2026-10-08 }
+  - { id: partito-democratico, nome: "Partito Democratico", tipo: partito, partito: partito-democratico, livello: A,
+      canale: rss, url: "https://www.partitodemocratico.it/feed/", attiva: false, verificato_il: 2026-10-08,
+      nota: "il sito rifiuta le richieste automatiche (errore 403)" }
+  - { id: alleanza-verdi-e-sinistra, nome: "Alleanza Verdi e Sinistra", tipo: partito,
+      partito: alleanza-verdi-e-sinistra, livello: A, canale: rss, url: "https://www.alleanzaverdisinistra.it/feed/",
+      attiva: false, verificato_il: 2026-10-08, nota: "il sito non risponde" }
+
+  # ---------- Canali Telegram ufficiali (livello B): solo quelli indicati dal sito ufficiale ----------
+  - { id: telegram-giorgia-meloni, nome: "Giorgia Meloni su Telegram", tipo: politico, persona: giorgia-meloni,
+      livello: B, canale: telegram, url: "https://t.me/s/giorgiameloniufficiale", verificato_il: 2026-10-08,
+      nota: "indicato da giorgiameloni.it" }
+  - { id: telegram-elly-schlein, nome: "Elly Schlein su Telegram", tipo: politico, persona: elly-schlein,
+      livello: B, canale: telegram, url: "https://t.me/s/ellyschlein", verificato_il: 2026-10-08,
+      nota: "indicato da ellyschlein.it; l'ultimo messaggio è del 2024" }
+  - { id: telegram-matteo-renzi, nome: "Matteo Renzi su Telegram", tipo: politico, persona: matteo-renzi,
+      livello: B, canale: telegram, url: "https://t.me/s/matteorenziufficiale", verificato_il: 2026-10-08,
+      nota: "indicato da matteorenzi.it" }
+  - { id: telegram-italia-viva, nome: "Italia Viva su Telegram", tipo: partito, partito: italia-viva,
+      livello: B, canale: telegram, url: "https://t.me/s/italiaviva_official", verificato_il: 2026-10-08,
+      nota: "indicato da italiaviva.it; l'ultimo messaggio è del 2023" }
+  - { id: telegram-azione, nome: "Azione su Telegram", tipo: partito, partito: azione,
+      livello: B, canale: telegram, url: "https://t.me/s/EntrainAzione", verificato_il: 2026-10-08,
+      nota: "indicato da azione.it" }
+
+  # ---------- Agenzie di stampa (livello C) ----------
+  - { id: ansa, nome: "ANSA", tipo: agenzia, orientamento: agenzia, livello: C, canale: rss,
+      url: "https://www.ansa.it/sito/notizie/politica/politica_rss.xml", verificato_il: 2026-10-08 }
+  - { id: agi, nome: "AGI", tipo: agenzia, orientamento: agenzia, livello: C, canale: rss,
+      url: "https://www.agi.it/politica/rss", verificato_il: 2026-10-08 }
+  - { id: adnkronos, nome: "Adnkronos", tipo: agenzia, orientamento: agenzia, livello: C, canale: rss,
+      url: "https://www.adnkronos.com/RSS_Politica.xml", verificato_il: 2026-10-08 }
+  - { id: askanews, nome: "askanews", tipo: agenzia, orientamento: agenzia, livello: C, canale: rss,
+      url: "https://www.askanews.it/feed/", verificato_il: 2026-10-08 }
+  - { id: dire, nome: "Agenzia Dire", tipo: agenzia, orientamento: agenzia, livello: C, canale: rss,
+      url: "https://www.dire.it/feed/", verificato_il: 2026-10-08 }
+
+  # ---------- Giornali (livello C): due per orientamento ----------
+  - { id: il-manifesto, nome: "il manifesto", tipo: testata, orientamento: sinistra, livello: C, canale: rss,
+      url: "https://ilmanifesto.it/feed", verificato_il: 2026-10-08 }
+  - { id: l-unita, nome: "l'Unità", tipo: testata, orientamento: sinistra, livello: C, canale: rss,
+      url: "https://www.unita.it/feed/", verificato_il: 2026-10-08 }
+  - { id: la-repubblica, nome: "la Repubblica", tipo: testata, orientamento: centrosinistra, livello: C, canale: rss,
+      url: "https://www.repubblica.it/rss/politica/rss2.0.xml", verificato_il: 2026-10-08 }
+  - { id: domani, nome: "Domani", tipo: testata, orientamento: centrosinistra, livello: C, canale: rss,
+      url: "https://www.editorialedomani.it/rss", verificato_il: 2026-10-08 }
+  - { id: corriere-della-sera, nome: "Corriere della Sera", tipo: testata, orientamento: centro, livello: C,
+      canale: rss, url: "https://www.corriere.it/dynamic-feed/rss/section/politica.xml", verificato_il: 2026-10-08,
+      nota: "il vecchio feed xml2.corriereobjects.it è fermo al 2024" }
+  - { id: il-sole-24-ore, nome: "Il Sole 24 Ore", tipo: testata, orientamento: centro, livello: C, canale: rss,
+      url: "https://www.ilsole24ore.com/rss/italia--politica.xml", verificato_il: 2026-10-08 }
+  - { id: il-giornale, nome: "il Giornale", tipo: testata, orientamento: centrodestra, livello: C, canale: rss,
+      url: "https://www.ilgiornale.it/arc/outboundfeeds/rss/category/politica/?outputType=xml",
+      verificato_il: 2026-10-08 }
+  - { id: il-tempo, nome: "Il Tempo", tipo: testata, orientamento: centrodestra, livello: C, canale: rss,
+      url: "https://www.iltempo.it/arc/outboundfeeds/rss/category/politica/?outputType=xml",
+      verificato_il: 2026-10-08 }
+  - { id: libero, nome: "Libero", tipo: testata, orientamento: destra, livello: C, canale: rss,
+      url: "https://www.liberoquotidiano.it/rss.xml", verificato_il: 2026-10-08 }
+  - { id: la-verita, nome: "La Verità", tipo: testata, orientamento: destra, livello: C, canale: rss,
+      url: "https://www.laverita.info/feeds/feed.rss", verificato_il: 2026-10-08 }
