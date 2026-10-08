@@ -9,6 +9,10 @@ Il modello risponde con il numero della promessa nel lotto e il tema. Le rispost
 tema sconosciuto si scartano e si contano: quelle promesse restano senza tema e si richiedono al giro dopo.
 Risposta del modello, lotto e temi si salvano nella stessa transazione.
 
+Due documenti con le stesse promesse (i programmi quasi uguali di una coalizione) fanno lo stesso prompt: il lotto
+con la stessa impronta, già salvato con questo modello, si riusa senza richiamare il modello (#80). La sua risposta
+dà il tema anche alle promesse dell'altro documento, legate allo stesso lotto.
+
 Inizializzazione con Claude (client a mano), aggiornamenti con Gemini: una promessa che ha già un tema non si
 richiede, qualunque modello l'abbia dato.
 
@@ -155,12 +159,31 @@ def salva_lotto(conn: psycopg.Connection, modello: str, testo_prompt: str, r: Ri
             )
 
 
+def lotto_salvato(conn: psycopg.Connection, modello: str, testo_prompt: str) -> tuple[UUID, object] | None:
+    """Il lotto con la stessa impronta già salvato per questo modello e prompt, con la risposta del modello."""
+    return conn.execute(
+        """select l.id, r.output from core.promessa_tema_lotto l join core.run_modello r on r.id = l.run_modello_id
+           where l.modello_id = %s and l.prompt_versione = %s and l.input_sha256 = %s""",
+        (modello, f"{PROMPT_ID}.{PROMPT_VERSIONE}", sha(testo_prompt)),
+    ).fetchone()
+
+
+def riusa_lotto(conn: psycopg.Connection, lotto_id: UUID, esito: Esito) -> None:
+    """Temi di altre promesse con lo stesso testo, legati al lotto già salvato."""
+    with conn.transaction(), conn.cursor() as cur:
+        cur.executemany(
+            "insert into core.promessa_tema (promessa_id, lotto_id, tema) values (%s, %s, %s) on conflict do nothing",
+            [(pid, lotto_id, tema) for pid, tema in esito.temi.items()],
+        )
+
+
 @dataclass
 class Conteggio:
     partiti: str
     lotti: int = 0
     gia_fatti: int = 0
     nuovi: int = 0
+    riusati: int = 0
     classificate: int = 0
     scartate: int = 0
     mancanti: int = 0
@@ -179,6 +202,12 @@ def esegui(conn: psycopg.Connection, gemini: Gemini, dimensione: int = DIMENSION
                 c.gia_fatti += 1
                 continue
             testo = prompt(da_fare)
+            if salvato := lotto_salvato(conn, gemini.modello, testo):
+                esito = controlla(salvato[1], da_fare)
+                riusa_lotto(conn, salvato[0], esito)
+                c.riusati += 1
+                c.classificate += len(esito.temi)
+                continue
             try:
                 r = gemini.json(testo, schema())
             except RispostaMancante:  # client a mano (#71): il lotto aspetta la risposta, si va avanti
@@ -225,10 +254,12 @@ def riepilogo(conn: psycopg.Connection, conteggi: list[Conteggio], fermo: bool, 
     righe = [
         f"Modello: `{modello}`, prompt `{PROMPT_ID}.{PROMPT_VERSIONE}`.",
         "",
-        "| Partiti | Lotti | Già fatti | Fatti ora | Senza risposta | Promesse classificate ora | Scartate ora |",
-        "|---|---|---|---|---|---|---|",
+        "| Partiti | Lotti | Già fatti | Fatti ora | Riusati | Senza risposta | Promesse classificate ora "
+        "| Scartate ora |",
+        "|---|---|---|---|---|---|---|---|",
         *[
-            f"| {c.partiti} | {c.lotti} | {c.gia_fatti} | {c.nuovi} | {c.mancanti} | {c.classificate} | {c.scartate} |"
+            f"| {c.partiti} | {c.lotti} | {c.gia_fatti} | {c.nuovi} | {c.riusati} | {c.mancanti} "
+            f"| {c.classificate} | {c.scartate} |"
             for c in conteggi
         ],
         "",

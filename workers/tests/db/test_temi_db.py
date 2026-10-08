@@ -96,3 +96,28 @@ def test_tema_sconosciuto_rifiutato_dal_database(conn):
     with pytest.raises(CheckViolation):
         conn.execute("insert into core.promessa_tema (promessa_id, lotto_id, tema) "
                      "select promessa_id, lotto_id, 'cultura' from core.promessa_tema")  # fmt: skip
+
+
+def test_stessa_impronta_si_riusa(conn):
+    """Due documenti con le stesse promesse fanno lo stesso prompt: il secondo lotto riusa il primo (#80)."""
+    _con_promesse(conn)
+    conn.execute("insert into core.partito (slug, nome) values ('noi-moderati', 'noi-moderati')")
+    salva_documento(conn, url="https://example.org/q.pdf", data=date(2022, 9, 25), sha256="d" * 64,
+                    lette=[Pagina(1, TESTO, False)])  # fmt: skip
+    collega(conn, partiti=["noi-moderati"], elezione=date(2022, 9, 25), sha256="d" * 64)
+    pr.esegui(conn, gemini_finto([PROMESSE], []))
+
+    chiamate = []
+    conteggi, fermo = te.esegui(conn, gemini_finto([[{"n": 1, "tema": "economia"}, {"n": 2, "tema": "altro"}]],
+                                                   chiamate))  # fmt: skip
+    assert not fermo and len(chiamate) == 1
+    assert [(c.partiti, c.nuovi, c.riusati, c.classificate) for c in conteggi] == [
+        ("azione, italia-viva", 1, 0, 2), ("noi-moderati", 0, 1, 2)]  # fmt: skip
+    assert conn.execute("select count(*) from core.promessa_tema_lotto").fetchone()[0] == 1
+    assert te.per_partito(conn) == [("azione", "altro", 1), ("azione", "economia", 1),
+                                    ("italia-viva", "altro", 1), ("italia-viva", "economia", 1),
+                                    ("noi-moderati", "altro", 1), ("noi-moderati", "economia", 1)]  # fmt: skip
+
+    # al giro dopo tutto è fatto: nessuna chiamata
+    conteggi, _ = te.esegui(conn, gemini_finto([], chiamate))
+    assert len(chiamate) == 1 and [c.gia_fatti for c in conteggi] == [1, 1]
