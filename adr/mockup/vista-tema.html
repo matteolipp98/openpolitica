@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<!-- Pagina per tema: "Su questo tema, cosa fa ognuno?" (issue #92, seconda domanda dell'obiettivo del prodotto in CLAUDE.md).
+     Attua ADR 0036 (linguaggio comune, parole fisse, fonte e data su ogni blocco), 0009 (argomenti a favore e contro
+     contro l'effetto bolla, ordine alfabetico, colori neutri, nessun punteggio né classifica), 0001 (fatti separati
+     dai valori), 0019 (ogni numero con il suo conteggio), 0008 (le domande sono quelle del questionario),
+     0037 (conteggi in linguaggio comune), 0022 (sei temi, temi presi da content/temi.yaml).
+     Spunto per layout e chiarezza dei dati: dovevannoinostrisoldi.com (scelta con bottoni affiancati, un blocco un dato,
+     "?" per le spiegazioni, barre con il valore accanto, "Dati esatti e fonte" che si apre).
+     Dati inventati. -->
+<html lang="it" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Su questo tema, cosa fa ognuno?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#E9ECF0;--surface:#FFFFFF;--ink:#141B23;--muted:#5C6773;
+  --rule:#C9D1DA;--rule-soft:#E2E7EC;--mark:#1F4E79;--brass:#8A6A33;--focus:#1F4E79;--track:#E6EBF0;
+  --nota-bg:#FBF7EE;--nota-ink:#574521;--alt:#F7F9FB;
+  /* colori dei partiti: neutri, assegnati in ordine alfabetico, mai quelli dei simboli (ADR 0009) */
+  --p1:#2F6B8A;--p2:#8A6A33;--p3:#5E7A3A;--p4:#7A4E7E;--p5:#A0523F;--p6:#3F7F74;--p7:#5B5F97;--p8:#6B7480;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:17px;line-height:1.55;font-variant-numeric:tabular-nums}
+.wrap{max-width:920px;margin:0 auto;padding:28px 16px 80px}
+.back{color:var(--mark);font-size:15px;text-decoration:none;display:inline-block;margin-bottom:16px}
+h1{font-family:"IBM Plex Serif",Georgia,serif;font-size:clamp(28px,6vw,40px);line-height:1.15;margin:0 0 12px;max-width:20ch}
+.lede{margin:0;color:var(--muted);max-width:50ch;font-size:18px}
+.nota{margin:18px 0 0;padding:10px 13px;background:var(--nota-bg);border-left:3px solid var(--brass);font-size:14px;color:var(--nota-ink);max-width:60ch}
+h2{font-family:"IBM Plex Serif",serif;font-size:23px;margin:44px 0 6px}
+.sottotitolo{margin:0 0 16px;color:var(--muted);max-width:60ch}
+a{color:var(--mark)}
+.card{background:var(--surface);border:1px solid var(--rule)}
+.pad{padding:18px}
+@media (min-width:700px){.pad{padding:22px}}
+
+/* etichetta piccola con "?" che apre la spiegazione */
+details.aiuto{margin:0 0 10px}
+details.aiuto summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;
+  font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+details.aiuto summary::-webkit-details-marker{display:none}
+details.aiuto summary::after{content:"?";display:inline-grid;place-items:center;width:18px;height:18px;border:1px solid var(--mark);
+  color:var(--mark);border-radius:50%;font-size:12px;letter-spacing:0;flex:none}
+details.aiuto p{margin:8px 0 4px;font-size:14.5px;color:var(--muted);max-width:62ch}
+
+/* fonte e data in fondo a ogni blocco */
+.fonte{font-size:13px;color:var(--muted);margin-top:16px}
+.fonte::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:#3F7F54;margin-right:8px;vertical-align:1px}
+.fonte.attesa::before{background:var(--rule)}
+details.esatti{margin-top:8px;font-size:14px}
+details.esatti summary{cursor:pointer;color:var(--mark)}
+.tabella{overflow-x:auto;margin-top:8px}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--rule-soft);vertical-align:top}
+th{color:var(--muted);font-weight:600}
+td.n,th.n{text-align:right;white-space:nowrap}
+
+/* scelta del tema: bottoni affiancati */
+.scelta{margin-top:26px}
+.temi{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+@media (min-width:700px){.temi{grid-template-columns:repeat(3,1fr)}}
+.temi button{appearance:none;font:inherit;font-size:15px;line-height:1.3;text-align:left;padding:10px 12px;cursor:pointer;
+  background:var(--surface);color:var(--ink);border:1px solid var(--rule);min-height:48px}
+.temi button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+
+/* testa del tema */
+.testa-tema{margin-top:22px;display:grid;gap:16px}
+@media (min-width:760px){.testa-tema{grid-template-columns:1.3fr 1fr;align-items:stretch}}
+.testa-tema h2{margin:0 0 6px;font-size:26px}
+.testa-tema .desc{margin:0;color:var(--muted)}
+.invito{border-left:4px solid var(--mark);display:flex;flex-direction:column;gap:10px}
+.invito p{margin:0}
+.invito .sotto{color:var(--muted);font-size:15px}
+.bottone{display:inline-block;align-self:flex-start;background:var(--mark);color:#fff;text-decoration:none;font-weight:600;padding:12px 18px}
+.facciamo{margin:14px 0 0;padding:0;list-style:none;font-size:15px;display:grid;gap:4px}
+.facciamo li{display:grid;grid-template-columns:20px 1fr;gap:6px}
+.facciamo .si::before{content:"✓";color:#3F7F54;font-weight:600}
+.facciamo .no::before{content:"✕";color:var(--brass);font-weight:600}
+
+/* domande votate */
+.domande{display:grid;gap:16px}
+.dom-testo{font-family:"IBM Plex Serif",serif;font-size:21px;line-height:1.3;margin:0 0 6px;font-weight:600}
+.dom-voto{margin:0;color:var(--muted);font-size:15px}
+.grande{font-family:"IBM Plex Serif",serif;font-size:40px;font-weight:600;line-height:1;margin-top:18px}
+.grande small{font-family:"IBM Plex Sans",sans-serif;font-size:17px;font-weight:400;color:var(--muted);margin-left:6px}
+.frase-grande{margin:6px 0 0;font-size:17px;max-width:44ch}
+.argomenti{display:grid;gap:10px;margin:18px 0 6px}
+@media (min-width:700px){.argomenti{grid-template-columns:1fr 1fr}}
+.arg{border:1px solid var(--rule-soft);background:var(--alt);padding:12px 14px}
+.arg h3{margin:0 0 6px;font-size:15px}
+.arg ul{margin:0;padding-left:18px;font-size:15px}
+.arg li+li{margin-top:4px}
+.posizioni{list-style:none;margin:16px 0 0;padding:0}
+.posizioni li{display:grid;grid-template-columns:14px 1fr auto;gap:4px 10px;align-items:start;padding:10px 0;border-top:1px solid var(--rule-soft)}
+.posizioni .q{width:14px;height:14px;border-radius:3px;margin-top:5px}
+.posizioni .nm{font-weight:600;font-size:16px}
+.posizioni .dett{display:block;font-weight:400;color:var(--muted);font-size:13.5px}
+.v-si,.v-no,.v-ast,.v-nd{font-size:13px;font-weight:600;padding:2px 9px;border:1px solid;white-space:nowrap;margin-top:2px}
+.v-si{color:#2F5E3F;border-color:#9DBEA7;background:#EEF6F0}
+.v-no{color:#8A3A2E;border-color:#D6A79F;background:#FBF0EE}
+.v-ast{color:var(--muted);border-color:var(--rule)}
+.v-nd{color:var(--muted);border-color:var(--rule);border-style:dashed;font-weight:400}
+.avvertenza{margin:12px 0 0;font-size:14px;color:var(--nota-ink);background:var(--nota-bg);padding:8px 10px}
+
+/* promesse */
+.barre{list-style:none;margin:6px 0 0;padding:0}
+.barre li{padding:12px 0;border-top:1px solid var(--rule-soft)}
+.barre li:first-child{border-top:0}
+.barre .riga{display:grid;grid-template-columns:1fr auto;gap:2px 12px;align-items:end}
+.barre .nm{font-weight:600;display:flex;align-items:center;gap:8px}
+.barre .nm .q{width:12px;height:12px;border-radius:3px;flex:none}
+.barre .val{font-family:"IBM Plex Serif",serif;font-size:22px;font-weight:600;line-height:1;text-align:right}
+.barre .quanti{grid-column:1;color:var(--muted);font-size:13.5px}
+.barra{height:10px;background:var(--track);margin-top:6px}
+.barra i{display:block;height:100%}
+.esempio{margin:8px 0 0;font-size:15px}
+.esempio q{font-style:italic}
+.comune{display:inline-block;margin-left:4px;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);border:1px solid var(--rule);padding:0 6px;font-weight:600;vertical-align:middle}
+
+/* cosa hanno detto: non ancora pronto, in grigio */
+.attesa-box{display:grid;gap:14px}
+.stato{display:inline-block;justify-self:start;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:600;padding:3px 8px;border:1px dashed var(--muted);color:var(--muted)}
+.fantasma{opacity:.55;border:1px dashed var(--rule);padding:14px;filter:grayscale(1)}
+.fantasma .et{font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:0 0 6px}
+.fantasma blockquote{margin:0;font-size:16px}
+.fantasma cite{display:block;font-style:normal;color:var(--muted);font-size:13.5px;margin-top:4px}
+.fantasma .contro{margin:10px 0 0;font-size:15px}
+
+.chiusura{margin-top:30px;font-size:15.5px;color:var(--muted);max-width:52ch}
+footer{margin-top:30px;padding-top:18px;border-top:1px solid var(--rule);font-size:14px;color:var(--muted);max-width:60ch}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#11161C;--surface:#171E26;--ink:#E7ECF1;--muted:#9AA6B2;--rule:#2C3742;--rule-soft:#232C35;
+  --mark:#7FB0E0;--brass:#C9A25E;--focus:#7FB0E0;--track:#232C35;--nota-bg:#1E1B13;--nota-ink:#D8C79D;--alt:#1B232B}
+  :root:not([data-theme="light"]) .bottone{color:var(--paper)}
+  :root:not([data-theme="light"]) .v-si{color:#9FD0AE;background:#16261C;border-color:#2F5E3F}
+  :root:not([data-theme="light"]) .v-no{color:#E7A99F;background:#2A1715;border-color:#8A3A2E}}
+:root[data-theme="dark"]{--paper:#11161C;--surface:#171E26;--ink:#E7ECF1;--muted:#9AA6B2;
+  --rule:#2C3742;--rule-soft:#232C35;--mark:#7FB0E0;--brass:#C9A25E;--focus:#7FB0E0;--track:#232C35;
+  --nota-bg:#1E1B13;--nota-ink:#D8C79D;--alt:#1B232B}
+:root[data-theme="dark"] .bottone{color:var(--paper)}
+:root[data-theme="dark"] .v-si{color:#9FD0AE;background:#16261C;border-color:#2F5E3F}
+:root[data-theme="dark"] .v-no{color:#E7A99F;background:#2A1715;border-color:#8A3A2E}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="vista-soggetti.html">← Tutti i partiti</a>
+<h1>Su questo tema, cosa fa ognuno?</h1>
+<p class="lede">Scegli un tema. Per ogni partito vedi come ha votato, cosa aveva promesso e cosa ha detto. Gli stessi fatti per tutti: il giudizio è tuo.</p>
+<p class="nota">Esempio per provare la pagina: nomi, voti, promesse e date sono inventati.</p>
+
+<section class="scelta" aria-label="Scegli il tema">
+  <div class="temi" id="temi" role="group" aria-label="Tema"></div>
+</section>
+
+<div class="testa-tema">
+  <section class="card pad">
+    <h2 id="tema-nome"></h2>
+    <p class="desc" id="tema-desc"></p>
+    <ul class="facciamo">
+      <li class="si">Mettiamo vicini i voti, le promesse e le frasi di ogni partito.</li>
+      <li class="si">Mostriamo le ragioni di chi è a favore e di chi è contro.</li>
+      <li class="no">Non diciamo quale idea è giusta, né chi votare.</li>
+    </ul>
+  </section>
+  <section class="card pad invito">
+    <p><b>Rispondi alle domande su questo tema</b></p>
+    <p class="sotto" id="invito-frase"></p>
+    <a class="bottone" id="invito-link" href="vista-questionario.html">Rispondi alle domande</a>
+  </section>
+</div>
+
+<h2>Come hanno votato</h2>
+<p class="sottotitolo">Le stesse domande del questionario. Per ognuna: le ragioni delle due parti, poi il voto di ogni partito in Parlamento, in ordine alfabetico.</p>
+<div class="domande" id="domande"></div>
+
+<h2>Cosa avevano promesso</h2>
+<p class="sottotitolo">Le promesse su questo tema nel programma delle elezioni del 2022. In ordine alfabetico.</p>
+<section class="card pad" id="promesse"></section>
+
+<h2>Cosa hanno detto</h2>
+<p class="sottotitolo">Le frasi dei partiti su questo tema, con la data e il posto dove le hanno dette.</p>
+<section class="card pad attesa-box" id="detto"></section>
+
+<p class="chiusura">Qui non diciamo quale idea è giusta. Diciamo cosa hanno votato, promesso e detto. Il resto lo decidi tu.</p>
+<footer>I voti vengono dai siti di Camera e Senato. Le promesse vengono dai programmi depositati al Ministero dell'Interno nel 2022. <a href="vista-metodo.html">Come lavoriamo</a></footer>
+</div>
+
+<script>
+/* ---------- dati inventati ---------- */
+const AGGIORNATO="6 ottobre 2026";
+const partiti=[
+ {n:"Alleanza Progresso",seggi:{camera:118,senato:63},prog:173,comune:true},
+ {n:"Civica Riformista",seggi:{camera:21,senato:9},prog:508},
+ {n:"Fronte dei Territori",seggi:{camera:66,senato:29},prog:173,comune:true},
+ {n:"Movimento Solidale",seggi:{camera:48,senato:28},prog:152},
+ {n:"Partito Lavoro e Comunità",seggi:{camera:68,senato:39},prog:292},
+ {n:"Patto per le Regioni",seggi:{camera:53,senato:25},prog:173,comune:true},
+ {n:"Unione Liberale",seggi:{camera:12,senato:6},prog:108},
+ {n:"Verdi e Territori",seggi:{camera:14,senato:7},prog:483},
+];
+/* temi e nomi da content/temi.yaml. Voti nell'ordine alfabetico dei partiti qui sopra:
+   s = sì, n = no, a = astenuto, null = nessun voto trovato.
+   promesse: quante sul tema, nello stesso ordine (i tre partiti con il programma comune hanno lo stesso numero) */
+const temi=[
+ {id:"economia",nome:"Lavoro, tasse e pensioni",desc:"Stipendi, contratti, tasse su lavoro e patrimoni, età della pensione.",
+  promesse:[62,96,62,38,71,62,33,93],
+  esempi:["Tassa al 15% per chi lavora in proprio e guadagna fino a 100.000 euro.","Taglio delle tasse sul lavoro di 16 miliardi in cinque anni.",
+   "Tassa al 15% per chi lavora in proprio e guadagna fino a 100.000 euro.","Salario minimo di 9 euro l'ora per tutti i contratti.",
+   "Un contratto stabile dopo 12 mesi di lavoro a termine.","Tassa al 15% per chi lavora in proprio e guadagna fino a 100.000 euro.",
+   "Tasse sul lavoro più basse di 3 punti entro il 2025.","Settimana di lavoro di 4 giorni, da provare negli uffici pubblici."],
+  domande:[
+   {t:"Lo Stato deve fissare per legge un salario minimo.",legge:"Proposta di legge sul salario minimo di 9 euro l'ora",ramo:"camera",data:"11 maggio 2023",num:"C. 1275",
+    esito:"Respinta: 168 sì e 201 no.",voti:["n","s","n","s","s","n","n","s"],
+    pro:["Chi lavora a tempo pieno non deve restare povero.","Quasi tutti i paesi europei ce l'hanno già."],
+    contro:["I contratti firmati da sindacati e imprese fanno già questo lavoro.","Un minimo troppo alto può far chiudere le piccole imprese o spingere al lavoro in nero."]},
+   {t:"Serve più flessibilità per andare in pensione prima, anche se costa allo Stato.",legge:"Proposta di cambiare il bilancio per la pensione a 62 anni con 41 anni di lavoro",ramo:"senato",data:"18 dicembre 2024",num:"S. 1112",
+    esito:"Respinta: 72 sì e 109 no.",voti:["n","n","s","s","s","s","n","s"],
+    pro:["Chi fa lavori pesanti non può lavorare fino a 67 anni.","Chi esce prima lascia il posto ai giovani."],
+    contro:["Costa qualche miliardo l'anno, che pagano i lavoratori di domani.","Viviamo più a lungo: le pensioni durano più anni."]}]},
+ {id:"welfare",nome:"Sanità, scuola e famiglie",desc:"Ospedali e liste d'attesa, scuola, aiuti a chi ha figli o è in difficoltà.",
+  promesse:[38,88,38,41,77,38,17,104],
+  esempi:["Un assegno di 300 euro al mese per ogni figlio fino a 18 anni.","20.000 insegnanti in più entro il 2027.",
+   "Un assegno di 300 euro al mese per ogni figlio fino a 18 anni.","Tenere il reddito di cittadinanza e rafforzare gli uffici per il lavoro.",
+   "Spendere per la sanità quanto la media dei paesi europei.","Un assegno di 300 euro al mese per ogni figlio fino a 18 anni.",
+   "Visite dallo specialista entro 30 giorni, anche nelle strutture private.","Asili nido gratis per tutti i bambini entro il 2026."],
+  domande:[
+   {t:"La sanità privata convenzionata va ridotta a favore di quella pubblica.",legge:"Richiesta al governo di spostare soldi dalla sanità privata convenzionata agli ospedali pubblici",ramo:"camera",data:"7 marzo 2025",num:"Mozione 1-00412",
+    esito:"Respinta: 159 sì e 214 no.",voti:["n","s","n","s","s","n","n","s"],
+    pro:["I soldi pubblici devono andare prima agli ospedali pubblici.","Le strutture private scelgono le cure che rendono di più."],
+    contro:["Le strutture private aiutano a ridurre le liste d'attesa.","Al paziente conta essere curato presto, non da chi."]},
+   {t:"Il reddito di cittadinanza va tenuto com'era.",legge:"Decreto del governo che sostituisce il reddito di cittadinanza con un aiuto più ristretto",ramo:"camera",data:"4 luglio 2023",num:"C. 1238",
+    esito:"Approvato: 221 sì e 147 no. Qui un voto «no» vuol dire che il partito voleva tenerlo.",voti:["n","n","n","s","s","n","n","s"],invertito:true,
+    pro:["Protegge chi è povero e non trova lavoro.","Senza un aiuto, molte famiglie scendono sotto il minimo per vivere."],
+    contro:["Chi può lavorare deve essere spinto a cercare lavoro.","Ci sono stati troppi casi di chi lo prendeva senza averne diritto."]}]},
+ {id:"diritti",nome:"Diritti e immigrazione",desc:"Cittadinanza, arrivi dei migranti, diritti civili.",
+  promesse:[22,41,22,12,38,22,8,77],
+  esempi:["Fermare le partenze con accordi con i paesi da cui partono i migranti.","Cittadinanza ai ragazzi nati qui dopo un ciclo di scuola.",
+   "Fermare le partenze con accordi con i paesi da cui partono i migranti.","Una legge sul fine vita entro cinque anni.",
+   "Matrimonio per tutte le coppie, anche dello stesso sesso.","Fermare le partenze con accordi con i paesi da cui partono i migranti.",
+   "Ingressi per lavoro decisi ogni anno in base ai posti liberi.","Cittadinanza a chi nasce in Italia."],
+  domande:[
+   {t:"Chi nasce in Italia da genitori stranieri deve diventare cittadino italiano subito.",legge:"Proposta di legge sulla cittadinanza a chi nasce in Italia",ramo:"camera",data:"22 febbraio 2024",num:"C. 105",
+    esito:"Respinta: 160 sì e 205 no.",voti:["n","s","n","s","s","n","s","s"],
+    pro:["Sono ragazzi cresciuti qui, che vanno a scuola con i nostri figli.","Oggi devono aspettare i 18 anni e fare domanda."],
+    contro:["La cittadinanza deve arrivare dopo un percorso, non solo con la nascita.","Le regole di oggi permettono già di diventare cittadini a 18 anni."]},
+   {t:"L'Italia deve portare in centri all'estero una parte dei migranti soccorsi in mare.",legge:"Legge che approva l'accordo per i centri per migranti in Albania",ramo:"senato",data:"15 febbraio 2024",num:"S. 980",
+    esito:"Approvata: 93 sì e 61 no.",voti:["s","a","s","n","n","s","a","n"],
+    pro:["Scoraggia le partenze e i viaggi pericolosi.","Divide il peso dell'accoglienza con altri paesi."],
+    contro:["Costa molto per poche persone portate davvero nei centri.","Rende più difficile controllare che i diritti delle persone siano rispettati."]}]},
+ {id:"ambiente",nome:"Energia e ambiente",desc:"Da dove prendiamo l'energia, bollette, clima, trasporti.",
+  promesse:[19,97,19,26,42,19,15,118],
+  esempi:["Tornare al nucleare con centrali di nuovo tipo.","Più gas comprato via nave e nucleare, per bollette più basse.",
+   "Tornare al nucleare con centrali di nuovo tipo.","Un aiuto per mettere i pannelli solari su ogni casa.",
+   "Autobus e treni gratis per gli studenti.","Tornare al nucleare con centrali di nuovo tipo.",
+   "Energia nucleare entro il 2035.","Tutta l'elettricità da sole, vento e acqua entro il 2035."],
+  domande:[
+   {t:"Bisogna costruire nuove centrali nucleari in Italia.",legge:"Legge che dà al governo il compito di preparare il ritorno al nucleare",ramo:"camera",data:"10 giugno 2026",num:"C. 2311",
+    esito:"Approvata: 230 sì e 140 no.",voti:["s","a","s","n","n","s","s","n"],
+    pro:["Dà tanta energia senza produrre gas che scaldano il clima.","Ci rende meno dipendenti dal gas comprato all'estero."],
+    contro:["Le centrali costano molto e richiedono più di dieci anni.","Non sappiamo ancora dove mettere le scorie per sempre."]},
+   {t:"Lo Stato deve aiutare le famiglie a pagare le bollette di luce e gas.",legge:"Proposta di cambiare il bilancio per aiutare con le bollette le famiglie che guadagnano poco",ramo:"senato",data:"20 dicembre 2025",num:"S. 1690",
+    esito:"Respinta: 70 sì e 108 no.",voti:["n","s","n","s","s","n","n","s"],
+    pro:["Le bollette pesano di più su chi guadagna poco.","Senza aiuto molte famiglie rinunciano a scaldarsi."],
+    contro:["Aiuti a tutti costano tanto e premiano anche chi consuma molto.","Meglio spendere per ridurre i consumi delle case."]}]},
+ {id:"istituzioni",nome:"Giustizia e regole dello Stato",desc:"Come funzionano tribunali, governo e regioni.",
+  promesse:[24,121,24,22,39,24,21,52],
+  esempi:["Il capo del governo eletto direttamente dai cittadini.","Separare le carriere di giudici e pubblici ministeri.",
+   "Il capo del governo eletto direttamente dai cittadini.","Tagliare gli stipendi dei parlamentari.",
+   "Processi civili più veloci: tre anni al massimo.","Il capo del governo eletto direttamente dai cittadini.",
+   "Abolire le Province una volta per tutte.","Una legge contro i conflitti di interesse."],
+  domande:[
+   {t:"Il capo del governo deve essere eletto direttamente dai cittadini.",legge:"Riforma della Costituzione sull'elezione diretta del presidente del Consiglio",ramo:"senato",data:"18 giugno 2024",num:"S. 935",
+    esito:"Approvata: 109 sì e 77 no. Per diventare legge servono altri voti.",voti:["s","s","s","n","n","s","s","n"],
+    pro:["I cittadini scelgono chi governa, senza accordi dopo il voto.","I governi durano di più."],
+    contro:["Dà troppo potere a una persona sola.","Toglie peso al Parlamento e al presidente della Repubblica."]},
+   {t:"I giudici e i pubblici ministeri devono fare due carriere separate.",legge:"Riforma della Costituzione sulla separazione delle carriere",ramo:"camera",data:"16 gennaio 2025",num:"C. 1917",
+    esito:"Approvata: 238 sì e 129 no. Per diventare legge servono altri voti.",voti:["s","s","s","n","n","s","s","n"],
+    pro:["Chi accusa e chi giudica non devono essere colleghi.","Il cittadino sotto processo è più tutelato."],
+    contro:["Il pubblico ministero rischia di finire sotto il governo.","Oggi i passaggi da un ruolo all'altro sono già pochissimi."]}]},
+ {id:"esteri",nome:"Europa, esteri e difesa",desc:"Rapporti con l'Unione Europea, guerre in corso, spese militari.",
+  promesse:[6,58,6,9,19,6,12,31],
+  esempi:["Più soldi per la difesa, come chiedono gli alleati.","Un esercito comune europeo.",
+   "Più soldi per la difesa, come chiedono gli alleati.","Nessun aumento delle spese militari.",
+   "L'Italia in prima fila per la pace in Ucraina.","Più soldi per la difesa, come chiedono gli alleati.",
+   "Più poteri al Parlamento europeo.","Meno soldi per le armi, più per aiutare i paesi poveri."],
+  domande:[
+   {t:"L'Italia deve continuare a inviare armi ai paesi sotto attacco.",legge:"Decreto del governo che allunga l'invio di aiuti militari all'Ucraina",ramo:"camera",data:"23 gennaio 2025",num:"C. 2205",
+    esito:"Approvato: 248 sì e 76 no.",voti:["s","s","s","n","n",null,"s","n"],
+    pro:["Un paese attaccato ha diritto a difendersi.","Se l'aggressore vince, altri paesi rischiano."],
+    contro:["Più armi allungano la guerra.","I soldi servono di più in Italia."]},
+   {t:"L'Italia deve spendere di più per la difesa.",legge:"Richiesta al governo di portare la spesa militare a quanto chiedono gli alleati",ramo:"senato",data:"2 aprile 2025",num:"Mozione 1-00198",
+    esito:"Approvata: 104 sì e 58 no.",voti:["s","s","s","n","a","s","s","n"],
+    pro:["Gli alleati ce lo chiedono da anni.","Un esercito ben attrezzato evita le guerre invece di farle."],
+    contro:["Sono soldi tolti a sanità e scuola.","Prima serve una difesa comune europea, non 27 eserciti."]}]},
+];
+
+/* ordine neutro: sempre alfabetico; colori assegnati in quell'ordine (ADR 0009) */
+partiti.forEach((p,i)=>p.col=`var(--p${i+1})`);
+const fmt=n=>n.toLocaleString("it-IT");
+const VOTO={s:["v-si","Sì"],n:["v-no","No"],a:["v-ast","Astenuto"]};
+const RAMO={camera:["Camera dei deputati","deputati"],senato:["Senato della Repubblica","senatori"]};
+function quota(n,d){const q=n/d;
+  if(q>0.95)return"quasi tutto";if(q>0.66)return"più di due terzi";if(q>0.5)return"più della metà";
+  if(q>0.33)return"più di un terzo";if(q>0.25)return"più di un quarto";if(q>0.1)return"meno di un quarto";return"meno di una su dieci";}
+/* quanti parlamentari del partito hanno votato come il partito: inventato ma coerente con i seggi */
+const concordi=(p,ramo,k)=>{const s=p.seggi[ramo];return [s-Math.ceil(s*0.07)-(k%3),s];};
+
+/* ---------- scelta del tema ---------- */
+document.getElementById("temi").innerHTML=temi.map(t=>`<button type="button" data-tema="${t.id}" aria-pressed="false">${t.nome}</button>`).join("");
+document.querySelectorAll("#temi button").forEach(b=>b.addEventListener("click",()=>{history.replaceState(null,"",`#${b.dataset.tema}`);mostra(b.dataset.tema);}));
+
+function mostra(id){
+  const t=temi.find(x=>x.id===id)||temi[0];
+  document.querySelectorAll("#temi button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.tema===t.id));
+  document.getElementById("tema-nome").textContent=t.nome;
+  document.getElementById("tema-desc").textContent=t.desc;
+  document.getElementById("invito-frase").textContent=`${t.domande.length} domande su questo tema, le stesse qui sotto. Poi ti diciamo quali partiti hanno votato come la pensi tu. Le risposte restano sul tuo telefono.`;
+  document.getElementById("invito-link").href=`vista-questionario.html#tema=${t.id}`;
+
+  /* domande votate */
+  document.getElementById("domande").innerHTML=t.domande.map((d,k)=>{
+    const [nomeRamo,chi]=RAMO[d.ramo];
+    const si=d.voti.filter(v=>v==="s").length, trovati=d.voti.filter(v=>v).length;
+    const righe=partiti.map((p,i)=>{const v=d.voti[i];
+      if(!v)return`<li><span class="q" style="background:${p.col}"></span><span class="nm">${p.n}<span class="dett">Non si sa: non abbiamo trovato il suo voto. Non inventiamo la sua posizione.</span></span><span class="v-nd">Non si sa</span></li>`;
+      const [c,tx]=VOTO[v],[a,b]=concordi(p,d.ramo,i+k);
+      return`<li><span class="q" style="background:${p.col}"></span><span class="nm">${p.n}<span class="dett">${a} ${chi} su ${b} hanno votato così</span></span><span class="${c}">${tx}</span></li>`;}).join("");
+    const tab=partiti.map((p,i)=>{const v=d.voti[i];const [a,b]=v?concordi(p,d.ramo,i+k):["—",p.seggi[d.ramo]];
+      return`<tr><td>${p.n}</td><td>${v?VOTO[v][1]:"Non si sa"}</td><td class="n">${a}</td><td class="n">${b}</td></tr>`;}).join("");
+    return`<article class="card pad">
+      <details class="aiuto"><summary>Domanda ${k+1} di ${t.domande.length}</summary>
+        <p>È una delle domande del questionario. La scegliamo perché il Parlamento ha votato una legge su questo. Un «sì» vuol dire che il partito ha votato a favore della legge qui sotto.</p></details>
+      <p class="dom-testo">${d.t}</p>
+      <p class="dom-voto">Il voto: ${d.legge}. ${nomeRamo}, ${d.data}. ${d.esito}</p>
+      <div class="argomenti">
+        <div class="arg"><h3>Chi è a favore dice</h3><ul>${d.pro.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+        <div class="arg"><h3>Chi è contro dice</h3><ul>${d.contro.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+      </div>
+      <details class="aiuto"><summary>Da dove vengono le ragioni</summary>
+        <p>Scriviamo le ragioni più forti di tutte e due le parti, con lo stesso spazio. Le prendiamo dalle schede di Camera e Senato e dai discorsi in Parlamento. Una persona le rilegge prima di pubblicarle.</p></details>
+      <div class="grande">${si}<small>partiti su ${partiti.length} hanno votato sì</small></div>
+      <p class="frase-grande">${trovati<partiti.length?`Per ${partiti.length-trovati} non abbiamo trovato il voto.`:"Abbiamo trovato il voto di tutti."}</p>
+      <ul class="posizioni">${righe}</ul>
+      <p class="avvertenza">Un voto non racconta tutto: si può votare no a una legge anche solo per una parte che non piace.${d.invertito?" Attenzione: qui «no» vuol dire che il partito voleva tenerlo com'era.":""}</p>
+      <div class="fonte"><span>Fonte: <a href="#">${nomeRamo}, voto del ${d.data} (${d.num})</a> · aggiornato al ${AGGIORNATO}</span></div>
+      <details class="esatti"><summary>Dati esatti e fonte</summary><div class="tabella"><table>
+        <thead><tr><th>Partito</th><th>Voto</th><th class="n">Hanno votato così</th><th class="n">${chi[0].toUpperCase()+chi.slice(1)}</th></tr></thead>
+        <tbody>${tab}</tbody></table></div></details>
+    </article>`;}).join("");
+
+  /* promesse */
+  const max=Math.max(...t.promesse);
+  const comuni=partiti.filter(p=>p.comune).map(p=>p.n);
+  const barre=partiti.map((p,i)=>{const n=t.promesse[i];
+    return`<li><div class="riga"><span class="nm"><span class="q" style="background:${p.col}"></span>${p.n}</span>
+      <span class="val">${n}</span><span class="quanti">${n} promesse su ${fmt(p.prog)}: ${quota(n,p.prog)} del programma${p.comune?' <span class="comune">programma comune</span>':""}</span></div>
+      <div class="barra"><i style="width:${100*n/max}%;background:${p.col}"></i></div>
+      <p class="esempio">Per esempio: <q>${t.esempi[i]}</q></p></li>`;}).join("");
+  const tab=partiti.map((p,i)=>`<tr><td>${p.n}</td><td class="n">${t.promesse[i]}</td><td class="n">${fmt(p.prog)}</td></tr>`).join("");
+  document.getElementById("promesse").innerHTML=`
+    <details class="aiuto"><summary>Promesse su questo tema</summary>
+      <p>Abbiamo letto tutto il programma che ogni partito ha depositato prima delle elezioni del 2022. Abbiamo contato ogni impegno concreto, per esempio una legge, una spesa o un servizio nuovo. Qui ci sono quelli su questo tema.</p></details>
+    <ul class="barre">${barre}</ul>
+    <p class="avvertenza">Più promesse non vuol dire promesse migliori: alcuni programmi sono molto più lunghi di altri. ${comuni.join(", ").replace(/, ([^,]*)$/," e $1")} hanno presentato un programma comune, per questo i numeri sono uguali.</p>
+    <p style="margin:12px 0 0;font-size:15px">Se una promessa è stata mantenuta lo vedi nella scheda di ogni partito. <a href="vista-partito.html">Apri una scheda ›</a></p>
+    <div class="fonte"><span>Fonte: <a href="#">programmi depositati al Ministero dell'Interno</a> · elezioni del 25 settembre 2022</span></div>
+    <details class="esatti"><summary>Dati esatti e fonte</summary><div class="tabella"><table>
+      <thead><tr><th>Partito</th><th class="n">Promesse sul tema</th><th class="n">Promesse in tutto</th></tr></thead>
+      <tbody>${tab}</tbody></table></div></details>`;
+
+  /* cosa hanno detto: non ancora pronto */
+  document.getElementById("detto").innerHTML=`
+    <details class="aiuto"><summary>Frasi su questo tema</summary>
+      <p>Raccoglieremo tutte le frasi su questo tema dette dai partiti in Parlamento, in televisione e sui loro canali. Se una frase va contro un loro voto, lo diremo accanto.</p></details>
+    <span class="stato">Arriva più avanti</span>
+    <p style="margin:0">Stiamo ancora raccogliendo le frasi. Intanto puoi vedere qui sopra come hanno votato e cosa avevano promesso.</p>
+    <div class="fantasma" aria-label="Esempio di come sarà">
+      <p class="et">Esempio di come sarà</p>
+      <blockquote>«${t.domande[0].voti[0]==="s"?t.domande[0].pro[0]:t.domande[0].contro[0]}»</blockquote>
+      <cite>${partiti[0].n} · intervista in televisione, 3 marzo 2024 · Fonte: trascrizione della trasmissione</cite>
+      <p class="contro">Se il partito avesse poi votato al contrario, qui comparirebbe: «Ha detto una cosa e ha votato il contrario», con il voto accanto.</p>
+    </div>
+    <div class="fonte attesa"><span>Fonte: frasi raccolte da Parlamento, televisione e canali dei partiti · non ancora disponibile</span></div>`;
+}
+mostra(location.hash.slice(1)||"economia");
+</script>
+</body>
+</html>
