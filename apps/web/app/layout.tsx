@@ -1,11 +1,24 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Sans, IBM_Plex_Serif } from "next/font/google";
+import localFont from "next/font/local";
 import Link from "next/link";
 import "./globals.css";
 
-// Font scaricati al build e serviti dal sito stesso: nessuna richiesta a Google da chi visita (ADR 0007, #27)
-const sans = IBM_Plex_Sans({ weight: ["400", "500", "600"], subsets: ["latin"], variable: "--font-sans", display: "swap" });
-const serif = IBM_Plex_Serif({ weight: ["600"], subsets: ["latin"], variable: "--font-serif", display: "swap" });
+// Font nel repository (app/fonts, licenza OFL) e serviti dal sito stesso: la build non scarica nulla
+// e nessuna richiesta a Google da chi visita (ADR 0007, #27, #72)
+const sans = localFont({
+  src: [
+    { path: "./fonts/ibm-plex-sans-latin-400-normal.woff2", weight: "400", style: "normal" },
+    { path: "./fonts/ibm-plex-sans-latin-500-normal.woff2", weight: "500", style: "normal" },
+    { path: "./fonts/ibm-plex-sans-latin-600-normal.woff2", weight: "600", style: "normal" },
+  ],
+  variable: "--font-sans",
+  display: "swap",
+});
+const serif = localFont({
+  src: [{ path: "./fonts/ibm-plex-serif-latin-600-normal.woff2", weight: "600", style: "normal" }],
+  variable: "--font-serif",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: { default: "Cosa hanno fatto davvero", template: "%s · openpolitica" },

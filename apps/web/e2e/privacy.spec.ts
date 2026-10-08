@@ -45,3 +45,12 @@ test("nessuna pagina chiede risorse ad altri siti", async ({ page }) => {
   for (const p of ["/", "/come-funziona", "/metodo", "/partiti/alleanza-progresso", "/persone/anna-pedretti"]) await page.goto(p);
   expect(richieste.filter((r) => !r.url().startsWith(BASE)).map((r) => r.url())).toEqual([]);
 });
+
+test("i caratteri IBM Plex arrivano dal sito stesso (#72)", async ({ page }) => {
+  const richieste = registra(page);
+  await page.goto("/");
+  await page.evaluate(() => document.fonts.ready);
+  const font = richieste.filter((r) => r.resourceType() === "font").map((r) => r.url());
+  expect(font.length).toBeGreaterThan(0);
+  expect(font.filter((u) => !u.startsWith(BASE))).toEqual([]);
+});
