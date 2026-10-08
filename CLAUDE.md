@@ -9,7 +9,11 @@ App pubblica che aiuta i cittadini a valutare i politici italiani: fatti uguali 
 
 ## Esperienza del sito: come dovevannoinostrisoldi.com
 
-L'esperienza del sito deve somigliare a quella di [dovevannoinostrisoldi.com](https://www.dovevannoinostrisoldi.com/) (decisione dell'utente, 8 ottobre 2026). Vale per ogni mock, vista e componente nuovi. Si riprende la struttura e il modo di presentare i dati, non i contenuti. Quando si progetta una pagina si apre il sito e si guarda come risolve un caso simile.
+L'esperienza del sito deve somigliare a quella di [dovevannoinostrisoldi.com](https://www.dovevannoinostrisoldi.com/) (decisione dell'utente, 8 ottobre 2026). Vale per ogni mock, vista e componente nuovi. Si riprende la struttura e il modo di presentare i dati, non i contenuti. Quando si progetta una pagina si apre il sito e si guarda come risolve un caso simile. Le pagine più vicine alle nostre sono:
+- [`/programmi`](https://www.dovevannoinostrisoldi.com/programmi): le promesse dei programmi messe di fronte ai numeri ufficiali;
+- [`/governi`](https://www.dovevannoinostrisoldi.com/governi): la "pagella" di ogni governo, con i grafici nel tempo;
+- [`/politici`](https://www.dovevannoinostrisoldi.com/politici): la mappa di chi siede in Governo, Camera e Senato;
+- [`/palazzo-chigi`](https://www.dovevannoinostrisoldi.com/palazzo-chigi): un buon esempio di numero grande, nota che spiega e blocco "Fonte e controlli".
 
 Cosa si riprende:
 - **Un blocco, un dato.** Ogni blocco è una scheda bianca con bordo sottile su fondo chiaro. In alto c'è un'etichetta piccola in maiuscolo con un "?" che apre la spiegazione. Sotto c'è un numero grande, con una frase che dice cosa conta, dove e in che periodo. Poi qualche riga con i dettagli: nome a sinistra, valore a destra.
@@ -23,7 +27,7 @@ Cosa si riprende:
 
 Cosa non si riprende, perché valgono le nostre regole:
 - **Percentuali da sole e numeri tecnici.** Il sito ne usa molti. Da noi valgono il linguaggio comune (ADR 0036) e il conteggio accanto a ogni numero (ADR 0019): "11 volte su 96", non "11,5%".
-- **Colori dei partiti e classifiche.** Colori neutri in ordine alfabetico e nessun punteggio unico (ADR 0009).
+- **Colori dei partiti, classifiche e voti in centesimi.** La pagella dei governi dà un voto come "62/100": da noi no. Colori neutri in ordine alfabetico e nessun punteggio unico (ADR 0009).
 - **Giudizi.** Mostriamo cosa hanno detto e cosa hanno fatto, non se è giusto (ADR 0001).
 
 Se un'idea del sito va contro un ADR, vince l'ADR, oppure si propone di cambiare l'ADR.
