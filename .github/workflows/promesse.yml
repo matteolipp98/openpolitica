@@ -2,6 +2,7 @@
 # restituisce le promesse; si tengono solo quelle con la citazione trovata nel testo.
 # Solo a mano: ogni giro usa al massimo max_chiamate chiamate e riprende dai lotti non ancora fatti
 # (un lotto già fatto con lo stesso modello e la stessa versione del prompt non si richiede).
+# Dopo l'estrazione, le promesse ancora senza tema ricevono uno dei 6 temi (issue #75).
 name: Promesse
 
 on:
@@ -42,3 +43,6 @@ jobs:
         run: |
           uv run python -m op_workers.programmi.promesse ${PARTITO:+--partito "$PARTITO"} --max-chiamate "$MAX" \
             | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Tema delle promesse nuove
+        env: { MAX: "${{ inputs.max_chiamate }}" }
+        run: uv run python -m op_workers.programmi.temi --max-chiamate "$MAX" | tee -a "$GITHUB_STEP_SUMMARY"
