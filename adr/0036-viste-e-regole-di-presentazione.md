@@ -11,7 +11,20 @@ Il pubblico è un elettore qualunque, senza competenze politiche o statistiche. 
 ## Decisione
 
 ### Le quattro viste della fase 0
-**Indice dei soggetti** (`mockup/vista-soggetti.html`). Letture in cima generate da regole fisse uguali per tutti, una per metrica, con i confronti tra soggetti ammessi dall'ADR 0037; poi una frase qualitativa per soggetto da soglie pubblicate e, aprendo, i singoli indicatori con un esempio "Ha detto / In realtà". Attua gli ADR 0019 e 0037: ogni percentuale porta il proprio conteggio, sotto la soglia minima resta il conteggio assoluto, nessun indicatore sintetico, elenco in ordine alfabetico.
+**Indice dei soggetti, cioè la home** (`mockup/vista-soggetti.html`; rivista l'8 ottobre 2026, issue #76). Presenta i partiti con i dati che già esistono, in quattro blocchi.
+- **Invito al questionario.**
+- **"Il Parlamento oggi".**
+  - Un emiciclo con un pallino per parlamentare, per Camera e Senato.
+  - I seggi sono raggruppati in governo e opposizione, poi in ordine alfabetico; la didascalia dice che non è la disposizione reale dell'aula. Nessun ordine destra-sinistra, perché sarebbe un giudizio.
+  - Accanto, un numero grande con una frase sotto ("237 su 400 deputati sostengono il governo: sono più della metà") e la legenda con i seggi di ogni partito.
+- **Una scheda per partito**, in ordine alfabetico:
+  - chi lo guida e se è al governo o all'opposizione;
+  - "Di cosa parla il suo programma": barre orizzontali per tema con il numero di promesse accanto, temi sempre nello stesso ordine. Se più partiti hanno depositato lo stesso programma, la scheda lo dice;
+  - "Come ha votato": le stesse tre domande del questionario per tutti i partiti, scelte con una regola fissa scritta in pagina (le tre votate più di recente, su temi diversi);
+  - due numeri, sempre con il loro totale: le promesse che dicono quanto e entro quando, e le leggi votate come il governo, con la nota per chi è al governo.
+- **Fonte e data su ogni blocco**, e una "?" che apre la spiegazione in parole semplici.
+
+I colori dei partiti sono neutri, assegnati in ordine alfabetico, mai quelli dei simboli. La frase "il partito ha votato unito N volte su M" non si usa: quasi tutti i partiti sono sullo stesso valore, quindi non aiuta a distinguerli. Le letture comparative dell'ADR 0037 e gli indicatori sui dati detti ("Ha detto / In realtà") si aggiungono alle schede quando quei dati esistono (fasi 2 e 3). Attua gli ADR 0019 e 0037: ogni numero porta il proprio conteggio, sotto la soglia minima resta il conteggio assoluto, nessun indicatore sintetico, elenco in ordine alfabetico. Spunto per la chiarezza dei dati: dovevannoinostrisoldi.com.
 
 **Questionario e risultato** (`mockup/vista-questionario.html`). Una domanda per schermata con una scheda di contesto prima della risposta (ADR 0013), tre risposte e la casella "conta più degli altri" (0037), calcolo nel browser (0007, 0008), graduatoria con pareggi entro un margine fisso, scomposizione per domanda con accordi, disaccordi e dati mancanti, e il caso "nessuno ti rappresenta" (0021).
 
