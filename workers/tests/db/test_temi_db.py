@@ -58,7 +58,7 @@ def test_classifica_salva_e_non_richiede(conn):
                       "finto-001")]  # fmt: skip
 
     # al giro dopo si richiede solo la promessa scartata, con un altro modello (aggiornamenti con Gemini)
-    altro = gemini_finto([[{"n": 1, "tema": "ambiente"}]], chiamate)
+    altro = gemini_finto([None, [{"n": 1, "tema": "ambiente"}]], chiamate)  # la prima risposta è già usata
     altro.modello = "altro"
     conteggi, _ = te.esegui(conn, altro)
     assert len(chiamate) == 2 and "[2]" not in json.loads(chiamate[1].content)["contents"][0]["parts"][0]["text"]
