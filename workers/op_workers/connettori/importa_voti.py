@@ -50,6 +50,7 @@ class Rapporto:
     voti_individuali: int = 0
     conteggi_gruppo: int = 0
     non_attribuiti: int = 0
+    atti_corretti: int = 0
     incoerenti: list[str] = field(default_factory=list)
     interrotto: str | None = None  # la fonte ci ha bloccato: si riprende al prossimo giro
 
@@ -333,7 +334,31 @@ def importa(conn: psycopg.Connection, c: ConnettoreVoti, leg: int, dal: date | N
             break
         if i % 20 == 0 or i == len(giorni):
             log.info("%s: %d/%d giorni, %d votazioni nuove", c.ramo, i, len(giorni), r.votazioni_nuove)
+    if hasattr(c, "atti_votazioni_finali") and not r.interrotto:
+        correggi_atti(conn, c, leg, r)
     return r
+
+
+def correggi_atti(conn: psycopg.Connection, c, leg: int, r: Rapporto) -> None:
+    """Riallinea atto e titolo delle votazioni finali già salvate con la scelta attuale del connettore (#74).
+
+    L'import salta le votazioni già presenti: senza questo passo un titolo sbagliato resterebbe per sempre.
+    """
+    try:
+        atti = c.atti_votazioni_finali(leg)
+    except ErroreSparql as e:
+        if not re.search(r"HTTP (403|429|5\d\d)", str(e)):
+            raise
+        log.warning("%s: atti delle votazioni finali non letti, si riprova al prossimo giro (%s)", c.ramo, e)
+        return
+    with conn.transaction(), conn.cursor() as cur:
+        cur.executemany(
+            """update core.votazione set atto_ref = %s, atto_titolo = %s
+               where ramo = %s and legislatura = %s and id_esterno = %s
+                 and (atto_ref, atto_titolo) is distinct from (%s, %s)""",
+            [(ref, tit, c.ramo, leg, ide, ref, tit) for ide, (ref, tit) in sorted(atti.items())],
+        )
+        r.atti_corretti += max(cur.rowcount, 0)
 
 
 def main(argv: list[str] | None = None) -> int:

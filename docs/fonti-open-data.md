@@ -57,11 +57,13 @@ Virtuoso, più lento (1-8 secondi), ontologia OSR (`http://dati.senato.it/osr/`)
 |---|---|
 | `osr:legislatura` | `19` (anche sulla seduta) |
 | `osr:seduta` → `osr:SedutaAssemblea` | `osr:dataSeduta` (data ISO), `osr:numeroSeduta` |
-| `osr:oggetto` → `osr:OggettoTrattazione` | `osr:relativoA` → `ddl/<idFase>` |
+| `osr:oggetto` → `osr:OggettoTrattazione` | `osr:relativoA` → `ddl/<idFase>`, anche più di uno (vedi sotto) |
 | `rdfs:label` | es. `Votazione finale` |
 | `osr:favorevoli`, `osr:contrari`, `osr:astenuti`, `osr:presenti`, `osr:votanti`, `osr:maggioranza`, `osr:congedoMissione` | numeri |
 | `osr:esito`, `osr:tipoVotazione`, `osr:numero`, `osr:numeroLegale` | |
 | `osr:favorevole`, `osr:contrario`, `osr:astenuto`, `osr:presenteNonVotante`, `osr:inCongedoMissione`, `osr:presidente`, `osr:votante`, `osr:presente` | **un arco per senatore**: il voto individuale è una proprietà della votazione, non una risorsa a sé |
+
+**Più disegni di legge nella stessa votazione (#74).** Una votazione finale può avere più `osr:relativoA`: i disegni di legge esaminati insieme, a volte anche una petizione o una relazione senza `osr:fase`. Nella XIX (misura dell'8 ottobre 2026) succede in 33 votazioni finali su 255. Il testo votato si riconosce da `osr:statoDdl`: è quello approvato, gli altri sono `assorbito` (per esempio la 19-431-19 sulla caccia: approvato S.1552 della maggioranza, assorbita la proposta popolare "Stop caccia!" S.1656). In 8 casi tutti i testi sono `appr. in t.u.` (testo unificato): il titolo del testo votato non è nei dati, quindi la votazione resta senza titolo e non diventa una domanda. Il connettore sceglie l'atto in `scegli_atto` e a ogni import riallinea le votazioni finali già salvate.
 
 I voti individuali non risultano duplicati (86 archi `osr:favorevole` per 86 favorevoli dichiarati).
 

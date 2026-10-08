@@ -253,3 +253,22 @@ def test_giorno_lungo_a_blocchi_riprende_dove_si_era_fermato(conn):
     assert r2.interrotto is None and r2.votazioni_nuove == 45 - BLOCCO_VOTAZIONI
     assert len(secondo.chieste) == 45 - BLOCCO_VOTAZIONI  # non richiede quelle già salvate
     assert conn.execute("select count(*) from core.votazione").fetchone()[0] == 45
+
+
+def test_atti_delle_votazioni_finali_gia_salvate_vengono_corretti(conn):
+    """Il titolo sbagliato salvato prima di #74 si corregge al giro dopo, anche se la votazione non è nuova."""
+    sincronizza(conn)
+
+    class ConAtti(ConnettoreFinto):
+        atti = {"vs19_1_1": ("C.1", "Legge di prova")}
+
+        def atti_votazioni_finali(self, leg):
+            return self.atti
+
+    c = ConAtti(_voti(("302103", "favorevole", "gr4133")), _votazione(fav=1, con=0))
+    assert importa(conn, c, 19).atti_corretti == 0
+    c.atti = {"vs19_1_1": ("C.2", "Testo approvato"), "vs19_9_9": ("C.9", "Votazione non salvata")}
+    assert importa(conn, c, 19).atti_corretti == 1
+    riga = conn.execute("select atto_ref, atto_titolo from core.votazione where id_esterno = 'vs19_1_1'").fetchone()
+    assert riga == ("C.2", "Testo approvato")
+    assert importa(conn, c, 19).atti_corretti == 0

@@ -64,10 +64,43 @@ def approvata(esito: str | None) -> bool | None:
     return None
 
 
-def normalizza_votazione(riga: dict[str, str], leg: int) -> VotazioneGrezza:
+def _numero_fase(fase: str) -> tuple[int, str]:
+    m = re.search(r"\d+", fase)
+    return (int(m.group()) if m else 0, fase)
+
+
+def scegli_atto(righe: list[dict[str, str]]) -> tuple[str | None, str | None]:
+    """(atto_ref, atto_titolo) di una votazione dalle sue righe, una per documento collegato (osr:relativoA).
+
+    Una votazione finale può riguardare più disegni di legge esaminati insieme (#74): conta quello approvato,
+    gli altri sono "assorbito". Si ignorano i documenti senza numero di fase (petizioni, relazioni) se c'è
+    anche un disegno di legge. Se restano più testi non assorbiti (testo unificato, "appr. in t.u."), il
+    titolo del testo votato non è nei dati: atto_titolo resta vuoto e la votazione non diventa una domanda.
+    """
+    atti: dict[str, dict[str, str]] = {}
+    for r in righe:
+        if r.get("ddl") or r.get("fase") or r.get("titolo"):
+            atti.setdefault(r.get("ddl") or r.get("fase") or r.get("titolo", ""), r)
+    voci = list(atti.values())
+    con_fase = [a for a in voci if (a.get("fase") or "").strip()]
+    if con_fase:
+        voci = con_fase
+    if len(voci) > 1:
+        voci = [a for a in voci if (a.get("stato") or "").strip().lower() != "assorbito"] or voci
+    if not voci:
+        return None, None
+    if len(voci) > 1:
+        fasi = sorted({a["fase"].strip() for a in voci}, key=_numero_fase)
+        return ", ".join(fasi), None
+    a = voci[0]
+    return (a.get("fase") or "").strip() or None, (a.get("titolo") or "").strip() or None
+
+
+def normalizza_votazione(riga: dict[str, str], leg: int, atti: list[dict[str, str]] | None = None) -> VotazioneGrezza:
+    """Una votazione dalla sua prima riga; atti = tutte le sue righe, per scegliere il documento votato."""
     etichetta = (riga.get("label") or "").strip() or None
     e = (etichetta or "").lower()
-    fase = (riga.get("fase") or "").strip()
+    atto_ref, atto_titolo = scegli_atto(atti or [riga])
     return VotazioneGrezza(
         ramo="senato",
         legislatura=leg,
@@ -76,8 +109,8 @@ def normalizza_votazione(riga: dict[str, str], leg: int) -> VotazioneGrezza:
         tipo=etichetta,
         titolo=etichetta,
         descrizione=(riga.get("esito") or "").strip() or None,
-        atto_ref=fase or None,  # es. 'S.1056'
-        atto_titolo=(riga.get("titolo") or "").strip() or None,
+        atto_ref=atto_ref,  # es. 'S.1056'
+        atto_titolo=atto_titolo,
         finale=e.startswith("votazione finale"),
         fiducia="fiducia" in e,
         segreta="segret" in (riga.get("tipoVot") or "").lower(),
@@ -108,15 +141,26 @@ def voti_da_archi(righe: list[dict[str, str]]) -> list[VotoGrezzo]:
 
 def query_votazioni(leg: int, dal: date, al: date) -> str:
     return f"""
-SELECT DISTINCT ?v ?data ?label ?fav ?con ?ast ?esito ?tipoVot ?titolo ?fase WHERE {{
+SELECT DISTINCT ?v ?data ?label ?fav ?con ?ast ?esito ?tipoVot ?ddl ?titolo ?fase ?stato WHERE {{
   ?v a osr:Votazione ; osr:legislatura {leg} ; osr:seduta ?s ; osr:favorevoli ?fav ; osr:contrari ?con .
   ?s osr:dataSeduta ?data .
   OPTIONAL {{ ?v osr:astenuti ?ast }} OPTIONAL {{ ?v rdfs:label ?label }} OPTIONAL {{ ?v osr:esito ?esito }}
   OPTIONAL {{ ?v osr:tipoVotazione ?tipoVot }}
   OPTIONAL {{ ?v osr:oggetto ?o . ?o osr:relativoA ?ddl .
-             OPTIONAL {{ ?ddl osr:titolo ?titolo }} OPTIONAL {{ ?ddl osr:fase ?fase }} }}
+             OPTIONAL {{ ?ddl osr:titolo ?titolo }} OPTIONAL {{ ?ddl osr:fase ?fase }}
+             OPTIONAL {{ ?ddl osr:statoDdl ?stato }} }}
   FILTER(STR(?data) >= "{dal.isoformat()}" && STR(?data) <= "{al.isoformat()}")
-}} ORDER BY ?data ?v"""
+}} ORDER BY ?data ?v ?ddl"""
+
+
+def query_atti_finali(leg: int) -> str:
+    """I documenti collegati a tutte le votazioni finali della legislatura: una sola richiesta (~350 righe)."""
+    return f"""
+SELECT DISTINCT ?v ?ddl ?titolo ?fase ?stato WHERE {{
+  ?v a osr:Votazione ; osr:legislatura {leg} ; rdfs:label ?l ; osr:oggetto ?o . ?o osr:relativoA ?ddl .
+  OPTIONAL {{ ?ddl osr:titolo ?titolo }} OPTIONAL {{ ?ddl osr:fase ?fase }} OPTIONAL {{ ?ddl osr:statoDdl ?stato }}
+  FILTER(STRSTARTS(LCASE(STR(?l)), "votazione finale"))
+}} ORDER BY ?v ?ddl"""
 
 
 def query_votazioni_del_giorno(giorno: date) -> str:
@@ -165,16 +209,19 @@ class ConnettoreSenato:
         self.sparql = sparql or ClientSparql(ENDPOINT, pausa=1.5)
 
     def votazioni(self, legislatura: int, dal: date) -> Iterator[VotazioneGrezza]:
-        visti: set[str] = set()
-        righe = [
-            r
-            for inizio, fine in finestre_mensili(dal)
-            for r in self.sparql.pagine(query_votazioni(legislatura, inizio, fine), pagina=1000)
-        ]
-        for r in righe:
-            if r["v"] not in visti:
-                visti.add(r["v"])
-                yield normalizza_votazione(r, legislatura)
+        per_votazione: dict[str, list[dict[str, str]]] = {}  # in ordine di data: i dict tengono l'ordine
+        for inizio, fine in finestre_mensili(dal):
+            for r in self.sparql.pagine(query_votazioni(legislatura, inizio, fine), pagina=1000):
+                per_votazione.setdefault(r["v"], []).append(r)
+        for righe in per_votazione.values():
+            yield normalizza_votazione(righe[0], legislatura, righe)
+
+    def atti_votazioni_finali(self, legislatura: int) -> dict[str, tuple[str | None, str | None]]:
+        """{id votazione: (atto_ref, atto_titolo)} per le votazioni finali: corregge quelle già salvate (#74)."""
+        per_votazione: dict[str, list[dict[str, str]]] = {}
+        for r in self.sparql.pagine(query_atti_finali(legislatura), pagina=1000):
+            per_votazione.setdefault(_id(RE_VOTAZIONE, r["v"], "votazione"), []).append(r)
+        return {v: scegli_atto(righe) for v, righe in per_votazione.items()}
 
     def voti_del_giorno(self, legislatura: int, giorno: date) -> Iterator[VotoGrezzo]:
         prefisso = f"{SENATO_VOTAZIONE}{legislatura}-"

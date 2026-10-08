@@ -127,6 +127,57 @@ class TestSenato:
         )
         assert v.astenuti == 0
 
+    # Votazione finale 19-431-19 (23 giugno 2026): cinque disegni di legge sulla caccia, approvato solo S.1552
+    CACCIA = [
+        {"ddl": SEN + "ddl/59566", "fase": "S.1656", "stato": "assorbito", "titolo": "Stop caccia! Per il divieto"},
+        {"ddl": SEN + "ddl/59294", "fase": "S.1552", "stato": "approvato", "titolo": "Modifiche alla legge n. 157"},
+        {"ddl": SEN + "ddl/56784", "fase": "S.596", "stato": "assorbito", "titolo": "Danni della fauna selvatica"},
+    ]
+
+    def test_testo_approvato_vince_sui_testi_assorbiti(self):
+        assert senato.scegli_atto(self.CACCIA) == ("S.1552", "Modifiche alla legge n. 157")
+        assert senato.scegli_atto(list(reversed(self.CACCIA))) == ("S.1552", "Modifiche alla legge n. 157")
+
+    def test_petizione_collegata_non_prende_il_posto_della_legge(self):
+        righe = [
+            {"ddl": SEN + "petizione/1", "titolo": "Il signor X chiede nuove disposizioni"},
+            {"ddl": SEN + "ddl/1", "fase": "S.1971", "stato": "appr. con modificaz", "titolo": "Conversione in legge"},
+            {"ddl": SEN + "ddl/2", "fase": "S.61", "stato": "assorbito", "titolo": "Altro"},
+        ]
+        assert senato.scegli_atto(righe) == ("S.1971", "Conversione in legge")
+
+    def test_testo_unificato_senza_titolo_proprio_non_ha_titolo(self):
+        righe = [
+            {"ddl": SEN + "ddl/1", "fase": "S.915", "stato": "appr. in t.u.", "titolo": "Accesso a medicina"},
+            {"ddl": SEN + "ddl/2", "fase": "S.1002", "stato": "appr. in t.u.", "titolo": "Corsi di laurea"},
+        ]
+        assert senato.scegli_atto(righe) == ("S.915, S.1002", None)
+
+    def test_un_solo_atto_e_nessun_atto(self):
+        assert senato.scegli_atto([self.VOTAZIONE]) == ("S.1056", self.VOTAZIONE["titolo"])
+        assert senato.scegli_atto([{"v": "x"}]) == (None, None)
+
+    def test_votazioni_raggruppa_le_righe_dei_disegni_di_legge(self):
+        righe = [{**self.VOTAZIONE, "v": SEN + "votazione/19-431-19", **a} for a in self.CACCIA]
+
+        class Finto:
+            def pagine(self, query, pagina=5000):
+                return righe if "2026-06-01" in query else []
+
+        vs = list(senato.ConnettoreSenato(Finto()).votazioni(19, date(2026, 6, 1)))
+        assert [(v.id_esterno, v.atto_ref, v.atto_titolo) for v in vs] == [
+            ("19-431-19", "S.1552", "Modifiche alla legge n. 157")
+        ]
+
+    def test_atti_delle_votazioni_finali(self):
+        class Finto:
+            def pagine(self, query, pagina=5000):
+                assert "votazione finale" in query
+                return [{"v": SEN + "votazione/19-431-19", **a} for a in TestSenato.CACCIA]
+
+        atti = senato.ConnettoreSenato(Finto()).atti_votazioni_finali(19)
+        assert atti == {"19-431-19": ("S.1552", "Modifiche alla legge n. 157")}
+
     def test_archi_diventano_un_voto_per_senatore(self):
         v = SEN + "votazione/19-167-42"
         righe = [
