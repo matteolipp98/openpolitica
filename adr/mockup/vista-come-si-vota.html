@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<!-- Come funziona il mio voto (issue #93, quarta domanda dell'obiettivo del prodotto in CLAUDE.md).
+     Attua ADR 0021 (collegio dal comune o dal CAP, regole che cambiano l'effetto del voto spiegate in modo neutro,
+     "nessuno ti rappresenta" con bianca, nulla e astensione, mai voto utile o strategico), 0007 (il comune resta sul
+     telefono), 0010 (par condicio: stessa pagina per tutti, niente sondaggi), 0036 (linguaggio comune, fonte e data
+     su ogni blocco), 0009 (partiti in ordine alfabetico, colori neutri), 0001 (fatti separati dai valori).
+     Spunto per il layout: dovevannoinostrisoldi.com (un blocco un dato, etichetta con "?", righe nome-valore,
+     "Fonte · aggiornato al", "Dati esatti e fonte", bottoni affiancati).
+     Candidati, collegi e comune inventati; regole vere, verificate l'8 ottobre 2026:
+     - legge di prima (elezioni 2022): legge 165/2017 ("Rosatellum"), che modifica il DPR 361/1957 (Camera) e il
+       d.lgs. 533/1993 (Senato); legge costituzionale 1/2020 (400 deputati e 200 senatori); legge costituzionale
+       1/2021 (18 anni per votare il Senato);
+     - legge nuova: approvata in via definitiva dalla Camera l'8 ottobre 2026 (atto Camera 2822-B), non ancora
+       pubblicata in Gazzetta Ufficiale; collegi ancora da disegnare. Punti da ricontrollare sul testo pubblicato:
+       premio se il 42% arriva in una Camera sola (le fonti di stampa non concordano), forma esatta della scheda,
+       nome che non compare sulla scheda, voto di chi studia o lavora fuori sede. -->
+<html lang="it" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Come funziona il tuo voto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#E9ECF0;--surface:#FFFFFF;--ink:#141B23;--muted:#5C6773;
+  --rule:#C9D1DA;--rule-soft:#E2E7EC;--mark:#1F4E79;--brass:#8A6A33;--focus:#1F4E79;--track:#E6EBF0;
+  --carta:#FBFAF6;--penna:#1F4E79;
+  /* colori dei partiti: neutri, assegnati in ordine alfabetico, mai quelli dei simboli (ADR 0009) */
+  --p1:#2F6B8A;--p2:#8A6A33;--p3:#5E7A3A;--p4:#7A4E7E;--p5:#A0523F;--p6:#3F7F74;--p7:#5B5F97;--p8:#6B7480;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:17px;line-height:1.55;font-variant-numeric:tabular-nums}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 16px 80px}
+h1{font-family:"IBM Plex Serif",Georgia,serif;font-size:clamp(28px,6vw,40px);line-height:1.15;margin:0 0 12px;max-width:18ch}
+.lede{margin:0;color:var(--muted);max-width:50ch;font-size:18px}
+.nota{margin:18px 0 0;padding:10px 13px;background:#FBF7EE;border-left:3px solid var(--brass);font-size:14px;color:#574521;max-width:62ch}
+h2{font-family:"IBM Plex Serif",serif;font-size:23px;margin:44px 0 6px}
+h3{font-size:18px;margin:0 0 6px}
+p{margin:0 0 10px}
+.sottotitolo{margin:0 0 16px;color:var(--muted);max-width:62ch}
+.et{font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:0 0 8px}
+.card{background:var(--surface);border:1px solid var(--rule);padding:18px}
+.griglia{display:grid;gap:14px}
+@media (min-width:860px){.griglia.due{grid-template-columns:1fr 1fr}.griglia.tre{grid-template-columns:repeat(3,1fr)}}
+.grande{font-family:"IBM Plex Serif",serif;font-size:40px;font-weight:600;line-height:1.05;margin:4px 0 6px}
+.grande small{font-family:"IBM Plex Sans",sans-serif;font-size:17px;font-weight:400;color:var(--muted);margin-left:6px}
+.frase{margin:0 0 12px;font-size:17px;max-width:40ch}
+.righe{list-style:none;margin:0;padding:0}
+.righe li{display:flex;justify-content:space-between;gap:14px;padding:7px 0;border-top:1px solid var(--rule-soft);font-size:15.5px}
+.righe li>span:not(:first-child){font-weight:600;text-align:right}
+.fonte{display:block;position:relative;padding-left:15px;font-size:13px;color:var(--muted);margin-top:14px}
+.fonte::before{content:"";position:absolute;left:0;top:.55em;width:7px;height:7px;border-radius:50%;background:#3F7F54}
+.fonte.attesa::before{background:var(--brass)}
+details.cosa,details.esatti{margin-top:10px;font-size:14.5px;color:var(--muted)}
+details summary{cursor:pointer;color:var(--mark);list-style:none;display:inline-flex;align-items:center;gap:6px}
+details summary::-webkit-details-marker{display:none}
+details.cosa summary::before{content:"?";display:inline-grid;place-items:center;width:18px;height:18px;border:1px solid currentColor;border-radius:50%;font-size:12px;flex:none}
+details.esatti summary::before{content:"▸";font-size:12px}
+details.esatti[open] summary::before{content:"▾"}
+details p{margin:8px 0 0;max-width:64ch}
+table{border-collapse:collapse;width:100%;margin-top:8px;font-size:14px}
+th,td{text-align:left;padding:6px 8px 6px 0;border-top:1px solid var(--rule-soft);vertical-align:top}
+th{font-weight:600;color:var(--ink)}
+a{color:var(--mark)}
+.avviso{border-left:4px solid var(--brass);margin-top:22px}
+.avviso p{max-width:64ch}
+
+/* bottoni affiancati */
+.tabs{display:inline-flex;flex-wrap:wrap;border:1px solid var(--rule);margin:4px 0 0;background:var(--surface)}
+.tabs button{appearance:none;border:0;background:var(--surface);font:inherit;font-size:15px;padding:9px 16px;cursor:pointer;color:var(--muted);text-align:left}
+.tabs button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.tabs button+button{border-left:1px solid var(--rule)}
+.tabs small{display:block;font-size:12.5px;opacity:.85}
+.fissa{position:sticky;top:0;z-index:2;background:var(--paper);padding:10px 0;margin-top:8px;border-bottom:1px solid var(--rule)}
+.fissa .et{margin:0 0 6px}
+body[data-legge="nuova"] [data-legge="2022"],body[data-legge="2022"] [data-legge="nuova"]{display:none!important}
+
+/* scheda disegnata */
+.scheda-griglia{display:grid;gap:18px}
+@media (min-width:860px){.scheda-griglia{grid-template-columns:1.1fr 1fr;align-items:start}}
+svg.scheda{width:100%;max-width:440px;height:auto;display:block;margin:0 auto}
+svg.scheda .foglio{fill:var(--carta);stroke:var(--rule)}
+svg.scheda .riquadro{fill:none;stroke:var(--muted);stroke-width:1}
+svg.scheda .coal{fill:none;stroke:var(--muted);stroke-width:1;stroke-dasharray:4 3}
+svg.scheda .simbolo{fill:var(--surface);stroke:var(--ink);stroke-width:1.2}
+svg.scheda text{fill:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:11px}
+svg.scheda .t-piccolo{font-size:9.5px;fill:var(--muted)}
+svg.scheda .t-forte{font-weight:600}
+svg.scheda .t-sigla{font-size:10px;font-weight:600;text-anchor:middle}
+svg.scheda .casella{fill:var(--surface);stroke:var(--ink);stroke-width:1}
+svg.scheda .croce{stroke:var(--penna);stroke-width:2.4;stroke-linecap:round;fill:none}
+.passi{list-style:none;margin:0;padding:0;counter-reset:p}
+.passi li{counter-increment:p;display:grid;grid-template-columns:30px 1fr;gap:10px;padding:10px 0;border-top:1px solid var(--rule-soft)}
+.passi li:first-child{border-top:0;padding-top:0}
+.passi li::before{content:counter(p);font-family:"IBM Plex Serif",serif;font-size:22px;font-weight:600;color:var(--mark);line-height:1.2}
+.passi p{margin:0;font-size:16px}
+.passi .s{display:block;color:var(--muted);font-size:14.5px;margin-top:2px}
+
+/* effetto del segno */
+.effetti{list-style:none;margin:0;padding:0}
+.effetti li{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:baseline;padding:9px 0;border-top:1px solid var(--rule-soft);font-size:15.5px}
+.effetti li:first-child{border-top:0;padding-top:0}
+.ok,.ko{font-size:13px;font-weight:600;padding:2px 9px;border:1px solid;white-space:nowrap}
+.ok{color:#2F5E3F;border-color:#9DBEA7;background:#EEF6F0}
+.ko{color:#8A3A2E;border-color:#D6A79F;background:#FBF0EE}
+.effetti .s{display:block;color:var(--muted);font-size:14px}
+
+/* barre di esempio */
+.barre{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:10px}
+.barre li{font-size:15px}
+.barre .riga{display:grid;grid-template-columns:1fr 4.2em;gap:10px;align-items:center}
+.barre .b{height:12px;background:var(--track);position:relative}
+.barre .b i{display:block;height:100%;background:var(--p8)}
+.barre .b .linea{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink)}
+.barre .v{text-align:right;font-weight:600}
+.barre .s{display:block;color:var(--muted);font-size:13.5px}
+
+/* trova il collegio */
+.trova form{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 6px}
+.trova label{display:block;font-weight:600;margin-bottom:2px}
+.trova input{flex:1 1 220px;min-width:0;font:inherit;padding:10px 12px;border:1px solid var(--rule);background:var(--surface);color:var(--ink)}
+.bottone{appearance:none;border:0;background:var(--mark);color:#fff;font:inherit;font-weight:600;padding:10px 18px;cursor:pointer}
+.privato{display:flex;gap:8px;font-size:14px;color:var(--muted);margin:4px 0 0;max-width:62ch}
+.privato::before{content:"🔒︎";flex:none}
+.esito{margin-top:16px;border-top:1px solid var(--rule-soft);padding-top:14px}
+.esito[hidden]{display:none}
+.collegi{display:grid;gap:10px;margin:8px 0 14px}
+@media (min-width:640px){.collegi{grid-template-columns:1fr 1fr}}
+.collegio{border:1px solid var(--rule-soft);padding:12px 14px}
+.collegio b{display:block;font-size:17px}
+.collegio span{color:var(--muted);font-size:14px}
+.liste{list-style:none;margin:0;padding:0}
+.liste>li{padding:10px 0;border-top:1px solid var(--rule-soft)}
+.liste .testa{display:grid;grid-template-columns:14px 1fr;gap:4px 10px;align-items:center}
+.liste .q{width:14px;height:14px;border-radius:3px}
+.liste .nome{font-weight:600}
+.liste .info{grid-column:2;font-size:14.5px;color:var(--muted)}
+.liste details{grid-column:2;margin-top:4px;font-size:14.5px}
+.liste ol{margin:6px 0 0;padding-left:22px;color:var(--ink)}
+.uni{list-style:none;margin:0;padding:0}
+.uni li{display:grid;grid-template-columns:1fr;padding:8px 0;border-top:1px solid var(--rule-soft);font-size:15.5px}
+.uni li span{color:var(--muted);font-size:14px}
+
+/* cosa facciamo e cosa no */
+.si-no{background:var(--surface);border:1px solid var(--rule)}
+.sn{display:flex;gap:12px;padding:12px 16px;border-top:1px solid var(--rule-soft);align-items:flex-start}
+.sn:first-child{border-top:0}
+.sn .seg{min-width:26px;font-weight:600;font-size:17px;line-height:1.5}
+.sn.si .seg{color:var(--mark)}.sn.no .seg{color:var(--brass)}
+.sn p{margin:0;flex:1;font-size:16px}
+footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--rule);font-size:14px;color:var(--muted);max-width:62ch}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#11161C;--surface:#171E26;--ink:#E7ECF1;--muted:#9AA6B2;--rule:#2C3742;--rule-soft:#232C35;
+  --mark:#7FB0E0;--brass:#C9A25E;--focus:#7FB0E0;--track:#232C35;--carta:#1B232B;--penna:#7FB0E0}
+  :root:not([data-theme="light"]) .nota{background:#1E1B13;color:#D8C79D}
+  :root:not([data-theme="light"]) .ok{background:#16251B;color:#9DCBAA;border-color:#2F5E3F}
+  :root:not([data-theme="light"]) .ko{background:#2A1715;color:#E2A79E;border-color:#8A3A2E}
+  :root:not([data-theme="light"]) .bottone{color:#11161C}}
+:root[data-theme="dark"]{--paper:#11161C;--surface:#171E26;--ink:#E7ECF1;--muted:#9AA6B2;
+  --rule:#2C3742;--rule-soft:#232C35;--mark:#7FB0E0;--brass:#C9A25E;--focus:#7FB0E0;--track:#232C35;--carta:#1B232B;--penna:#7FB0E0}
+:root[data-theme="dark"] .nota{background:#1E1B13;color:#D8C79D}
+:root[data-theme="dark"] .ok{background:#16251B;color:#9DCBAA;border-color:#2F5E3F}
+:root[data-theme="dark"] .ko{background:#2A1715;color:#E2A79E;border-color:#8A3A2E}
+:root[data-theme="dark"] .bottone{color:#11161C}
+</style>
+</head>
+<body data-legge="nuova">
+<div class="wrap">
+<h1>Come funziona il tuo voto</h1>
+<p class="lede">Com'è fatta la scheda, dove voti, chi sono i candidati e quali regole cambiano il peso del tuo voto. Le regole sono uguali per tutti. Per chi votare lo decidi tu.</p>
+<p class="nota">Esempio per provare la pagina: partiti, candidati, collegi e comune sono inventati. Le regole invece sono quelle vere, con la legge accanto.</p>
+
+<section class="card avviso">
+  <p class="et">La legge è appena cambiata</p>
+  <p><b>L'8 ottobre 2026 il Parlamento ha approvato una legge elettorale nuova.</b> Vale per le prossime elezioni politiche. Non è ancora pubblicata in Gazzetta Ufficiale, e i nuovi collegi non sono ancora disegnati.</p>
+  <p>Qui sotto puoi vedere le regole nuove o quelle con cui si è votato nel 2022.</p>
+  <p class="fonte attesa">Fonte: Camera dei deputati, atto 2822-B · aggiornato all'8 ottobre 2026. Lo ricontrolliamo sul testo pubblicato.</p>
+</section>
+
+<div class="fissa">
+  <p class="et">Quali regole vuoi vedere?</p>
+  <div class="tabs" role="group" aria-label="Legge elettorale">
+    <button type="button" data-scelta="nuova" aria-pressed="true">Prossime elezioni<small>legge nuova</small></button>
+    <button type="button" data-scelta="2022" aria-pressed="false">Elezioni 2022<small>legge di prima</small></button>
+  </div>
+</div>
+
+<!-- ============ QUANDO E CHI ============ -->
+<h2>Quando si vota e chi vota</h2>
+<div class="griglia tre">
+  <section class="card">
+    <p class="et">Prossime elezioni politiche</p>
+    <div class="grande">Entro dicembre 2027</div>
+    <p class="frase">La data precisa non c'è ancora. La decide il Presidente della Repubblica.</p>
+    <ul class="righe">
+      <li><span>Ultime elezioni</span><span>25 settembre 2022</span></li>
+      <li><span>Il Parlamento dura</span><span>5 anni</span></li>
+      <li><span>Prima riunione</span><span>13 ottobre 2022</span></li>
+      <li><span>Fine dei 5 anni</span><span>ottobre 2027</span></li>
+    </ul>
+    <details class="cosa"><summary>Perché «entro dicembre»</summary>
+      <p>Il Parlamento dura cinque anni dalla prima riunione. Quando finisce, si vota entro 70 giorni. Si può votare anche prima, se il Parlamento viene sciolto in anticipo.</p></details>
+    <p class="fonte">Fonte: <a href="https://www.senato.it/istituzione/la-costituzione">Costituzione</a>, articoli 60, 61 e 88 · aggiornato all'8 ottobre 2026</p>
+  </section>
+
+  <section class="card">
+    <p class="et">Chi può votare</p>
+    <div class="grande">18 anni</div>
+    <p class="frase">bastano per votare sia la Camera sia il Senato.</p>
+    <ul class="righe">
+      <li><span>Senato, fino al 2021</span><span>25 anni</span></li>
+      <li><span>Per essere eletti deputati</span><span>25 anni</span></li>
+      <li><span>Per essere eletti senatori</span><span>40 anni</span></li>
+    </ul>
+    <details class="cosa"><summary>Cosa è cambiato</summary>
+      <p>Fino al 2021 il Senato lo votava solo chi aveva almeno 25 anni. Dalle elezioni del 2022 bastano 18 anni anche lì.</p></details>
+    <p class="fonte">Fonte: Costituzione, articoli 48, 56 e 58; <a href="https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:legge.costituzionale:2021-10-18;1">legge costituzionale 1/2021</a> · aggiornato all'8 ottobre 2026</p>
+  </section>
+
+  <section class="card">
+    <p class="et">Chi elegge il tuo voto</p>
+    <div class="grande">600 <small>parlamentari</small></div>
+    <p class="frase">400 deputati alla Camera e 200 senatori al Senato. Ricevi due schede, una per ciascuno.</p>
+    <ul class="righe">
+      <li><span>Prima del 2022</span><span>945</span></li>
+      <li><span>Eletti dagli italiani all'estero</span><span>8 + 4</span></li>
+      <li><span>Senatori a vita</span><span>non si votano</span></li>
+    </ul>
+    <details class="cosa"><summary>Cosa è cambiato</summary>
+      <p>Nel 2020 un referendum ha confermato il taglio dei parlamentari: da 630 a 400 deputati e da 315 a 200 senatori.</p></details>
+    <p class="fonte">Fonte: <a href="https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:legge.costituzionale:2020-10-19;1">legge costituzionale 1/2020</a> · aggiornato all'8 ottobre 2026</p>
+  </section>
+</div>
+
+<!-- ============ LA SCHEDA ============ -->
+<h2>La scheda</h2>
+<p class="sottotitolo">Camera e Senato hanno due schede di colore diverso, ma si votano allo stesso modo.</p>
+
+<section class="card" data-legge="nuova">
+  <div class="scheda-griglia">
+    <figure style="margin:0">
+      <svg class="scheda" viewBox="0 0 360 330" role="img" aria-label="Disegno della scheda nuova: una croce sul simbolo del partito e due croci su due nomi della stessa lista">
+        <rect class="foglio" x="1" y="1" width="358" height="328"/>
+        <text x="14" y="20" class="t-piccolo">CAMERA DEI DEPUTATI · collegio di esempio</text>
+        <!-- coalizione -->
+        <rect class="coal" x="10" y="30" width="340" height="186"/>
+        <text x="18" y="44" class="t-piccolo">Coalizione: partiti alleati</text>
+        <!-- lista 1 -->
+        <rect class="riquadro" x="18" y="52" width="160" height="156"/>
+        <circle class="simbolo" cx="40" cy="74" r="14"/><text x="40" y="78" class="t-sigla">FT</text>
+        <path class="croce" d="M28 62 L52 86 M52 62 L28 86"/>
+        <text x="60" y="71" class="t-forte">Fronte dei Territori</text>
+        <text x="60" y="85" class="t-piccolo">Capolista: Rita Fabbri</text>
+        <g transform="translate(26,100)">
+          <rect class="casella" x="0" y="0" width="10" height="10"/><text x="16" y="9">Paolo Neri</text>
+          <rect class="casella" x="0" y="17" width="10" height="10"/><text x="16" y="26">Ilaria Monti</text>
+          <path class="croce" d="M-1 16 L11 28 M11 16 L-1 28"/>
+          <rect class="casella" x="0" y="34" width="10" height="10"/><text x="16" y="43">Sergio Valli</text>
+          <path class="croce" d="M-1 33 L11 45 M11 33 L-1 45"/>
+          <rect class="casella" x="0" y="51" width="10" height="10"/><text x="16" y="60">Marta Leone</text>
+          <rect class="casella" x="0" y="68" width="10" height="10"/><text x="16" y="77">Enzo Galli</text>
+          <rect class="casella" x="0" y="85" width="10" height="10"/><text x="16" y="94">Sara Testa</text>
+        </g>
+        <!-- lista 2 -->
+        <rect class="riquadro" x="182" y="52" width="160" height="156"/>
+        <circle class="simbolo" cx="204" cy="74" r="14"/><text x="204" y="78" class="t-sigla">PR</text>
+        <text x="224" y="71" class="t-forte">Patto per le Regioni</text>
+        <text x="224" y="85" class="t-piccolo">Capolista: Bruno Sala</text>
+        <g transform="translate(190,100)">
+          <rect class="casella" x="0" y="0" width="10" height="10"/><text x="16" y="9">Elisa Fonti</text>
+          <rect class="casella" x="0" y="17" width="10" height="10"/><text x="16" y="26">Mario Riva</text>
+          <rect class="casella" x="0" y="34" width="10" height="10"/><text x="16" y="43">Nadia Bassi</text>
+          <rect class="casella" x="0" y="51" width="10" height="10"/><text x="16" y="60">Luca Pace</text>
+          <rect class="casella" x="0" y="68" width="10" height="10"/><text x="16" y="77">Anna Villa</text>
+          <rect class="casella" x="0" y="85" width="10" height="10"/><text x="16" y="94">Ugo Serra</text>
+        </g>
+        <!-- lista da sola -->
+        <rect class="riquadro" x="10" y="226" width="340" height="94"/>
+        <circle class="simbolo" cx="32" cy="248" r="14"/><text x="32" y="252" class="t-sigla">UL</text>
+        <text x="52" y="245" class="t-forte">Unione Liberale</text>
+        <text x="52" y="259" class="t-piccolo">Capolista: Carla Neri · si presenta da sola</text>
+        <g transform="translate(20,274)">
+          <rect class="casella" x="0" y="0" width="10" height="10"/><text x="16" y="9">Fabio Gatti</text>
+          <rect class="casella" x="0" y="17" width="10" height="10"/><text x="16" y="26">Lia Rossi</text>
+          <rect class="casella" x="110" y="0" width="10" height="10"/><text x="126" y="9">Dario Conte</text>
+          <rect class="casella" x="110" y="17" width="10" height="10"/><text x="126" y="26">Ada Marini</text>
+          <rect class="casella" x="220" y="0" width="10" height="10"/><text x="236" y="9">Piero Lodi</text>
+          <rect class="casella" x="220" y="17" width="10" height="10"/><text x="236" y="26">Vera Costa</text>
+        </g>
+      </svg>
+      <figcaption class="fonte attesa">Disegno nostro: il modello ufficiale della scheda nuova non è ancora uscito.</figcaption>
+    </figure>
+    <div>
+      <p class="et">Come si vota, in tre passi</p>
+      <ol class="passi">
+        <li><p>Fai una croce sul simbolo del partito che scegli.<span class="s">Basta questo: il voto è valido.</span></p></li>
+        <li><p>Se vuoi, scegli anche fino a tre persone della stessa lista, con una croce accanto al nome.<span class="s">Se ne scegli due o tre, devono essere uomini e donne. Altrimenti conta solo la prima.</span></p></li>
+        <li><p>Il primo nome, il capolista, non si sceglie.<span class="s">Lo decide il partito. Se il partito prende un posto in quel collegio, va a lui o a lei.</span></p></li>
+      </ol>
+      <p class="fonte attesa">Fonte: legge elettorale nuova, atto Camera 2822-B · aggiornato all'8 ottobre 2026</p>
+    </div>
+  </div>
+</section>
+
+<section class="card" data-legge="2022">
+  <div class="scheda-griglia">
+    <figure style="margin:0">
+      <svg class="scheda" viewBox="0 0 360 250" role="img" aria-label="Disegno della scheda del 2022: in alto il candidato del collegio, sotto i partiti che lo sostengono">
+        <rect class="foglio" x="1" y="1" width="358" height="248"/>
+        <text x="14" y="20" class="t-piccolo">CAMERA DEI DEPUTATI · collegio di esempio</text>
+        <rect class="coal" x="10" y="30" width="340" height="140"/>
+        <rect class="riquadro" x="18" y="38" width="324" height="34"/>
+        <text x="28" y="53" class="t-piccolo">Candidato nel collegio</text>
+        <text x="28" y="66" class="t-forte">Elena Marchi</text>
+        <rect class="riquadro" x="18" y="80" width="160" height="82"/>
+        <circle class="simbolo" cx="40" cy="102" r="14"/><text x="40" y="106" class="t-sigla">FT</text>
+        <path class="croce" d="M28 90 L52 114 M52 90 L28 114"/>
+        <text x="60" y="99" class="t-forte">Fronte dei Territori</text>
+        <text x="60" y="122" class="t-piccolo">1. Rita Fabbri</text>
+        <text x="60" y="135" class="t-piccolo">2. Paolo Neri</text>
+        <text x="60" y="148" class="t-piccolo">3. Ilaria Monti</text>
+        <rect class="riquadro" x="182" y="80" width="160" height="82"/>
+        <circle class="simbolo" cx="204" cy="102" r="14"/><text x="204" y="106" class="t-sigla">PR</text>
+        <text x="224" y="99" class="t-forte">Patto per le Regioni</text>
+        <text x="224" y="122" class="t-piccolo">1. Bruno Sala</text>
+        <text x="224" y="135" class="t-piccolo">2. Elisa Fonti</text>
+        <rect class="coal" x="10" y="178" width="340" height="62"/>
+        <rect class="riquadro" x="18" y="184" width="324" height="20"/>
+        <text x="28" y="198" class="t-piccolo">Candidato nel collegio: <tspan class="t-forte" style="fill:var(--ink)">Giorgio Bellini</tspan></text>
+        <circle class="simbolo" cx="32" cy="222" r="11"/><text x="32" y="226" class="t-sigla">UL</text>
+        <text x="50" y="219" class="t-forte">Unione Liberale</text>
+        <text x="50" y="232" class="t-piccolo">1. Carla Neri · 2. Fabio Gatti</text>
+      </svg>
+      <figcaption class="fonte">Disegno semplificato della scheda del 2022.</figcaption>
+    </figure>
+    <div>
+      <p class="et">Come si votava nel 2022</p>
+      <ol class="passi">
+        <li><p>In alto c'è il candidato del tuo collegio. Nel collegio vince chi prende più voti, anche uno solo in più.<span class="s">Così si eleggeva poco più di un terzo dei parlamentari.</span></p></li>
+        <li><p>Sotto ci sono i partiti che lo sostengono, con una lista di 2, 3 o 4 nomi già in ordine.<span class="s">Non si potevano scegliere i nomi: entravano nell'ordine deciso dal partito.</span></p></li>
+        <li><p>Bastava una croce sul simbolo, o sul nome del candidato, o su tutti e due.<span class="s">Il voto andava sia al candidato sia al partito.</span></p></li>
+      </ol>
+      <p class="fonte">Fonte: <a href="https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:legge:2017-11-03;165">legge 165/2017</a>; <a href="https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.del.presidente.della.repubblica:1957-03-30;361">DPR 361/1957</a>, articoli 18-bis, 31 e 58 · aggiornato all'8 ottobre 2026</p>
+    </div>
+  </div>
+</section>
+
+<h3 style="margin-top:22px">Cosa succede con il tuo segno</h3>
+<section class="card" data-legge="nuova">
+  <ul class="effetti">
+    <li><span>Croce solo sul simbolo del partito<span class="s">Il voto va al partito.</span></span><span class="ok">Valido</span></li>
+    <li><span>Croce su uno o più nomi, senza toccare il simbolo<span class="s">Il voto va alla persona e anche al suo partito.</span></span><span class="ok">Valido</span></li>
+    <li><span>Croce su un partito e su un nome di un altro partito<span class="s">Non si può dividere il voto tra due partiti.</span></span><span class="ko">Non si può</span></li>
+    <li><span>Due nomi dello stesso sesso<span class="s">Conta solo il primo; il voto al partito resta valido.</span></span><span class="ok">Vale in parte</span></li>
+  </ul>
+  <details class="esatti"><summary>Dati esatti e fonte</summary>
+    <table><tr><th>Regola</th><th>Cosa dice</th></tr>
+      <tr><td>Preferenze</td><td>Fino a 3, tra 6 candidati stampati sotto il capolista; con 2 o 3 preferenze vale l'alternanza di genere, altrimenti conta solo la prima.</td></tr>
+      <tr><td>Capolista</td><td>Bloccato, scelto dal partito; non riceve preferenze.</td></tr>
+      <tr><td>Voto disgiunto</td><td>Non previsto.</td></tr>
+      <tr><td>Stato</td><td>Approvata dalla Camera in via definitiva l'8 ottobre 2026 (227 sì, 164 no). In attesa di promulgazione e pubblicazione. Ricostruito da resoconti di stampa: da ricontrollare sul testo in Gazzetta Ufficiale.</td></tr></table></details>
+  <p class="fonte attesa">Fonte: legge elettorale nuova, atto Camera 2822-B · aggiornato all'8 ottobre 2026</p>
+</section>
+
+<section class="card" data-legge="2022">
+  <ul class="effetti">
+    <li><span>Croce solo sul simbolo del partito<span class="s">Il voto va al partito e anche al suo candidato nel collegio.</span></span><span class="ok">Valido</span></li>
+    <li><span>Croce solo sul candidato del collegio<span class="s">Il voto va a lui e ai partiti che lo sostengono, diviso in base a quanti voti ha preso ciascuno in quel collegio.</span></span><span class="ok">Valido</span></li>
+    <li><span>Croce sul candidato e su un partito che lo sostiene</span><span class="ok">Valido</span></li>
+    <li><span>Croce sul candidato e su un partito che non lo sostiene<span class="s">È il «voto disgiunto»: non è permesso.</span></span><span class="ko">Scheda nulla</span></li>
+  </ul>
+  <p class="fonte">Fonte: <a href="https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.del.presidente.della.repubblica:1957-03-30;361">DPR 361/1957</a>, articoli 58 e 59-bis; per il Senato <a href="https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.legislativo:1993-12-20;533">d.lgs. 533/1993</a> · aggiornato all'8 ottobre 2026</p>
+</section>
+
+<!-- ============ REGOLE CHE CAMBIANO L'EFFETTO ============ -->
+<h2>Le regole che cambiano il peso del voto</h2>
+<p class="sottotitolo">Non tutti i voti portano un posto in Parlamento. Ecco perché, con esempi su 100 voti validi.</p>
+
+<div class="griglia due">
+  <section class="card">
+    <p class="et">Il minimo per entrare</p>
+    <div class="grande">3 <small>voti su 100</small></div>
+    <p class="frase">Un partito che ne prende meno non ha posti in Parlamento. Il conto si fa su tutta Italia.</p>
+    <ul class="barre">
+      <li><div class="riga"><span class="b"><i style="width:48%"></i><span class="linea" style="left:30%"></span></span><span class="v">4,8</span></div><span class="s">Partito A: 4,8 su 100, entra. La riga è il minimo, 3 su 100.</span></li>
+      <li><div class="riga"><span class="b"><i style="width:21%;background:var(--rule)"></i><span class="linea" style="left:30%"></span></span><span class="v">2,1</span></div><span class="s">Partito B: 2,1 su 100, non entra</span></li>
+    </ul>
+    <ul class="righe" style="margin-top:12px">
+      <li><span>Un'alleanza di partiti (coalizione)</span><span>10 su 100</span></li>
+    </ul>
+    <p data-legge="nuova" style="margin-top:10px;font-size:15.5px"><b>Partiti alleati sotto il 3.</b> In ogni coalizione, il più votato tra quelli sotto 3 su 100 entra lo stesso. I voti degli altri non contano per nessuno.</p>
+    <p data-legge="2022" style="margin-top:10px;font-size:15.5px"><b>Partiti alleati sotto il 3.</b> Se hanno almeno 1 voto su 100, non hanno posti ma i loro voti vanno agli alleati. Sotto 1 su 100, i voti non contano per nessuno.</p>
+    <details class="cosa"><summary>Perché c'è un minimo</summary><p>Serve a non avere troppi partiti piccoli in Parlamento. È una regola uguale per tutti: non ti diciamo se è giusta.</p></details>
+    <p class="fonte attesa" data-legge="nuova">Fonte: legge elettorale nuova, atto Camera 2822-B · aggiornato all'8 ottobre 2026</p>
+    <p class="fonte" data-legge="2022">Fonte: <a href="https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.del.presidente.della.repubblica:1957-03-30;361">DPR 361/1957</a>, art. 83; <a href="https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.legislativo:1993-12-20;533">d.lgs. 533/1993</a>, art. 16-bis · aggiornato all'8 ottobre 2026</p>
+  </section>
+
+  <section class="card" data-legge="nuova">
+    <p class="et">Il premio per chi vince</p>
+    <div class="grande">42 <small>voti su 100</small></div>
+    <p class="frase">Se una coalizione arriva almeno a 42, alla Camera e al Senato, riceve posti in più.</p>
+    <ul class="righe">
+      <li><span>Posti in più alla Camera</span><span>70 deputati</span></li>
+      <li><span>Posti in più al Senato</span><span>35 senatori</span></li>
+      <li><span>Al massimo, alla Camera</span><span>220 su 400</span></li>
+      <li><span>Al massimo, al Senato</span><span>113 su 200</span></li>
+      <li><span>Se nessuno arriva a 42</span><span>niente premio</span></li>
+    </ul>
+    <p style="margin-top:10px;font-size:15.5px">Per esempio: con 43 voti su 100 una coalizione avrebbe più della metà dei posti. Senza premio ne avrebbe meno della metà.</p>
+    <details class="cosa"><summary>Cosa non sappiamo ancora</summary><p>I giornali non dicono tutti la stessa cosa sul caso in cui una coalizione arriva a 42 in una sola delle due Camere. Lo scriveremo quando la legge sarà pubblicata.</p></details>
+    <p class="fonte attesa">Fonte: legge elettorale nuova, atto Camera 2822-B · aggiornato all'8 ottobre 2026</p>
+  </section>
+
+  <section class="card" data-legge="2022">
+    <p class="et">Chi vince nel collegio</p>
+    <div class="grande">147 + 74</div>
+    <p class="frase">collegi in cui vince un solo candidato: chi prende più voti, anche uno solo in più.</p>
+    <ul class="righe">
+      <li><span>Collegi di un solo eletto, Camera</span><span>147 su 400</span></li>
+      <li><span>Collegi di un solo eletto, Senato</span><span>74 su 200</span></li>
+      <li><span>Divisi in base ai voti di ogni partito</span><span>245 + 122</span></li>
+      <li><span>Eletti all'estero</span><span>8 + 4</span></li>
+    </ul>
+    <p class="fonte">Fonte: <a href="https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.legislativo:2020-12-23;177">d.lgs. 177/2020</a> (i collegi dopo il taglio) · aggiornato all'8 ottobre 2026</p>
+  </section>
+
+  <section class="card">
+    <p class="et">Chi decide i nomi degli eletti</p>
+    <div class="grande" data-legge="nuova">3 <small>nomi che puoi scegliere</small></div>
+    <p class="frase" data-legge="nuova">Il primo della lista lo sceglie il partito. Dopo di lui passa chi ha più croci.</p>
+    <div class="grande" data-legge="2022">0 <small>nomi da scegliere</small></div>
+    <p class="frase" data-legge="2022">Le liste erano bloccate: entravano nell'ordine deciso dal partito.</p>
+    <ul class="righe">
+      <li data-legge="nuova"><span>Nomi stampati per lista</span><span>capolista + 6</span></li>
+      <li data-legge="nuova"><span>Croci sui nomi</span><span>fino a 3</span></li>
+      <li data-legge="2022"><span>Nomi per lista</span><span>da 2 a 4</span></li>
+      <li><span>Collegi in cui si può candidare una persona</span><span data-legge="nuova">fino a 5</span><span data-legge="2022">1 + fino a 5</span></li>
+    </ul>
+    <p style="margin-top:10px;font-size:15.5px">La stessa persona può essere candidata in più posti. Se viene eletta in più posti, ne tiene uno solo. Negli altri entra il nome dopo di lei.</p>
+    <p class="fonte attesa" data-legge="nuova">Fonte: legge elettorale nuova, atto Camera 2822-B · aggiornato all'8 ottobre 2026</p>
+    <p class="fonte" data-legge="2022">Fonte: <a href="https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.del.presidente.della.repubblica:1957-03-30;361">DPR 361/1957</a>, articoli 18-bis, 19 e 85 · aggiornato all'8 ottobre 2026</p>
+  </section>
+
+  <section class="card">
+    <p class="et">Cosa non ti diremo mai</p>
+    <p style="font-size:17px">Queste regole servono a capire come si contano i voti. <b>Non ti diciamo mai di votare un partito perché «ce la fa» o di non votarlo perché «non entra».</b></p>
+    <p>Non facciamo previsioni e non usiamo sondaggi. Vota chi ti convince: le regole sono uguali per tutti.</p>
+    <p class="fonte">Fonte: nostra regola, ADR 0021 · aggiornato all'8 ottobre 2026</p>
+  </section>
+</div>
+
+<!-- ============ TROVA IL TUO COLLEGIO ============ -->
+<h2>Trova il tuo collegio</h2>
+<p class="sottotitolo">Scrivi il comune dove voti, o il CAP. Ti diciamo il tuo collegio di Camera e Senato e chi si candida.</p>
+<section class="card trova">
+  <form id="trova">
+    <label for="dove" style="flex-basis:100%">Comune o CAP</label>
+    <input id="dove" name="dove" autocomplete="off" placeholder="Per esempio Valdorano o 00100">
+    <button class="bottone" type="submit">Cerca</button>
+  </form>
+  <p class="privato">Quello che scrivi resta sul tuo telefono. Il telefono scarica l'elenco dei collegi, uguale per tutti, e cerca da solo: noi non sappiamo dove abiti.</p>
+
+  <div class="esito" id="esito" hidden>
+    <p class="et">Esempio: Valdorano (comune inventato)</p>
+    <div class="collegi">
+      <div class="collegio"><b>Camera: collegio Esempio 2-03</b><span data-legge="nuova">7 deputati da eleggere</span><span data-legge="2022">1 deputato del collegio + una lista di 2-4 nomi per partito</span></div>
+      <div class="collegio"><b>Senato: collegio Esempio 2-01</b><span data-legge="nuova">5 senatori da eleggere</span><span data-legge="2022">1 senatore del collegio + una lista di 2-4 nomi per partito</span></div>
+    </div>
+    <p class="nota" data-legge="nuova" style="margin:0 0 14px">I collegi della legge nuova non sono ancora stati disegnati. Qui vedi un esempio di come apparirà.</p>
+
+    <div data-legge="2022">
+      <p class="et">Candidati nel collegio della Camera, in ordine alfabetico</p>
+      <ul class="uni" id="uni"></ul>
+    </div>
+    <p class="et" style="margin-top:14px">Partiti e candidati alla Camera, in ordine alfabetico</p>
+    <ul class="liste" id="liste"></ul>
+    <details class="cosa"><summary>Perché in ordine alfabetico</summary><p>Sulla scheda vera l'ordine dei partiti è tirato a sorte. Qui li mettiamo in ordine alfabetico, così nessuno viene prima per scelta nostra.</p></details>
+    <p class="fonte attesa">Fonte: liste depositate al Ministero dell'Interno · le liste arrivano circa sei settimane prima del voto</p>
+  </div>
+</section>
+
+<!-- ============ SE NESSUNO TI CONVINCE ============ -->
+<h2>Se nessuno ti convince</h2>
+<p class="sottotitolo">Puoi anche lasciare la scheda bianca, annullarla o non andare a votare. Ecco cosa succede, senza giudizi.</p>
+<div class="griglia tre">
+  <section class="card">
+    <p class="et">Scheda bianca</p>
+    <p>Prendi la scheda e non fai nessun segno.</p>
+    <p>Viene contata e il numero si pubblica. Ma non vale per nessun partito e non conta per i posti in Parlamento.</p>
+    <p class="fonte">Fonte: <a href="https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.del.presidente.della.repubblica:1957-03-30;361">DPR 361/1957</a>, art. 68 · aggiornato all'8 ottobre 2026</p>
+  </section>
+  <section class="card">
+    <p class="et">Scheda nulla</p>
+    <p>La scheda ha segni che non si capiscono, o scritte, o un voto diviso tra partiti che non si può fare.</p>
+    <p>Come la bianca: viene contata, ma non conta per i posti.</p>
+    <p class="fonte">Fonte: <a href="https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.del.presidente.della.repubblica:1957-03-30;361">DPR 361/1957</a>, articoli 59-bis e 69 · aggiornato all'8 ottobre 2026</p>
+  </section>
+  <section class="card">
+    <p class="et">Non andare a votare</p>
+    <p>Votare è un dovere dei cittadini, ma non ci sono multe.</p>
+    <p>Alle politiche non serve un numero minimo di votanti. L'elezione vale anche se vota poca gente. Nel 2022 ha votato meno di due persone su tre.</p>
+    <p class="fonte">Fonte: Costituzione, art. 48; <a href="https://elezionistorico.interno.gov.it/">Ministero dell'Interno, Eligendo</a> · aggiornato all'8 ottobre 2026</p>
+  </section>
+</div>
+<section class="card" style="margin-top:14px">
+  <p class="et">Un esempio con i numeri</p>
+  <div class="grande">56 <small>voti su 100 elettori</small></div>
+  <p class="frase">decidono i posti, se votano in 60 e 4 lasciano la scheda bianca o nulla.</p>
+  <ul class="righe">
+    <li><span>Elettori</span><span>100</span></li>
+    <li><span>Non vanno a votare</span><span>40</span></li>
+    <li><span>Bianche o nulle</span><span>4</span></li>
+    <li><span>Voti che contano per i posti</span><span>56</span></li>
+  </ul>
+  <p style="margin-top:10px;font-size:15.5px">Anche i minimi per entrare (3 su 100, 10 su 100) si contano solo su quei 56 voti.</p>
+  <p class="fonte">Fonte: <a href="https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.del.presidente.della.repubblica:1957-03-30;361">DPR 361/1957</a>, art. 83 (si contano i voti validi) · aggiornato all'8 ottobre 2026</p>
+</section>
+
+<!-- ============ COSA FACCIAMO E COSA NO ============ -->
+<h2>Cosa facciamo e cosa no</h2>
+<div class="si-no">
+  <div class="sn si"><span class="seg">Sì</span><p>Spieghiamo le regole del voto, uguali per tutti, con la legge accanto.</p></div>
+  <div class="sn si"><span class="seg">Sì</span><p>Ti diciamo il tuo collegio e chi si candida, appena le liste sono depositate.</p></div>
+  <div class="sn si"><span class="seg">Sì</span><p>Ti diciamo quando cambia una legge, e cosa ancora non sappiamo.</p></div>
+  <div class="sn no"><span class="seg">No</span><p>Non ti diciamo per chi votare.</p></div>
+  <div class="sn no"><span class="seg">No</span><p>Non ti consigliamo il «voto utile»: non diciamo chi ce la fa e chi no.</p></div>
+  <div class="sn no"><span class="seg">No</span><p>Non sappiamo dove abiti: il comune resta sul tuo telefono.</p></div>
+</div>
+<p style="margin-top:16px">Vuoi sapere quali partiti la pensano come te? <a href="vista-questionario.html">Rispondi alle domande ›</a></p>
+
+<footer>Le regole vengono dalle leggi elettorali e dalla Costituzione. Durante la campagna elettorale questa pagina resta uguale per tutti i partiti. Qui non diciamo se le regole sono giuste: quello lo decidi tu. <a href="vista-metodo.html">Come lavoriamo</a></footer>
+</div>
+
+<script>
+/* ---------- scelta della legge (bottoni affiancati) ---------- */
+document.querySelectorAll(".tabs button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll(".tabs button").forEach(x=>x.setAttribute("aria-pressed",x===b));
+  document.body.dataset.legge=b.dataset.scelta;}));
+
+/* ---------- dati inventati del collegio di esempio ---------- */
+const partiti=[
+ {n:"Alleanza Progresso",coal:"A",capo:"Laura Conti",altri:["Matteo Ricci","Silvia Moro","Andrea Fumagalli","Giada Pellegrini","Tommaso Ruggeri","Alice Bianco"]},
+ {n:"Civica Riformista",coal:null,capo:"Marco Benedetti",altri:["Elena Caruso","Franco Mancini","Laura Vitale","Simone Gentile","Irene Fontana","Giorgio Martini"]},
+ {n:"Fronte dei Territori",coal:"A",capo:"Rita Fabbri",altri:["Paolo Neri","Ilaria Monti","Sergio Valli","Marta Leone","Enzo Galli","Sara Testa"]},
+ {n:"Movimento Solidale",coal:null,capo:"Giulia Ferraro",altri:["Antonio Greco","Chiara Barbieri","Luigi Rinaldi","Valeria Longo","Stefano Marchetti","Rosa Ferri"]},
+ {n:"Partito Lavoro e Comunità",coal:"B",capo:"Paola Ventura",altri:["Davide Colombo","Federica Sanna","Roberto De Luca","Martina Cattaneo","Filippo Grasso","Beatrice Orlando"]},
+ {n:"Patto per le Regioni",coal:"A",capo:"Bruno Sala",altri:["Elisa Fonti","Mario Riva","Nadia Bassi","Luca Pace","Anna Villa","Ugo Serra"]},
+ {n:"Unione Liberale",coal:null,capo:"Carla Neri",altri:["Fabio Gatti","Lia Rossi","Dario Conte","Ada Marini","Piero Lodi","Vera Costa"]},
+ {n:"Verdi e Territori",coal:"B",capo:"Chiara Lombardi",altri:["Luca Ortolani","Giulia Sartori","Nicola Bruno","Ester Galli","Ivo Pagani","Lucia Riva"]},
+];
+const uninominali=[ /* legge di prima: un candidato per coalizione o partito, in ordine alfabetico */
+ {n:"Giorgio Bellini",con:["Unione Liberale"]},
+ {n:"Laura De Santis",con:["Partito Lavoro e Comunità","Verdi e Territori"]},
+ {n:"Elena Marchi",con:["Alleanza Progresso","Fronte dei Territori","Patto per le Regioni"]},
+ {n:"Riccardo Ponti",con:["Civica Riformista"]},
+ {n:"Teresa Valente",con:["Movimento Solidale"]},
+];
+/* ordine alfabetico e colori neutri in quell'ordine (ADR 0009) */
+partiti.sort((a,b)=>a.n.localeCompare(b.n,"it")).forEach((p,i)=>p.col=`var(--p${i+1})`);
+const alleati=p=>partiti.filter(x=>p.coal&&x.coal===p.coal&&x!==p).map(x=>x.n);
+const elenco=a=>a.length<2?a.join(""):a.slice(0,-1).join(", ")+" e "+a.at(-1);
+
+document.getElementById("liste").innerHTML=partiti.map(p=>{
+  const al=alleati(p);
+  return `<li><div class="testa"><span class="q" style="background:${p.col}"></span><span class="nome">${p.n}</span>
+    <span class="info">${al.length?`Alleato con ${elenco(al)}`:"Si presenta da solo"}</span>
+    <span class="info">Capolista: <b style="color:var(--ink)">${p.capo}</b></span>
+    <details><summary><span data-legge="nuova">Vedi gli altri 6 nomi</span><span data-legge="2022">Vedi gli altri nomi, in ordine</span></summary>
+      <ol start="2">${p.altri.map((n,i)=>`<li${i>2?' data-legge="nuova"':""}>${n}</li>`).join("")}</ol></details></div></li>`;}).join("");
+document.getElementById("uni").innerHTML=uninominali.map(c=>
+  `<li>${c.n}<span>sostenuto da ${elenco(c.con)}</span></li>`).join("");
+
+/* la ricerca è finta: nel sito vero il telefono cerca il comune in un elenco scaricato, senza mandarlo a nessuno (ADR 0007) */
+document.getElementById("trova").addEventListener("submit",e=>{e.preventDefault();
+  document.getElementById("esito").hidden=false;});
+</script>
+</body>
+</html>
