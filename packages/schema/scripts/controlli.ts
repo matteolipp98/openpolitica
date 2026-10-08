@@ -1,4 +1,5 @@
 // Controlli incrociati tra i file di content/ (riferimenti, duplicati, regole degli ADR).
+import { ORIENTAMENTI } from "../src/content.js";
 import type { Errore } from "./carica.js";
 import type { caricaContenuti } from "./carica.js";
 
@@ -45,6 +46,27 @@ export function controllaRiferimenti(c: C): Errore[] {
     for (const p of per?.partiti ?? [])
       if (!coperti.includes(p.slug)) err("programmi.yaml", `${el.data}: manca il programma di ${p.slug}`);
   }
+
+  // ADR 0002, 0006: fonti con riferimenti validi e paniere dei giornali bilanciato
+  const fonti = c["fonti.yaml"]?.fonti ?? [];
+  dup(fonti.map((f) => f.id), "fonti.yaml", "fonte");
+  dup(fonti.map((f) => f.url), "fonti.yaml", "indirizzo");
+  const persone = new Set(per?.persone.map((p) => p.slug) ?? []);
+  for (const f of fonti) {
+    if (f.partito && !partiti.has(f.partito)) err("fonti.yaml", `${f.id}: partito sconosciuto ${f.partito}`);
+    if (f.persona && !persone.has(f.persona)) err("fonti.yaml", `${f.id}: persona fuori dal perimetro ${f.persona}`);
+    if (f.link) try { new RegExp(f.link); } catch { err("fonti.yaml", `${f.id}: espressione regolare non valida`); }
+  }
+  for (const p of per?.partiti ?? [])
+    if (fonti.length && !fonti.some((f) => f.partito === p.slug))
+      err("fonti.yaml", `manca una fonte del partito ${p.slug} (anche non attiva, con la nota sul perché)`);
+  const perOrientamento = new Map<string, number>();
+  for (const f of fonti)
+    if (f.tipo === "testata" && f.attiva) perOrientamento.set(f.orientamento!, (perOrientamento.get(f.orientamento!) ?? 0) + 1);
+  if (new Set(perOrientamento.values()).size > 1)
+    err("fonti.yaml", `giornali non bilanciati per orientamento: ${[...perOrientamento].map(([o, n]) => `${o} ${n}`).join(", ")}`);
+  if (fonti.length && perOrientamento.size !== ORIENTAMENTI.length)
+    err("fonti.yaml", `servono giornali di ogni orientamento (${ORIENTAMENTI.join(", ")})`);
 
   // ADR 0027: una forma nominale non può appartenere a due persone
   const forme = new Map<string, string>();

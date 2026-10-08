@@ -146,6 +146,48 @@ export const Perimetro = z.object({
   persone: z.array(z.object({ slug, partito: slug, motivo: z.string() })),
 });
 
+// ---------- Fonti di notizie e dichiarazioni (ADR 0002, 0003, 0006) ----------
+export const ORIENTAMENTI = ["sinistra", "centrosinistra", "centro", "centrodestra", "destra"] as const;
+export const Fonte = z
+  .object({
+    id: slug,
+    nome: z.string().min(2),
+    tipo: z.enum(["istituzione", "partito", "politico", "agenzia", "testata"]),
+    livello: z.enum(["A", "B", "C"]),
+    canale: z.enum(["rss", "sito", "telegram"]),
+    url,
+    link: z.string().optional(), // canale sito: espressione regolare sugli indirizzi da leggere
+    sitemap: z.string().optional(), // canale sito con indice di sitemap: quali sitemap aprire
+    partito: slug.optional(),
+    persona: slug.optional(),
+    orientamento: z.enum([...ORIENTAMENTI, "agenzia"]).optional(),
+    attiva: z.boolean().default(true),
+    verificato_il: data,
+    nota: z.string().optional(),
+  })
+  .superRefine((f, ctx) => {
+    const errore = (message: string) => ctx.addIssue({ code: "custom", message: `${f.id}: ${message}` });
+    if (f.canale === "sito" && !f.link) errore("una fonte di tipo sito ha bisogno di `link`");
+    if (f.canale === "telegram" && !/^https:\/\/t\.me\/s\/[A-Za-z0-9_]+$/.test(f.url)) errore("indirizzo Telegram non nella forma https://t.me/s/<canale>");
+    if ((f.tipo === "testata" || f.tipo === "agenzia") !== (f.orientamento !== undefined))
+      errore("l'orientamento si indica per giornali e agenzie, e solo per loro");
+    if ((f.tipo === "testata" || f.tipo === "agenzia") !== (f.livello === "C")) errore("giornali e agenzie sono di livello C, e solo loro");
+    if (f.tipo === "partito" && !f.partito) errore("manca il partito");
+    if (f.tipo === "politico" && !f.persona) errore("manca la persona");
+  });
+export const Fonti = z.object({
+  versione: z.number().int().positive(),
+  aggiornato_il: data,
+  orientamento: z.string().min(40),
+  gdelt: z.object({
+    attiva: z.boolean(),
+    livello: z.literal("C"),
+    filtro: z.string(),
+    finestra_ore: z.number().int().positive().max(24),
+  }),
+  fonti: z.array(Fonte).min(1),
+});
+
 // ---------- Programmi elettorali (ADR 0020, piano §4) ----------
 export const Programmi = z.object({
   versione: z.number().int().positive(),
@@ -234,4 +276,5 @@ export const SCHEMI = {
   "gruppi.yaml": Gruppi,
   "perimetro.yaml": Perimetro,
   "programmi.yaml": Programmi,
+  "fonti.yaml": Fonti,
 } as const;

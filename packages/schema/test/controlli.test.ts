@@ -35,6 +35,22 @@ describe("controlli incrociati", () => {
     expect(e.map((x) => x.messaggio)).toEqual(["2022-09-25: manca il programma di lega"]);
   });
 
+  it("rifiuta un paniere di giornali sbilanciato (ADR 0006)", () => {
+    const f = structuredClone(base["fonti.yaml"]!);
+    f.fonti = f.fonti.filter((x) => x.id !== "libero");
+    const e = controllaRiferimenti({ ...base, "fonti.yaml": f });
+    expect(e.map((x) => x.messaggio)).toEqual([
+      "giornali non bilanciati per orientamento: sinistra 2, centrosinistra 2, centro 2, centrodestra 2, destra 1",
+    ]);
+  });
+
+  it("rifiuta un partito seguito senza fonte (ADR 0002)", () => {
+    const f = structuredClone(base["fonti.yaml"]!);
+    f.fonti = f.fonti.filter((x) => x.partito !== "lega");
+    const e = controllaRiferimenti({ ...base, "fonti.yaml": f });
+    expect(e.map((x) => x.messaggio)).toEqual(["manca una fonte del partito lega (anche non attiva, con la nota sul perché)"]);
+  });
+
   it("rifiuta un gruppo verificato senza identificativo", () => {
     const g = structuredClone(base["gruppi.yaml"]!);
     g.gruppi[0]!.stato = "verificato";

@@ -1,0 +1,143 @@
+{
+  "type": "object",
+  "properties": {
+    "versione": {
+      "type": "integer",
+      "exclusiveMinimum": 0
+    },
+    "aggiornato_il": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "orientamento": {
+      "type": "string",
+      "minLength": 40
+    },
+    "gdelt": {
+      "type": "object",
+      "properties": {
+        "attiva": {
+          "type": "boolean"
+        },
+        "livello": {
+          "type": "string",
+          "const": "C"
+        },
+        "filtro": {
+          "type": "string"
+        },
+        "finestra_ore": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 24
+        }
+      },
+      "required": [
+        "attiva",
+        "livello",
+        "filtro",
+        "finestra_ore"
+      ],
+      "additionalProperties": false
+    },
+    "fonti": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "nome": {
+            "type": "string",
+            "minLength": 2
+          },
+          "tipo": {
+            "type": "string",
+            "enum": [
+              "istituzione",
+              "partito",
+              "politico",
+              "agenzia",
+              "testata"
+            ]
+          },
+          "livello": {
+            "type": "string",
+            "enum": [
+              "A",
+              "B",
+              "C"
+            ]
+          },
+          "canale": {
+            "type": "string",
+            "enum": [
+              "rss",
+              "sito",
+              "telegram"
+            ]
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "link": {
+            "type": "string"
+          },
+          "partito": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "persona": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "orientamento": {
+            "type": "string",
+            "enum": [
+              "sinistra",
+              "centrosinistra",
+              "centro",
+              "centrodestra",
+              "destra",
+              "agenzia"
+            ]
+          },
+          "attiva": {
+            "type": "boolean",
+            "default": true
+          },
+          "verificato_il": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "nota": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "nome",
+          "tipo",
+          "livello",
+          "canale",
+          "url",
+          "verificato_il"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "versione",
+    "aggiornato_il",
+    "orientamento",
+    "gdelt",
+    "fonti"
+  ],
+  "additionalProperties": false,
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}
