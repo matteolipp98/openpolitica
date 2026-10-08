@@ -2,6 +2,23 @@
 
 App pubblica che aiuta i cittadini a valutare i politici italiani: fatti uguali per tutti, valori dell'utente. Le decisioni sono in `adr/` (indice in `adr/README.md`), il piano di implementazione in `docs/piano-implementazione.md`.
 
+## Obiettivo del prodotto
+
+**openpolitica è lo strumento che aiuta una persona a scegliere chi votare e come votare, partendo dalle sue idee.** È un prodotto specializzato in politica, non un portale di dati pubblici (decisione dell'utente, 8 ottobre 2026).
+
+Chi arriva sul sito deve poter rispondere a quattro domande, nell'ordine in cui se le pone:
+1. **Chi la pensa come me?** Risponde alle domande sui temi che gli stanno a cuore e vede quali partiti hanno votato come la pensa lui, tema per tema, con i disaccordi sempre in vista (ADR 0008, 0009).
+2. **Su questo tema, cosa fa ognuno?** Sceglie un tema (sanità, tasse, lavoro…) e vede, per ogni partito, cosa aveva promesso, come ha votato e cosa ha detto, con i numeri e le fonti.
+3. **Di questo partito posso fidarmi?** Apre la scheda e vede i fatti: promesse mantenute, voti, dati sbagliati, quando ha detto una cosa e votato il contrario.
+4. **Come funziona il mio voto?** Vede la scheda, il suo collegio, i candidati e le regole che cambiano l'effetto del voto, spiegate in modo neutro (ADR 0021).
+
+Cosa non facciamo mai:
+- **dire chi votare.** Mostriamo quanto un partito è vicino alle idee dell'utente e perché; la scelta resta sua (ADR 0001);
+- **consigliare il voto utile** o un voto strategico (ADR 0021);
+- **dare un punteggio unico o una classifica dei partiti** sui fatti (ADR 0009).
+
+Ogni pagina nuova si giudica così: aiuta qualcuno senza competenze politiche a decidere con più fatti e meno slogan? Se non aiuta nessuna delle quattro domande, non va nel sito.
+
 ## Regole di lavoro
 
 - **Il lettore è l'italiano medio, senza nessuna competenza politica o statistica.** Ogni testo visibile (mock, viste, FAQ, messaggi) deve capirsi al primo colpo: frasi corte, una cosa per frase, parole di tutti i giorni, confronti concreti ("meno della metà") invece di percentuali e termini tecnici. Il dettaglio tecnico va nella pagina di metodo. Regole complete nell'ADR 0036, "Linguaggio comune".
@@ -9,7 +26,7 @@ App pubblica che aiuta i cittadini a valutare i politici italiani: fatti uguali 
 
 ## Esperienza del sito: come dovevannoinostrisoldi.com
 
-L'esperienza del sito deve somigliare a quella di [dovevannoinostrisoldi.com](https://www.dovevannoinostrisoldi.com/) (decisione dell'utente, 8 ottobre 2026). Vale per ogni mock, vista e componente nuovi. Si riprende la struttura e il modo di presentare i dati, non i contenuti. Quando si progetta una pagina si apre il sito e si guarda come risolve un caso simile. Le pagine più vicine alle nostre sono:
+L'esperienza del sito deve somigliare a quella di [dovevannoinostrisoldi.com](https://www.dovevannoinostrisoldi.com/) (decisione dell'utente, 8 ottobre 2026). Vale per ogni mock, vista e componente nuovi. Si riprende la struttura e il modo di presentare i dati, non i contenuti né il perimetro: quel sito copre tutta la spesa pubblica, noi solo la scelta del voto (vedi "Obiettivo del prodotto"). Quando si progetta una pagina si apre il sito e si guarda come risolve un caso simile. Le pagine più vicine alle nostre sono:
 - [`/programmi`](https://www.dovevannoinostrisoldi.com/programmi): le promesse dei programmi messe di fronte ai numeri ufficiali;
 - [`/governi`](https://www.dovevannoinostrisoldi.com/governi): la "pagella" di ogni governo, con i grafici nel tempo;
 - [`/politici`](https://www.dovevannoinostrisoldi.com/politici): la mappa di chi siede in Governo, Camera e Senato;
